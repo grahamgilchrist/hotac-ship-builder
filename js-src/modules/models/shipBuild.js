@@ -6,6 +6,7 @@ var events = require('../controllers/events');
 var XpItem = require('./xpItem');
 var itemTypes = require('./itemTypes');
 var upgrades = require('../models/upgrades').all;
+var pilots = require('../models/pilots');
 
 // Ship build
 var ShipBuild = function (startingShipId) {
@@ -20,6 +21,7 @@ var ShipBuild = function (startingShipId) {
     this.currentShip = this.startingShip;
     events.trigger('build.currentShip.update', this.currentShip);
 
+    this.pilotAbilities = [];
     this.upgrades = {};
     this.setPilotSkill(2);
 };
@@ -33,6 +35,12 @@ ShipBuild.prototype.getShipById = function (shipId) {
 ShipBuild.prototype.getUpgradeById = function (upgradeId) {
     return _.find(upgrades, function (upgradeItem) {
         return upgradeItem.id === upgradeId;
+    });
+};
+
+ShipBuild.prototype.getPilotById = function (pilotId) {
+    return _.find(pilots, function (pilotCard) {
+        return pilotCard.id === pilotId;
     });
 };
 
@@ -97,6 +105,15 @@ ShipBuild.prototype.buyUpgrade = function (upgradeId) {
     }
     this.upgrades[upgrade.slot].push(upgrade);
     events.trigger('build.upgrades.update', this);
+};
+
+ShipBuild.prototype.buyPilotAbility = function (pilotId) {
+    this.addToHistory(itemTypes.BUY_PILOT_ABILITY, {
+        pilotId: pilotId
+    });
+    var pilot = this.getPilotById(pilotId);
+    this.pilotAbilities.push(pilot);
+    events.trigger('build.pilotAbilities.update', this);
 };
 
 module.exports = ShipBuild;

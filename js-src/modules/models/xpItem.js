@@ -4,6 +4,7 @@ var _ = require('lodash');
 var itemTypes = require('./itemTypes');
 var ships = require('./ships');
 var upgrades = require('../models/upgrades').all;
+var pilots = require('../models/pilots');
 
 var XpItem = function (upgradeType, data) {
     this.upgradeType = upgradeType;
@@ -24,6 +25,9 @@ XpItem.prototype.cost = function () {
     } else if (this.upgradeType === itemTypes.BUY_UPGRADE) {
         var upgrade = this.getUpgradeById(this.data.upgradeId);
         return upgrade.points * -1;
+    } else if (this.upgradeType === itemTypes.BUY_PILOT_ABILITY) {
+        var pilot = this.getPilotById(this.data.pilotId);
+        return pilot.skill * -1;
     }
     return 0;
 };
@@ -41,7 +45,10 @@ XpItem.prototype.label = function () {
         return 'Gain mission XP';
     } else if (this.upgradeType === itemTypes.BUY_UPGRADE) {
         var upgrade = this.getUpgradeById(this.data.upgradeId);
-        return upgrade.slot +': ' + upgrade.name;
+        return upgrade.slot + ': ' + upgrade.name;
+    } else if (this.upgradeType === itemTypes.BUY_PILOT_ABILITY) {
+        var pilot = this.getPilotById(this.data.pilotId);
+        return 'Pilot Ability: ' + pilot.name;
     }
     return '';
 };
@@ -55,6 +62,12 @@ XpItem.prototype.getShipById = function (shipId) {
 XpItem.prototype.getUpgradeById = function (upgradeId) {
     return _.find(upgrades, function (upgradeItem) {
         return upgradeItem.id === upgradeId;
+    });
+};
+
+XpItem.prototype.getPilotById = function (pilotId) {
+    return _.find(pilots, function (pilotCard) {
+        return pilotCard.id === pilotId;
     });
 };
 

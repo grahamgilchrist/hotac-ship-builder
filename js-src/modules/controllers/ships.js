@@ -4,6 +4,7 @@ var $ = require('jquery');
 var _ = require('lodash');
 var ships = require('../models/ships');
 var upgrades = require('../models/upgrades').keyed;
+var pilots = require('../models/pilots');
 var Build = require('../models/shipBuild');
 var events = require('./events');
 
@@ -16,7 +17,6 @@ module.exports = {
         module.exports.initStartingShips();
         module.exports.initShipChange();
         module.exports.initPsIncrease();
-        module.exports.initUpgrades();
         module.exports.initAddXp();
     },
     initResetButton: function () {
@@ -79,30 +79,16 @@ module.exports = {
             currentBuild.increasePilotSkill();
         });
     },
-    initUpgrades: function () {
-        // bind ships to DOM
-        // var $upgradeList = $('#upgrades-list');
-        // var $noneOption = $('<option value="0">Select an upgrade...</option>');
-        // $upgradeList.append($noneOption);
-        // // Add all ships to list
-        // _.forEach(upgrades, function (item) {
-        //     var $newOption = $('<option value="' + item.id + '">' + item.name + '</option>');
-        //     $upgradeList.append($newOption);
-        // });
-
-        // $('#buy-upgrade').on('click', function () {
-        //     var chosenItemValue = $upgradeList.val();
-        //     currentBuild.buyUpgrade(chosenItemValue);
-        // });
-    },
     renderPilotLevelUpgrades: function (pilotSkill) {
         var eliteUpgradeSlot = {
             type: 'Elite'
         };
 
         if (pilotSkill >= 3) {
-            var $upgradeElement = module.exports.renderShipUpgrade(eliteUpgradeSlot);
-            $('#elite-wrapper').append($upgradeElement);
+            var $eliteUpgradeElement = module.exports.renderShipUpgrade(eliteUpgradeSlot);
+            $('#elite-wrapper').append($eliteUpgradeElement);
+            var $pilotAbilityUpgradeElement = module.exports.renderPilotAbilityUpgrade(pilotSkill);
+            $('#elite-wrapper').append($pilotAbilityUpgradeElement);
         }
     },
     renderShipUpgrades: function (currentShip) {
@@ -139,6 +125,32 @@ module.exports = {
 
         return $div;
     },
+    renderPilotAbilityUpgrade: function (pilotSkill) {
+        // Only show pilots of current PS or lower
+        var availablePilots = _.filter(pilots, function (pilot) {
+            return pilot.skill <= pilotSkill;
+        });
+
+        var $div = $('<div>');
+        $div.append('<h3>Named pilot abilities</h3>');
+        var $select = $('<select>');
+        var $noneOption = $('<option value="0">Select an upgrade...</option>');
+        $select.append($noneOption);
+        _.each(availablePilots, function (pilotCard) {
+            var $option = $('<option value="' + pilotCard.id + '">PS' + pilotCard.skill + ' ' + pilotCard.name + '</option>');
+            $select.append($option);
+        });
+        $div.append($select);
+
+        var $button = $('<button>Buy</button>');
+        $button.on('click', function () {
+            var pilotId = parseInt($select.val(), 10);
+            currentBuild.buyPilotAbility(pilotId);
+        });
+        $div.append($button);
+
+        return $div;
+    },
     initAddXp: function () {
         $('#add-mission-xp').on('click', function () {
             var stringXpAmount = $('#mission-xp').val();
@@ -169,6 +181,10 @@ module.exports = {
         events.on('build.xpHistory.add', function (event, data) {
             module.exports.renderXpHistoryTableRow(data);
         });
+
+        events.on('build.pilotAbilities.update', function (event, build) {
+            module.exports.renderUpgradesList(build);
+        });
     },
     renderUpgradesList: function (build) {
         var keyedUpgrades = _.clone(build.upgrades, true);
@@ -177,7 +193,7 @@ module.exports = {
             if (!keyedUpgrades[upgradeType]) {
                 keyedUpgrades[upgradeType] = [];
             }
-        };
+        }
 
         var $upgradeItem;
         var $ul;
@@ -195,6 +211,12 @@ module.exports = {
                 var $li = $('<li>' + upgrade.name + '</li>');
                 $ul.append($li);
             });
+            if (type === 'Elite') {
+                _.each(build.pilotAbilities, function (pilot) {
+                    var $li = $('<li>Ability: ' + pilot.name + '</li>');
+                    $ul.append($li);
+                });
+            }
             $upgradeItem.append($ul);
             $('#upgrade-list').append($upgradeItem);
         }
