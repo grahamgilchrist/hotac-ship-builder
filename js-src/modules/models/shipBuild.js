@@ -5,16 +5,23 @@ var ships = require('./ships');
 var events = require('../controllers/events');
 var XpItem = require('./xpItem');
 var itemTypes = require('./itemTypes');
+var upgrades = require('../models/upgrades').all;
 
 // Ship build
 var ShipBuild = function (startingShipId) {
     this.startingShip = this.getShipById(startingShipId);
-    this.currentShip = this.startingShip;
-    events.trigger('build.currentShip.update', this);
-    this.setPilotSkill(2);
-    this.currentXp = 0;
-    this.addXp(this.startingShip.startingXp);
+
     this.xpHistory = [];
+    this.currentXp = 0;
+    this.addToHistory(itemTypes.STARTING_SHIP_TYPE, {
+        shipId: this.startingShip.id
+    });
+
+    this.currentShip = this.startingShip;
+    events.trigger('build.currentShip.update', this.currentShip);
+
+    this.upgrades = {};
+    this.setPilotSkill(2);
 };
 
 ShipBuild.prototype.getShipById = function (shipId) {
@@ -23,9 +30,18 @@ ShipBuild.prototype.getShipById = function (shipId) {
     });
 };
 
+ShipBuild.prototype.getUpgradeById = function (upgradeId) {
+    return _.find(upgrades, function (upgradeItem) {
+        return upgradeItem.id === upgradeId;
+    });
+};
+
 ShipBuild.prototype.setPilotSkill = function (ps) {
     this.pilotSkill = ps;
-    events.trigger('build.pilotSkill.update', this.pilotSkill);
+    events.trigger('build.pilotSkill.update', {
+        pilotSkill: this.pilotSkill,
+        build: this
+    });
 };
 
 ShipBuild.prototype.addXp = function (xp) {
@@ -38,31 +54,49 @@ ShipBuild.prototype.removeXp = function (xp) {
     events.trigger('build.xp.update', this.currentXp);
 };
 
-ShipBuild.prototype.addToHistory = function (type, id) {
-    var xpItem = new XpItem(type, id, this.currentXp);
-    this.removeXp(xpItem.cost());
+ShipBuild.prototype.addToHistory = function (type, data) {
+    var xpItem = new XpItem(type, data);
+    // console.log('xpItem', xpItem);
+    // console.log('xpItem.cost()', xpItem.cost());
+    this.addXp(xpItem.cost());
     this.xpHistory.push(xpItem);
-    events.trigger('build.xpHistory.update', xpItem);
+    events.trigger('build.xpHistory.add', {
+        build: this,
+        xpItem: xpItem
+    });
 };
 
 ShipBuild.prototype.changeShip = function (shipId) {
-    this.addToHistory(itemTypes.SHIP_TYPE, shipId);
+    this.addToHistory(itemTypes.SHIP_TYPE, {
+        shipId: shipId
+    });
     this.currentShip = this.getShipById(shipId);
-    events.trigger('build.currentShip.update', this);
+    events.trigger('build.currentShip.update', this.currentShip);
 };
 
 ShipBuild.prototype.increasePilotSkill = function () {
     this.setPilotSkill(this.pilotSkill + 1);
-    this.addToHistory(itemTypes.PILOT_SKILL, this.pilotSkill);
+    this.addToHistory(itemTypes.PILOT_SKILL, {
+        pilotSkill: this.pilotSkill
+    });
 };
 
 ShipBuild.prototype.addMissionXp = function (xpAmount) {
-    this.addXp(xpAmount);
-    this.addToHistory(itemTypes.MISSION, xpAmount);
+    this.addToHistory(itemTypes.MISSION, {
+        missionXp: xpAmount
+    });
 };
 
 ShipBuild.prototype.buyUpgrade = function (upgradeId) {
-    this.addToHistory(itemTypes.BUY_UPGRADE, upgradeId);
+    this.addToHistory(itemTypes.BUY_UPGRADE, {
+        upgradeId: upgradeId
+    });
+    var upgrade = this.getUpgradeById(upgradeId);
+    if (!this.upgrades[upgrade.slot]) {
+        this.upgrades[upgrade.slot] = [];
+    }
+    this.upgrades[upgrade.slot].push(upgrade);
+    events.trigger('build.upgrades.update', this);
 };
 
 module.exports = ShipBuild;

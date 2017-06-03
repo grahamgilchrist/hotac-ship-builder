@@ -8,10 +8,10 @@ module.exports = [
         startingXp: 5,
         upgrades: [
             {
-                type: 'astro'
+                type: 'Astromech'
             },
             {
-                type: 'torp'
+                type: 'Torpedo'
             }
         ]
     },
@@ -22,22 +22,22 @@ module.exports = [
         startingXp: 8,
         upgrades: [
             {
-                type: 'astro'
+                type: 'Astromech'
             },
             {
                 type: [
-                    'torp',
-                    'bomb'
+                    'Torpedo',
+                    'Bomb'
                 ]
             },
             {
                 type: [
-                    'torp',
-                    'bomb'
+                    'Torpedo',
+                    'Bomb'
                 ]
             },
             {
-                type: 'turret'
+                type: 'Turret'
             }
         ]
     },
@@ -46,10 +46,10 @@ module.exports = [
         label: 'A-wing',
         upgrades: [
             {
-                type: 'ept'
+                type: 'Elite'
             },
             {
-                type: 'missile'
+                type: 'Missile'
             }
         ]
     },
@@ -58,16 +58,16 @@ module.exports = [
         label: 'B-wing',
         upgrades: [
             {
-                type: 'torp'
+                type: 'Torpedo'
             },
             {
-                type: 'torp'
+                type: 'Torpedo'
             },
             {
-                type: 'cannon'
+                type: 'Cannon'
             },
             {
-                type: 'system'
+                type: 'System'
             }
         ]
     },
@@ -76,10 +76,10 @@ module.exports = [
         label: 'HWK-290',
         upgrades: [
             {
-                type: 'turret'
+                type: 'Turret'
             },
             {
-                type: 'crew'
+                type: 'Crew'
             }
         ]
     }

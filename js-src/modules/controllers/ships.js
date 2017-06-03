@@ -3,10 +3,9 @@
 var $ = require('jquery');
 var _ = require('lodash');
 var ships = require('../models/ships');
+var upgrades = require('../models/upgrades').keyed;
 var Build = require('../models/shipBuild');
 var events = require('./events');
-var upgrades = require('xwing-data/data/upgrades');
-console.log('upgrades', upgrades);
 
 var currentBuild;
 
@@ -82,52 +81,180 @@ module.exports = {
     },
     initUpgrades: function () {
         // bind ships to DOM
-        var $upgradeList = $('#upgrades-list');
-        var $noneOption = $('<option value="0">Select an upgrade...</option>');
-        $upgradeList.append($noneOption);
-        // Add all ships to list
-        _.forEach(upgrades, function (item) {
-            var $newOption = $('<option value="' + item.id + '">' + item.name + '</option>');
-            $upgradeList.append($newOption);
+        // var $upgradeList = $('#upgrades-list');
+        // var $noneOption = $('<option value="0">Select an upgrade...</option>');
+        // $upgradeList.append($noneOption);
+        // // Add all ships to list
+        // _.forEach(upgrades, function (item) {
+        //     var $newOption = $('<option value="' + item.id + '">' + item.name + '</option>');
+        //     $upgradeList.append($newOption);
+        // });
+
+        // $('#buy-upgrade').on('click', function () {
+        //     var chosenItemValue = $upgradeList.val();
+        //     currentBuild.buyUpgrade(chosenItemValue);
+        // });
+    },
+    renderPilotLevelUpgrades: function (pilotSkill) {
+        var eliteUpgradeSlot = {
+            type: 'Elite'
+        };
+
+        if (pilotSkill >= 3) {
+            var $upgradeElement = module.exports.renderShipUpgrade(eliteUpgradeSlot);
+            $('#elite-wrapper').append($upgradeElement);
+        }
+    },
+    renderShipUpgrades: function (currentShip) {
+        var upgradeSlots = _.clone(currentShip.upgrades, true);
+        // Always add a mod slot
+        upgradeSlots.push({
+            type: 'Modification'
         });
 
-        $('#buy-upgrade').on('click', function () {
-            var chosenItemValue = $upgradeList.val();
-            currentBuild.buyUpgrade(chosenItemValue);
+        _.each(upgradeSlots, function (upgradeSlot) {
+            var $upgradeElement = module.exports.renderShipUpgrade(upgradeSlot);
+            $('#upgrades-wrapper').append($upgradeElement);
         });
+    },
+    renderShipUpgrade: function (upgradeSlot) {
+        var $div = $('<div>');
+        $div.append('<h3>' + upgradeSlot.type + '</h3>');
+        var $select = $('<select>');
+        var $noneOption = $('<option value="0">Select an upgrade...</option>');
+        $select.append($noneOption);
+        var upgradesOfType = upgrades[upgradeSlot.type];
+        _.each(upgradesOfType, function (upgradeCard) {
+            var $option = $('<option value="' + upgradeCard.id + '">' + upgradeCard.name + '</option>');
+            $select.append($option);
+        });
+        $div.append($select);
+
+        var $button = $('<button>Buy</button>');
+        $button.on('click', function () {
+            var upgradeId = parseInt($select.val(), 10);
+            currentBuild.buyUpgrade(upgradeId);
+        });
+        $div.append($button);
+
+        return $div;
     },
     initAddXp: function () {
         $('#add-mission-xp').on('click', function () {
             var stringXpAmount = $('#mission-xp').val();
             var xpAmount = parseInt(stringXpAmount, 10);
-            currentBuild.addMissionXp(xpAmount);         
+            currentBuild.addMissionXp(xpAmount);
         });
     },
     bindStatus: function () {
-        events.on('build.currentShip.update', function (event, currentBuild) {
-            $('#ship-current').text(currentBuild.currentShip.label);
+        events.on('build.currentShip.update', function (event, currentShip) {
+            $('#ship-current').text(currentShip.label);
+            module.exports.renderShipUpgrades(currentShip);
         });
 
-        events.on('build.pilotSkill.update', function (event, pilotSkill) {
-            $('#pilot-skill').text(pilotSkill);
+        events.on('build.pilotSkill.update', function (event, data) {
+            $('#pilot-skill').text(data.pilotSkill);
+            module.exports.renderPilotLevelUpgrades(data.pilotSkill);
+            module.exports.renderUpgradesList(data.build);
         });
 
         events.on('build.xp.update', function (event, xp) {
             $('#xp-current').text(xp);
         });
 
-        events.on('build.upgrades.add', function (event, upgradeId) {
-            var $upgradeItem = $('<li>' + upgradeId + '</li>');
+        events.on('build.upgrades.update', function (event, build) {
+            module.exports.renderUpgradesList(build);
+        });
+
+        events.on('build.xpHistory.add', function (event, data) {
+            module.exports.renderXpHistoryTableRow(data);
+        });
+    },
+    renderUpgradesList: function (build) {
+        var keyedUpgrades = _.clone(build.upgrades, true);
+        var numUsableUpgrades = module.exports.numberOfUsableUpgrades(build);
+        for (var upgradeType in numUsableUpgrades) {
+            if (!keyedUpgrades[upgradeType]) {
+                keyedUpgrades[upgradeType] = [];
+            }
+        };
+
+        var $upgradeItem;
+        var $ul;
+        var numOfType;
+        var numAvailableofType;
+        $('#upgrade-list').empty();
+        for (var type in keyedUpgrades) {
+            $upgradeItem = $('<div>');
+            numOfType = keyedUpgrades[type].length;
+            numAvailableofType = numUsableUpgrades[type];
+            $upgradeItem.append('<h3>' + type + ' (' + numOfType + ')</h3>');
+            $upgradeItem.append('<p>Usable slots: ' + numAvailableofType + '</p>');
+            $ul = $('<ul>');
+            _.each(keyedUpgrades[type], function (upgrade) {
+                var $li = $('<li>' + upgrade.name + '</li>');
+                $ul.append($li);
+            });
+            $upgradeItem.append($ul);
             $('#upgrade-list').append($upgradeItem);
+        }
+    },
+    numberOfUsableUpgrades: function (build) {
+
+        // elite slots are dependent on pilot level
+        var eliteSlots = 0;
+        if (build.pilotSkill >= 3) {
+            eliteSlots = 1;
+        } else if (build.pilotSkill >= 5) {
+            eliteSlots = 2;
+        } else if (build.pilotSkill >= 7) {
+            eliteSlots = 3;
+        } else if (build.pilotSkill >= 9) {
+            eliteSlots = 4;
+        }
+
+        // mod slots are dependent on pilot level
+        var modSlots = 1;
+        if (build.pilotSkill >= 4) {
+            modSlots = 2;
+        } else if (build.pilotSkill >= 6) {
+            modSlots = 3;
+        } else if (build.pilotSkill >= 8) {
+            modSlots = 4;
+        }
+
+        // Not allowed any of this Mod
+        var usableUpgrades = {
+            Elite: eliteSlots,
+            Modification: modSlots
+        };
+
+        // Add slots for the ship type
+        var shipUpgrades = build.currentShip.upgrades;
+        _.each(shipUpgrades, function (shipUpgrade) {
+            if (!usableUpgrades[shipUpgrade.type]) {
+                usableUpgrades[shipUpgrade.type] = 1;
+            } else {
+                usableUpgrades[shipUpgrade.type] += 1;
+            }
         });
 
-        events.on('build.xpHistory.update', function (event, xpItem) {
-            var $historyItem = $('<tr>');
-            $historyItem.append('<td>' + xpItem.type() + ': ' + xpItem.name() + '</td>');
-            $historyItem.append('<td>' + xpItem.cost() + '</td>');
-            $historyItem.append('<td>' + xpItem.remaining() + '</td>');
-            $('#xp-history').append($historyItem);
-        });
-
+        return usableUpgrades;
+    },
+    renderXpHistoryTableRow: function (data) {
+        var $historyItem = $('<tr>');
+        $historyItem.append('<td>' + data.xpItem.label() + '</td>');
+        var cost = data.xpItem.cost();
+        var costString = cost;
+        var costClass = '';
+        if (cost > 0) {
+            costString = '+' + cost;
+            costClass = 'positive';
+        } else if (cost < 0) {
+            costClass = 'negative';
+        }
+        $historyItem.append('<td class="' + costClass + '">' + costString + '</td>');
+        $historyItem.append('<td>' + data.build.currentXp + '</td>');
+        $('#xp-history').append($historyItem);
     }
 };
