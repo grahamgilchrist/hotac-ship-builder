@@ -32,7 +32,7 @@ var _ = require('lodash');
 var ships = require('../models/ships');
 var Build = require('../models/shipBuild');
 var events = require('./events');
-var upgrades = require('xwing-data/data/upgrades.js');
+var upgrades = require('xwing-data/data/upgrades');
 console.log('upgrades', upgrades);
 
 var currentBuild;
@@ -40,18 +40,31 @@ var currentBuild;
 module.exports = {
     init: function () {
         module.exports.bindStatus();
+        module.exports.initResetButton();
         module.exports.initStartingShips();
         module.exports.initShipChange();
         module.exports.initPsIncrease();
         module.exports.initUpgrades();
+        module.exports.initAddXp();
+    },
+    initResetButton: function () {
+        // hide start section
+        $('.new').hide();
+        $('.main').hide();
+        // bind new button
+        $('#new-build').on('click', module.exports.clickResetButton);
+    },
+    clickResetButton: function () {
+        if (currentBuild) {
+            var result = window.confirm('Are you sure you want to start a new ship? The existing build will be lost');
+            if (!result) {
+                return;
+            }
+        }
+        $('.main').hide();
+        $('.new').show();
     },
     initStartingShips: function () {
-        // bind starting ship change
-        $('#starting-ships').on('change', function () {
-            var chosenItemValue = $(this).val();
-            module.exports.chooseStartingShip(chosenItemValue);
-        });
-
         // get list of starting ships
         var filterFunction = function (item) {
             return item.starting === true;
@@ -64,11 +77,14 @@ module.exports = {
             $('#starting-ships').append($newOption);
         });
         $('#starting-ships option').first().prop('selected', 'selected');
-        $('#starting-ships').change();
 
-    },
-    chooseStartingShip: function (newShipId) {
-        currentBuild = new Build(newShipId);
+        // bind starting ship change
+        $('#start-build').on('click', function () {
+            var chosenShipId = $('#starting-ships').val();
+            currentBuild = new Build(chosenShipId);
+            $('.new').hide();
+            $('.main').show();
+        });
     },
     initShipChange: function () {
         // bind ships to DOM
@@ -107,7 +123,18 @@ module.exports = {
             currentBuild.buyUpgrade(chosenItemValue);
         });
     },
+    initAddXp: function () {
+        $('#add-mission-xp').on('click', function () {
+            var stringXpAmount = $('#mission-xp').val();
+            var xpAmount = parseInt(stringXpAmount, 10);
+            currentBuild.addMissionXp(xpAmount);         
+        });
+    },
     bindStatus: function () {
+        events.on('build.currentShip.update', function (event, currentBuild) {
+            $('#ship-current').text(currentBuild.currentShip.label);
+        });
+
         events.on('build.pilotSkill.update', function (event, pilotSkill) {
             $('#pilot-skill').text(pilotSkill);
         });
@@ -132,13 +159,14 @@ module.exports = {
     }
 };
 
-},{"../models/shipBuild":5,"../models/ships":6,"./events":2,"jquery":8,"lodash":9,"xwing-data/data/upgrades.js":10}],4:[function(require,module,exports){
+},{"../models/shipBuild":5,"../models/ships":6,"./events":2,"jquery":8,"lodash":9,"xwing-data/data/upgrades":10}],4:[function(require,module,exports){
 'use strict';
 
 module.exports = {
     SHIP_TYPE: 'ship',
     PILOT_SKILL: 'pilotSkill',
-    BUY_UPGRADE: 'buyUpgrade'
+    BUY_UPGRADE: 'buyUpgrade',
+    MISSION: 'mission'
 };
 
 },{}],5:[function(require,module,exports){
@@ -152,14 +180,19 @@ var itemTypes = require('./itemTypes');
 
 // Ship build
 var ShipBuild = function (startingShipId) {
-    this.startingShip = _.find(ships, function (ship) {
-        return ship.id === startingShipId;
-    });
-    this.shipType = this.startingShip;
+    this.startingShip = this.getShipById(startingShipId);
+    this.currentShip = this.startingShip;
+    events.trigger('build.currentShip.update', this);
     this.setPilotSkill(2);
     this.currentXp = 0;
     this.addXp(this.startingShip.startingXp);
     this.xpHistory = [];
+};
+
+ShipBuild.prototype.getShipById = function (shipId) {
+    return _.find(ships, function (ship) {
+        return ship.id === shipId;
+    });
 };
 
 ShipBuild.prototype.setPilotSkill = function (ps) {
@@ -186,11 +219,18 @@ ShipBuild.prototype.addToHistory = function (type, id) {
 
 ShipBuild.prototype.changeShip = function (shipId) {
     this.addToHistory(itemTypes.SHIP_TYPE, shipId);
+    this.currentShip = this.getShipById(shipId);
+    events.trigger('build.currentShip.update', this);
 };
 
 ShipBuild.prototype.increasePilotSkill = function () {
     this.setPilotSkill(this.pilotSkill + 1);
     this.addToHistory(itemTypes.PILOT_SKILL, this.pilotSkill);
+};
+
+ShipBuild.prototype.addMissionXp = function (xpAmount) {
+    this.addXp(xpAmount);
+    this.addToHistory(itemTypes.MISSION, xpAmount);
 };
 
 ShipBuild.prototype.buyUpgrade = function (upgradeId) {
@@ -27651,7 +27691,7 @@ return jQuery;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],10:[function(require,module,exports){
-[
+module.exports=[
   {
     "name": "Ion Cannon Turret",
     "id": 0,

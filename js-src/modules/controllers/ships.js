@@ -5,7 +5,7 @@ var _ = require('lodash');
 var ships = require('../models/ships');
 var Build = require('../models/shipBuild');
 var events = require('./events');
-var upgrades = require('xwing-data/data/upgrades.js');
+var upgrades = require('xwing-data/data/upgrades');
 console.log('upgrades', upgrades);
 
 var currentBuild;
@@ -13,18 +13,31 @@ var currentBuild;
 module.exports = {
     init: function () {
         module.exports.bindStatus();
+        module.exports.initResetButton();
         module.exports.initStartingShips();
         module.exports.initShipChange();
         module.exports.initPsIncrease();
         module.exports.initUpgrades();
+        module.exports.initAddXp();
+    },
+    initResetButton: function () {
+        // hide start section
+        $('.new').hide();
+        $('.main').hide();
+        // bind new button
+        $('#new-build').on('click', module.exports.clickResetButton);
+    },
+    clickResetButton: function () {
+        if (currentBuild) {
+            var result = window.confirm('Are you sure you want to start a new ship? The existing build will be lost');
+            if (!result) {
+                return;
+            }
+        }
+        $('.main').hide();
+        $('.new').show();
     },
     initStartingShips: function () {
-        // bind starting ship change
-        $('#starting-ships').on('change', function () {
-            var chosenItemValue = $(this).val();
-            module.exports.chooseStartingShip(chosenItemValue);
-        });
-
         // get list of starting ships
         var filterFunction = function (item) {
             return item.starting === true;
@@ -37,11 +50,14 @@ module.exports = {
             $('#starting-ships').append($newOption);
         });
         $('#starting-ships option').first().prop('selected', 'selected');
-        $('#starting-ships').change();
 
-    },
-    chooseStartingShip: function (newShipId) {
-        currentBuild = new Build(newShipId);
+        // bind starting ship change
+        $('#start-build').on('click', function () {
+            var chosenShipId = $('#starting-ships').val();
+            currentBuild = new Build(chosenShipId);
+            $('.new').hide();
+            $('.main').show();
+        });
     },
     initShipChange: function () {
         // bind ships to DOM
@@ -80,7 +96,18 @@ module.exports = {
             currentBuild.buyUpgrade(chosenItemValue);
         });
     },
+    initAddXp: function () {
+        $('#add-mission-xp').on('click', function () {
+            var stringXpAmount = $('#mission-xp').val();
+            var xpAmount = parseInt(stringXpAmount, 10);
+            currentBuild.addMissionXp(xpAmount);         
+        });
+    },
     bindStatus: function () {
+        events.on('build.currentShip.update', function (event, currentBuild) {
+            $('#ship-current').text(currentBuild.currentShip.label);
+        });
+
         events.on('build.pilotSkill.update', function (event, pilotSkill) {
             $('#pilot-skill').text(pilotSkill);
         });
