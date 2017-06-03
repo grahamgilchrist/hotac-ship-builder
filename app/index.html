@@ -1,0 +1,75 @@
+<html>
+    <head>
+        <style>
+            .upgrades {
+                width: 50%;
+                float: left;
+            }
+
+            .status {
+                width: 50%;
+                float: right;
+            }
+            th {
+                padding: 10px 20px;
+                text-align: left;
+                background: #eee
+            }
+            td {
+                padding: 10px 20px;
+            }
+            table {
+                border-collapse: collapse;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="upgrades">
+            <h1>Starting ship</h1>
+            <select id="starting-ships"></select>
+
+            <h1>Upgrades</h1>
+
+            <h2>Change ship</h2>
+            <select id="change-ship-list"></select>
+            <button id="change-ship">Change</button>
+
+            <h2>Increase pilot skill</h2>
+            <button id="increase-ps">Increase one level</button>
+
+            <h2>Buy upgrade</h2>
+            <select id="upgrades-list"></select>
+            <button id="buy-upgrade">Buy</button>
+
+            <h2>Add Mission XP</h2>
+            <input type="text">
+            <button id="add-mission-xp">Add</button>
+
+        </div>
+
+        <div class="status">
+            <h1>Current Stats</h1>
+
+            <h2>Pilot Skill: <span id="pilot-skill"></span></h2>
+
+            <h2>Current XP: <span id="xp-current"></span></h2>
+
+            <h2>Purchased upgrades</h2>
+            <ul id="upgrade-list"></ul>
+            
+            <h2>XP history</h2>
+            <table>
+                <thead>
+                    <th>Upgrade</th>
+                    <th>Cost</th>
+                    <th>Remaining XP</th>
+                </thead>
+                <tbody id="xp-history">
+                </tbody>
+            </table>
+
+        </div>
+
+        <script src="js/main.js"></script>
+    </body>
+</html>

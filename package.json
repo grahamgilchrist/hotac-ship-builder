@@ -1,0 +1,24 @@
+{
+  "name": "hotac-squad-builder",
+  "version": "0.0.1",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grahamgilchrist/hotac-squad-builder.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/grahamgilchrist/hotac-squad-builder/issues"
+  },
+  "homepage": "https://github.com/grahamgilchrist/hotac-squad-builder#readme",
+  "devDependencies": {
+    "browserify": "13.x",
+    "gulp": "3.x",
+    "gulp-sourcemaps": "2.6.x",
+    "gulp-webserver": "0.9.x",
+    "jquery": "3.1.x",
+    "lodash": "^4.17.4",
+    "vinyl-source-stream": "1.x",
+    "xwing-data": "^0.35.2"
+  }
+}
