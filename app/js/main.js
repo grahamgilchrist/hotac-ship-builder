@@ -48,8 +48,6 @@ module.exports = {
     },
     initResetButton: function () {
         // hide start section
-        $('.new').hide();
-        $('.main').hide();
         // bind new button
         $('#new-build').on('click', module.exports.clickResetButton);
     },
@@ -60,8 +58,8 @@ module.exports = {
                 return;
             }
         }
-        $('.main').hide();
-        $('.new').show();
+        $('.main').removeClass('active');
+        $('.new').addClass('active');
     },
     initStartingShips: function () {
         // get list of starting ships
@@ -81,8 +79,8 @@ module.exports = {
         $('#start-build').on('click', function () {
             var chosenShipId = $('#starting-ships').val();
             currentBuild = new Build(chosenShipId);
-            $('.new').hide();
-            $('.main').show();
+            $('.new').removeClass('active');
+            $('.main').addClass('active');
         });
     },
     initShipChange: function () {
@@ -272,11 +270,12 @@ module.exports = {
             modSlots = 4;
         }
 
-        // Not allowed any of this Mod
         var usableUpgrades = {
-            Elite: eliteSlots,
             Modification: modSlots
         };
+        if (eliteSlots > 0) {
+            usableUpgrades.Elite = eliteSlots;
+        }
 
         // Add slots for the ship type
         var shipUpgrades = build.currentShip.upgrades;

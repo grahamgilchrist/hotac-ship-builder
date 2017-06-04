@@ -1,96 +1,86 @@
+<!doctype html>
 <html>
     <head>
-        <style>
-            .main {
-                overflow: hidden;
-            }
-
-            .status {
-                width: 50%;
-                float: left;
-            }
-
-            .upgrades {
-                width: 50%;
-                float: right;
-            }
-            th {
-                padding: 10px 20px;
-                text-align: left;
-                background: #eee
-            }
-            td {
-                padding: 10px 20px;
-            }
-            table {
-                border-collapse: collapse;
-            }
-
-            .positive {
-                color: green;
-            }
-
-            .negative {
-                color: red;
-            }
-        </style>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Hotac Ship builder</title>
+        <meta name="description" content="Interactive ship advancement tool for use with the x-wing heroes of the Aturi cluster campaign">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/png" href="/favicon.png" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css" /> 
+        <link href="/styles/main.css" rel="stylesheet">
+        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+        <script defer src="js/main.js"></script>
     </head>
     <body>
 
-        <button id="new-build">New</button>
-        <div class="new">
-            <select id="starting-ships"></select>
-            <button id="start-build">Start</button>
-        </div>
-
-        <div class="main">
-            <div class="status">
-                <h1>Current pilot build</h1>
-                <h2>Current ship: <span id="ship-current"></span></h2>
-
-                <h2>Pilot Skill: <span id="pilot-skill"></span></h2>
-
-                <h2>Current XP: <span id="xp-current"></span></h2>
-
-                <h2>Purchased upgrades</h2>
-                <ul id="upgrade-list"></ul>
-                
-                <h2>XP history</h2>
-                <table>
-                    <thead>
-                        <th>Upgrade</th>
-                        <th>Cost</th>
-                        <th>Remaining XP</th>
-                    </thead>
-                    <tbody id="xp-history">
-                    </tbody>
-                </table>
-
-            </div>
-
-            <div class="upgrades">
-                <h1>Upgrades</h1>
-
-                <h2>Add Mission XP</h2>
-                <input type="text" id="mission-xp">
-                <button id="add-mission-xp">Add</button>
-
-                <h2>Change ship</h2>
-                <select id="change-ship-list"></select>
-                <button id="change-ship">Change</button>
-
-                <h2>Increase pilot skill</h2>
-                <button id="increase-ps">Increase one level</button>
-
-                <h2>Buy upgrade</h2>
-                <div id="upgrades-wrapper">
-                </div>
-                <div id="elite-wrapper">
-                </div>
-
+        <div class="header">
+            <div class="structure">
+                <h1>Heroes of the Aturi Cluster <span>Ship builder</span></h1>
             </div>
         </div>
 
-        <script src="js/main.js"></script>
+        <div class="container">
+            <div class="structure">
+                <div class="reset">
+                    <button id="new-build" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Start new ship build</button>
+                </div>
+
+                <div class="new">
+                    <h2>Select Starting ship</h2>
+                    <select id="starting-ships"></select>
+                    <button id="start-build" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Start</button>
+                </div>
+
+                <div class="main">
+                    <div class="status">
+                        <h2>Current pilot build</h2>
+                        <h3>Current ship: <span id="ship-current"></span></h3>
+
+                        <h3>Pilot Skill: <span id="pilot-skill"></span></h3>
+
+                        <h3>Current XP: <span id="xp-current"></span></h3>
+
+                        <h3>Purchased upgrades</h3>
+                        <ul id="upgrade-list"></ul>
+                        
+                        <h3>XP history</h3>
+                        <table>
+                            <thead>
+                                <th>Upgrade</th>
+                                <th>Cost</th>
+                                <th>Remaining XP</th>
+                            </thead>
+                            <tbody id="xp-history">
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <div class="upgrades">
+                        <h2>Upgrades</h2>
+
+                        <h3>Add Mission XP</h3>
+                        <input type="text" id="mission-xp">
+                        <button id="add-mission-xp">Add</button>
+
+                        <h3>Change ship</h3>
+                        <select id="change-ship-list"></select>
+                        <button id="change-ship">Change</button>
+
+                        <h3>Increase pilot skill</h3>
+                        <button id="increase-ps">Increase one level</button>
+
+                        <h3>Buy upgrade</h3>
+                        <div id="upgrades-wrapper">
+                        </div>
+                        <div id="elite-wrapper">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

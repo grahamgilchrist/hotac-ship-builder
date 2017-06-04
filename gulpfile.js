@@ -1,16 +1,18 @@
 'use strict';
 
 const gulp = require('gulp');
-const server = require('./node/server')();
-const brwoserify = require('./node/browserify')();
+require('./node/server')();
+require('./node/browserify')();
+require('./node/sass')();
 
 // Add some general task aliases
 gulp.task('lint', [
-    'eslint'
+    'eslint',
+    'sass-lint'
 ]);
 
 gulp.task('watch', [
-    // 'sass:watch',
+    'sass:watch',
     'browserify:watch'
 ]);
 
@@ -21,8 +23,8 @@ gulp.task('dev', [
 ]);
 
 gulp.task('build', [
-    'browserify'
-    // 'sass'
+    'browserify',
+    'sass'
 ]);
 
 gulp.task('default', ['build']);
