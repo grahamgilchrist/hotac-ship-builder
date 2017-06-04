@@ -1,0 +1,95 @@
+.header
+    overflow: hidden
+    background-color: $color-primary
+    color: #fff
+
+    h1
+        font-size: 36px
+        margin: $vertical-spacing 0
+
+        span
+            display: block
+            font-size: 18px
+
+.structure
+    max-width: 1200px
+    margin: 0 auto
+    padding: 0 20px
+
+.container
+    padding: 20px 0
+
+.new,
+.main
+    display: none
+    margin: 20px 0
+    padding: 20px
+    background-color: #f6f6f6
+
+    &.active
+        display: block
+
+.main
+    overflow: hidden
+
+.status
+    width: 50%
+    float: left
+
+.upgrades
+    width: 50%
+    float: right
+
+.info-items
+    display: table
+    margin-bottom: $vertical-spacing
+
+.info-item
+    display: table-row
+    margin-bottom: 5px
+
+    .label,
+    .value
+        padding: 5px 10px
+        display: table-cell
+
+    .label
+        font-weight: 700
+        text-align: right
+    .value
+        background-color: #fff
+
+.purchased-upgrades
+
+
+#upgrade-list
+    font-size: 12px
+
+    ul
+        overflow: hidden
+        li
+            float: left
+            margin-right: 5px
+            width: 150px
+            padding: 5px 10px
+            background-color: #fff
+            margin-bottom: 5px
+
+            &:last-child
+                margin-right: 0
+
+    h4,
+    p
+        margin-bottom: 0
+
+    h4 .number
+        margin-left: 0.7em
+        font-size: 12px
+        display: inline-block
+        background-color: $color-primary
+        border-radius: 20px
+        width: 20px
+        height: 20px
+        color: #fff
+        line-height: 20px
+        text-align: center

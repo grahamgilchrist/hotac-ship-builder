@@ -47,7 +47,6 @@ module.exports = {
         module.exports.initAddXp();
     },
     initResetButton: function () {
-        // hide start section
         // bind new button
         $('#new-build').on('click', module.exports.clickResetButton);
     },
@@ -130,7 +129,7 @@ module.exports = {
     },
     renderShipUpgrade: function (upgradeSlot) {
         var $div = $('<div>');
-        $div.append('<h3>' + upgradeSlot.type + '</h3>');
+        $div.append('<h4' + upgradeSlot.type + '</h4>');
         var $select = $('<select>');
         var $noneOption = $('<option value="0">Select an upgrade...</option>');
         $select.append($noneOption);
@@ -157,7 +156,7 @@ module.exports = {
         });
 
         var $div = $('<div>');
-        $div.append('<h3>Named pilot abilities</h3>');
+        $div.append('<h4>Named pilot abilities</h4>');
         var $select = $('<select>');
         var $noneOption = $('<option value="0">Select an upgrade...</option>');
         $select.append($noneOption);
@@ -226,11 +225,11 @@ module.exports = {
         var numAvailableofType;
         $('#upgrade-list').empty();
         for (var type in keyedUpgrades) {
-            $upgradeItem = $('<div>');
+            $upgradeItem = $('<li>');
             numOfType = keyedUpgrades[type].length;
             numAvailableofType = numUsableUpgrades[type];
-            $upgradeItem.append('<h3>' + type + ' (' + numOfType + ')</h3>');
-            $upgradeItem.append('<p>Usable slots: ' + numAvailableofType + '</p>');
+            $upgradeItem.append('<h4>' + type + '<span class="number">' + numOfType + '</span></h4>');
+            $upgradeItem.append('<p>This ship can mount ' + numAvailableofType + ' of these upgrades</p>');
             $ul = $('<ul>');
             _.each(keyedUpgrades[type], function (upgrade) {
                 var $li = $('<li>' + upgrade.name + '</li>');
