@@ -47,6 +47,8 @@ module.exports = {
         module.exports.initAddXp();
     },
     initResetButton: function () {
+        $('.new').addClass('active');
+
         // bind new button
         $('#new-build').on('click', module.exports.clickResetButton);
     },
@@ -103,37 +105,12 @@ module.exports = {
             currentBuild.increasePilotSkill();
         });
     },
-    renderPilotLevelUpgrades: function (pilotSkill) {
-        var eliteUpgradeSlot = {
-            type: 'Elite'
-        };
-
-        if (pilotSkill >= 3) {
-            var $eliteUpgradeElement = module.exports.renderShipUpgrade(eliteUpgradeSlot);
-            $('#elite-wrapper').append($eliteUpgradeElement);
-            var $pilotAbilityUpgradeElement = module.exports.renderPilotAbilityUpgrade(pilotSkill);
-            $('#elite-wrapper').append($pilotAbilityUpgradeElement);
-        }
-    },
-    renderShipUpgrades: function (currentShip) {
-        var upgradeSlots = _.clone(currentShip.upgrades, true);
-        // Always add a mod slot
-        upgradeSlots.push({
-            type: 'Modification'
-        });
-
-        _.each(upgradeSlots, function (upgradeSlot) {
-            var $upgradeElement = module.exports.renderShipUpgrade(upgradeSlot);
-            $('#upgrades-wrapper').append($upgradeElement);
-        });
-    },
-    renderShipUpgrade: function (upgradeSlot) {
+    renderShipUpgrade: function (upgradeType) {
         var $div = $('<div>');
-        $div.append('<h4' + upgradeSlot.type + '</h4>');
         var $select = $('<select>');
         var $noneOption = $('<option value="0">Select an upgrade...</option>');
         $select.append($noneOption);
-        var upgradesOfType = upgrades[upgradeSlot.type];
+        var upgradesOfType = upgrades[upgradeType];
         _.each(upgradesOfType, function (upgradeCard) {
             var $option = $('<option value="' + upgradeCard.id + '">' + upgradeCard.name + '</option>');
             $select.append($option);
@@ -177,20 +154,24 @@ module.exports = {
     },
     initAddXp: function () {
         $('#add-mission-xp').on('click', function () {
-            var stringXpAmount = $('#mission-xp').val();
+            var stringXpAmount = prompt('Add XP earned from a mission');
             var xpAmount = parseInt(stringXpAmount, 10);
-            currentBuild.addMissionXp(xpAmount);
+
+            if (!_.isNaN(xpAmount)) {
+                currentBuild.addMissionXp(xpAmount);
+            }
         });
     },
     bindStatus: function () {
-        events.on('build.currentShip.update', function (event, currentShip) {
-            $('#ship-current').text(currentShip.label);
-            module.exports.renderShipUpgrades(currentShip);
+        events.on('build.currentShip.update', function (event, build) {
+            $('#ship-current').text(build.currentShip.label);
+            module.exports.renderUpgradesList(build);
         });
 
         events.on('build.pilotSkill.update', function (event, data) {
             $('#pilot-skill').text(data.pilotSkill);
-            module.exports.renderPilotLevelUpgrades(data.pilotSkill);
+            $('#pilot-skill-plus-one').text(data.pilotSkill + 1);
+            $('#pilot-skill-next-xp-cost').text((data.pilotSkill + 1) * 2);
             module.exports.renderUpgradesList(data.build);
         });
 
@@ -227,21 +208,31 @@ module.exports = {
         for (var type in keyedUpgrades) {
             $upgradeItem = $('<li>');
             numOfType = keyedUpgrades[type].length;
-            numAvailableofType = numUsableUpgrades[type];
-            $upgradeItem.append('<h4>' + type + '<span class="number">' + numOfType + '</span></h4>');
-            $upgradeItem.append('<p>This ship can mount ' + numAvailableofType + ' of these upgrades</p>');
+            numAvailableofType = numUsableUpgrades[type].allowed;
             $ul = $('<ul>');
+
+            var $li = $('<li class="slot">' + type + '<span class="equip">Can equip ' + numAvailableofType + '</span></li>');
+            $ul.append($li);
+
             _.each(keyedUpgrades[type], function (upgrade) {
-                var $li = $('<li>' + upgrade.name + '</li>');
+                var $li = $('<li class="upgrade">' + upgrade.name + '</li>');
                 $ul.append($li);
             });
             if (type === 'Elite') {
                 _.each(build.pilotAbilities, function (pilot) {
-                    var $li = $('<li>Ability: ' + pilot.name + '</li>');
+                    var $li = $('<li class="upgrade">Ability: ' + pilot.name + '</li>');
                     $ul.append($li);
                 });
             }
             $upgradeItem.append($ul);
+
+            var $upgradePurchaseList = module.exports.renderShipUpgrade(type);
+            $upgradeItem.append($upgradePurchaseList);
+
+            if (type === 'Elite') {
+                var $pilotPurchaseList = module.exports.renderPilotAbilityUpgrade(currentBuild.pilotSkill);
+                $upgradeItem.append($pilotPurchaseList);
+            }
             $('#upgrade-list').append($upgradeItem);
         }
     },
@@ -270,19 +261,29 @@ module.exports = {
         }
 
         var usableUpgrades = {
-            Modification: modSlots
+            Modification: {
+                max: 3,
+                allowed: modSlots
+            }
         };
         if (eliteSlots > 0) {
-            usableUpgrades.Elite = eliteSlots;
+            usableUpgrades.Elite = {
+                max: 4,
+                allowed: eliteSlots
+            };
         }
 
         // Add slots for the ship type
         var shipUpgrades = build.currentShip.upgrades;
         _.each(shipUpgrades, function (shipUpgrade) {
             if (!usableUpgrades[shipUpgrade.type]) {
-                usableUpgrades[shipUpgrade.type] = 1;
+                usableUpgrades[shipUpgrade.type] = {
+                    max: 1,
+                    allowed: 1
+                };
             } else {
-                usableUpgrades[shipUpgrade.type] += 1;
+                usableUpgrades[shipUpgrade.type].max += 1;
+                usableUpgrades[shipUpgrade.type].allowed += 1;
             }
         });
 
@@ -352,11 +353,12 @@ var ShipBuild = function (startingShipId) {
         shipId: this.startingShip.id
     });
 
-    this.currentShip = this.startingShip;
-    events.trigger('build.currentShip.update', this.currentShip);
-
     this.pilotAbilities = [];
     this.upgrades = {};
+
+    this.currentShip = this.startingShip;
+    events.trigger('build.currentShip.update', this);
+
     this.setPilotSkill(2);
 };
 
@@ -413,7 +415,7 @@ ShipBuild.prototype.changeShip = function (shipId) {
         shipId: shipId
     });
     this.currentShip = this.getShipById(shipId);
-    events.trigger('build.currentShip.update', this.currentShip);
+    events.trigger('build.currentShip.update', this);
 };
 
 ShipBuild.prototype.increasePilotSkill = function () {

@@ -22,23 +22,73 @@
 .new,
 .main
     display: none
-    margin: 20px 0
-    padding: 20px
-    background-color: #f6f6f6
 
     &.active
         display: block
 
-.main
+.new,
+.current-build
+    padding: 20px
+    background-color: #f6f6f6
+
+.reset
+    margin-bottom: 20px
+
+.current-build
     overflow: hidden
 
-.status
-    width: 50%
-    float: left
+.build-header
+    overflow: hidden
+    background-color: $color-primary
+    color: #fff
+    padding: 20px
 
-.upgrades
-    width: 50%
-    float: right
+    h2
+        float: left
+        margin: 0 
+
+    .xp-current
+        float: right
+        position: relative
+
+        .label,
+        .value
+            display: inline-block
+            vertical-align: middle
+
+        .label
+            text-align: center
+
+        .label-main,
+        .label-sub
+            display: block
+
+        .label-main
+            font-size: 36px
+            line-height: 48px
+
+        .label-sub
+            font-size: 10px
+            line-height: 1
+
+        .value
+            margin: 0 10px 0 0.5em
+            font-size: 36px
+            background-color: $color-accent
+            width: 48px
+            height: 48px
+            line-height: 48px
+            border-radius: 48px
+            text-align: center
+
+        .mdl-button--fab
+            position: absolute
+            top: -5px
+            right: -10px
+            width: 30px
+            min-width: 30px
+            height: 30px
+            font-size: 10px
 
 .info-items
     display: table
@@ -64,20 +114,29 @@
 
 #upgrade-list
     font-size: 12px
+    overflow: hidden
 
-    ul
-        overflow: hidden
+    > li
+        float: left
+        margin-right: 5px
+
+        &:last-child
+            margin-right: 0
+
         li
-            float: left
-            margin-right: 5px
-            width: 150px
+            width: 180px
             padding: 5px 10px
-            background-color: #fff
-            margin-bottom: 5px
+            margin-bottom: 5px  
 
-            &:last-child
-                margin-right: 0
+            &.slot
+                background-color: #fff
 
+            &.upgrade
+                background-color: #c8f3c8
+
+            .equip
+                font-size: 10px
+                margin-left: 1em
     h4,
     p
         margin-bottom: 0

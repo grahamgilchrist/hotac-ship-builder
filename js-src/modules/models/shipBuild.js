@@ -18,11 +18,12 @@ var ShipBuild = function (startingShipId) {
         shipId: this.startingShip.id
     });
 
-    this.currentShip = this.startingShip;
-    events.trigger('build.currentShip.update', this.currentShip);
-
     this.pilotAbilities = [];
     this.upgrades = {};
+
+    this.currentShip = this.startingShip;
+    events.trigger('build.currentShip.update', this);
+
     this.setPilotSkill(2);
 };
 
@@ -79,7 +80,7 @@ ShipBuild.prototype.changeShip = function (shipId) {
         shipId: shipId
     });
     this.currentShip = this.getShipById(shipId);
-    events.trigger('build.currentShip.update', this.currentShip);
+    events.trigger('build.currentShip.update', this);
 };
 
 ShipBuild.prototype.increasePilotSkill = function () {

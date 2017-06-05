@@ -23,10 +23,6 @@
 
         <div class="container">
             <div class="structure">
-                <div class="reset">
-                    <button id="new-build" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Start new ship build</button>
-                </div>
-
                 <div class="new">
                     <h2>Select Starting ship</h2>
                     <select id="starting-ships"></select>
@@ -34,62 +30,70 @@
                 </div>
 
                 <div class="main">
-                    <div class="status">
-                        <h2>Current pilot build</h2>
-
-                        <div class="info-items">
-                            <div class="info-item">
-                                <span class="label">Current ship</span>
-                                <span class= "value" id="ship-current"></span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">Pilot Skill</span>
-                                <span class= "value" id="pilot-skill"></span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">Current XP</span>
-                                <span class= "value" id="xp-current"></span>
-                            </div>
-                        </div>
-
-                        <div class="purchased-upgrades">
-                            <h3>Purchased upgrades</h3>
-                            <ul id="upgrade-list"></ul>
-                        </div>
-                        
-                        <h3>XP history</h3>
-                        <table>
-                            <thead>
-                                <th>Upgrade</th>
-                                <th>Cost</th>
-                                <th>Remaining XP</th>
-                            </thead>
-                            <tbody id="xp-history">
-                            </tbody>
-                        </table>
-
+                    <div class="reset">
+                        <button id="new-build" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Start new ship build</button>
                     </div>
 
-                    <div class="upgrades">
-                        <h2>Upgrades</h2>
-
-                        <h3>Add Mission XP</h3>
-                        <input type="text" id="mission-xp">
-                        <button id="add-mission-xp">Add</button>
-
-                        <h3>Change ship</h3>
-                        <select id="change-ship-list"></select>
-                        <button id="change-ship">Change</button>
-
-                        <h3>Increase pilot skill</h3>
-                        <button id="increase-ps">Increase one level</button>
-
-                        <h3>Buy upgrade</h3>
-                        <div id="upgrades-wrapper">
-                        </div>
-                        <div id="elite-wrapper">
+                    <div class="current-build">
+                        <div class="build-header">
+                            <h2 id="ship-current"></h2>
+                            <div class="xp-current">
+                                <span class="label"><span class="label-main">XP</span><span class="label-sub">to spend</span></span>
+                                <span class="value" id="xp-current"></span>
+                                <button  id="add-mission-xp" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+                                    <i class="material-icons">add</i>
+                                </button>
+                                <div class="mdl-tooltip" data-mdl-for="add-mission-xp">
+                                    Add mission XP
+                                </div>
+                            </div>
                         </div>
 
+                        <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+                            <div class="mdl-tabs__tab-bar">
+                                <a href="#current-ship-tab" class="mdl-tabs__tab is-active">Current ship status</a>
+                                <a href="#xp-history-tab" class="mdl-tabs__tab">XP history</a>
+                            </div>
+
+                            <div class="mdl-tabs__panel is-active" id="current-ship-tab">
+                                <div class="status">
+
+                                    <div class="info-items">
+                                        <div class="info-item">
+                                            <span class="label">Pilot Skill</span>
+                                            <span class= "value" id="pilot-skill"></span>
+                                            <span><span id="pilot-skill-next-xp-cost"></span> XP to update to level <span id="pilot-skill-plus-one"></span></span>
+                                            <button id="increase-ps">Upgrade</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="change-ship">
+                                        <h3>Change ship (5XP)</h3>
+                                        <select id="change-ship-list"></select>
+                                        <button id="change-ship">Change</button>
+                                    </div>
+
+                                    <div class="purchased-upgrades">
+                                        <h3>Upgrades</h3>
+                                        <ul id="upgrade-list"></ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mdl-tabs__panel" id="xp-history-tab">
+                                <h3>XP history</h3>
+                                <table>
+                                    <thead>
+                                        <th>Upgrade</th>
+                                        <th>Cost</th>
+                                        <th>Remaining XP</th>
+                                    </thead>
+                                    <tbody id="xp-history">
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
