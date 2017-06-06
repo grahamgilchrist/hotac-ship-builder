@@ -8,7 +8,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" type="image/png" href="/favicon.png" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css" /> 
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css" />
+        <link rel="stylesheet" href="components/xwing-miniatures-font/dist/xwing-miniatures.css" /> 
         <link href="/styles/main.css" rel="stylesheet">
         <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
         <script defer src="js/main.js"></script>
@@ -57,27 +58,28 @@
                                 </div>
 
                                 <div class="mdl-tabs__panel is-active" id="current-ship-tab">
-                                    <div class="status">
 
-                                        <div class="info-items">
-                                            <div class="info-item">
-                                                <span class="label">Pilot Skill</span>
-                                                <span class= "value" id="pilot-skill"></span>
-                                                <span><span id="pilot-skill-next-xp-cost"></span> XP to update to level <span id="pilot-skill-plus-one"></span></span>
-                                                <button id="increase-ps" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Upgrade</button>
-                                            </div>
-                                        </div>
+                                    <div class="ship-info">
+                                        <img src="" alt="Ship image" id="ship-info-image">
+                                        <div id="ship-info-stats"></div>
+                                        <div id="ship-info-actions"></div>
+                                    </div>
+                                    <div>
+                                        <span class="label">Pilot Skill</span>
+                                        <span class= "value" id="pilot-skill"></span>
+                                        <span><span id="pilot-skill-next-xp-cost"></span> XP to update to level <span id="pilot-skill-plus-one"></span></span>
+                                        <button id="increase-ps" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Upgrade</button>
+                                    </div>
 
-                                        <div class="change-ship">
-                                            <h3>Change ship (5XP)</h3>
-                                            <select id="change-ship-list"></select>
-                                            <button id="change-ship" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Change</button>
-                                        </div>
+                                    <div class="change-ship">
+                                        <h3>Change ship (5XP)</h3>
+                                        <select id="change-ship-list"></select>
+                                        <button id="change-ship" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Change</button>
+                                    </div>
 
-                                        <div class="purchased-upgrades">
-                                            <h3>Upgrades</h3>
-                                            <ul id="upgrade-list"></ul>
-                                        </div>
+                                    <div class="purchased-upgrades">
+                                        <h3>Upgrades</h3>
+                                        <ul id="upgrade-list"></ul>
                                     </div>
                                 </div>
 
