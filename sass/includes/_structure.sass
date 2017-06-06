@@ -28,8 +28,31 @@
 
 .new,
 .build-content
-    padding: 20px
     background-color: #f6f6f6
+
+.new
+    padding: 20px
+    text-align: center
+
+    label
+        font-weight: 700
+        font-size: 14px
+        margin-bottom: 0.3em
+
+    label,
+    input,
+    select
+        display: block
+        min-width: 200px
+        margin:
+            left: auto
+            right: auto
+
+    .form-group
+        margin: 1.4em 0
+
+.build-content
+    padding: 0 20px 20px 20px
 
 .reset
     margin-bottom: 20px
@@ -99,24 +122,37 @@
             font-size: 10px
 
 .mdl-tabs__panel
+    overflow: hidden
     padding: 20px 0
 
 .ship-info
-    overflow: hidden
+    float: left
+    width: 300px
+    margin-right: 20px
 
-    img
-        display: block
-        background-color: #fefefe
+    .img-wrapper
         width: 300px
-        height: 150px
-        float: left
+        height: 124px
+        overflow: hidden
+        background-color: #fefefe
+
+        img
+            display: block
+            max-width: 100%
+
+    #ship-info-stats,
+    #ship-info-actions
+        background-color: #262626
+        padding: 0 10px
+        font-size: 22px
+        line-height: 58px
+        text-align: center
 
     #ship-info-stats
-        background-color: #000
-        padding: 0 10px
-        font-size: 28px
-        line-height: 58px
-        float: right
+        font-weight: 700
+
+        i
+            font-weight: 400
 
         span
             display: inline-block
@@ -138,15 +174,53 @@
             color: #53a3fb
 
     #ship-info-actions
-        background-color: #000
-        padding: 0 10px
-        font-size: 28px
-        line-height: 58px
-        float: right
-        clear: right
+        border-bottom-left-radius: 14px
+        border-bottom-right-radius: 14px
+        border-top: 1px solid #333
 
         i
             color: #fff
+            display: inline-block
+            margin-right: 1em
+
+            &:last-child
+                margin-right: 0
+
+.ship-info-pilot-skill,
+.purchased-upgrades
+    margin-left: 320px
+
+.ship-info-pilot-skill
+    span
+        vertical-align: middle
+
+    .label
+        font-size: 22px
+        margin-right: 0.5em
+
+    .value
+        font-size: 28px
+        color: orange
+        background-color: #262626
+        display: inline-block
+        width: 50px
+        height: 50px
+        line-height: 50px
+        border-radius: 50px
+        text-align: center
+
+    .ps-upgrade-wrapper
+        display: inline-block
+        text-align: center
+        margin-left: 1em
+
+.change-ship
+    margin-top: 20px
+
+.purchased-upgrades
+    border-top: 1px solid #eee
+    margin-top: 20px
+    padding-top: 20px
 
 #upgrade-list
     font-size: 12px

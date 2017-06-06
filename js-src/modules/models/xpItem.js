@@ -53,6 +53,31 @@ XpItem.prototype.label = function () {
     return '';
 };
 
+XpItem.prototype.exportString = function () {
+    var idString = '';
+    var dataString = '';
+    if (this.upgradeType === itemTypes.SHIP_TYPE) {
+        dataString = this.data.shipId;
+        idString = 'ST';
+    } else if (this.upgradeType === itemTypes.STARTING_SHIP_TYPE) {
+        dataString = this.data.shipId;
+        idString = 'SST';
+    } else if (this.upgradeType === itemTypes.PILOT_SKILL) {
+        dataString = this.data.pilotSkill;
+        idString = 'PS';
+    } else if (this.upgradeType === itemTypes.MISSION) {
+        dataString = this.data.missionXp;
+        idString = 'XP';
+    } else if (this.upgradeType === itemTypes.BUY_UPGRADE) {
+        dataString = this.data.upgradeId;
+        idString = 'UP';
+    } else if (this.upgradeType === itemTypes.BUY_PILOT_ABILITY) {
+        dataString = this.data.pilotId;
+        idString = 'PA';
+    }
+    return idString + '=' + dataString;
+};
+
 XpItem.prototype.getShipById = function (shipId) {
     return _.find(ships, function (shipItem) {
         return shipItem.id === shipId;

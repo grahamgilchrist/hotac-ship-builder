@@ -83,14 +83,13 @@ ShipBuild.prototype.removeXp = function (xp) {
 
 ShipBuild.prototype.addToHistory = function (type, data) {
     var xpItem = new XpItem(type, data);
-    // console.log('xpItem', xpItem);
-    // console.log('xpItem.cost()', xpItem.cost());
     this.addXp(xpItem.cost());
     this.xpHistory.push(xpItem);
     events.trigger('build.xpHistory.add', {
         build: this,
         xpItem: xpItem
     });
+    this.generateExportString();
 };
 
 ShipBuild.prototype.changeShip = function (shipId) {
@@ -133,6 +132,14 @@ ShipBuild.prototype.buyPilotAbility = function (pilotId) {
     var pilot = this.getPilotById(pilotId);
     this.pilotAbilities.push(pilot);
     events.trigger('build.pilotAbilities.update', this);
+};
+
+ShipBuild.prototype.generateExportString = function () {
+    var itemExports = _.map(this.xpHistory, function (xpItem) {
+        return xpItem.exportString();
+    });
+    var exportString = itemExports.join(',');
+    document.location.hash = exportString;
 };
 
 module.exports = ShipBuild;

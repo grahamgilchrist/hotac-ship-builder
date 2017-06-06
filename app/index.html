@@ -25,9 +25,26 @@
         <div class="container">
             <div class="structure">
                 <div class="new">
-                    <h2>Select Starting ship</h2>
-                    <select id="starting-ships"></select>
-                    <button id="start-build" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Start</button>
+                    <h2>Create new ship</h2>
+
+                    <div class="form-group">
+                        <label for="player-name">Player name</label>
+                        <input type="text" placeholder="Player name" id="player-name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="callsign">Callsign</label>
+                        <input type="text" placeholder="Callsign" id="callsign">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="starting-ships">Starting ship</label>
+                        <select id="starting-ships"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <button id="start-build" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Start</button>
+                    </div>
                 </div>
 
                 <div class="main">
@@ -60,22 +77,30 @@
                                 <div class="mdl-tabs__panel is-active" id="current-ship-tab">
 
                                     <div class="ship-info">
-                                        <img src="" alt="Ship image" id="ship-info-image">
+                                        <div class="img-wrapper">
+                                            <img src="" alt="Ship image" id="ship-info-image">
+                                        </div>
                                         <div id="ship-info-stats"></div>
                                         <div id="ship-info-actions"></div>
+
+                                        <div class="change-ship">
+                                            <select id="change-ship-list"></select>
+                                            <span><button id="change-ship" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Change ship</button> (5XP)</span>
+                                        </div>
                                     </div>
-                                    <div>
+                                    <div class="ship-info-pilot-skill">
                                         <span class="label">Pilot Skill</span>
                                         <span class= "value" id="pilot-skill"></span>
-                                        <span><span id="pilot-skill-next-xp-cost"></span> XP to update to level <span id="pilot-skill-plus-one"></span></span>
-                                        <button id="increase-ps" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Upgrade</button>
+                                        <span class="ps-upgrade-wrapper">
+                                            <div>
+                                                <span id="pilot-skill-next-xp-cost"></span><span> XP to update to level </span><span id="pilot-skill-plus-one"></span>
+                                            </div>
+                                            <div>
+                                                <button id="increase-ps" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Upgrade</button>
+                                            </div>
+                                        </span>
                                     </div>
 
-                                    <div class="change-ship">
-                                        <h3>Change ship (5XP)</h3>
-                                        <select id="change-ship-list"></select>
-                                        <button id="change-ship" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Change</button>
-                                    </div>
 
                                     <div class="purchased-upgrades">
                                         <h3>Upgrades</h3>

@@ -101,7 +101,7 @@ module.exports = {
     },
     renderPilotAbilityUpgrade: function (pilotSkill) {
         // Only show pilots of current PS or lower
-        var availablePilots = _.filter(pilots.allRebels, function (pilot) {
+        var availablePilots = _.filter(pilots.pilotsWithAbilities, function (pilot) {
             return pilot.skill <= pilotSkill;
         });
 
