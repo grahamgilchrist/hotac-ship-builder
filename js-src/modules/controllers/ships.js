@@ -101,7 +101,7 @@ module.exports = {
     },
     renderPilotAbilityUpgrade: function (pilotSkill) {
         // Only show pilots of current PS or lower
-        var availablePilots = _.filter(pilots, function (pilot) {
+        var availablePilots = _.filter(pilots.allRebels, function (pilot) {
             return pilot.skill <= pilotSkill;
         });
 
@@ -280,6 +280,10 @@ module.exports = {
         $('#xp-history').append($historyItem);
     },
     renderShipStats: function (currentShip) {
+        var $shipImage = $('#ship-info-image');
+        var imgUrl = '/components/xwing-data/images/' + currentShip.pilotCard.image;
+        $shipImage.attr('src', imgUrl);
+
         var $shipStats = $('#ship-info-stats');
         $shipStats.empty();
         $shipStats.append('<span class="attack"><i class="xwing-miniatures-font xwing-miniatures-font-attack"></i> ' + currentShip.shipData.attack + '</span>');

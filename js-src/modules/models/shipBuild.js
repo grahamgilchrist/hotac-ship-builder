@@ -7,7 +7,7 @@ var events = require('../controllers/events');
 var XpItem = require('./xpItem');
 var itemTypes = require('./itemTypes');
 var upgrades = require('../models/upgrades').all;
-var pilots = require('../models/pilots');
+var pilots = require('../models/pilots').allRebels;
 
 // Ship build
 var ShipBuild = function (startingShipId) {
@@ -34,7 +34,7 @@ ShipBuild.prototype.getShipById = function (shipId) {
     });
     var newModel = _.clone(hotacShipModel, true);
     newModel.shipData = this.getShipDataById(shipId);
-    newModel.pilotCard = this.getPilotById(newModel.pilotCardId);
+    newModel.pilotCard = this.getPilotByXws(newModel.pilotCardId);
 
     return newModel;
 };
@@ -48,6 +48,12 @@ ShipBuild.prototype.getUpgradeById = function (upgradeId) {
 ShipBuild.prototype.getPilotById = function (pilotId) {
     return _.find(pilots, function (pilotCard) {
         return pilotCard.id === pilotId;
+    });
+};
+
+ShipBuild.prototype.getPilotByXws = function (pilotId) {
+    return _.find(pilots, function (pilotCard) {
+        return pilotCard.xws === pilotId;
     });
 };
 

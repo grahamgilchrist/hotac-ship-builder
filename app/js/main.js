@@ -128,7 +128,7 @@ module.exports = {
     },
     renderPilotAbilityUpgrade: function (pilotSkill) {
         // Only show pilots of current PS or lower
-        var availablePilots = _.filter(pilots, function (pilot) {
+        var availablePilots = _.filter(pilots.allRebels, function (pilot) {
             return pilot.skill <= pilotSkill;
         });
 
@@ -307,6 +307,10 @@ module.exports = {
         $('#xp-history').append($historyItem);
     },
     renderShipStats: function (currentShip) {
+        var $shipImage = $('#ship-info-image');
+        var imgUrl = '/components/xwing-data/images/' + currentShip.pilotCard.image;
+        $shipImage.attr('src', imgUrl);
+
         var $shipStats = $('#ship-info-stats');
         $shipStats.empty();
         $shipStats.append('<span class="attack"><i class="xwing-miniatures-font xwing-miniatures-font-attack"></i> ' + currentShip.shipData.attack + '</span>');
@@ -345,11 +349,16 @@ var pilots = require('xwing-data/data/pilots');
 
 // key upgrades by type
 var rebelPilots = _.filter(pilots, function (pilot) {
-    return pilot.faction === 'Rebel Alliance' && pilot.text;
+    return pilot.faction === 'Rebel Alliance';
+});
+var pilotsWithAbilities = _.filter(rebelPilots, function (pilot) {
+    return pilot.text;
 });
 
-module.exports = rebelPilots;
-
+module.exports = {
+	allRebels: rebelPilots,
+	pilotsWithAbilities: pilotsWithAbilities
+};
 },{"lodash":12,"xwing-data/data/pilots":13}],6:[function(require,module,exports){
 'use strict';
 
@@ -360,7 +369,7 @@ var events = require('../controllers/events');
 var XpItem = require('./xpItem');
 var itemTypes = require('./itemTypes');
 var upgrades = require('../models/upgrades').all;
-var pilots = require('../models/pilots');
+var pilots = require('../models/pilots').allRebels;
 
 // Ship build
 var ShipBuild = function (startingShipId) {
@@ -387,7 +396,7 @@ ShipBuild.prototype.getShipById = function (shipId) {
     });
     var newModel = _.clone(hotacShipModel, true);
     newModel.shipData = this.getShipDataById(shipId);
-    newModel.pilotCard = this.getPilotById(newModel.pilotCardId);
+    newModel.pilotCard = this.getPilotByXws(newModel.pilotCardId);
 
     return newModel;
 };
@@ -401,6 +410,12 @@ ShipBuild.prototype.getUpgradeById = function (upgradeId) {
 ShipBuild.prototype.getPilotById = function (pilotId) {
     return _.find(pilots, function (pilotCard) {
         return pilotCard.id === pilotId;
+    });
+};
+
+ShipBuild.prototype.getPilotByXws = function (pilotId) {
+    return _.find(pilots, function (pilotCard) {
+        return pilotCard.xws === pilotId;
     });
 };
 
@@ -593,6 +608,11 @@ var upgrades = require('xwing-data/data/upgrades');
 // key upgrades by type
 var keyedUpgrades = {};
 _.each(upgrades, function (upgrade) {
+
+	if (upgrade.faction === 'Galactic Empire' || upgrade.faction === 'Scum and Villainy') {
+		return;
+	}
+
     if (!keyedUpgrades[upgrade.slot]) {
         keyedUpgrades[upgrade.slot] = [];
     }
@@ -611,7 +631,7 @@ var _ = require('lodash');
 var itemTypes = require('./itemTypes');
 var ships = require('./ships');
 var upgrades = require('../models/upgrades').all;
-var pilots = require('../models/pilots');
+var pilots = require('../models/pilots').allRebels;
 
 var XpItem = function (upgradeType, data) {
     this.upgradeType = upgradeType;

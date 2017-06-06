@@ -5,7 +5,13 @@ var pilots = require('xwing-data/data/pilots');
 
 // key upgrades by type
 var rebelPilots = _.filter(pilots, function (pilot) {
-    return pilot.faction === 'Rebel Alliance' && pilot.text;
+    return pilot.faction === 'Rebel Alliance';
+});
+var pilotsWithAbilities = _.filter(rebelPilots, function (pilot) {
+    return pilot.text;
 });
 
-module.exports = rebelPilots;
+module.exports = {
+	allRebels: rebelPilots,
+	pilotsWithAbilities: pilotsWithAbilities
+};
