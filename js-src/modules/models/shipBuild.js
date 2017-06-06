@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var ships = require('./ships');
+var shipData = require('./shipCards');
 var events = require('../controllers/events');
 var XpItem = require('./xpItem');
 var itemTypes = require('./itemTypes');
@@ -28,9 +29,14 @@ var ShipBuild = function (startingShipId) {
 };
 
 ShipBuild.prototype.getShipById = function (shipId) {
-    return _.find(ships, function (ship) {
+    var hotacShipModel = _.find(ships, function (ship) {
         return ship.id === shipId;
     });
+    var newModel = _.clone(hotacShipModel, true);
+    newModel.shipData = this.getShipDataById(shipId);
+    newModel.pilotCard = this.getPilotById(newModel.pilotCardId);
+
+    return newModel;
 };
 
 ShipBuild.prototype.getUpgradeById = function (upgradeId) {
@@ -42,6 +48,12 @@ ShipBuild.prototype.getUpgradeById = function (upgradeId) {
 ShipBuild.prototype.getPilotById = function (pilotId) {
     return _.find(pilots, function (pilotCard) {
         return pilotCard.id === pilotId;
+    });
+};
+
+ShipBuild.prototype.getShipDataById = function (shipId) {
+    return _.find(shipData, function (shipData) {
+        return shipData.xws === shipId;
     });
 };
 

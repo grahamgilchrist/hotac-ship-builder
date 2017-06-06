@@ -42,7 +42,18 @@
 
     h2
         float: left
-        margin: 0 
+        margin: 0
+
+        i
+            $size: 50px
+            margin-right: 0.4em
+            display: inline-block
+            width: $size
+            height: $size
+            line-height: $size
+            border-radius: $size
+            background-color: #000
+            text-align: center
 
     .xp-current
         float: right
@@ -87,27 +98,52 @@
             height: 30px
             font-size: 10px
 
-.info-items
-    display: table
-    margin-bottom: $vertical-spacing
+.ship-info
+    overflow: hidden
 
-.info-item
-    display: table-row
-    margin-bottom: 5px
+    img
+        display: block
+        background-color: #fefefe
+        width: 300px
+        height: 150px
+        float: left
 
-    .label,
-    .value
-        padding: 5px 10px
-        display: table-cell
+    #ship-info-stats
+        background-color: #000
+        padding: 0 10px
+        font-size: 28px
+        line-height: 58px
+        float: right
 
-    .label
-        font-weight: 700
-        text-align: right
-    .value
-        background-color: #fff
+        span
+            display: inline-block
+            margin-right: 1em
 
-.purchased-upgrades
+            &:last-child
+                margin-right: 0
 
+        .attack
+            color: #c52b2b
+
+        .agility
+            color: #4ead4e
+
+        .hull
+            color: #ffff3f
+
+        .shield
+            color: #53a3fb
+
+    #ship-info-actions
+        background-color: #000
+        padding: 0 10px
+        font-size: 28px
+        line-height: 58px
+        float: right
+        clear: right
+
+        i
+            color: #fff
 
 #upgrade-list
     font-size: 12px

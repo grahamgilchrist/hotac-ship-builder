@@ -6,6 +6,7 @@ module.exports = [
         label: 'X-wing',
         starting: true,
         startingXp: 5,
+        pilotCardId: 'rookiepilot',
         upgrades: [
             {
                 type: 'Astromech'
@@ -20,6 +21,7 @@ module.exports = [
         label: 'Y-wing',
         starting: true,
         startingXp: 8,
+        pilotCardId: 'goldsquadronpilot',
         upgrades: [
             {
                 type: 'Astromech'
@@ -44,6 +46,7 @@ module.exports = [
     {
         id: 'awing',
         label: 'A-wing',
+        pilotCardId: 'greensquadronpilot',
         upgrades: [
             {
                 type: 'Elite'
@@ -56,6 +59,7 @@ module.exports = [
     {
         id: 'bwing',
         label: 'B-wing',
+        pilotCardId: 'daggersquadronpilot',
         upgrades: [
             {
                 type: 'Torpedo'
@@ -72,8 +76,9 @@ module.exports = [
         ]
     },
     {
-        id: 'hwk',
+        id: 'hwk290',
         label: 'HWK-290',
+        pilotCardId: 'rebeloperative',
         upgrades: [
             {
                 type: 'Turret'
