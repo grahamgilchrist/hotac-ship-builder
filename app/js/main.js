@@ -303,7 +303,7 @@ module.exports = {
         }
         $historyItem.append('<td class="' + costClass + '">' + costString + '</td>');
         $historyItem.append('<td>' + data.build.currentXp + '</td>');
-        $('#xp-history').append($historyItem);
+        $('#xp-history').prepend($historyItem);
     }
 };
 
