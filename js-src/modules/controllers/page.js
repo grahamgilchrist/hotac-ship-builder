@@ -8,6 +8,7 @@ var shipInfoView = require('../views/shipInfo');
 var pilotSkillView = require('../views/pilotSkillView');
 var upgradesView = require('../views/upgradesView');
 var xpHistoryView = require('../views/xpHistory');
+var hashController = require('./urlHash');
 
 var currentBuild;
 
@@ -21,15 +22,19 @@ module.exports = {
         mainView.init();
         pilotSkillView.init();
         newView.init();
-        newView.show();
-    },
-    bindNewViewEvents: function () {
-        events.on('view.new.reset', function () {
-            mainView.hide();
-            newView.reset();
-            newView.show();
-        });
 
+        var urlHash = hashController.get();
+        if (urlHash && urlHash.length > 0) {
+            // We got a hash in URL, so create a build based on it
+            currentBuild = new Build(urlHash);
+            mainView.show();
+        } else {
+            // No build provided via URL, so show new build form
+            newView.show();
+        }
+    },
+
+    bindNewViewEvents: function () {
         events.on('view.new.start', function (event, data) {
             currentBuild = new Build(data.shipId);
             newView.hide();
@@ -37,6 +42,13 @@ module.exports = {
         });
     },
     bindMainViewEvents: function () {
+        events.on('view.main.reset', function () {
+            mainView.hide();
+            newView.reset();
+            newView.show();
+            hashController.clear();
+        });
+
         events.on('view.main.changeShip', function (event, shipId) {
             currentBuild.changeShip(shipId);
         });
@@ -83,6 +95,8 @@ module.exports = {
 
         events.on('model.build.xpHistory.add', function (event, data) {
             xpHistoryView.renderTableRow(data);
+            var newHash = data.build.generateExportString();
+            hashController.set(newHash);
         });
 
     }
