@@ -1,7 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
-var upgrades = require('xwing-data/data/upgrades');
+var upgrades = require('../../generated/upgrades');
 
 // key upgrades by type
 var keyedUpgrades = {};

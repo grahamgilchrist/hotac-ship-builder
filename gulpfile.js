@@ -7,6 +7,7 @@ require('./node/sass')();
 require('./node/eslint')();
 require('./node/json-lint')();
 require('./node/yaml-lint')();
+require('./node/copyXwingData')();
 
 // Add some general task aliases
 gulp.task('lint', [
@@ -28,6 +29,7 @@ gulp.task('dev', [
 ]);
 
 gulp.task('build', [
+    'copyXwingData',
     'browserify',
     'sass'
 ]);

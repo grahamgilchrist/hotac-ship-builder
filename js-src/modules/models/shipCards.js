@@ -1,5 +1,5 @@
 'use strict';
 
-var shipCards = require('xwing-data/data/ships');
+var shipCards = require('../../generated/ships');
 
 module.exports = shipCards;

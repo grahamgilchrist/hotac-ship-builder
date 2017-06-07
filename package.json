@@ -16,6 +16,7 @@
     "gulp": "3.x",
     "gulp-eslint": "3.0.x",
     "gulp-json-lint": "0.1.x",
+    "gulp-rename": "^1.2.2",
     "gulp-sass": "3.x",
     "gulp-sass-lint": "1.x",
     "gulp-sourcemaps": "2.6.x",

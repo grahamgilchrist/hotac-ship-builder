@@ -5,3 +5,4 @@ app/components
 # ignore generated files
 app/styles
 app/js
+js-src/generated

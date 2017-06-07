@@ -1,7 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
-var pilots = require('xwing-data/data/pilots');
+var pilots = require('../../generated/pilots');
 
 // key upgrades by type
 var rebelPilots = _.filter(pilots, function (pilot) {
