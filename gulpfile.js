@@ -11,7 +11,9 @@ require('./node/yaml-lint')();
 // Add some general task aliases
 gulp.task('lint', [
     'eslint',
-    'sass-lint'
+    'sass-lint',
+    'yaml-lint',
+    'jsonlint'
 ]);
 
 gulp.task('watch', [
