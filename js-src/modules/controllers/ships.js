@@ -7,6 +7,7 @@ var upgrades = require('../models/upgrades').keyed;
 var pilots = require('../models/pilots');
 var Build = require('../models/shipBuild');
 var events = require('./events');
+var shipInfoView = require('../views/shipInfo');
 
 var currentBuild;
 
@@ -138,7 +139,7 @@ module.exports = {
     bindStatus: function () {
         events.on('build.currentShip.update', function (event, build) {
             $('#ship-current').text(build.currentShip.label).prepend('<i class="xwing-miniatures-ship xwing-miniatures-ship-' + build.currentShip.id + '"></i>');
-            module.exports.renderShipStats(build.currentShip);
+            shipInfoView.renderShipInfo(build.currentShip);
             module.exports.renderUpgradesList(build);
         });
 
@@ -278,25 +279,5 @@ module.exports = {
         $historyItem.append('<td class="' + costClass + '">' + costString + '</td>');
         $historyItem.append('<td>' + data.build.currentXp + '</td>');
         $('#xp-history').prepend($historyItem);
-    },
-    renderShipStats: function (currentShip) {
-        var $shipImage = $('#ship-info-image');
-        var imgUrl = '/components/xwing-data/images/' + currentShip.pilotCard.image;
-        $shipImage.attr('src', imgUrl);
-
-        var $shipStats = $('#ship-info-stats');
-        $shipStats.empty();
-        $shipStats.append('<span class="attack"><i class="xwing-miniatures-font xwing-miniatures-font-attack"></i> ' + currentShip.shipData.attack + '</span>');
-        $shipStats.append('<span class="agility"><i class="xwing-miniatures-font xwing-miniatures-font-agility"></i> ' + currentShip.shipData.agility + '</span>');
-        $shipStats.append('<span class="hull"><i class="xwing-miniatures-font xwing-miniatures-font-hull"></i> ' + currentShip.shipData.hull + '</span>');
-        $shipStats.append('<span class="shield"><i class="xwing-miniatures-font xwing-miniatures-font-shield"></i> ' + currentShip.shipData.shields + '</span>');
-
-        var $shipActions = $('#ship-info-actions');
-        $shipActions.empty();
-        _.each(currentShip.shipData.actions, function (action) {
-            var actionString = action.replace(' ', '').replace('-', '');
-            actionString = actionString.toLowerCase();
-            $shipActions.append('<i class="xwing-miniatures-font xwing-miniatures-font-' + actionString + '"></i>');
-        });
     }
 };
