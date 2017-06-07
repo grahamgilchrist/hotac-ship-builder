@@ -1,0 +1,10 @@
+---
+  extends: "./base.yaml"
+  parserOptions:
+    ecmaVersion: 5
+  env:
+    browser: true
+  rules:
+    radix:
+      - "error"
+      - "always"

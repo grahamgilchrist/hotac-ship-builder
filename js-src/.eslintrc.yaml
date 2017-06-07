@@ -1,10 +1,6 @@
 ---
-  parserOptions:
-    ecmaVersion: 5
+  root: true
+  extends: "../node/eslint-config/browser.yaml"
   env:
     browser: true
-    node: true
-  rules:
-    radix:
-      - "error"
-      - "always"
+    commonjs: true
