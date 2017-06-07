@@ -12,6 +12,6 @@ var pilotsWithAbilities = _.filter(rebelPilots, function (pilot) {
 });
 
 module.exports = {
-	allRebels: rebelPilots,
-	pilotsWithAbilities: pilotsWithAbilities
+    allRebels: rebelPilots,
+    pilotsWithAbilities: pilotsWithAbilities
 };

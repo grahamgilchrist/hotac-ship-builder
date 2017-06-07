@@ -8,6 +8,7 @@ var pilots = require('../models/pilots');
 var Build = require('../models/shipBuild');
 var events = require('./events');
 var shipInfoView = require('../views/shipInfo');
+var xpHistoryView = require('../views/xpHistory');
 
 var currentBuild;
 
@@ -159,7 +160,7 @@ module.exports = {
         });
 
         events.on('build.xpHistory.add', function (event, data) {
-            module.exports.renderXpHistoryTableRow(data);
+            xpHistoryView.renderTableRow(data);
         });
 
         events.on('build.pilotAbilities.update', function (event, build) {
@@ -177,12 +178,10 @@ module.exports = {
 
         var $upgradeItem;
         var $ul;
-        var numOfType;
         var numAvailableofType;
         $('#upgrade-list').empty();
         for (var type in keyedUpgrades) {
             $upgradeItem = $('<li>');
-            numOfType = keyedUpgrades[type].length;
             numAvailableofType = numUsableUpgrades[type].allowed;
             $ul = $('<ul>');
 
@@ -263,21 +262,5 @@ module.exports = {
         });
 
         return usableUpgrades;
-    },
-    renderXpHistoryTableRow: function (data) {
-        var $historyItem = $('<tr>');
-        $historyItem.append('<td>' + data.xpItem.label() + '</td>');
-        var cost = data.xpItem.cost();
-        var costString = cost;
-        var costClass = '';
-        if (cost > 0) {
-            costString = '+' + cost;
-            costClass = 'positive';
-        } else if (cost < 0) {
-            costClass = 'negative';
-        }
-        $historyItem.append('<td class="' + costClass + '">' + costString + '</td>');
-        $historyItem.append('<td>' + data.build.currentXp + '</td>');
-        $('#xp-history').prepend($historyItem);
     }
 };

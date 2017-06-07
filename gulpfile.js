@@ -4,6 +4,9 @@ const gulp = require('gulp');
 require('./node/server')();
 require('./node/browserify')();
 require('./node/sass')();
+require('./node/eslint')();
+require('./node/json-lint')();
+require('./node/yaml-lint')();
 
 // Add some general task aliases
 gulp.task('lint', [
@@ -17,7 +20,7 @@ gulp.task('watch', [
 ]);
 
 gulp.task('dev', [
-	'build',
+    'build',
     'server',
     'watch'
 ]);

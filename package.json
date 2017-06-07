@@ -14,10 +14,13 @@
   "devDependencies": {
     "browserify": "13.x",
     "gulp": "3.x",
+    "gulp-eslint": "3.x",
+    "gulp-json-lint": "0.1.x",
     "gulp-sass": "3.x",
     "gulp-sass-lint": "1.x",
     "gulp-sourcemaps": "2.6.x",
     "gulp-webserver": "0.9.x",
+    "gulp-yaml-validate": "1.0.x",
     "jquery": "3.1.x",
     "lodash": "4.17.x",
     "vinyl-source-stream": "1.x",

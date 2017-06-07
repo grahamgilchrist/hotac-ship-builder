@@ -1,0 +1,6 @@
+# Package folders
+node_modules/**/*
+app/components/**/*
+
+# Generated files
+app/js/**/*

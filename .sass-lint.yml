@@ -1,0 +1,36 @@
+options:
+  formatter: stylish
+  merge-default-rules: false
+files:
+  include: 'sass/**/*.s+(a|c)ss'
+rules:
+  indentation:
+    - 2
+    - size: 4  
+  # Extends
+  extends-before-mixins: 2
+  extends-before-declarations: 2
+  placeholder-in-extend: 2
+
+  # Mixins
+  mixins-before-declarations:
+    - 2
+    -
+      exclude:
+        - media
+
+  # Line Spacing
+  single-line-per-selector: 2
+
+  # Inner Spacing
+  space-after-comma: 2
+  space-before-colon: 2
+  space-after-colon: 2
+  space-before-brace: 2
+  space-before-bang: 2
+  space-after-bang: 2
+  space-between-parens: 2
+  space-around-operator: 2
+
+  # Final Items
+  final-newline: 2
