@@ -3,7 +3,6 @@
 var $ = require('jquery');
 var _ = require('lodash');
 var ships = require('../models/ships');
-var upgrades = require('../models/upgrades').keyed;
 var Build = require('../models/shipBuild');
 var events = require('./events');
 var shipInfoView = require('../views/shipInfo');
@@ -80,27 +79,6 @@ module.exports = {
             currentBuild.increasePilotSkill();
         });
     },
-    renderShipUpgrade: function (upgradeType) {
-        var $div = $('<div>');
-        var $select = $('<select>');
-        var $noneOption = $('<option value="0">Select an upgrade...</option>');
-        $select.append($noneOption);
-        var upgradesOfType = upgrades[upgradeType];
-        _.each(upgradesOfType, function (upgradeCard) {
-            var $option = $('<option value="' + upgradeCard.id + '">' + upgradeCard.name + '</option>');
-            $select.append($option);
-        });
-        $div.append($select);
-
-        var $button = $('<button>Buy</button>');
-        $button.on('click', function () {
-            var upgradeId = parseInt($select.val(), 10);
-            currentBuild.buyUpgrade(upgradeId);
-        });
-        $div.append($button);
-
-        return $div;
-    },
     initAddXp: function () {
         $('#add-mission-xp').on('click', function () {
             var stringXpAmount = prompt('Add XP earned from a mission');
@@ -133,12 +111,21 @@ module.exports = {
             upgradesView.renderUpgradesList(build);
         });
 
-        events.on('build.xpHistory.add', function (event, data) {
-            xpHistoryView.renderTableRow(data);
+        events.on('view.upgrades.buy', function (event, upgradeId) {
+            currentBuild.buyUpgrade(upgradeId);
         });
 
         events.on('build.pilotAbilities.update', function (event, build) {
             upgradesView.renderUpgradesList(build);
         });
+
+        events.on('view.pilotAbilities.buy', function (event, pilotId) {
+            currentBuild.buyPilotAbility(pilotId);
+        });
+
+        events.on('build.xpHistory.add', function (event, data) {
+            xpHistoryView.renderTableRow(data);
+        });
+
     }
 };

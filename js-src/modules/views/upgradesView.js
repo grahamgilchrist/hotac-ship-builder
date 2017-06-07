@@ -3,7 +3,9 @@
 var $ = require('jquery');
 var _ = require('lodash');
 
+var events = require('../controllers/events');
 var pilots = require('../models/pilots');
+var upgrades = require('../models/upgrades').keyed;
 
 module.exports = {
     renderUpgradesList: function (build) {
@@ -39,7 +41,7 @@ module.exports = {
             }
             $upgradeItem.append($ul);
 
-            var $upgradePurchaseList = module.exports.renderShipUpgrade(type);
+            var $upgradePurchaseList = module.exports.renderShipUpgrade(build, type);
             $upgradeItem.append($upgradePurchaseList);
 
             if (type === 'Elite') {
@@ -48,6 +50,27 @@ module.exports = {
             }
             $('#upgrade-list').append($upgradeItem);
         }
+    },
+    renderShipUpgrade: function (build, upgradeType) {
+        var $div = $('<div>');
+        var $select = $('<select>');
+        var $noneOption = $('<option value="0">Select an upgrade...</option>');
+        $select.append($noneOption);
+        var upgradesOfType = upgrades[upgradeType];
+        _.each(upgradesOfType, function (upgradeCard) {
+            var $option = $('<option value="' + upgradeCard.id + '">' + upgradeCard.name + '</option>');
+            $select.append($option);
+        });
+        $div.append($select);
+
+        var $button = $('<button>Buy</button>');
+        $button.on('click', function () {
+            var upgradeId = parseInt($select.val(), 10);
+            events.trigger('view.upgrades.buy', upgradeId);
+        });
+        $div.append($button);
+
+        return $div;
     },
     renderPilotAbilityUpgrade: function (build) {
         // Only show pilots of current PS or lower
@@ -69,7 +92,7 @@ module.exports = {
         var $button = $('<button>Buy</button>');
         $button.on('click', function () {
             var pilotId = parseInt($select.val(), 10);
-            build.buyPilotAbility(pilotId);
+            events.trigger('view.pilotAbilities.buy', pilotId);
         });
         $div.append($button);
 
