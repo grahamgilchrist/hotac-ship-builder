@@ -1,10 +1,10 @@
 'use strict';
 
 var $ = require('jquery');
-var shipController = require('./modules/controllers/ships');
+var pageController = require('./modules/controllers/page');
 
 var ready = function () {
-    shipController.init();
+    pageController.init();
 };
 
 $(document).ready(ready);

@@ -23,7 +23,7 @@ var ShipBuild = function (startingShipId) {
     this.upgrades = {};
 
     this.currentShip = this.startingShip;
-    events.trigger('build.currentShip.update', this);
+    events.trigger('model.build.currentShip.update', this);
 
     this.setPilotSkill(2);
 };
@@ -65,7 +65,7 @@ ShipBuild.prototype.getShipDataById = function (shipId) {
 
 ShipBuild.prototype.setPilotSkill = function (ps) {
     this.pilotSkill = ps;
-    events.trigger('build.pilotSkill.update', {
+    events.trigger('model.build.pilotSkill.update', {
         pilotSkill: this.pilotSkill,
         build: this
     });
@@ -73,19 +73,19 @@ ShipBuild.prototype.setPilotSkill = function (ps) {
 
 ShipBuild.prototype.addXp = function (xp) {
     this.currentXp += xp;
-    events.trigger('build.xp.update', this.currentXp);
+    events.trigger('model.build.xp.update', this.currentXp);
 };
 
 ShipBuild.prototype.removeXp = function (xp) {
     this.currentXp -= xp;
-    events.trigger('build.xp.update', this.currentXp);
+    events.trigger('model.build.xp.update', this.currentXp);
 };
 
 ShipBuild.prototype.addToHistory = function (type, data) {
     var xpItem = new XpItem(type, data);
     this.addXp(xpItem.cost());
     this.xpHistory.push(xpItem);
-    events.trigger('build.xpHistory.add', {
+    events.trigger('model.build.xpHistory.add', {
         build: this,
         xpItem: xpItem
     });
@@ -97,7 +97,7 @@ ShipBuild.prototype.changeShip = function (shipId) {
         shipId: shipId
     });
     this.currentShip = this.getShipById(shipId);
-    events.trigger('build.currentShip.update', this);
+    events.trigger('model.build.currentShip.update', this);
 };
 
 ShipBuild.prototype.increasePilotSkill = function () {
@@ -122,7 +122,7 @@ ShipBuild.prototype.buyUpgrade = function (upgradeId) {
         this.upgrades[upgrade.slot] = [];
     }
     this.upgrades[upgrade.slot].push(upgrade);
-    events.trigger('build.upgrades.update', this);
+    events.trigger('model.build.upgrades.update', this);
 };
 
 ShipBuild.prototype.buyPilotAbility = function (pilotId) {
@@ -131,7 +131,7 @@ ShipBuild.prototype.buyPilotAbility = function (pilotId) {
     });
     var pilot = this.getPilotById(pilotId);
     this.pilotAbilities.push(pilot);
-    events.trigger('build.pilotAbilities.update', this);
+    events.trigger('model.build.pilotAbilities.update', this);
 };
 
 ShipBuild.prototype.generateExportString = function () {
