@@ -68,12 +68,29 @@ module.exports = {
     },
     bindXpButton: function () {
         $('#add-mission-xp').on('click', function () {
-            var stringXpAmount = prompt('Add XP earned from a mission');
-            var xpAmount = parseInt(stringXpAmount, 10);
 
-            if (!_.isNaN(xpAmount)) {
-                events.trigger('view.main.addMissionXp', xpAmount);
-            }
+            var $modalContent = $('<div>');
+            var $header = $('<h2>Add XP earned from a mission</h2>');
+            var $input = $('<div><input type="text" id="mission-xp-amount"></div>');
+            var $button = $('<button>Add</button>');
+
+            $button.on('click', function () {
+                var stringXpAmount = $('#mission-xp-amount').val();
+                var xpAmount = parseInt(stringXpAmount, 10);
+
+                if (!_.isNaN(xpAmount)) {
+                    events.trigger('view.main.addMissionXp', xpAmount);
+                }
+
+                $.featherlight.close();
+            });
+
+            $modalContent.append($header);
+            $modalContent.append($input);
+            $modalContent.append($button);
+
+            $.featherlight($modalContent);
+            $('#mission-xp-amount').focus();
         });
     }
 };
