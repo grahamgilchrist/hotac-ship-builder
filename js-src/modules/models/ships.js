@@ -23,9 +23,8 @@ var hotacShips = [
         label: 'X-wing',
         starting: true,
         startingXp: 5,
-        pilotCardId: 'rookiepilot',
         shipData: getShipDataById('xwing'),
-        pilotCard: getPilotByXws('rookiepilot'),
+        pilotCard: getPilotByXws('redsquadronpilot'),
         upgrades: [
             {
                 type: 'Astromech'
@@ -40,7 +39,6 @@ var hotacShips = [
         label: 'Y-wing',
         starting: true,
         startingXp: 8,
-        pilotCardId: 'goldsquadronpilot',
         shipData: getShipDataById('ywing'),
         pilotCard: getPilotByXws('goldsquadronpilot'),
         upgrades: [
@@ -67,9 +65,8 @@ var hotacShips = [
     {
         id: 'awing',
         label: 'A-wing',
-        pilotCardId: 'greensquadronpilot',
         shipData: getShipDataById('awing'),
-        pilotCard: getPilotByXws('greensquadronpilot'),
+        pilotCard: getPilotByXws('arvelcrynyd'),
         upgrades: [
             {
                 type: 'Elite'
@@ -82,9 +79,8 @@ var hotacShips = [
     {
         id: 'bwing',
         label: 'B-wing',
-        pilotCardId: 'daggersquadronpilot',
         shipData: getShipDataById('bwing'),
-        pilotCard: getPilotByXws('daggersquadronpilot'),
+        pilotCard: getPilotByXws('bluesquadronpilot'),
         upgrades: [
             {
                 type: 'Torpedo'
@@ -103,9 +99,8 @@ var hotacShips = [
     {
         id: 'hwk290',
         label: 'HWK-290',
-        pilotCardId: 'rebeloperative',
         shipData: getShipDataById('hwk290'),
-        pilotCard: getPilotByXws('rebeloperative'),
+        pilotCard: getPilotByXws('kylekatarn'),
         upgrades: [
             {
                 type: 'Turret'
