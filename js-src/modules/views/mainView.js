@@ -55,7 +55,7 @@ module.exports = {
             $shipList.append($ship);
         });
 
-        var $button = $('<button>Choose ship</button>');
+        var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Choose ship</button>');
         $button.on('click', function () {
             events.trigger('view.main.changeShip', chosenShipId);
             $.featherlight.close();
@@ -76,7 +76,7 @@ module.exports = {
             var $modalContent = $('<div>');
             var $header = $('<h2>Add XP earned from a mission</h2>');
             var $input = $('<div><input type="text" id="mission-xp-amount"></div>');
-            var $button = $('<button>Add</button>');
+            var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Add</button>');
 
             $button.on('click', function () {
                 var stringXpAmount = $('#mission-xp-amount').val();

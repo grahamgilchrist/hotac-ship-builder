@@ -99,7 +99,7 @@ module.exports = {
             $upgradeList.append($upgrade);
         });
 
-        var $button = $('<button>Buy upgrade</button>');
+        var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Buy upgrade</button>');
         $button.on('click', function () {
             events.trigger('view.upgrades.buy', chosenUpgradeId);
             $.featherlight.close();
@@ -145,7 +145,7 @@ module.exports = {
             $upgradeList.append($upgrade);
         });
 
-        var $button = $('<button>Buy ability</button>');
+        var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Buy ability</button>');
         $button.on('click', function () {
             events.trigger('view.pilotAbilities.buy', chosenPilotId);
             $.featherlight.close();
