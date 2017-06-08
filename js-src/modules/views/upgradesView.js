@@ -33,12 +33,13 @@ module.exports = {
             $ul.append($li);
 
             _.each(keyedUpgrades[type], function (upgrade) {
-                var $li = $('<li class="upgrade">' + upgrade.name + '</li>');
+                var $li = $('<li class="upgrade" data-featherlight="/components/xwing-data/images/' + upgrade.image + '">' + upgrade.name + '</li>');
                 $ul.append($li);
             });
             if (type === 'Elite') {
                 _.each(build.pilotAbilities, function (pilot) {
-                    var $li = $('<li class="upgrade">Ability: ' + pilot.name + '</li>');
+                    var escapedText = pilot.text.replace(/"/g, '&quot;');
+                    var $li = $('<li class="upgrade" data-featherlight="' + escapedText + '" data-featherlight-type="text">Ability: ' + pilot.name + '</li>');
                     $ul.append($li);
                 });
             }
