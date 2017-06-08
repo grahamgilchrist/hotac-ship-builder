@@ -82,7 +82,7 @@ module.exports = {
         events.on('model.build.ready', function (event, build) {
             mainView.renderTitle(build);
             mainView.renderXp(build.currentXp);
-            shipInfoView.renderShipInfo(build.currentShip);
+            shipInfoView.renderShipInfo(build.currentShip, build.upgrades);
             upgradesView.renderUpgradesList(build);
             pilotSkillView.renderWithPs(build.pilotSkill);
             upgradesView.renderUpgradesList(build);
@@ -95,7 +95,7 @@ module.exports = {
         events.on('model.build.currentShip.update', function (event, build) {
             if (build.ready) {
                 mainView.renderTitle(build);
-                shipInfoView.renderShipInfo(build.currentShip);
+                shipInfoView.renderShipInfo(build.currentShip, build.upgrades);
                 upgradesView.renderUpgradesList(build);
                 changeShipView.renderShipView(build.pilotSkill, build.currentShip);
             }
@@ -116,6 +116,7 @@ module.exports = {
         events.on('model.build.upgrades.update', function (event, build) {
             if (build.ready) {
                 upgradesView.renderUpgradesList(build);
+                shipInfoView.renderShipInfo(build.currentShip, build.upgrades);
             }
         });
 
