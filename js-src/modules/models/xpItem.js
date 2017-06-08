@@ -78,6 +78,33 @@ XpItem.prototype.exportString = function () {
     return idString + '=' + dataString;
 };
 
+XpItem.prototype.parseExportString = function (exportString) {
+    var splitItems = exportString.split('=');
+    var idString = splitItems[0];
+    var dataString = splitItems[1];
+    this.data = {};
+
+    if (idString === 'SST') {
+        this.data.shipId = dataString;
+        this.upgradeType = itemTypes.STARTING_SHIP_TYPE;
+    } else if (idString === 'ST') {
+        this.data.shipId = dataString;
+        this.upgradeType = itemTypes.SHIP_TYPE;
+    } else if (idString === 'PS') {
+        this.data.pilotSkill = parseInt(dataString, 10);
+        this.upgradeType = itemTypes.PILOT_SKILL;
+    } else if (idString === 'XP') {
+        this.data.missionXp = parseInt(dataString, 10);
+        this.upgradeType = itemTypes.MISSION;
+    } else if (idString === 'UP') {
+        this.data.upgradeId = parseInt(dataString, 10);
+        this.upgradeType = itemTypes.BUY_UPGRADE;
+    } else if (idString === 'PA') {
+        this.data.pilotId = parseInt(dataString, 10);
+        this.upgradeType = itemTypes.BUY_PILOT_ABILITY;
+    }
+};
+
 XpItem.prototype.getShipById = function (shipId) {
     return _.find(ships, function (shipItem) {
         return shipItem.id === shipId;

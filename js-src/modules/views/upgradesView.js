@@ -41,7 +41,7 @@ module.exports = {
             }
             $upgradeItem.append($ul);
 
-            var $upgradePurchaseList = module.exports.renderShipUpgrade(build, type);
+            var $upgradePurchaseList = module.exports.renderShipUpgrade(type);
             $upgradeItem.append($upgradePurchaseList);
 
             if (type === 'Elite') {
@@ -51,7 +51,7 @@ module.exports = {
             $('#upgrade-list').append($upgradeItem);
         }
     },
-    renderShipUpgrade: function (build, upgradeType) {
+    renderShipUpgrade: function (upgradeType) {
         var $div = $('<div>');
         var $select = $('<select>');
         var $noneOption = $('<option value="0">Select an upgrade...</option>');

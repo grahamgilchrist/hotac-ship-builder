@@ -1,5 +1,7 @@
 'use strict';
 
+var XpItem = require('../models/xpItem');
+var itemTypes = require('../models/itemTypes');
 var Build = require('../models/shipBuild');
 var events = require('./events');
 var newView = require('../views/newView');
@@ -26,17 +28,22 @@ module.exports = {
         var urlHash = hashController.get();
         if (urlHash && urlHash.length > 0) {
             // We got a hash in URL, so create a build based on it
-            currentBuild = new Build(urlHash);
+            var xpHistory = hashController.parseExportStringToHistory(urlHash);
+            currentBuild = new Build(xpHistory);
             mainView.show();
         } else {
             // No build provided via URL, so show new build form
             newView.show();
         }
     },
-
     bindNewViewEvents: function () {
         events.on('view.new.start', function (event, data) {
-            currentBuild = new Build(data.shipId);
+            var startingXpHistory = [
+                new XpItem(itemTypes.STARTING_SHIP_TYPE, {
+                    shipId: data.shipId
+                })
+            ];
+            currentBuild = new Build(startingXpHistory);
             newView.hide();
             mainView.show();
         });
@@ -70,15 +77,28 @@ module.exports = {
         });
     },
     bindModelEvents: function () {
-        events.on('model.build.currentShip.update', function (event, build) {
+        events.on('model.build.ready', function (event, build) {
             mainView.renderTitle(build.currentShip);
+            mainView.renderXp(build.currentXp);
             shipInfoView.renderShipInfo(build.currentShip);
+            upgradesView.renderUpgradesList(build);
+            pilotSkillView.renderWithPs(build.pilotSkill);
             upgradesView.renderUpgradesList(build);
         });
 
-        events.on('model.build.pilotSkill.update', function (event, data) {
-            pilotSkillView.renderWithPs(data.pilotSkill);
-            upgradesView.renderUpgradesList(data.build);
+        events.on('model.build.currentShip.update', function (event, build) {
+            if (build.ready) {
+                mainView.renderTitle(build.currentShip);
+                shipInfoView.renderShipInfo(build.currentShip);
+                upgradesView.renderUpgradesList(build);
+            }
+        });
+
+        events.on('model.build.pilotSkill.update', function (event, build) {
+            if (build.ready) {
+                pilotSkillView.renderWithPs(build.pilotSkill);
+                upgradesView.renderUpgradesList(build);
+            }
         });
 
         events.on('model.build.xp.update', function (event, xp) {
@@ -86,18 +106,21 @@ module.exports = {
         });
 
         events.on('model.build.upgrades.update', function (event, build) {
-            upgradesView.renderUpgradesList(build);
+            if (build.ready) {
+                upgradesView.renderUpgradesList(build);
+            }
         });
 
         events.on('model.build.pilotAbilities.update', function (event, build) {
-            upgradesView.renderUpgradesList(build);
+            if (build.ready) {
+                upgradesView.renderUpgradesList(build);
+            }
         });
 
         events.on('model.build.xpHistory.add', function (event, data) {
             xpHistoryView.renderTableRow(data);
-            var newHash = data.build.generateExportString();
+            var newHash = hashController.generateExportString(data.build);
             hashController.set(newHash);
         });
-
     }
 };
