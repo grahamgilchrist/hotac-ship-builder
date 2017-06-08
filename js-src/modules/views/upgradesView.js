@@ -10,7 +10,7 @@ var upgrades = require('../models/upgrades').keyed;
 module.exports = {
     renderUpgradesList: function (build) {
         var keyedUpgrades = _.clone(build.upgrades, true);
-        var numUsableUpgrades = module.exports.numberOfUsableUpgrades(build);
+        var numUsableUpgrades = module.exports.numberOfUsableUpgrades(build.pilotSkill, build.currentShip);
         for (var upgradeType in numUsableUpgrades) {
             if (!keyedUpgrades[upgradeType]) {
                 keyedUpgrades[upgradeType] = [];
@@ -41,7 +41,7 @@ module.exports = {
             }
             $upgradeItem.append($ul);
 
-            var $upgradePurchaseList = module.exports.renderShipUpgrade(type);
+            var $upgradePurchaseList = module.exports.renderNewUpgrades(type, build.currentShip);
             $upgradeItem.append($upgradePurchaseList);
 
             if (type === 'Elite') {
@@ -51,26 +51,62 @@ module.exports = {
             $('#upgrade-list').append($upgradeItem);
         }
     },
-    renderShipUpgrade: function (upgradeType) {
+    renderNewUpgrades: function (upgradeType, currentShip) {
         var $div = $('<div>');
-        var $select = $('<select>');
-        var $noneOption = $('<option value="0">Select an upgrade...</option>');
-        $select.append($noneOption);
-        var upgradesOfType = upgrades[upgradeType];
-        _.each(upgradesOfType, function (upgradeCard) {
-            var $option = $('<option value="' + upgradeCard.id + '">' + upgradeCard.name + '</option>');
-            $select.append($option);
-        });
-        $div.append($select);
-
-        var $button = $('<button>Buy</button>');
+        var $button = $('<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored"><i class="material-icons">add</i></button>');
         $button.on('click', function () {
-            var upgradeId = parseInt($select.val(), 10);
-            events.trigger('view.upgrades.buy', upgradeId);
+            var $modalContent = module.exports.renderUpgradeModalContent(upgradeType, currentShip);
+            $.featherlight($modalContent);
         });
         $div.append($button);
 
         return $div;
+    },
+    renderUpgradeModalContent: function (upgradeType, currentShip) {
+        var upgradesOfType = upgrades[upgradeType];
+
+        // filter out
+        var filteredUpgrades = _.filter(upgradesOfType, function (upgrade) {
+            if (upgrade.ship && upgrade.ship.indexOf(currentShip.shipData.name) < 0) {
+                // There's a ship restriction, and it doesn't match this one
+                return false;
+            }
+            if (upgrade.size && upgrade.size.indexOf(currentShip.shipData.size) < 0) {
+                // There's a ship size restriction, and it doesn't match this one
+                return false;
+            }
+
+            return true;
+        });
+
+        var chosenUpgradeId;
+
+        var $modalContent = $('<div>');
+        var $summary = $('<div class="summary">');
+        var $upgradeList = $('<ul>');
+
+        _.forEach(filteredUpgrades, function (item) {
+            var $upgrade = $('<li><img src="/components/xwing-data/images/' + item.image + '" alt="' + item.name + '"></li>');
+            $upgrade.on('click', function () {
+                var $text = $('<span>' + item.name + ': ' + item.points + 'XP</span>');
+                var $summaryElement = $('.featherlight .summary');
+                $summaryElement.html($text);
+                chosenUpgradeId = item.id;
+            });
+            $upgradeList.append($upgrade);
+        });
+
+        var $button = $('<button>Buy upgrade</button>');
+        $button.on('click', function () {
+            events.trigger('view.upgrades.buy', chosenUpgradeId);
+            $.featherlight.close();
+        });
+
+        $modalContent.append($upgradeList);
+        $modalContent.append($summary);
+        $modalContent.append($button);
+
+        return $modalContent;
     },
     renderPilotAbilityUpgrade: function (build) {
         // Only show pilots of current PS or lower
@@ -98,27 +134,27 @@ module.exports = {
 
         return $div;
     },
-    numberOfUsableUpgrades: function (build) {
+    numberOfUsableUpgrades: function (pilotSkill, currentShip) {
 
         // elite slots are dependent on pilot level
         var eliteSlots = 0;
-        if (build.pilotSkill >= 3) {
+        if (pilotSkill >= 3) {
             eliteSlots = 1;
-        } else if (build.pilotSkill >= 5) {
+        } else if (pilotSkill >= 5) {
             eliteSlots = 2;
-        } else if (build.pilotSkill >= 7) {
+        } else if (pilotSkill >= 7) {
             eliteSlots = 3;
-        } else if (build.pilotSkill >= 9) {
+        } else if (pilotSkill >= 9) {
             eliteSlots = 4;
         }
 
         // mod slots are dependent on pilot level
         var modSlots = 1;
-        if (build.pilotSkill >= 4) {
+        if (pilotSkill >= 4) {
             modSlots = 2;
-        } else if (build.pilotSkill >= 6) {
+        } else if (pilotSkill >= 6) {
             modSlots = 3;
-        } else if (build.pilotSkill >= 8) {
+        } else if (pilotSkill >= 8) {
             modSlots = 4;
         }
 
@@ -136,7 +172,7 @@ module.exports = {
         }
 
         // Add slots for the ship type
-        var shipUpgrades = build.currentShip.upgrades;
+        var shipUpgrades = currentShip.upgrades;
         _.each(shipUpgrades, function (shipUpgrade) {
             if (!usableUpgrades[shipUpgrade.type]) {
                 usableUpgrades[shipUpgrade.type] = {

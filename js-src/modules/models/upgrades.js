@@ -7,7 +7,13 @@ var upgrades = require('../../generated/upgrades');
 var keyedUpgrades = {};
 _.each(upgrades, function (upgrade) {
 
+    // Remove imperial and scum cards
     if (upgrade.faction === 'Galactic Empire' || upgrade.faction === 'Scum and Villainy') {
+        return;
+    }
+
+    // Remove huge ship only cards
+    if (upgrade.size && upgrade.size.indexOf('huge') >= 0) {
         return;
     }
 
