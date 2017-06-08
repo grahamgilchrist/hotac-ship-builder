@@ -44,7 +44,7 @@ module.exports = {
             }
             $upgradeItem.append($ul);
 
-            var $upgradePurchaseList = module.exports.renderNewUpgrades(type, build.currentShip);
+            var $upgradePurchaseList = module.exports.renderNewUpgrades(type, build.currentShip, build.upgrades);
             $upgradeItem.append($upgradePurchaseList);
 
             if (type === 'Elite') {
@@ -54,29 +54,52 @@ module.exports = {
             $('#upgrade-list').append($upgradeItem);
         }
     },
-    renderNewUpgrades: function (upgradeType, currentShip) {
+    renderNewUpgrades: function (upgradeType, currentShip, existingUpgrades) {
         var $div = $('<div>');
         var $button = $('<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored"><i class="material-icons">add</i></button>');
         $button.on('click', function () {
-            var $modalContent = module.exports.renderUpgradeModalContent(upgradeType, currentShip);
+            var $modalContent = module.exports.renderUpgradeModalContent(upgradeType, currentShip, existingUpgrades);
             $.featherlight($modalContent);
         });
         $div.append($button);
 
         return $div;
     },
-    renderUpgradeModalContent: function (upgradeType, currentShip) {
+    renderUpgradeModalContent: function (upgradeType, currentShip, existingUpgrades) {
         var upgradesOfType = upgrades[upgradeType];
+        var existingUpgradesOfType = existingUpgrades[upgradeType];
 
         // filter out
         var filteredUpgrades = _.filter(upgradesOfType, function (upgrade) {
+            // Remove any upgrades for different ships
             if (upgrade.ship && upgrade.ship.indexOf(currentShip.shipData.name) < 0) {
-                // There's a ship restriction, and it doesn't match this one
                 return false;
             }
+
+            // Remove any upgrades for different ship sizes
             if (upgrade.size && upgrade.size.indexOf(currentShip.shipData.size) < 0) {
-                // There's a ship size restriction, and it doesn't match this one
                 return false;
+            }
+
+            // Remove any upgrades the build already has
+            var upgradeExists = _.find(existingUpgradesOfType, function (existingUpgrade) {
+                return existingUpgrade.id === upgrade.id;
+            });
+
+            if (upgradeExists) {
+                var upgradeIsAllowed = false;
+                // filter out any upgrades the player already has
+                // except
+                // * secondary weapons & bombs
+                if (upgrade.slot === 'Bomb' || upgrade.slot === 'Torpedo' || upgrade.slot === 'Cannon' || upgrade.slot === 'Turret' || upgrade.slot === 'Missile') {
+                    upgradeIsAllowed = true;
+                // * hull upgrade and shield upgrade
+                } else if (upgrade.xws === 'hullupgrade' || upgrade.xws === 'shieldupgrade') {
+                    upgradeIsAllowed = true;
+                }
+                if (!upgradeIsAllowed) {
+                    return false;
+                }
             }
 
             return true;
