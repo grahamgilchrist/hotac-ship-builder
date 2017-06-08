@@ -4,7 +4,10 @@ var $ = require('jquery');
 var _ = require('lodash');
 
 var events = require('../controllers/events');
-var pilots = require('../models/pilots');
+var pilotsWithAbilities = require('../models/pilots').pilotsWithAbilities;
+var pilots = _.uniqBy(pilotsWithAbilities, function (pilot) {
+    return pilot.text;
+});
 var upgrades = require('../models/upgrades').keyed;
 
 module.exports = {
@@ -45,7 +48,7 @@ module.exports = {
             $upgradeItem.append($upgradePurchaseList);
 
             if (type === 'Elite') {
-                var $pilotPurchaseList = module.exports.renderPilotAbilityUpgrade(build);
+                var $pilotPurchaseList = module.exports.renderNewAbilityButton(build.pilotSkill);
                 $upgradeItem.append($pilotPurchaseList);
             }
             $('#upgrade-list').append($upgradeItem);
@@ -81,14 +84,14 @@ module.exports = {
 
         var chosenUpgradeId;
 
-        var $modalContent = $('<div>');
+        var $modalContent = $('<div class="card-image-list">');
         var $summary = $('<div class="summary">');
         var $upgradeList = $('<ul>');
 
         _.forEach(filteredUpgrades, function (item) {
             var $upgrade = $('<li><img src="/components/xwing-data/images/' + item.image + '" alt="' + item.name + '"></li>');
             $upgrade.on('click', function () {
-                var $text = $('<span>' + item.name + ': ' + item.points + 'XP</span>');
+                var $text = $('<span>' + item.name + ': ' + item.hotacPoints + 'XP</span>');
                 var $summaryElement = $('.featherlight .summary');
                 $summaryElement.html($text);
                 chosenUpgradeId = item.id;
@@ -108,31 +111,51 @@ module.exports = {
 
         return $modalContent;
     },
-    renderPilotAbilityUpgrade: function (build) {
-        // Only show pilots of current PS or lower
-        var availablePilots = _.filter(pilots.pilotsWithAbilities, function (pilot) {
-            return pilot.skill <= build.pilotSkill;
-        });
-
+    renderNewAbilityButton: function (pilotSkill) {
         var $div = $('<div>');
-        $div.append('<h4>Named pilot abilities</h4>');
-        var $select = $('<select>');
-        var $noneOption = $('<option value="0">Select an upgrade...</option>');
-        $select.append($noneOption);
-        _.each(availablePilots, function (pilotCard) {
-            var $option = $('<option value="' + pilotCard.id + '">PS' + pilotCard.skill + ' ' + pilotCard.name + '</option>');
-            $select.append($option);
-        });
-        $div.append($select);
-
-        var $button = $('<button>Buy</button>');
+        var $button = $('<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored"><i class="material-icons">add</i></button>');
         $button.on('click', function () {
-            var pilotId = parseInt($select.val(), 10);
-            events.trigger('view.pilotAbilities.buy', pilotId);
+            var $modalContent = module.exports.renderPilotAbilityModalContent(pilotSkill);
+            $.featherlight($modalContent);
         });
         $div.append($button);
 
         return $div;
+    },
+    renderPilotAbilityModalContent: function (pilotSkill) {
+        // Only show pilots of current PS or lower
+        var availablePilots = _.filter(pilots, function (pilot) {
+            return pilot.skill <= pilotSkill;
+        });
+
+        var chosenPilotId;
+
+        var $modalContent = $('<div class="pilot-ability-list">');
+        var $summary = $('<div class="summary">');
+        var $upgradeList = $('<ul>');
+
+        _.forEach(availablePilots, function (pilotCard) {
+            var $upgrade = $('<li><h3>' + pilotCard.name + '</h3><p>' + pilotCard.text + '</p></li>');
+            $upgrade.on('click', function () {
+                var $text = $('<span>' + pilotCard.name + ': ' + pilotCard.skill + 'XP</span>');
+                var $summaryElement = $('.featherlight .summary');
+                $summaryElement.html($text);
+                chosenPilotId = pilotCard.id;
+            });
+            $upgradeList.append($upgrade);
+        });
+
+        var $button = $('<button>Buy ability</button>');
+        $button.on('click', function () {
+            events.trigger('view.pilotAbilities.buy', chosenPilotId);
+            $.featherlight.close();
+        });
+
+        $modalContent.append($upgradeList);
+        $modalContent.append($summary);
+        $modalContent.append($button);
+
+        return $modalContent;
     },
     numberOfUsableUpgrades: function (pilotSkill, currentShip) {
 

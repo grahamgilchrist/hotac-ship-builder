@@ -1,14 +1,25 @@
 .featherlight
-    li
-        display: inline-block
-        margin: 5px
+    .card-image-list
+        text-align: center
 
-    img
-        width: 165px
+        li
+            display: inline-block
+            margin: 5px
+            cursor: pointer
 
-#change-ship-list
-    display: none
+        img
+            width: 165px
 
-.featherlight
-    #change-ship-list
-        display: block
+    .pilot-ability-list
+        li
+            border-bottom: 1px solid #eee
+            padding: 1em
+            cursor: pointer
+
+            &:last-child
+                border-bottom: none
+
+        h3,
+        p
+            margin-bottom: 0
+

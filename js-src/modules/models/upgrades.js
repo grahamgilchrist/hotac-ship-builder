@@ -29,6 +29,22 @@ _.each(sortedUpgrades, function (upgrade) {
         return;
     }
 
+    // Remove squad leader as not allowed in HOTAC
+    if (upgrade.xws === 'squadleader') {
+        return;
+    }
+
+    // Define points value for Hotac. epts cost double
+    upgrade.hotacPoints = upgrade.points;
+    if (upgrade.slot === 'Elite') {
+        upgrade.hotacPoints = upgrade.points * 2;
+    }
+
+    // Extra munitions is a mod in hotac
+    if (upgrade.xws === 'extramunitions') {
+        upgrade.slot = 'Modification';
+    }
+
     if (!keyedUpgrades[upgrade.slot]) {
         keyedUpgrades[upgrade.slot] = [];
     }

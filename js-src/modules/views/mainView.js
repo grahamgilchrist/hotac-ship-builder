@@ -38,7 +38,7 @@ module.exports = {
         });
     },
     renderChangeShipModalContent: function () {
-        var $modalContent = $('<div class="change-ship-list">');
+        var $modalContent = $('<div class="card-image-list">');
         var $summary = $('<div class="summary">');
         var $shipList = $('<ul>');
         var chosenShipId;
@@ -47,7 +47,7 @@ module.exports = {
             var $ship = $('<li><img src="/components/xwing-data/images/' + item.pilotCard.image + '" alt="' + item.name + '"></li>');
             $ship.on('click', function () {
                 var $text = $('<span>' + item.label + ': 5XP</span>');
-                var $summaryElement = $('.featherlight .change-ship-list .summary');
+                var $summaryElement = $('.featherlight .summary');
                 $summaryElement.html($text);
                 chosenShipId = item.id;
             });
