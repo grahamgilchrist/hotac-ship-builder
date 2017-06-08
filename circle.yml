@@ -1,0 +1,13 @@
+machine:
+    node:
+      version: 7.1
+dependencies:
+  override:
+    - npm install -g gulp
+    - npm install
+compile:
+  override:
+    - gulp
+test:
+  override:
+    - gulp lint
