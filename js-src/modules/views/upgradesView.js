@@ -45,70 +45,69 @@ module.exports = {
             }
             $upgradeItem.append($ul);
 
-            var $upgradePurchaseList = module.exports.renderNewUpgrades(type, build.currentShip, build.upgrades);
+            var $upgradePurchaseList = module.exports.renderNewUpgrades(type, build.currentShip, build.upgrades, build.pilotSkill);
             $upgradeItem.append($upgradePurchaseList);
 
-            if (type === 'Elite') {
-                var $pilotPurchaseList = module.exports.renderNewAbilityButton(build.pilotSkill);
-                $upgradeItem.append($pilotPurchaseList);
-            }
             $('#upgrade-list').append($upgradeItem);
         }
     },
-    renderNewUpgrades: function (upgradeType, currentShip, existingUpgrades) {
+    renderNewUpgrades: function (upgradeType, currentShip, existingUpgrades, pilotSkill) {
         var $div = $('<div>');
         var $button = $('<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored"><i class="material-icons">add</i></button>');
         $button.on('click', function () {
-            var $modalContent = module.exports.renderUpgradeModalContent(upgradeType, currentShip, existingUpgrades);
+            var $modalContent = module.exports.renderUpgradeModalContent(upgradeType, currentShip, existingUpgrades, pilotSkill);
             $.featherlight($modalContent);
         });
         $div.append($button);
 
         return $div;
     },
-    renderUpgradeModalContent: function (upgradeType, currentShip, existingUpgrades) {
+    renderUpgradeModalContent: function (upgradeType, currentShip, existingUpgrades, pilotSkill) {
+        var $modalContent = $('<div>');
+
+        var $cardListTab = module.exports.renderCardListModalContent(upgradeType, currentShip, existingUpgrades);
+        $modalContent.append($cardListTab);
+
+        if (upgradeType === 'Elite') {
+            $cardListTab.addClass('mdl-tabs__panel is_active');
+            var $abilityTab = module.exports.renderPilotAbilityModalContent(pilotSkill);
+            $abilityTab.addClass('mdl-tabs__panel');
+
+            $modalContent.addClass('mdl-tabs');
+            var $tabsBar = $('<div class="mdl-tabs__tab-bar">');
+            var $tabLink1 = $('<a href="#modal-card-image-list" class="mdl-tabs__tab is-active">Elite pilot talent cards</a>');
+            var $tabLink2 = $('<a href="#modal-pilot-ability-list" class="mdl-tabs__tab">Named pilot abilities</a>');
+            $tabsBar.append($tabLink1);
+            $tabsBar.append($tabLink2);
+            $abilityTab.hide();
+            $tabLink1.on('click', function (event) {
+                $('.featherlight #modal-pilot-ability-list').hide();
+                $('.featherlight #modal-card-image-list').show();
+                event.preventDefault();
+                return false;
+            });
+            $tabLink2.on('click', function (event) {
+                $('.featherlight #modal-card-image-list').hide();
+                $('.featherlight #modal-pilot-ability-list').show();
+                $abilityTab.show();
+                event.preventDefault();
+                return false;
+            });
+            $modalContent.prepend($tabsBar);
+            $modalContent.append($abilityTab);
+        }
+
+        return $modalContent;
+    },
+    renderCardListModalContent: function (upgradeType, currentShip, existingUpgrades) {
         var upgradesOfType = upgrades[upgradeType];
         var existingUpgradesOfType = existingUpgrades[upgradeType];
 
-        // filter out
-        var filteredUpgrades = _.filter(upgradesOfType, function (upgrade) {
-            // Remove any upgrades for different ships
-            if (upgrade.ship && upgrade.ship.indexOf(currentShip.shipData.name) < 0) {
-                return false;
-            }
-
-            // Remove any upgrades for different ship sizes
-            if (upgrade.size && upgrade.size.indexOf(currentShip.shipData.size) < 0) {
-                return false;
-            }
-
-            // Remove any upgrades the build already has
-            var upgradeExists = _.find(existingUpgradesOfType, function (existingUpgrade) {
-                return existingUpgrade.id === upgrade.id;
-            });
-
-            if (upgradeExists) {
-                var upgradeIsAllowed = false;
-                // filter out any upgrades the player already has
-                // except
-                // * secondary weapons & bombs
-                if (upgrade.slot === 'Bomb' || upgrade.slot === 'Torpedo' || upgrade.slot === 'Cannon' || upgrade.slot === 'Turret' || upgrade.slot === 'Missile') {
-                    upgradeIsAllowed = true;
-                // * hull upgrade and shield upgrade
-                } else if (upgrade.xws === 'hullupgrade' || upgrade.xws === 'shieldupgrade') {
-                    upgradeIsAllowed = true;
-                }
-                if (!upgradeIsAllowed) {
-                    return false;
-                }
-            }
-
-            return true;
-        });
+        var filteredUpgrades = module.exports.getUpgradesToShow(upgradesOfType, currentShip, existingUpgradesOfType);
 
         var chosenUpgradeId;
 
-        var $modalContent = $('<div class="card-image-list">');
+        var $modalContent = $('<div class="card-image-list" id="modal-card-image-list">');
         var $summary = $('<div class="summary">');
         var $upgradeList = $('<ul>');
 
@@ -135,16 +134,43 @@ module.exports = {
 
         return $modalContent;
     },
-    renderNewAbilityButton: function (pilotSkill) {
-        var $div = $('<div>');
-        var $button = $('<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored"><i class="material-icons">add</i></button>');
-        $button.on('click', function () {
-            var $modalContent = module.exports.renderPilotAbilityModalContent(pilotSkill);
-            $.featherlight($modalContent);
-        });
-        $div.append($button);
+    getUpgradesToShow: function (upgrades, currentShip, existingUpgrades) {
+        var filteredUpgrades = _.filter(upgrades, function (upgrade) {
+            // Remove any upgrades for different ships
+            if (upgrade.ship && upgrade.ship.indexOf(currentShip.shipData.name) < 0) {
+                return false;
+            }
 
-        return $div;
+            // Remove any upgrades for different ship sizes
+            if (upgrade.size && upgrade.size.indexOf(currentShip.shipData.size) < 0) {
+                return false;
+            }
+
+            // Remove any upgrades the build already has
+            var upgradeExists = _.find(existingUpgrades, function (existingUpgrade) {
+                return existingUpgrade.id === upgrade.id;
+            });
+
+            if (upgradeExists) {
+                var upgradeIsAllowed = false;
+                // filter out any upgrades the player already has
+                // except
+                // * secondary weapons & bombs
+                if (upgrade.slot === 'Bomb' || upgrade.slot === 'Torpedo' || upgrade.slot === 'Cannon' || upgrade.slot === 'Turret' || upgrade.slot === 'Missile') {
+                    upgradeIsAllowed = true;
+                // * hull upgrade and shield upgrade
+                } else if (upgrade.xws === 'hullupgrade' || upgrade.xws === 'shieldupgrade') {
+                    upgradeIsAllowed = true;
+                }
+                if (!upgradeIsAllowed) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
+
+        return filteredUpgrades;
     },
     renderPilotAbilityModalContent: function (pilotSkill) {
         // Only show pilots of current PS or lower
@@ -154,7 +180,7 @@ module.exports = {
 
         var chosenPilotId;
 
-        var $modalContent = $('<div class="pilot-ability-list">');
+        var $modalContent = $('<div class="pilot-ability-list" id="modal-pilot-ability-list">');
         var $summary = $('<div class="summary">');
         var $upgradeList = $('<ul>');
 
@@ -223,7 +249,7 @@ module.exports = {
         }
 
         // Add slots for the ship type
-        var shipUpgrades = currentShip.upgrades;
+        var shipUpgrades = currentShip.upgradeSlots;
         _.each(shipUpgrades, function (shipUpgrade) {
             if (!usableUpgrades[shipUpgrade.type]) {
                 usableUpgrades[shipUpgrade.type] = {

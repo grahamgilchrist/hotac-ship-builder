@@ -4,11 +4,6 @@ var $ = require('jquery');
 var _ = require('lodash');
 
 module.exports = {
-    renderShipInfo: function (currentShip, purchasedUpgrades) {
-        module.exports.renderShipStats(currentShip);
-        module.exports.renderShipActions(currentShip, purchasedUpgrades);
-        module.exports.renderShipImage(currentShip);
-    },
     renderShipStats: function (currentShip) {
         var $shipStats = $('#ship-info-stats');
         $shipStats.empty();
@@ -47,5 +42,74 @@ module.exports = {
         var $shipImage = $('#ship-info-image');
         var imgUrl = '/components/xwing-data/images/' + currentShip.pilotCard.image;
         $shipImage.attr('src', imgUrl);
+    },
+    renderShipUpgrades: function (currentShip, pilotSkill) {
+        var $shipUpgrades = $('#ship-info-upgrades');
+        $shipUpgrades.empty();
+
+        var $ul = $('<ul>');
+
+        var upgradeSlots = module.exports.getShipUpgrades(currentShip);
+
+        _.each(upgradeSlots, function (upgradeSlot, index) {
+            var iconString = upgradeSlot.type.replace(' ', '').replace('-', '');
+            iconString = iconString.toLowerCase();
+            var $li = $('<li><span><i class="xwing-miniatures-font xwing-miniatures-font-' + iconString + '"></i>' + upgradeSlot.type + '</span></li>');
+            if (pilotSkill < upgradeSlot.pilotSkill) {
+                $li.addClass('disabled');
+                $li.append('<span> (PS ' + upgradeSlot.pilotSkill + ')</span>');
+            }
+            $ul.append($li);
+        });
+
+        $shipUpgrades.append($ul);
+    },
+    getShipUpgrades: function (currentShip) {
+        // elite slots are dependent on pilot level
+
+        var usableUpgrades = _.map(currentShip.upgradeSlots, function (upgradeSlot) {
+            return {
+                type: upgradeSlot.type
+            };
+        });
+
+        usableUpgrades = usableUpgrades.concat([
+            {
+                type: 'Title'
+            },
+            {
+                type: 'Modification'
+            },
+            {
+                type: 'Modification',
+                pilotSkill: 4
+            },
+            {
+                type: 'Modification',
+                pilotSkill: 6
+            },
+            {
+                type: 'Modification',
+                pilotSkill: 8
+            },
+            {
+                type: 'Elite',
+                pilotSkill: 3
+            },
+            {
+                type: 'Elite',
+                pilotSkill: 5
+            },
+            {
+                type: 'Elite',
+                pilotSkill: 7
+            },
+            {
+                type: 'Elite',
+                pilotSkill: 9
+            }
+        ]);
+
+        return usableUpgrades;
     }
 };

@@ -25,13 +25,16 @@ var hotacShips = [
         startingXp: 5,
         shipData: getShipDataById('xwing'),
         pilotCard: getPilotByXws('redsquadronpilot'),
-        upgrades: [
+        upgradeSlots: [
             {
                 type: 'Astromech'
             },
             {
                 type: 'Torpedo'
             }
+        ],
+        startingUpgrades: [
+            'integratedastromech'
         ]
     },
     {
@@ -41,7 +44,7 @@ var hotacShips = [
         startingXp: 8,
         shipData: getShipDataById('ywing'),
         pilotCard: getPilotByXws('goldsquadronpilot'),
-        upgrades: [
+        upgradeSlots: [
             {
                 type: 'Astromech'
             },
@@ -60,6 +63,9 @@ var hotacShips = [
             {
                 type: 'Turret'
             }
+        ],
+        startingUpgrades: [
+            'btla4'
         ]
     },
     {
@@ -67,13 +73,16 @@ var hotacShips = [
         label: 'A-wing',
         shipData: getShipDataById('awing'),
         pilotCard: getPilotByXws('arvelcrynyd'),
-        upgrades: [
+        upgradeSlots: [
             {
                 type: 'Elite'
             },
             {
                 type: 'Missile'
             }
+        ],
+        startingUpgrades: [
+            'awingtestpilot'
         ]
     },
     {
@@ -81,7 +90,7 @@ var hotacShips = [
         label: 'B-wing',
         shipData: getShipDataById('bwing'),
         pilotCard: getPilotByXws('bluesquadronpilot'),
-        upgrades: [
+        upgradeSlots: [
             {
                 type: 'Torpedo'
             },
@@ -94,6 +103,9 @@ var hotacShips = [
             {
                 type: 'System'
             }
+        ],
+        startingUpgrades: [
+            'bwinge2'
         ]
     },
     {
@@ -101,7 +113,7 @@ var hotacShips = [
         label: 'HWK-290',
         shipData: getShipDataById('hwk290'),
         pilotCard: getPilotByXws('kylekatarn'),
-        upgrades: [
+        upgradeSlots: [
             {
                 type: 'Turret'
             },
