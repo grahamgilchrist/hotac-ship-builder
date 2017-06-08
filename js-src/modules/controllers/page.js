@@ -84,6 +84,7 @@ module.exports = {
             upgradesView.renderUpgradesList(build);
             pilotSkillView.renderWithPs(build.pilotSkill);
             upgradesView.renderUpgradesList(build);
+            xpHistoryView.renderTable(build);
         });
 
         events.on('model.build.currentShip.update', function (event, build) {
@@ -118,7 +119,7 @@ module.exports = {
         });
 
         events.on('model.build.xpHistory.add', function (event, data) {
-            xpHistoryView.renderTableRow(data);
+            xpHistoryView.renderTableRow(data.xpItem, data.build.currentXp);
             var newHash = hashController.generateExportString(data.build);
             hashController.set(newHash);
         });
