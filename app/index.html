@@ -86,8 +86,11 @@
                                         <div id="ship-info-actions"></div>
 
                                         <div class="change-ship">
-                                            <button id="change-ship" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Change ship (5XP)</button>
+                                            <span id="change-ship-wrapper">
+                                                <button id="change-ship" disabled class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Change ship (5XP)</button>
+                                            </span>
                                         </div>
+                                        <div class="mdl-tooltip" data-mdl-for="change-ship-wrapper" id="change-ship-tooltip">New ships are unlocked at pilot skill 4</div>
                                     </div>
                                     <div class="ship-info-pilot-skill">
                                         <span class="label">Pilot Skill</span>

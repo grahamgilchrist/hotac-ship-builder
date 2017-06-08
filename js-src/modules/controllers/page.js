@@ -8,6 +8,7 @@ var newView = require('../views/newView');
 var mainView = require('../views/mainView');
 var shipInfoView = require('../views/shipInfo');
 var pilotSkillView = require('../views/pilotSkillView');
+var changeShipView = require('../views/changeShipView');
 var upgradesView = require('../views/upgradesView');
 var xpHistoryView = require('../views/xpHistory');
 var hashController = require('./urlHash');
@@ -56,9 +57,6 @@ module.exports = {
             hashController.clear();
         });
 
-        events.on('view.main.changeShip', function (event, shipId) {
-            currentBuild.changeShip(shipId);
-        });
         events.on('view.main.increasePs', function () {
             currentBuild.increasePilotSkill();
         });
@@ -75,6 +73,10 @@ module.exports = {
         events.on('view.pilotAbilities.buy', function (event, pilotId) {
             currentBuild.buyPilotAbility(pilotId);
         });
+
+        events.on('view.changeShip.changeShip', function (event, shipId) {
+            currentBuild.changeShip(shipId);
+        });
     },
     bindModelEvents: function () {
         events.on('model.build.ready', function (event, build) {
@@ -85,6 +87,7 @@ module.exports = {
             pilotSkillView.renderWithPs(build.pilotSkill);
             upgradesView.renderUpgradesList(build);
             xpHistoryView.renderTable(build);
+            changeShipView.renderShipView(build.pilotSkill, build.currentShip);
             var newHash = hashController.generateExportString(build);
             hashController.set(newHash);
         });
@@ -94,6 +97,7 @@ module.exports = {
                 mainView.renderTitle(build);
                 shipInfoView.renderShipInfo(build.currentShip);
                 upgradesView.renderUpgradesList(build);
+                changeShipView.renderShipView(build.pilotSkill, build.currentShip);
             }
         });
 
@@ -101,6 +105,7 @@ module.exports = {
             if (build.ready) {
                 pilotSkillView.renderWithPs(build.pilotSkill);
                 upgradesView.renderUpgradesList(build);
+                changeShipView.renderShipView(build.pilotSkill, build.currentShip);
             }
         });
 

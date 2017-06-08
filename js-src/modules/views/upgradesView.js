@@ -208,6 +208,10 @@ module.exports = {
             Modification: {
                 max: 3,
                 allowed: modSlots
+            },
+            Title: {
+                max: 1,
+                allowed: 1
             }
         };
         if (eliteSlots > 0) {
