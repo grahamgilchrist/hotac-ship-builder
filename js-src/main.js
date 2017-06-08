@@ -1,6 +1,6 @@
 'use strict';
 
-var $ = require('jquery');
+var $ = window.jQuery = require('jquery');
 var pageController = require('./modules/controllers/page');
 
 var ready = function () {

@@ -11,7 +11,6 @@ module.exports = {
         // bind new button
         $('#new-build').on('click', module.exports.clickResetButton);
 
-        module.exports.renderChangeShipList();
         module.exports.bindChangeShipButton();
         module.exports.bindXpButton();
     },
@@ -32,23 +31,36 @@ module.exports = {
     renderTitle: function (currentShip) {
         $('#ship-current').text(currentShip.label).prepend('<i class="xwing-miniatures-ship xwing-miniatures-ship-' + currentShip.id + '"></i>');
     },
-    renderChangeShipList: function () {
-        // bind ships to DOM
-        var $changeShipList = $('#change-ship-list');
-        var $noneOption = $('<option value="0">Select a ship...</option>');
-        $changeShipList.append($noneOption);
-
-        // Add all ships to list
-        _.forEach(ships, function (item) {
-            var $newOption = $('<option value="' + item.id + '">' + item.label + '</option>');
-            $changeShipList.append($newOption);
-        });
-    },
     bindChangeShipButton: function () {
-        var $changeShipList = $('#change-ship-list');
         $('#change-ship').on('click', function () {
-            var chosenItemValue = $changeShipList.val();
-            events.trigger('view.main.changeShip', chosenItemValue);
+
+            var $modalContent = $('<div class="change-ship-list">');
+            var $summary = $('<div class="summary">');
+            var $shipList = $('<ul>');
+            var chosenShipId;
+            // Add all ships to list
+            _.forEach(ships, function (item) {
+                var $ship = $('<li><img src="/components/xwing-data/images/' + item.pilotCard.image + '" alt="' + item.id + '"></li>');
+                $ship.on('click', function () {
+                    var $text = $('<span>' + item.label + ': 5XP</span>');
+                    var $summaryElement = $('.featherlight .change-ship-list .summary');
+                    $summaryElement.html($text);
+                    chosenShipId = item.id;
+                });
+                $shipList.append($ship);
+            });
+
+            var $button = $('<button>Choose ship</button>');
+            $button.on('click', function () {
+                events.trigger('view.main.changeShip', chosenShipId);
+                $.featherlight.close();
+            });
+
+            $modalContent.append($shipList);
+            $modalContent.append($summary);
+            $modalContent.append($button);
+
+            $.featherlight($modalContent);
         });
     },
     renderXp: function (xpAmount) {
