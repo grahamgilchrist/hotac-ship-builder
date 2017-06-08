@@ -28,8 +28,9 @@ module.exports = {
     show: function () {
         $('.main').addClass('active');
     },
-    renderTitle: function (currentShip) {
-        $('#ship-current').text(currentShip.label).prepend('<i class="xwing-miniatures-ship xwing-miniatures-ship-' + currentShip.id + '"></i>');
+    renderTitle: function (build) {
+        var label = build.currentShip.label + ' - ' + build.callsign + ' - ' + build.playerName;
+        $('#ship-current').text(label).prepend('<i class="xwing-miniatures-ship xwing-miniatures-ship-' + build.currentShip.id + '"></i>');
     },
     bindChangeShipButton: function () {
         $('#change-ship').on('click', function () {

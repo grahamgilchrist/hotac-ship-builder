@@ -16,8 +16,8 @@ module.exports = {
             var chosenShipId = $('#starting-ships').val();
             events.trigger('view.new.start', {
                 shipId: chosenShipId,
-                callsign: $('#callsign'),
-                player: $('#player-name')
+                callsign: $('#callsign').val(),
+                playerName: $('#player-name').val()
             });
         });
     },

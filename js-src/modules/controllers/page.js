@@ -28,8 +28,8 @@ module.exports = {
         var urlHash = hashController.get();
         if (urlHash && urlHash.length > 0) {
             // We got a hash in URL, so create a build based on it
-            var xpHistory = hashController.parseExportStringToHistory(urlHash);
-            currentBuild = new Build(xpHistory);
+            var buildData = hashController.parseExportStringToHistory(urlHash);
+            currentBuild = new Build(buildData.xpHistory, buildData.callsign, buildData.playerName);
             mainView.show();
         } else {
             // No build provided via URL, so show new build form
@@ -43,7 +43,7 @@ module.exports = {
                     shipId: data.shipId
                 })
             ];
-            currentBuild = new Build(startingXpHistory);
+            currentBuild = new Build(startingXpHistory, data.callsign, data.playerName);
             newView.hide();
             mainView.show();
         });
@@ -78,7 +78,7 @@ module.exports = {
     },
     bindModelEvents: function () {
         events.on('model.build.ready', function (event, build) {
-            mainView.renderTitle(build.currentShip);
+            mainView.renderTitle(build);
             mainView.renderXp(build.currentXp);
             shipInfoView.renderShipInfo(build.currentShip);
             upgradesView.renderUpgradesList(build);
@@ -88,7 +88,7 @@ module.exports = {
 
         events.on('model.build.currentShip.update', function (event, build) {
             if (build.ready) {
-                mainView.renderTitle(build.currentShip);
+                mainView.renderTitle(build);
                 shipInfoView.renderShipInfo(build.currentShip);
                 upgradesView.renderUpgradesList(build);
             }

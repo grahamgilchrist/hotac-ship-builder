@@ -9,7 +9,9 @@ var upgrades = require('../models/upgrades').all;
 var pilots = require('../models/pilots').allRebels;
 
 // Ship build
-var ShipBuild = function (xpHistory) {
+var ShipBuild = function (xpHistory, callsign, playerName) {
+    this.callsign = callsign;
+    this.playerName = playerName;
     this.currentShip = null;
     this.xpHistory = [];
     this.currentXp = 0;
