@@ -35,6 +35,7 @@ module.exports = {
                 }
             });
         });
+        actions = _.uniq(actions);
 
         _.each(actions, function (action) {
             var actionString = action.replace(' ', '').replace('-', '');
