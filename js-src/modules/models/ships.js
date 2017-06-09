@@ -12,9 +12,9 @@ var getPilotByXws = function (pilotId) {
     });
 };
 
-var getShipDataById = function (shipId) {
+var getShipDataById = function (xws) {
     return _.find(shipData, function (shipData) {
-        return shipData.xws === shipId;
+        return shipData.xws === xws;
     });
 };
 

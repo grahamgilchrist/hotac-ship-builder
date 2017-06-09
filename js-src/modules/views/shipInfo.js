@@ -83,7 +83,7 @@ module.exports = {
 
         var usableUpgrades = _.map(currentShip.upgradeSlots, function (upgradeSlot) {
             return {
-                type: upgradeSlot.type
+                type: upgradeSlot
             };
         });
 
