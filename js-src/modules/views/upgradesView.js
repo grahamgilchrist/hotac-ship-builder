@@ -94,30 +94,20 @@ module.exports = {
         $modalContent.append($cardListTab);
 
         if (upgradeType === 'Elite') {
-            $cardListTab.addClass('mdl-tabs__panel is_active');
+            // tab elements
+            $cardListTab.addClass('mdl-tabs__panel is-active');
             var $abilityTab = module.exports.renderPilotAbilityModalContent(pilotSkill);
-            $abilityTab.addClass('mdl-tabs__panel');
+            $abilityTab.addClass('mdl-tabs__panel tab');
 
-            $modalContent.addClass('mdl-tabs');
+            // tab link elements
             var $tabsBar = $('<div class="mdl-tabs__tab-bar">');
             var $tabLink1 = $('<a href="#modal-card-image-list" class="mdl-tabs__tab is-active">Elite pilot talent cards</a>');
             var $tabLink2 = $('<a href="#modal-pilot-ability-list" class="mdl-tabs__tab">Named pilot abilities</a>');
             $tabsBar.append($tabLink1);
             $tabsBar.append($tabLink2);
-            $abilityTab.hide();
-            $tabLink1.on('click', function (event) {
-                $('.featherlight #modal-pilot-ability-list').hide();
-                $('.featherlight #modal-card-image-list').show();
-                event.preventDefault();
-                return false;
-            });
-            $tabLink2.on('click', function (event) {
-                $('.featherlight #modal-card-image-list').hide();
-                $('.featherlight #modal-pilot-ability-list').show();
-                $abilityTab.show();
-                event.preventDefault();
-                return false;
-            });
+
+            // create DOM structure
+            $modalContent.addClass('mdl-tabs mdl-js-tabs mdl-js-ripple-effect');
             $modalContent.prepend($tabsBar);
             $modalContent.append($abilityTab);
         }
