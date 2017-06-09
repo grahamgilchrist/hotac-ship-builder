@@ -12,72 +12,98 @@ var upgrades = require('../models/upgrades').keyed;
 
 module.exports = {
     renderUpgradesList: function (build) {
-        var purchasedUpgradesByType = _.clone(build.upgrades, true);
+        // Get a list of the slots allowed for this build (determined by ship and PS) and the number of each upgrade per slot
+        var numUpgradesAllowedInBuildByType = module.exports.numberOfUsableUpgrades(build.pilotSkill, build.currentShip);
+
+        // Get grouped allowed/disallowed upgrade slots for this build
+        var upgradesBySlot = module.exports.getAllowedDisallowedUpgradesBySlot(build, numUpgradesAllowedInBuildByType);
 
         // Sort ships starting upgrades by slot type
+        var startingUpgradesByType = module.exports.groupStartingUpgradesByType(build.currentShip.startingUpgrades);
+
+        $('#upgrade-list').empty();
+        var $slotList;
+        var $upgradeItem;
+        _.forEach(upgradesBySlot.allowed, function (upgradesList, slotType) {
+            $upgradeItem = $('<li>');
+            // List of upgrades that match this slot type
+            $slotList = module.exports.renderSlotList(slotType, startingUpgradesByType[slotType], upgradesList, numUpgradesAllowedInBuildByType[slotType].allowed, build.pilotAbilities);
+            $upgradeItem.append($slotList);
+
+            // Add new upgrade button
+            var $upgradeAddButton = module.exports.renderAddUpgradeButton(slotType, build.currentShip, build.upgrades, build.pilotSkill);
+            $upgradeItem.append($upgradeAddButton);
+
+            $('#upgrade-list').append($upgradeItem);
+        });
+
+        // Show disallowed upgrades
+        _.forEach(upgradesBySlot.disallowed, function (upgradesList, slotType) {
+            $upgradeItem = $('<li class="disallowed">');
+            $slotList = module.exports.renderSlotList(slotType, [], upgradesList, 0, build.pilotAbilities);
+            $upgradeItem.append($slotList);
+            $('#upgrade-list').append($upgradeItem);
+        });
+    },
+    getAllowedDisallowedUpgradesBySlot: function (build, numUpgradesAllowedInBuildByType) {
+        var purchasedUpgradesByType = _.clone(build.upgrades, true);
+
+        var allowedUpgradesBySlot = {};
+        var disallowedUpgradesBySlot = {};
+
+        // Make sure we have at least an empty entry for every slot the build is allowed to take
+        _.forEach(numUpgradesAllowedInBuildByType, function (slotSizes, slotTypeString) {
+            allowedUpgradesBySlot[slotTypeString] = [];
+        });
+
+        // Populate allowed and disallowed slot lists with the purchased upgrades
+        _.forEach(purchasedUpgradesByType, function (upgradesList, slotType) {
+            // Find the keys of any slots in the build that match these upgrades
+            var matchingSlotKeys = module.exports.getMatchingBuildSlots(numUpgradesAllowedInBuildByType, slotType);
+            if (matchingSlotKeys.length > 0) {
+                // Allowed in build
+                _.forEach(matchingSlotKeys, function (matchingSlotKey) {
+                    allowedUpgradesBySlot[matchingSlotKey] = allowedUpgradesBySlot[matchingSlotKey].concat(upgradesList);
+                });
+            } else {
+                // This slot not allowed in this build (restricted by ship?)
+                disallowedUpgradesBySlot[slotType] = upgradesList;
+            }
+        });
+
+        return {
+            allowed: allowedUpgradesBySlot,
+            disallowed: disallowedUpgradesBySlot
+        };
+    },
+    // Given a set of upgrades and a slot type, assign the upgrades to any slot which
+    getMatchingBuildSlots: function (slotTypesAllowedInBuild, upgradesSlotType) {
+        var matchingSlotKeys = [];
+
+        // Look through all the allowed slots for this build and return any that match the specified slot type
+        // Build may have multiple of the same slots (e.g. bombs) or have some combined slots (e.g. mod/crew in b-wing)
+        _.forEach(slotTypesAllowedInBuild, function (slotSizes, allowedSlotTypeKey) {
+            // this may be a slot which allows multiple upgrade types, so convert to an array
+            var allowedSlotTypes = allowedSlotTypeKey.split(',');
+
+            // Does the specified Slot type match any of the possible allowed types for this build?
+            if (allowedSlotTypes.indexOf(upgradesSlotType) >= 0) {
+                matchingSlotKeys.push(allowedSlotTypeKey);
+            }
+        });
+        return matchingSlotKeys;
+    },
+    groupStartingUpgradesByType: function (startingUpgrades) {
+        // Sort ships starting upgrades by slot type
         var startingUpgradesByType = {};
-        _.each(build.currentShip.startingUpgrades, function (startingUpgrade) {
+        _.each(startingUpgrades, function (startingUpgrade) {
             var slotType = startingUpgrade.slot;
             if (!startingUpgradesByType[slotType]) {
                 startingUpgradesByType[slotType] = [];
             }
             startingUpgradesByType[slotType].push(startingUpgrade);
         });
-
-        // Get a list of the slots allowed for this build (determined by ship and PS) and the number of each upgrade per slot
-        var numUpgradesAllowedInBuildByType = module.exports.numberOfUsableUpgrades(build.pilotSkill, build.currentShip);
-
-        // keep track of which allowed slots on the ship have been filled
-        var slotTypesUsed = [];
-
-        // Sort purchased upgrades into the allowed slot bins by type. This includes sorting into slots with multiple types
-        var allowedUpgradesBySlot = {};
-        for (var upgradeTypeString in numUpgradesAllowedInBuildByType) {
-            // Add an empty slot here, even if no upgrades purchased
-            allowedUpgradesBySlot[upgradeTypeString] = [];
-            // this may be a slot which allows multiple upgrade types, so convert to an array
-            var upgradeTypes = upgradeTypeString.split(',');
-            // Add purchased upgrades which match any of the possible allowed types for this slot
-            _.each(upgradeTypes, function (upgradeType) {
-                if (purchasedUpgradesByType[upgradeType]) {
-                    slotTypesUsed.push(upgradeType);
-                    allowedUpgradesBySlot[upgradeTypeString] = allowedUpgradesBySlot[upgradeTypeString].concat(purchasedUpgradesByType[upgradeType]);
-                }
-            });
-        }
-
-        // Find any keys frompurchasedupgradesby type that are not in allowed build and create array for those as disabled upgrades
-        var disallowedUpgradesBySlot = {};
-        for (var slotType in purchasedUpgradesByType) {
-            if (slotTypesUsed.indexOf(slotType) === -1) {
-                // this upgrade type was not in the allowed list
-                disallowedUpgradesBySlot[slotType] = purchasedUpgradesByType[slotType];
-            }
-        }
-
-        $('#upgrade-list').empty();
-        var $slotList;
-        var $upgradeItem;
-        for (var allowedSlotType in allowedUpgradesBySlot) {
-            $upgradeItem = $('<li>');
-            // List of upgrades that match this slot type
-            $slotList = module.exports.renderSlotList(allowedSlotType, startingUpgradesByType[allowedSlotType], allowedUpgradesBySlot[allowedSlotType], numUpgradesAllowedInBuildByType[allowedSlotType].allowed, build.pilotAbilities);
-            $upgradeItem.append($slotList);
-
-            // Add new upgrade button
-            var $upgradeAddButton = module.exports.renderAddUpgradeButton(allowedSlotType, build.currentShip, build.upgrades, build.pilotSkill);
-            $upgradeItem.append($upgradeAddButton);
-
-            $('#upgrade-list').append($upgradeItem);
-        }
-
-        // TODO: show disallowed upgrades
-        for (var disallowedSlotType in disallowedUpgradesBySlot) {
-            $upgradeItem = $('<li class="disallowed">');
-            $slotList = module.exports.renderSlotList(disallowedSlotType, [], disallowedUpgradesBySlot[disallowedSlotType], 0, build.pilotAbilities);
-            $upgradeItem.append($slotList);
-            $('#upgrade-list').append($upgradeItem);
-        }
+        return startingUpgradesByType;
     },
     renderSlotList: function (slotType, startingUpgrades, purchasedUpgrades, numUpgradesAllowedInSlot, pilotAbilities) {
         var $ul = $('<ul>');
