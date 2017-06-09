@@ -220,7 +220,7 @@ module.exports = {
         var $upgradeList = $('<ul>');
 
         _.forEach(availablePilots, function (pilotCard) {
-            var $upgrade = $('<li><h3>' + pilotCard.name + '</h3><p>' + pilotCard.text + '</p></li>');
+            var $upgrade = $('<li><h3>' + pilotCard.name + ' (PS ' + pilotCard.skill + ')</h3><p>' + pilotCard.text + '</p></li>');
             $upgrade.on('click', function () {
                 var $text = $('<span>' + pilotCard.name + ': ' + pilotCard.skill + 'XP</span>');
                 var $summaryElement = $('.featherlight .summary');
