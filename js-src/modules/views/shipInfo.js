@@ -58,10 +58,11 @@ module.exports = {
             } else if (_.isString(upgradeSlot.type)) {
                 upgradeNames.push(upgradeSlot.type);
             }
-            var iconStrings = _.map(upgradeNames, module.exports.getIconString);
-            var iconString = iconStrings.join(' / ');
-            var nameString = upgradeNames.join(' / ');
-            var $li = $('<li><span class="icons">' + iconString + '</span><span>' + nameString + '</span></li>');
+            var titleStrings = _.map(upgradeNames, function (upgradeName) {
+                return module.exports.getIconString(upgradeName) + ' <span>' + upgradeName + '</span>';
+            });
+            var titleString = titleStrings.join(' / ');
+            var $li = $('<li>' + titleString + '</li>');
             if (pilotSkill < upgradeSlot.pilotSkill) {
                 $li.addClass('disabled');
                 $li.append('<span> (PS ' + upgradeSlot.pilotSkill + ')</span>');

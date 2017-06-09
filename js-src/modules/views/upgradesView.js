@@ -37,7 +37,13 @@ module.exports = {
             numAvailableofType = numUsableUpgrades[type].allowed;
             $ul = $('<ul>');
 
-            var $li = $('<li class="slot">' + type + '<span class="equip">Can equip ' + numAvailableofType + '</span></li>');
+            var upgradeNames = type.split(',');
+            var titleStrings = _.map(upgradeNames, function (upgradeName) {
+                return module.exports.getIconString(upgradeName) + '<span>' + upgradeName + '</span>';
+            });
+            var titleString = titleStrings.join(' / ');
+
+            var $li = $('<li class="slot">' + titleString + '<div class="equip">Can equip ' + numAvailableofType + '</div></li>');
             $ul.append($li);
 
             _.each(keyedStartingUpgrades[type], function (upgrade) {
@@ -64,9 +70,15 @@ module.exports = {
             $('#upgrade-list').append($upgradeItem);
         }
     },
+    getIconString: function (upgradeSlotType) {
+        var iconId = upgradeSlotType.replace(' ', '').replace('-', '');
+        iconId = iconId.toLowerCase();
+        var iconString = '<i class="xwing-miniatures-font xwing-miniatures-font-' + iconId + '"></i>';
+        return iconString;
+    },
     renderNewUpgrades: function (upgradeType, currentShip, existingUpgrades, pilotSkill) {
         var $div = $('<div>');
-        var $button = $('<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored"><i class="material-icons">add</i></button>');
+        var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Add</button>');
         $button.on('click', function () {
             var $modalContent = module.exports.renderUpgradeModalContent(upgradeType, currentShip, existingUpgrades, pilotSkill);
             $.featherlight($modalContent);
@@ -160,8 +172,13 @@ module.exports = {
             }
 
             // Don't show anything which is a starting upgrade for the ship
-            if (currentShip.startingUpgrades && currentShip.startingUpgrades.indexOf(upgrade.xws) > -1) {
-                return false;
+            if (currentShip.startingUpgrades) {
+                var found = _.find(currentShip.startingUpgrades, function (startingUpgrade) {
+                    return startingUpgrade.xws === upgrade.xws;
+                });
+                if (found) {
+                    return false;
+                }
             }
 
             // Remove any upgrades the build already has
