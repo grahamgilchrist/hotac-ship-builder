@@ -51,10 +51,17 @@ module.exports = {
 
         var upgradeSlots = module.exports.getShipUpgrades(currentShip);
 
-        _.each(upgradeSlots, function (upgradeSlot, index) {
-            var iconString = upgradeSlot.type.replace(' ', '').replace('-', '');
-            iconString = iconString.toLowerCase();
-            var $li = $('<li><span><i class="xwing-miniatures-font xwing-miniatures-font-' + iconString + '"></i>' + upgradeSlot.type + '</span></li>');
+        _.each(upgradeSlots, function (upgradeSlot) {
+            var upgradeNames = [];
+            if (_.isArray(upgradeSlot.type)) {
+                upgradeNames = upgradeSlot.type;
+            } else if (_.isString(upgradeSlot.type)) {
+                upgradeNames.push(upgradeSlot.type);
+            }
+            var iconStrings = _.map(upgradeNames, module.exports.getIconString);
+            var iconString = iconStrings.join(' / ');
+            var nameString = upgradeNames.join(' / ');
+            var $li = $('<li><span class="icons">' + iconString + '</span><span>' + nameString + '</span></li>');
             if (pilotSkill < upgradeSlot.pilotSkill) {
                 $li.addClass('disabled');
                 $li.append('<span> (PS ' + upgradeSlot.pilotSkill + ')</span>');
@@ -63,6 +70,12 @@ module.exports = {
         });
 
         $shipUpgrades.append($ul);
+    },
+    getIconString: function (upgradeSlotType) {
+        var iconId = upgradeSlotType.replace(' ', '').replace('-', '');
+        iconId = iconId.toLowerCase();
+        var iconString = '<i class="xwing-miniatures-font xwing-miniatures-font-' + iconId + '"></i>';
+        return iconString;
     },
     getShipUpgrades: function (currentShip) {
         // elite slots are dependent on pilot level

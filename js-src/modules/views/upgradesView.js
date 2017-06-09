@@ -20,6 +20,14 @@ module.exports = {
             }
         }
 
+        var keyedStartingUpgrades = {};
+        _.each(build.currentShip.startingUpgrades, function (startingUpgrade) {
+            if (!keyedStartingUpgrades[startingUpgrade.slot]) {
+                keyedStartingUpgrades[startingUpgrade.slot] = [];
+            }
+            keyedStartingUpgrades[startingUpgrade.slot].push(startingUpgrade);
+        });
+
         var $upgradeItem;
         var $ul;
         var numAvailableofType;
@@ -31,6 +39,11 @@ module.exports = {
 
             var $li = $('<li class="slot">' + type + '<span class="equip">Can equip ' + numAvailableofType + '</span></li>');
             $ul.append($li);
+
+            _.each(keyedStartingUpgrades[type], function (upgrade) {
+                var $li = $('<li class="starting-upgrade" data-featherlight="/components/xwing-data/images/' + upgrade.image + '">' + upgrade.name + '</li>');
+                $ul.append($li);
+            });
 
             _.each(keyedUpgrades[type], function (upgrade) {
                 var $li = $('<li class="upgrade" data-featherlight="/components/xwing-data/images/' + upgrade.image + '">' + upgrade.name + '</li>');
@@ -143,6 +156,11 @@ module.exports = {
 
             // Remove any upgrades for different ship sizes
             if (upgrade.size && upgrade.size.indexOf(currentShip.shipData.size) < 0) {
+                return false;
+            }
+
+            // Don't show anything which is a starting upgrade for the ship
+            if (currentShip.startingUpgrades && currentShip.startingUpgrades.indexOf(upgrade.xws) > -1) {
                 return false;
             }
 

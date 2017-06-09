@@ -4,6 +4,7 @@ var _ = require('lodash');
 
 var pilots = require('./pilots').allRebels;
 var shipData = require('./shipCards');
+var upgrades = require('./upgrades').all;
 
 var getPilotByXws = function (pilotId) {
     return _.find(pilots, function (pilotCard) {
@@ -14,6 +15,12 @@ var getPilotByXws = function (pilotId) {
 var getShipDataById = function (shipId) {
     return _.find(shipData, function (shipData) {
         return shipData.xws === shipId;
+    });
+};
+
+var getUpgradeByXws = function (upgradeId) {
+    return _.find(upgrades, function (upgrade) {
+        return upgrade.xws === upgradeId;
     });
 };
 
@@ -34,7 +41,7 @@ var hotacShips = [
             }
         ],
         startingUpgrades: [
-            'integratedastromech'
+            getUpgradeByXws('integratedastromech')
         ]
     },
     {
@@ -65,7 +72,7 @@ var hotacShips = [
             }
         ],
         startingUpgrades: [
-            'btla4'
+            getUpgradeByXws('btla4ywing')
         ]
     },
     {
@@ -82,7 +89,7 @@ var hotacShips = [
             }
         ],
         startingUpgrades: [
-            'awingtestpilot'
+            getUpgradeByXws('awingtestpilot')
         ]
     },
     {
@@ -105,7 +112,7 @@ var hotacShips = [
             }
         ],
         startingUpgrades: [
-            'bwinge2'
+            getUpgradeByXws('bwinge2')
         ]
     },
     {
