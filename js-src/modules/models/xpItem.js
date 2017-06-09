@@ -25,7 +25,7 @@ XpItem.prototype.cost = function () {
     } else if (this.upgradeType === itemTypes.BUY_UPGRADE) {
         var upgrade = this.getUpgradeById(this.data.upgradeId);
         if (upgrade.points === 0) {
-            return 0
+            return 0;
         }
         return upgrade.points * -1;
     } else if (this.upgradeType === itemTypes.BUY_PILOT_ABILITY) {
