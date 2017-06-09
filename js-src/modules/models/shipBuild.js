@@ -21,6 +21,7 @@ var ShipBuild = function (xpHistory, callsign, playerName) {
     this.setPilotSkill(2);
     this.processHistory(xpHistory);
     this.ready = true;
+
     events.trigger('model.build.ready', this);
 };
 

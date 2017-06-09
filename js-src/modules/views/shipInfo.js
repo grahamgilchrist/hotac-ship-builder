@@ -89,37 +89,37 @@ module.exports = {
 
         usableUpgrades = usableUpgrades.concat([
             {
-                type: 'Title'
+                type: ['Title']
             },
             {
-                type: 'Modification'
+                type: ['Modification']
             },
             {
-                type: 'Modification',
+                type: ['Modification'],
                 pilotSkill: 4
             },
             {
-                type: 'Modification',
+                type: ['Modification'],
                 pilotSkill: 6
             },
             {
-                type: 'Modification',
+                type: ['Modification'],
                 pilotSkill: 8
             },
             {
-                type: 'Elite',
+                type: ['Elite'],
                 pilotSkill: 3
             },
             {
-                type: 'Elite',
+                type: ['Elite'],
                 pilotSkill: 5
             },
             {
-                type: 'Elite',
+                type: ['Elite'],
                 pilotSkill: 7
             },
             {
-                type: 'Elite',
+                type: ['Elite'],
                 pilotSkill: 9
             }
         ]);
