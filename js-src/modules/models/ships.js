@@ -27,7 +27,6 @@ var getUpgradeByXws = function (upgradeId) {
 var hotacShips = [
     {
         id: 'xwing',
-        label: 'X-wing',
         starting: true,
         startingXp: 5,
         shipData: getShipDataById('xwing'),
@@ -46,7 +45,6 @@ var hotacShips = [
     },
     {
         id: 'ywing',
-        label: 'Y-wing',
         starting: true,
         startingXp: 8,
         shipData: getShipDataById('ywing'),
@@ -73,7 +71,6 @@ var hotacShips = [
     },
     {
         id: 'awing',
-        label: 'A-wing',
         shipData: getShipDataById('awing'),
         pilotCard: getPilotByXws('arvelcrynyd'),
         upgradeSlots: [
@@ -90,7 +87,6 @@ var hotacShips = [
     },
     {
         id: 'bwing',
-        label: 'B-wing',
         shipData: getShipDataById('bwing'),
         pilotCard: getPilotByXws('bluesquadronpilot'),
         upgradeSlots: [
@@ -113,7 +109,6 @@ var hotacShips = [
     },
     {
         id: 'hwk290',
-        label: 'HWK-290',
         shipData: getShipDataById('hwk290'),
         pilotCard: getPilotByXws('kylekatarn'),
         upgradeSlots: [
@@ -124,7 +119,24 @@ var hotacShips = [
                 'Crew'
             ]
         ]
+    },
+    {
+        id: 't70xwing',
+        shipData: getShipDataById('t70xwing'),
+        pilotCard: getPilotByXws('redace'),
+        upgradeSlots: [
+            [
+                'Astromech'
+            ],
+            [
+                'Torpedo'
+            ],
+            [
+                'Tech'
+            ]
+        ]
     }
+
 ];
 
 module.exports = hotacShips;

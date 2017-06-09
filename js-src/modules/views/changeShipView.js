@@ -21,7 +21,7 @@ module.exports = {
         }
     },
     bindChangeShipButton: function (currentShip) {
-        $('#change-ship').on('click', function () {
+        $('#change-ship').off('click').on('click', function () {
             var $modalContent = module.exports.renderChangeShipModalContent(currentShip);
             $.featherlight($modalContent);
         });
@@ -41,7 +41,7 @@ module.exports = {
         _.forEach(filteredShips, function (item) {
             var $ship = $('<li><img src="/components/xwing-data/images/' + item.pilotCard.image + '" alt="' + item.name + '"></li>');
             $ship.on('click', function () {
-                var $text = $('<span>' + item.label + ': 5XP</span>');
+                var $text = $('<span>' + item.shipData.name + ': 5XP</span>');
                 var $summaryElement = $('.featherlight .summary');
                 $summaryElement.html($text);
                 chosenShipId = item.id;

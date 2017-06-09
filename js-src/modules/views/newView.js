@@ -31,7 +31,7 @@ module.exports = {
 
         // bind starting ships to DOM
         _.forEach(startingShips, function (item) {
-            var $newOption = $('<option value="' + item.id + '">' + item.label + '</option>');
+            var $newOption = $('<option value="' + item.id + '">' + item.shipData.name + '</option>');
             $('#starting-ships').append($newOption);
         });
         module.exports.resetStartingShipsList();

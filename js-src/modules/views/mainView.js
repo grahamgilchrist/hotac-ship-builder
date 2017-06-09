@@ -27,7 +27,7 @@ module.exports = {
         $('.main').addClass('active');
     },
     renderTitle: function (build) {
-        var label = build.currentShip.label + ' - ' + build.callsign + ' - ' + build.playerName;
+        var label = build.currentShip.shipData.name + ' - ' + build.callsign + ' - ' + build.playerName;
         $('#ship-current').text(label).prepend('<i class="xwing-miniatures-ship xwing-miniatures-ship-' + build.currentShip.id + '"></i>');
     },
     renderXp: function (xpAmount) {
