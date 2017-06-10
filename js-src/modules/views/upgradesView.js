@@ -13,7 +13,7 @@ var upgrades = require('../models/upgrades').keyed;
 module.exports = {
     renderUpgradesList: function (build) {
         // Get a list of the slots allowed for this build (determined by ship and PS) and the number of each upgrade per slot
-        var numUpgradesAllowedInBuildByType = module.exports.numberOfUsableUpgrades(build.pilotSkill, build.currentShip);
+        var numUpgradesAllowedInBuildByType = module.exports.numberOfUsableUpgrades(build.pilotSkill, build.currentShip, build.upgrades);
 
         // Get grouped allowed/disallowed upgrade slots for this build
         var upgradesBySlot = module.exports.getAllowedDisallowedUpgradesBySlot(build, numUpgradesAllowedInBuildByType);
@@ -320,7 +320,7 @@ module.exports = {
 
         return $modalContent;
     },
-    numberOfUsableUpgrades: function (pilotSkill, currentShip) {
+    numberOfUsableUpgrades: function (pilotSkill, currentShip, upgradesByType) {
 
         // elite slots are dependent on pilot level
         var eliteSlots = 0;
@@ -361,19 +361,70 @@ module.exports = {
             };
         }
 
+        // Array to track the actual slot names allowed by the ship (not just the combined keys)
+        // Used to check validity of slots added by upgrade cards
+        var allowedShipSlots = [];
+        var addToSlot = function (slotKey, max, allowed) {
+            if (!usableUpgrades[slotKey]) {
+                usableUpgrades[slotKey] = {
+                    max: max,
+                    allowed: allowed
+                };
+            } else {
+                usableUpgrades[slotKey].max += max;
+                usableUpgrades[slotKey].allowed += allowed;
+            }
+        };
+
+        // array to track which upgrades we've processed grants for, and prevent infinite loop
+        var processedGrantForIds = [];
+        var processGrants = function (upgrade) {
+            // Is the type of this upgrade allowed on this ship?
+            var foundGrant = false;
+            if (processedGrantForIds.indexOf(upgrade.id) === -1) {
+                // Only process this if we haven't already done so
+                var slotType = upgrade.slot;
+                if (usableUpgrades[slotType] || allowedShipSlots.indexOf(slotType) >= 0) {
+                    // slot is allowed on ship, so lets process any addiitonal slots the upgrade grants
+                    if (upgrade.grants) {
+                        _.each(upgrade.grants, function (grant) {
+                            if (grant.type === 'slot') {
+                                foundGrant = true;
+                                addToSlot(grant.name, 1, 1);
+                            }
+                        });
+                    }
+                }
+            }
+            return foundGrant;
+        };
+
+        var processGrantsList = function (upgradeList) {
+            var found = false;
+            // keep looping while we find results. If we find a grant, we have to process the
+            // whole list again, in case it affects another upgrade
+            do {
+                found = _.find(upgradeList, processGrants);
+                if (found && found.id) {
+                    processedGrantForIds.push(found.id);
+                }
+            } while (found);
+        };
+
         // Add slots for the ship type
         var upgradeSlots = currentShip.upgradeSlots;
         _.each(upgradeSlots, function (upgradeArray) {
             var upgradeKey = upgradeArray.join(',');
-            if (!usableUpgrades[upgradeKey]) {
-                usableUpgrades[upgradeKey] = {
-                    max: 1,
-                    allowed: 1
-                };
-            } else {
-                usableUpgrades[upgradeKey].max += 1;
-                usableUpgrades[upgradeKey].allowed += 1;
-            }
+            addToSlot(upgradeKey, 1, 1);
+            allowedShipSlots = allowedShipSlots.concat(upgradeArray);
+        });
+
+        // Do any starting upgrade grants before the purchased ones
+        processGrantsList(currentShip.startingUpgrades);
+
+        // Add slots given by upgrades/starting upgrades
+        _.each(upgradesByType, function (upgradesList) {
+            processGrantsList(upgradesList);
         });
 
         return usableUpgrades;

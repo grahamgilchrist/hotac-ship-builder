@@ -128,6 +128,7 @@ module.exports = {
     },
     renderShipDial: function (currentShip) {
         var $shipUpgrades = $('#ship-info-dial');
+        $shipUpgrades.empty();
         var $table = $('<table>');
 
         var fontIconKey = [
