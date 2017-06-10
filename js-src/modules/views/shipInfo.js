@@ -125,5 +125,74 @@ module.exports = {
         ]);
 
         return usableUpgrades;
+    },
+    renderShipDial: function (currentShip) {
+        var $shipUpgrades = $('#ship-info-dial');
+        var $table = $('<table>');
+
+        var fontIconKey = [
+            'turnleft',
+            'bankleft',
+            'straight',
+            'bankright',
+            'turnright',
+            'kturn',
+            'sloopleft',
+            'sloopright',
+            'trollleft',
+            'trollright',
+            'reversebankleft',
+            'reversestraight',
+            'reversebankright'
+        ];
+
+        var speedZeroFontIconKey = [
+            'turnleft',
+            'bankleft',
+            'stop',
+            'bankright',
+            'turnright',
+            'kturn',
+            'sloopleft',
+            'sloopright',
+            'trollleft',
+            'trollright',
+            'reversebankleft',
+            'reversestraight',
+            'reversebankright'
+        ];
+
+        var dialManeuvers = _.reverse(currentShip.shipData.maneuvers);
+        _.each(dialManeuvers, function (speedManeuvers, speedIndex) {
+            var maneuverSpeed = dialManeuvers.length - 1 - speedIndex;
+            var $tr = $('<tr>');
+            // first row show speed
+            var $td = $('<td>' + maneuverSpeed + '</td>');
+            $tr.append($td);
+            _.each(speedManeuvers, function (maneuver, maneuverIndex) {
+                var maneuverString = '';
+                if (maneuver > 0) {
+                    var iconKey;
+                    if (maneuverSpeed === 0) {
+                        iconKey = speedZeroFontIconKey[maneuverIndex];
+                    } else {
+                        iconKey = fontIconKey[maneuverIndex];
+                    }
+                    maneuverString = '<i class="xwing-miniatures-font xwing-miniatures-font-' + iconKey + '"></i>';
+                }
+                var maneuverClass = '';
+                if (maneuver === 2) {
+                    maneuverClass = 'green';
+                }
+                if (maneuver === 3) {
+                    maneuverClass = 'red';
+                }
+                var $td = $('<td class="' + maneuverClass + '">' + maneuverString + '</td>');
+                $tr.append($td);
+            });
+            $table.append($tr);
+        });
+
+        $shipUpgrades.append($table);
     }
 };

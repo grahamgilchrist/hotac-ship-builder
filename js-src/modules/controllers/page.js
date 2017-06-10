@@ -86,6 +86,7 @@ module.exports = {
             shipInfoView.renderShipActions(build.currentShip, build.upgrades);
             shipInfoView.renderShipImage(build.currentShip);
             shipInfoView.renderShipUpgrades(build.currentShip, build.pilotSkill);
+            shipInfoView.renderShipDial(build.currentShip);
             upgradesView.renderUpgradesList(build);
             pilotSkillView.renderWithPs(build.pilotSkill);
             upgradesView.renderUpgradesList(build);
@@ -102,6 +103,7 @@ module.exports = {
                 shipInfoView.renderShipActions(build.currentShip, build.upgrades);
                 shipInfoView.renderShipImage(build.currentShip);
                 shipInfoView.renderShipUpgrades(build.currentShip, build.pilotSkill);
+                shipInfoView.renderShipDial(build.currentShip);
                 upgradesView.renderUpgradesList(build);
                 changeShipView.renderShipView(build.pilotSkill, build.currentShip);
             }

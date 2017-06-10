@@ -62,12 +62,15 @@
 
     #ship-info-upgrades
         overflow: hidden
-        column-count: 2
+        
+        ul
+            column-count: 2
+            padding-top: 6px
 
         li
             background-color: #fff
             width: 147px
-            margin-top: 6px
+            margin-bottom: 6px
             font-size: 10px
             padding: 0 8px
             box-sizing: border-box
@@ -85,3 +88,13 @@
 
             &.disabled
                 background-color: #eee
+
+    #ship-info-dial
+        td
+            padding: 5px
+
+        .red
+            color: red
+
+        .green
+            color: green
