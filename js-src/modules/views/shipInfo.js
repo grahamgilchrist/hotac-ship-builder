@@ -170,28 +170,40 @@ module.exports = {
             // first row show speed
             var $td = $('<td>' + maneuverSpeed + '</td>');
             $tr.append($td);
-            _.each(speedManeuvers, function (maneuver, maneuverIndex) {
-                var maneuverString = '';
-                if (maneuver > 0) {
-                    var iconKey;
-                    if (maneuverSpeed === 0) {
-                        iconKey = speedZeroFontIconKey[maneuverIndex];
-                    } else {
-                        iconKey = fontIconKey[maneuverIndex];
-                    }
-                    maneuverString = '<i class="xwing-miniatures-font xwing-miniatures-font-' + iconKey + '"></i>';
-                }
-                var maneuverClass = '';
-                if (maneuver === 2) {
-                    maneuverClass = 'green';
-                }
-                if (maneuver === 3) {
-                    maneuverClass = 'red';
-                }
-                var $td = $('<td class="' + maneuverClass + '">' + maneuverString + '</td>');
-                $tr.append($td);
+
+            // don't show speed zero if there are no maneuvers
+            var showRow = true;
+            var noManeuversAtThisSpeed = _.every(speedManeuvers, function (maneuver) {
+                return maneuver === 0;
             });
-            $table.append($tr);
+            if (maneuverSpeed === 0 && noManeuversAtThisSpeed) {
+                showRow = false;
+            }
+
+            if (showRow) {
+                _.each(speedManeuvers, function (maneuver, maneuverIndex) {
+                    var maneuverString = '';
+                    if (maneuver > 0) {
+                        var iconKey;
+                        if (maneuverSpeed === 0) {
+                            iconKey = speedZeroFontIconKey[maneuverIndex];
+                        } else {
+                            iconKey = fontIconKey[maneuverIndex];
+                        }
+                        maneuverString = '<i class="xwing-miniatures-font xwing-miniatures-font-' + iconKey + '"></i>';
+                    }
+                    var maneuverClass = '';
+                    if (maneuver === 2) {
+                        maneuverClass = 'green';
+                    }
+                    if (maneuver === 3) {
+                        maneuverClass = 'red';
+                    }
+                    var $td = $('<td class="' + maneuverClass + '">' + maneuverString + '</td>');
+                    $tr.append($td);
+                });
+                $table.append($tr);
+            }
         });
 
         $shipUpgrades.append($table);
