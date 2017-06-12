@@ -14,10 +14,10 @@
 .structure
     max-width: 1200px
     margin: 0 auto
-    padding: 0 20px
+    padding: 0 $site-padding
 
 .container
-    padding: 20px 0
+    padding: $site-padding 0
 
 .new,
 .main
@@ -31,7 +31,7 @@
     background-color: #f6f6f6
 
 .new
-    padding: 20px
+    padding: $site-padding
     text-align: center
 
     label
@@ -52,16 +52,16 @@
         margin: 1.4em 0
 
 .build-content
-    padding: 0 20px 20px 20px
+    padding: 0 $site-padding $site-padding $site-padding
 
 .reset
-    margin-bottom: 20px
+    margin-bottom: $site-padding
 
 .build-header
     overflow: hidden
     background-color: $color-primary
     color: #fff
-    padding: 20px
+    padding: $site-padding
 
     h2
         float: left
@@ -123,13 +123,19 @@
 
 .mdl-tabs__panel
     overflow: hidden
-    padding: 20px 0
+    padding-top: $site-padding
+    text-align: center
 
 .ship-info-pilot-skill,
 .purchased-upgrades
-    margin-left: 320px
+    background-color: #fff
+
+    @include media($media-main-two-col)
+        margin-left: 320px
 
 .ship-info-pilot-skill
+    padding: $site-padding
+
     span
         vertical-align: middle
 
@@ -154,4 +160,4 @@
         margin-left: 1em
 
 .change-ship
-    margin-top: 20px
+    margin-top: $site-padding

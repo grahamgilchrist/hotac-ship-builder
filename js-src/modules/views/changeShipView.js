@@ -28,6 +28,7 @@ module.exports = {
     },
     renderChangeShipModalContent: function (currentShip) {
         var $modalContent = $('<div class="card-image-list">');
+        var $footer = $('<div class="modal-footer">');
         var $summary = $('<div class="summary">');
         var $shipList = $('<ul>');
         var chosenShipId;
@@ -45,19 +46,21 @@ module.exports = {
                 var $summaryElement = $('.featherlight .summary');
                 $summaryElement.html($text);
                 chosenShipId = item.id;
+                $(this).closest('.featherlight').find('.modal-footer button').removeAttr('disabled');
             });
             $shipList.append($ship);
         });
 
-        var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Choose ship</button>');
+        var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>Choose ship</button>');
         $button.on('click', function () {
             events.trigger('view.changeShip.changeShip', chosenShipId);
             $.featherlight.close();
         });
 
+        $footer.append($summary);
+        $footer.append($button);
         $modalContent.append($shipList);
-        $modalContent.append($summary);
-        $modalContent.append($button);
+        $modalContent.append($footer);
 
         return $modalContent;
     }
