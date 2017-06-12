@@ -13,7 +13,7 @@ module.exports = {
     },
     bindStartButton: function () {
         $('#start-build').on('click', function () {
-            var chosenShipId = $('#starting-ships').val();
+            var chosenShipId = $('#starting-ships select').val();
             events.trigger('view.new.start', {
                 shipId: chosenShipId,
                 callsign: $('#callsign').val(),
@@ -22,6 +22,8 @@ module.exports = {
         });
     },
     renderStartingShipsList: function () {
+        var $select = $('<select>');
+
         // get list of starting ships
         var filterFunction = function (item) {
             return item.starting === true;
@@ -31,9 +33,12 @@ module.exports = {
 
         // bind starting ships to DOM
         _.forEach(startingShips, function (item) {
-            var $newOption = $('<option value="' + item.id + '">' + item.shipData.name + '</option>');
-            $('#starting-ships').append($newOption);
+            var $newOption = $('<option value="' + item.id + '">' + item.shipData.name + ' (' + item.startingXp +' XP to spend)</option>');
+            $select.append($newOption);
         });
+
+        $('#starting-ships').append($select);
+
         module.exports.resetStartingShipsList();
     },
     reset: function () {

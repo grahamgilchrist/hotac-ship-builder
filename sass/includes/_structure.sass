@@ -4,17 +4,31 @@
     color: #fff
 
     h1
-        font-size: 36px
+        font-size: 24px
         margin: $vertical-spacing 0
 
-        span
+        @include media($media-header-med-size)
+            font-size: 30px
+            margin: $vertical-spacing-med 0
+
+        .subtitle
             display: block
-            font-size: 18px
+            font-size: 14px
+            line-height: 1
+
+            @include media($media-header-med-size)
+                font-size: 18px
 
 .structure
     max-width: 1200px
     margin: 0 auto
     padding: 0 $site-padding
+
+.current-build .structure
+    padding: 0
+
+    @include media($media-main-padding)
+        padding: 0 $site-padding
 
 .container
     padding: $site-padding 0
@@ -29,135 +43,3 @@
 .new,
 .build-content
     background-color: #f6f6f6
-
-.new
-    padding: $site-padding
-    text-align: center
-
-    label
-        font-weight: 700
-        font-size: 14px
-        margin-bottom: 0.3em
-
-    label,
-    input,
-    select
-        display: block
-        min-width: 200px
-        margin:
-            left: auto
-            right: auto
-
-    .form-group
-        margin: 1.4em 0
-
-.build-content
-    padding: 0 $site-padding $site-padding $site-padding
-
-.reset
-    margin-bottom: $site-padding
-
-.build-header
-    overflow: hidden
-    background-color: $color-primary
-    color: #fff
-    padding: $site-padding
-
-    h2
-        float: left
-        margin: 0
-
-        i
-            $size: 50px
-            margin-right: 0.4em
-            display: inline-block
-            width: $size
-            height: $size
-            line-height: $size
-            border-radius: $size
-            background-color: #000
-            text-align: center
-
-    .xp-current
-        float: right
-        position: relative
-
-        .label,
-        .value
-            display: inline-block
-            vertical-align: middle
-
-        .label
-            text-align: center
-
-        .label-main,
-        .label-sub
-            display: block
-
-        .label-main
-            font-size: 36px
-            line-height: 48px
-
-        .label-sub
-            font-size: 10px
-            line-height: 1
-
-        .value
-            margin: 0 10px 0 0.5em
-            font-size: 36px
-            background-color: $color-accent
-            width: 48px
-            height: 48px
-            line-height: 48px
-            border-radius: 48px
-            text-align: center
-
-        .mdl-button--fab
-            position: absolute
-            top: -5px
-            right: -10px
-            width: 30px
-            min-width: 30px
-            height: 30px
-            font-size: 10px
-
-.mdl-tabs__panel
-    overflow: hidden
-    padding-top: $site-padding
-    text-align: center
-
-.ship-info-pilot-skill,
-.purchased-upgrades
-    background-color: #fff
-
-    @include media($media-main-two-col)
-        margin-left: 320px
-
-.ship-info-pilot-skill
-    padding: $site-padding
-
-    span
-        vertical-align: middle
-
-    .label
-        font-size: 22px
-        margin-right: 0.5em
-
-    .value
-        font-size: 28px
-        color: orange
-        background-color: #262626
-        display: inline-block
-        width: 50px
-        height: 50px
-        line-height: 50px
-        border-radius: 50px
-        text-align: center
-
-    .ps-upgrade-wrapper
-        display: inline-block
-        text-align: center
-        margin-left: 1em
-
-.change-ship
-    margin-top: $site-padding

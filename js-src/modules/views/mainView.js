@@ -27,8 +27,10 @@ module.exports = {
         $('.main').addClass('active');
     },
     renderTitle: function (build) {
-        var label = build.currentShip.shipData.name + ' - ' + build.callsign + ' - ' + build.playerName;
-        $('#ship-current').text(label).prepend('<i class="xwing-miniatures-ship xwing-miniatures-ship-' + build.currentShip.id + '"></i>');
+        $('#title-icon').html('<i class="xwing-miniatures-ship xwing-miniatures-ship-' + build.currentShip.id + '"></i>');
+        $('#title-callsign').text(build.callsign);
+        $('#title-ship').text(build.currentShip.shipData.name);
+        $('#title-player-name').text(build.playerName);
     },
     renderXp: function (xpAmount) {
         $('#xp-current').text(xpAmount);
