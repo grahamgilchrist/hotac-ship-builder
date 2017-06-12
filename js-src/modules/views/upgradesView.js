@@ -211,6 +211,7 @@ module.exports = {
         var chosenUpgradeId;
 
         var $modalContent = $('<div class="card-image-list" id="modal-card-image-list-' + upgradeType + '">');
+        var $footer = $('<div class="modal-footer">');
         var $summary = $('<div class="summary">');
         var $upgradeList = $('<ul>');
 
@@ -221,19 +222,21 @@ module.exports = {
                 var $summaryElement = $('.featherlight .summary');
                 $summaryElement.html($text);
                 chosenUpgradeId = item.id;
+                $(this).closest('.featherlight').find('.modal-footer button').removeAttr('disabled');
             });
             $upgradeList.append($upgrade);
         });
 
-        var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Buy upgrade</button>');
+        var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>Buy upgrade</button>');
         $button.on('click', function () {
             events.trigger('view.upgrades.buy', chosenUpgradeId);
             $.featherlight.close();
         });
 
+        $footer.append($summary);
+        $footer.append($button);
         $modalContent.append($upgradeList);
-        $modalContent.append($summary);
-        $modalContent.append($button);
+        $modalContent.append($footer);
 
         return $modalContent;
     },

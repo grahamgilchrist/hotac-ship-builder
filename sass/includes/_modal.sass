@@ -1,5 +1,11 @@
 .featherlight
+    $footer-height: 50px
+
+    .featherlight-inner
+        position: relative
+
     .card-image-list
+        padding-bottom: $footer-height
         text-align: center
 
         li
@@ -23,3 +29,22 @@
         p
             margin-bottom: 0
 
+
+    .modal-footer
+        position: absolute
+        bottom: 0
+        left: 0
+        padding: 0 20px
+        text-align: center
+        width: 100%
+
+        .summary,
+        button
+            vertical-align: middle
+
+        .summary
+            display: inline-block
+            font:
+                size: 18px
+                weight: 700
+            margin-right: 1em

@@ -1,16 +1,27 @@
 .purchased-upgrades
     border-top: 1px solid #eee
-    margin-top: 20px
-    padding-top: 20px
+    margin-top: $site-padding
+    padding:
+        top: $site-padding
+        left: $site-padding
+        right: $site-padding
 
 #upgrade-list
     font-size: 12px
     overflow: hidden
+    margin: 0
+    // flexbox
+    display: flex
+    align-items: flex-start
+    justify-content: center
+    flex-direction: row
+    flex-wrap: wrap
+    flex-flow: row wrap
+    align-content: flex-end
 
     > li
-        float: left
         margin-right: 5px
-        margin-bottom: 20px
+        margin-bottom: $site-padding
 
         &.disallowed
             opacity: 0.5

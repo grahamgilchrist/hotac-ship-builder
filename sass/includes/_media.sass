@@ -1,0 +1,11 @@
+$media-main-two-col: 'screen and (min-width: 750px)'
+
+// Example usage
+// $px600: "screen and (min-width: 600px)"
+// 
+// @include media($px600)
+//     properties here
+
+@mixin media($expression)
+    @media #{$expression}
+        @content

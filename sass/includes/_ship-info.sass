@@ -1,13 +1,32 @@
 .ship-info
-    float: left
-    width: 300px
-    margin-right: 20px
+    display: inline-block
+    background-color: #fff
+    padding: $site-padding 0
+    margin-bottom: $site-padding
+    text-align: center
+
+    @include media($media-main-two-col)
+        width: 300px
+        float: left
+        margin-right: 20px
+        padding: 0 0 $site-padding
+
+    .ship-image-stats,
+    #ship-info-upgrades,
+    #ship-info-dial,
+    .change-ship
+        display: inline-block
+        vertical-align: middle
+
+    .ship-image-stats
+        width: 300px
+        margin-bottom: $site-padding
 
     .img-wrapper
-        width: 300px
         height: 124px
         overflow: hidden
         background-color: #fefefe
+        // margin: 0 (-$site-padding)
 
         img
             display: block
@@ -20,6 +39,7 @@
         font-size: 22px
         line-height: 58px
         text-align: center
+        // margin: 0 (-$site-padding)
 
     #ship-info-stats
         font-weight: 700
@@ -59,17 +79,20 @@
             &:last-child
                 margin-right: 0
 
-
     #ship-info-upgrades
         overflow: hidden
-        
+        padding: 0 6px $site-padding
+
         ul
+            text-align: left
             column-count: 2
-            padding-top: 6px
+            column-gap: 6px
+            margin: 0
 
         li
             background-color: #fff
-            width: 147px
+            // width: 147px
+            width: 141px
             margin-bottom: 6px
             font-size: 10px
             padding: 0 8px
@@ -83,13 +106,15 @@
             i
                 margin-right: 0.1em
 
-            &:nth-child(odd)
-                margin-right: 6px
-
             &.disabled
                 background-color: #eee
 
     #ship-info-dial
+        margin: 0 $site-padding
+
+        table
+            margin: 0
+
         td
             padding: 5px
 
