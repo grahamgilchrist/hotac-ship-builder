@@ -1,0 +1,48 @@
+.new
+    padding: $site-padding
+    text-align: center
+
+    h2
+        line-height: 1
+
+    .form-group
+        margin: $site-padding 0
+        // remove inline block spacing
+        font-size: 0
+
+        &:last-child
+            margin-bottom: 0
+
+    label,
+    input,
+    select
+        display: block
+        margin:
+            left: auto
+            right: auto
+        font-size: 16px
+
+        @include media($media-new-inline-labels)
+            display: inline-block
+
+    label
+        font-weight: 700
+        font-size: 14px
+        margin-bottom: 0.5em
+
+        @include media($media-new-inline-labels)
+            width: 24%
+            text-align: right
+            padding-right: 1em
+            margin-bottom: 0
+
+    input,
+    select
+        min-width: 200px
+        padding: 5px 10px
+        width: 100%
+
+        @include media($media-new-inline-labels)
+            min-width: 100px
+            max-width: 400px
+            width: 76%

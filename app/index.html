@@ -20,14 +20,18 @@
 
         <div class="header">
             <div class="structure">
-                <h1>Heroes of the Aturi Cluster <span>Ship builder</span></h1>
+                <h1>
+                    <span class="title">Heroes of the Aturi Cluster</span>
+                    <span class="subtitle">Campaign ship builder</span>
+                </h1>
             </div>
         </div>
 
         <div class="container">
-            <div class="structure">
-                <div class="new">
+            <div class="new">
+                <div class="structure">
                     <h2>Create new ship</h2>
+                    <p>Before upgrading your ship, we need some starting information:</p>
 
                     <div class="form-group">
                         <label for="player-name">Player name</label>
@@ -41,22 +45,34 @@
 
                     <div class="form-group">
                         <label for="starting-ships">Starting ship</label>
-                        <select id="starting-ships"></select>
+                        <span id="starting-ships"></span>
                     </div>
 
                     <div class="form-group">
                         <button id="start-build" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Start</button>
                     </div>
                 </div>
+            </div>
 
-                <div class="main">
-                    <div class="reset">
+            <div class="main">
+                <div class="reset">
+                    <div class="structure">
                         <button id="new-build" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Start new ship build</button>
                     </div>
+                </div>
 
-                    <div class="current-build">
+                <div class="current-build">
+                    <div class="structure">
                         <div class="build-header">
-                            <h2 id="ship-current"></h2>
+                            <div class="title-wrapper">
+                                <span id="title-icon"></span>
+                                <h2>
+                                    <span id="title-callsign"></span>
+                                    <span class="subtitle">
+                                        <span id="title-player-name"></span> - <span id="title-ship"></span>
+                                    </span>
+                                </h2>
+                            </div>
                             <div class="xp-current">
                                 <span class="label"><span class="label-main">XP</span><span class="label-sub">to spend</span></span>
                                 <span class="value" id="xp-current"></span>

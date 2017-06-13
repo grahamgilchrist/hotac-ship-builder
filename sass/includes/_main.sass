@@ -1,0 +1,126 @@
+.build-content
+    padding: 0 $site-padding $site-padding $site-padding
+
+.reset
+    margin-bottom: $site-padding
+
+.build-header
+    overflow: hidden
+    background-color: $color-primary
+    color: #fff
+    padding: $site-padding
+
+    .title-wrapper
+        float: left
+
+        #title-icon,
+        h2
+            display: inline-block
+            vertical-align: middle
+
+        h2
+            margin: 0
+            line-height: 1
+
+        i
+            $size: 50px
+            margin-right: $site-padding / 2
+            display: inline-block
+            width: $size
+            height: $size
+            line-height: $size
+            border-radius: $size
+            background-color: #000
+            text-align: center
+            font-size: 42px
+
+        .subtitle
+            display: block
+            font-size: 14px
+            font-weight: 400
+            line-height: 1
+            margin-top: 0.4em
+
+    .xp-current
+        float: right
+        position: relative
+
+        .label,
+        .value
+            display: inline-block
+            vertical-align: middle
+            line-height: 1
+
+        .label
+            text-align: center
+
+        .label-main,
+        .label-sub
+            display: block
+
+        .label-main
+            font-size: 36px
+            margin-bottom: 4px
+
+        .label-sub
+            font-size: 10px
+
+        .value
+            margin: 0 10px
+            font-size: 36px
+            background-color: $color-accent
+            width: 48px
+            height: 48px
+            line-height: 48px
+            border-radius: 48px
+            text-align: center
+
+        .mdl-button--fab
+            position: absolute
+            top: -5px
+            right: -10px
+            width: 30px
+            min-width: 30px
+            height: 30px
+            font-size: 10px
+
+.mdl-tabs__panel
+    overflow: hidden
+    padding-top: $site-padding
+    text-align: center
+
+.ship-info-pilot-skill,
+.purchased-upgrades
+    background-color: #fff
+
+    @include media($media-main-two-col)
+        margin-left: 320px
+
+.ship-info-pilot-skill
+    padding: $site-padding
+
+    span
+        vertical-align: middle
+
+    .label
+        font-size: 22px
+        margin-right: 0.5em
+
+    .value
+        font-size: 28px
+        color: orange
+        background-color: #262626
+        display: inline-block
+        width: 50px
+        height: 50px
+        line-height: 50px
+        border-radius: 50px
+        text-align: center
+
+    .ps-upgrade-wrapper
+        display: inline-block
+        text-align: center
+        margin-left: 1em
+
+.change-ship
+    margin-top: $site-padding
