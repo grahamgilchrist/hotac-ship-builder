@@ -18,6 +18,7 @@
     flex-wrap: wrap
     flex-flow: row wrap
     align-content: flex-end
+    text-align: left
 
     > li
         margin-right: 5px
@@ -35,7 +36,7 @@
         li
             width: 180px
             padding: 5px 10px
-            margin-bottom: 5px  
+            margin-bottom: 5px
 
             &.slot
                 background-color: #fff
@@ -50,9 +51,17 @@
             &.upgrade,
             &.starting-upgrade
                 cursor: pointer
+                padding-right: 6px
+
+                i
+                    float: right
+                    color: #868686
+                    font-size: 20px
+                    margin-top: 2px
 
             &.starting-upgrade
                 background-color: #eee
+                color: #868686
 
             &.upgrade
                 background-color: #c8f3c8
