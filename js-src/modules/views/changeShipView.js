@@ -27,7 +27,7 @@ module.exports = {
         });
     },
     renderChangeShipModalContent: function (currentShip) {
-        var $modalContent = $('<div class="card-image-list">');
+        var $modalContent = $('<div class="ship-options-list">');
         var $footer = $('<div class="modal-footer">');
         var $summary = $('<div class="summary">');
         var $shipList = $('<ul>');
@@ -40,15 +40,18 @@ module.exports = {
 
         // Add all ships to list
         _.forEach(filteredShips, function (item) {
-            var $ship = $('<li><img src="/components/xwing-data/images/' + item.pilotCard.image + '" alt="' + item.name + '"></li>');
-            $ship.on('click', function () {
+            var $item = $('<li>');
+            var $img = $('<div class="img-wrapper"><img src="/components/xwing-data/images/' + item.pilotCard.image + '" alt="' + item.shipData.name + '"><div>');
+            $item.append($img);
+            $item.append('<h3>' + item.shipData.name + '</h3>');
+            $item.on('click', function () {
                 var $text = $('<span>' + item.shipData.name + ': 5XP</span>');
                 var $summaryElement = $('.featherlight .summary');
                 $summaryElement.html($text);
                 chosenShipId = item.id;
                 $(this).closest('.featherlight').find('.modal-footer button').removeAttr('disabled');
             });
-            $shipList.append($ship);
+            $shipList.append($item);
         });
 
         var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>Choose ship</button>');
