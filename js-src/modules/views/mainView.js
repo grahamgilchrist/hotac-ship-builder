@@ -61,5 +61,9 @@ module.exports = {
             $.featherlight($modalContent);
             $('#mission-xp-amount').focus();
         });
+    },
+    showShipTab: function () {
+        var $tabLink = $('.mdl-tabs__tab[href="#current-ship-tab"]');
+        $tabLink.get(0).click();
     }
 };
