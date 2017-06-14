@@ -11,6 +11,7 @@ var pilotSkillView = require('../views/pilotSkillView');
 var changeShipView = require('../views/changeShipView');
 var upgradesView = require('../views/upgradesView');
 var xpHistoryView = require('../views/xpHistory');
+var messageView = require('../views/message');
 var hashController = require('./urlHash');
 
 var currentBuild;
@@ -102,6 +103,7 @@ module.exports = {
             upgradesView.renderUpgradesList(build);
             xpHistoryView.renderTable(build);
             changeShipView.renderShipView(build.pilotSkill, build.currentShip);
+            messageView.clear();
             var newHash = hashController.generateExportString(build);
             hashController.set(newHash);
         });
@@ -149,6 +151,7 @@ module.exports = {
             if (data.build.ready) {
                 var xpItemIndex = data.build.xpHistory.length - 1;
                 xpHistoryView.renderTableRow(data.xpItem, data.build.currentXp, xpItemIndex);
+                messageView.renderMessage(data.xpItem, xpItemIndex);
                 var newHash = hashController.generateExportString(data.build);
                 hashController.set(newHash);
             }
