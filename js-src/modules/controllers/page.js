@@ -77,6 +77,16 @@ module.exports = {
         events.on('view.changeShip.changeShip', function (event, shipId) {
             currentBuild.changeShip(shipId);
         });
+
+        events.on('view.xpHistory.revert', function (event, xpItemIndex) {
+            // Get the Xp item up to the point
+            var newHistory = [];
+            for (var i = 0; i <= xpItemIndex; i++) {
+                newHistory.push(currentBuild.xpHistory[i]);
+            }
+            // trash the existing build and star a new one with the new history
+            currentBuild = new Build(newHistory, currentBuild.callsign, currentBuild.playerName);
+        });
     },
     bindModelEvents: function () {
         events.on('model.build.ready', function (event, build) {
@@ -137,7 +147,8 @@ module.exports = {
 
         events.on('model.build.xpHistory.add', function (event, data) {
             if (data.build.ready) {
-                xpHistoryView.renderTableRow(data.xpItem, data.build.currentXp);
+                var xpItemIndex = data.build.xpHistory.length - 1;
+                xpHistoryView.renderTableRow(data.xpItem, data.build.currentXp, xpItemIndex);
                 var newHash = hashController.generateExportString(data.build);
                 hashController.set(newHash);
             }
