@@ -1,14 +1,27 @@
 .build-content
     padding: 0 $site-padding $site-padding $site-padding
 
+    @include media('print')
+        padding: 0
+        text-align: left
+
 .reset
     margin-bottom: $site-padding
+
+    @include media('print')
+        display: none
+
+#print
+    float: right
 
 .build-header
     overflow: hidden
     background-color: $color-primary
     color: #fff
     padding: $site-padding
+
+    @include media('print')
+        padding: 0
 
     .title-wrapper
         float: left
@@ -75,6 +88,9 @@
             border-radius: 48px
             text-align: center
 
+            @include media('print')
+                line-height: 1
+
         .mdl-button--fab
             position: absolute
             top: -5px
@@ -83,6 +99,10 @@
             min-width: 30px
             height: 30px
             font-size: 10px
+
+.mdl-tabs__tab-bar
+    @include media('print')
+        display: none
 
 .mdl-tabs__panel
     overflow: hidden
@@ -98,6 +118,10 @@
 
 .ship-info-pilot-skill
     padding: $site-padding
+
+    @include media('print')
+        float: left
+        clear: left
 
     span
         vertical-align: middle
@@ -121,6 +145,9 @@
         display: inline-block
         text-align: center
         margin-left: 1em
+
+        @include media('print')
+            display: none
 
 .change-ship
     margin-top: $site-padding

@@ -107,6 +107,11 @@ module.exports = {
     },
     renderSlotList: function (slotType, startingUpgrades, purchasedUpgrades, numUpgradesAllowedInSlot, pilotAbilities) {
         var $ul = $('<ul>');
+        if (_.isUndefined(startingUpgrades) || startingUpgrades.length === 0) {
+            if (_.isUndefined(purchasedUpgrades) || purchasedUpgrades.length === 0) {
+                $ul.addClass('empty');
+            }
+        }
 
         // Get title of slot
         var upgradeNames = slotType.split(',');
@@ -119,12 +124,12 @@ module.exports = {
         $ul.append($li);
 
         _.each(startingUpgrades, function (upgrade) {
-            var $li = $('<li class="starting-upgrade" data-featherlight="/components/xwing-data/images/' + upgrade.image + '"><span>' + upgrade.name + '</span><i class="material-icons">remove_red_eye</i></li>');
+            var $li = $('<li class="starting-upgrade" data-featherlight="/components/xwing-data/images/' + upgrade.image + '"><span>' + upgrade.name + '</span><i class="material-icons">remove_red_eye</i><img class="preview" src="/components/xwing-data/images/' + upgrade.image + '"></li>');
             $ul.append($li);
         });
 
         _.each(purchasedUpgrades, function (upgrade) {
-            var $li = $('<li class="upgrade" data-featherlight="/components/xwing-data/images/' + upgrade.image + '"><span>' + upgrade.name + '</span><i class="material-icons">remove_red_eye</i></li>');
+            var $li = $('<li class="upgrade" data-featherlight="/components/xwing-data/images/' + upgrade.image + '"><span>' + upgrade.name + '</span><i class="material-icons">remove_red_eye</i><img class="preview" src="/components/xwing-data/images/' + upgrade.image + '"></li>');
             $ul.append($li);
         });
 

@@ -1,3 +1,7 @@
+body
+    @include media('print')
+        zoom: 75%
+
 .header
     overflow: hidden
     background-color: $color-primary
@@ -19,10 +23,16 @@
             @include media($media-header-med-size)
                 font-size: 18px
 
+            @include media('print')
+                display: inline-block
+
 .structure
     max-width: 1200px
     margin: 0 auto
     padding: 0 $site-padding
+
+    @include media('print')
+        padding: 0
 
 .current-build .structure
     padding: 0
@@ -32,6 +42,9 @@
 
 .container
     padding: $site-padding 0
+
+    @include media('print')
+        padding: 0
 
 .new,
 .main
