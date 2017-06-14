@@ -38,10 +38,10 @@ XpItem.prototype.cost = function () {
 XpItem.prototype.label = function () {
     if (this.upgradeType === itemTypes.SHIP_TYPE) {
         var ship = this.getShipById(this.data.shipId);
-        return 'Change ship: ' + ship.label;
+        return 'Change ship: ' + ship.shipData.name;
     } else if (this.upgradeType === itemTypes.STARTING_SHIP_TYPE) {
         var startingShip = this.getShipById(this.data.shipId);
-        return 'Starting ship: ' + startingShip.label;
+        return 'Starting ship: ' + startingShip.shipData.name;
     } else if (this.upgradeType === itemTypes.PILOT_SKILL) {
         return 'Upgrade pilot skill: PS ' + this.data.pilotSkill;
     } else if (this.upgradeType === itemTypes.MISSION) {

@@ -119,12 +119,12 @@ module.exports = {
         $ul.append($li);
 
         _.each(startingUpgrades, function (upgrade) {
-            var $li = $('<li class="starting-upgrade" data-featherlight="/components/xwing-data/images/' + upgrade.image + '">' + upgrade.name + '</li>');
+            var $li = $('<li class="starting-upgrade" data-featherlight="/components/xwing-data/images/' + upgrade.image + '"><span>' + upgrade.name + '</span><i class="material-icons">remove_red_eye</i></li>');
             $ul.append($li);
         });
 
         _.each(purchasedUpgrades, function (upgrade) {
-            var $li = $('<li class="upgrade" data-featherlight="/components/xwing-data/images/' + upgrade.image + '">' + upgrade.name + '</li>');
+            var $li = $('<li class="upgrade" data-featherlight="/components/xwing-data/images/' + upgrade.image + '"><span>' + upgrade.name + '</span><i class="material-icons">remove_red_eye</i></li>');
             $ul.append($li);
         });
 
