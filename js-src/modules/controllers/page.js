@@ -80,13 +80,14 @@ module.exports = {
         });
 
         events.on('view.xpHistory.revert', function (event, xpItemIndex) {
-            // Get the Xp item up to the point
+            // Get the XP items up to the point specified
             var newHistory = [];
             for (var i = 0; i <= xpItemIndex; i++) {
                 newHistory.push(currentBuild.xpHistory[i]);
             }
             // trash the existing build and star a new one with the new history
             currentBuild = new Build(newHistory, currentBuild.callsign, currentBuild.playerName);
+            mainView.showShipTab();
         });
     },
     bindModelEvents: function () {
