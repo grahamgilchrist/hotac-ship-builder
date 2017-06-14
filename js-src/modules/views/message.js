@@ -17,12 +17,11 @@ module.exports = {
         $messageWrapper.append($button);
         module.exports.clear();
         $('#message').append($messageWrapper);
-        $messageWrapper.slideDown();
+        $('#message').slideDown();
 
         var timoutSeconds = 5;
         setTimeout(function () {
-            // module.exports.clear();
-            $messageWrapper.slideUp(undefined, function () {
+            $('#message').slideUp(undefined, function () {
                 module.exports.clear();
             });
         }, timoutSeconds * 1000);
