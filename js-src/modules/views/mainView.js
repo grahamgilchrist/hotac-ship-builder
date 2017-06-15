@@ -11,6 +11,7 @@ module.exports = {
         $('#new-build').on('click', module.exports.clickResetButton);
 
         module.exports.bindXpButton();
+        module.exports.bindPrintButton();
     },
     clickResetButton: function () {
         var result = window.confirm('Are you sure you want to start a new ship? The existing build will be lost');
@@ -60,6 +61,11 @@ module.exports = {
 
             $.featherlight($modalContent);
             $('#mission-xp-amount').focus();
+        });
+    },
+    bindPrintButton: function () {
+        $('#print').on('click', function () {
+            window.print();
         });
     },
     showShipTab: function () {

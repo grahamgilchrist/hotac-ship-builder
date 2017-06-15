@@ -1,10 +1,17 @@
 .purchased-upgrades
-    border-top: 1px solid #eee
     margin-top: $site-padding
     padding:
         top: $site-padding
         left: $site-padding
         right: $site-padding
+
+    @include media('print')
+        margin: 0
+        padding: 0
+
+    h3
+        @include media('print')
+            display: none
 
 #upgrade-list
     font-size: 12px
@@ -20,6 +27,9 @@
     align-content: flex-end
     text-align: left
 
+    @include media('print')
+        justify-content: left
+
     > li
         margin-right: 5px
         margin-bottom: $site-padding
@@ -33,10 +43,18 @@
         ul
             margin-bottom: 0
 
+            &.empty
+                @include media('print')
+                    display: none
+
         li
             width: 180px
             padding: 5px 10px
             margin-bottom: 5px
+
+            @include media('print')
+                width: 120px
+                padding: 0
 
             &.slot
                 background-color: #fff
@@ -53,11 +71,29 @@
                 cursor: pointer
                 padding-right: 6px
 
+                @include media('print')
+                    padding: 0
+
                 i
                     float: right
                     color: #868686
                     font-size: 20px
                     margin-top: 2px
+
+                i,
+                span
+                    @include media('print')
+                        display: none
+
+                img
+                    max-width: 100%
+
+                .preview
+                    display: none
+
+                    @include media('print')
+                        display: block
+                        zoom: 75%
 
             &.starting-upgrade
                 background-color: #eee
@@ -72,6 +108,9 @@
 
         .mdl-button
             width: 180px
+
+            @include media('print')
+                display: none
 
     h4,
     p

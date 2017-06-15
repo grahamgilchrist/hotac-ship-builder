@@ -163,7 +163,7 @@ module.exports = {
             'reversebankright'
         ];
 
-        var dialManeuvers = _.reverse(currentShip.shipData.maneuvers);
+        var dialManeuvers = _.reverse(_.clone(currentShip.shipData.maneuvers));
         _.each(dialManeuvers, function (speedManeuvers, speedIndex) {
             var maneuverSpeed = dialManeuvers.length - 1 - speedIndex;
             var $tr = $('<tr>');

@@ -11,6 +11,12 @@
         margin-right: 20px
         padding: 0 0 $site-padding
 
+    @include media('print')
+        width: 270px
+        float: left
+        zoom: 75%
+        margin-right: 20px
+
     .ship-image-stats,
     #ship-info-upgrades,
     #ship-info-dial,
@@ -125,3 +131,7 @@
 
         .green
             color: green
+
+    .change-ship
+        @include media('print')
+            display: none
