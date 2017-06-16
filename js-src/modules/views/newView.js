@@ -43,6 +43,8 @@ module.exports = {
     },
     reset: function () {
         module.exports.resetStartingShipsList();
+        $('#callsign').val();
+        $('#player-name').val();
     },
     resetStartingShipsList: function () {
         $('#starting-ships option').first().prop('selected', 'selected');
