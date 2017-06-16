@@ -11,6 +11,7 @@ module.exports = {
         $('#new-build').on('click', module.exports.clickResetButton);
 
         module.exports.bindXpButton();
+        module.exports.bindExportButton();
         module.exports.bindPrintButton();
     },
     clickResetButton: function () {
@@ -66,6 +67,19 @@ module.exports = {
     bindPrintButton: function () {
         $('#print').on('click', function () {
             window.print();
+        });
+    },
+    bindExportButton: function () {
+        $('#export').on('click', function () {
+            var $modalContent = $('<div class="share-modal">');
+            $modalContent.append('<h3>Share ship build</h3>');
+            $modalContent.append('<p>Copy and share the link below via email, social media etc. to allow others to view this build</p>');
+            var $input = $('<input type="text" value="' + window.location.href + '">');
+            $input.on('focus', function () {
+                this.select();
+            });
+            $modalContent.append($input);
+            $.featherlight($modalContent);
         });
     },
     showShipTab: function () {

@@ -22,11 +22,14 @@ module.exports = {
         // add callsign and playername as first items
         itemExports.unshift(build.callsign);
         itemExports.unshift(build.playerName);
-        var exportString = itemExports.join(',');
+        var exportString = '/v1/' + itemExports.join(',');
         return exportString;
     },
     parseExportStringToHistory: function (exportString) {
-        var splitItems = exportString.split(',');
+        var splitParts = exportString.split('/');
+        var items = splitParts[2];
+
+        var splitItems = items.split(',');
 
         var playerName = splitItems.shift();
         var callsign = splitItems.shift();
