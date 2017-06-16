@@ -27,6 +27,10 @@ XpItem.prototype.cost = function () {
         if (upgrade.points === 0) {
             return 0;
         }
+        if (upgrade.slot === 'Elite') {
+            // Elites are double printed points cost
+            return upgrade.points * -2;
+        }
         return upgrade.points * -1;
     } else if (this.upgradeType === itemTypes.BUY_PILOT_ABILITY) {
         var pilot = this.getPilotById(this.data.pilotId);
