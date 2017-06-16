@@ -51,6 +51,12 @@ module.exports = {
                 chosenShipId = item.id;
                 $(this).closest('.featherlight').find('.modal-footer button').removeAttr('disabled');
             });
+
+            $item.on('dblclick', function () {
+                events.trigger('view.changeShip.changeShip', item.id);
+                $.featherlight.close();
+            });
+
             $shipList.append($item);
         });
 
