@@ -229,6 +229,12 @@ module.exports = {
                 chosenUpgradeId = item.id;
                 $(this).closest('.featherlight').find('.modal-footer button').removeAttr('disabled');
             });
+
+            $upgrade.on('dblclick', function () {
+                events.trigger('view.upgrades.buy', item.id);
+                $.featherlight.close();
+            });
+
             $upgradeList.append($upgrade);
         });
 
@@ -313,6 +319,12 @@ module.exports = {
                 $summaryElement.html($text);
                 chosenPilotId = pilotCard.id;
             });
+
+            $upgrade.on('dblclick', function () {
+                events.trigger('view.pilotAbilities.buy', pilotCard.id);
+                $.featherlight.close();
+            });
+
             $upgradeList.append($upgrade);
         });
 
