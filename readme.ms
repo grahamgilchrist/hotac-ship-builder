@@ -1,14 +1,14 @@
 # Heroes of the Aturi Cluster ship builder
 
-This project is a web based ship builder and campaign tracker for the "Heroes of the Aturi Cluster" campaign for the x-wing miniatures game. The concept was originally built to help my campaign players understand all the options for upgrading their ships in one place. It provides a web based interface to spend Xp on upgrades and track XP throughout your pilots time in the campaign. Ship builds can be shared via unique URLs.
+This project is a web based ship builder and campaign tracker for the "Heroes of the Aturi Cluster" campaign for the x-wing miniatures game. The concept was originally built to help my campaign players understand all the options for upgrading their ships in one place. It provides a web based interface to spend XP on upgrades and track XP throughout your pilots time in the campaign. Ship builds can be shared via unique URLs.
 
 A live version can be found at: [http://hotac-ship-builder.netlify.com](http://hotac-ship-builder.netlify.com)
 
 The project is written entirely in javascript and html. Styling is generated using the Sass preprocessor.
 
 Thsi project owes many thanks to two x-wing projects without which, this would have not been possible:
-* [https://github.com/guidokessels/xwing-data](x-wing miniatures data)
-* [https://github.com/geordanr/xwing-miniatures-font](x-wing miniatures font)
+* [x-wing miniatures data](https://github.com/guidokessels/xwing-data)
+* [x-wing miniatures font](https://github.com/geordanr/xwing-miniatures-font)
 
 ## Contributing
 * Bugfix pull requests are welcome
