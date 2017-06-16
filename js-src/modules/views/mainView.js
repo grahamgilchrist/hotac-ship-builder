@@ -2,7 +2,6 @@
 
 var $ = require('jquery');
 var _ = require('lodash');
-var urlHash = require('../controllers/urlHash');
 
 var events = require('../controllers/events');
 
