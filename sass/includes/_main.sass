@@ -1,12 +1,6 @@
-.build-content
-    padding: 0 $site-padding $site-padding $site-padding
-
-    @include media('print')
-        padding: 0
-        text-align: left
-
 .reset
     margin-bottom: $site-padding
+    overflow: hidden
 
     @include media('print')
         display: none
@@ -14,9 +8,11 @@
 #print,
 #export
     float: right
+    padding: 0 8px
+    min-width: 48px
 
 #export
-    margin-right: $site-padding
+    margin-right: $site-padding / 2
 
 .build-header
     overflow: hidden
@@ -104,14 +100,27 @@
             height: 30px
             font-size: 10px
 
-.mdl-tabs__tab-bar
-    @include media('print')
-        display: none
+.build-content
+    padding: 0 0 $site-padding
 
-.mdl-tabs__panel
-    overflow: hidden
-    padding-top: $site-padding
-    text-align: center
+    @include media($media-main-padding)
+        padding: 0 $site-padding $site-padding $site-padding
+
+    @include media('print')
+        padding: 0
+        text-align: left
+
+    .mdl-tabs__tab-bar
+        @include media('print')
+            display: none
+
+    .mdl-tabs__tab
+        width: 50%
+
+    .mdl-tabs__panel
+        overflow: hidden
+        padding-top: $site-padding
+        text-align: center
 
 .ship-info-pilot-skill,
 .purchased-upgrades

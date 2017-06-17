@@ -25,11 +25,19 @@
         vertical-align: middle
 
     .ship-image-stats
-        max-width: 300px
         margin-bottom: $site-padding
 
+    .img-wrapper,
+    #ship-info-stats,
+    #ship-info-actions
+        max-width: 150px
+        display: inline-block
+
+        @include media($media-main-two-col)
+            max-width: 300px
+            display: block
+
     .img-wrapper
-        height: 124px
         overflow: hidden
         background-color: #fefefe
         // padding bottom trick to maintain aspect ratio as image scales
