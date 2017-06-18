@@ -114,24 +114,6 @@
 
                                 <div class="mdl-tabs__panel is-active" id="current-ship-tab">
 
-                                    <div class="ship-info">
-                                        <div class="ship-image-stats">
-                                            <div class="img-wrapper">
-                                                <img src="" alt="Ship image" id="ship-info-image">
-                                            </div>
-                                            <div id="ship-info-stats"></div>
-                                            <div id="ship-info-actions"></div>
-                                        </div>
-                                        <div id="ship-info-upgrades"></div>
-                                        <div id="ship-info-dial"></div>
-
-                                        <div class="change-ship">
-                                            <span id="change-ship-wrapper">
-                                                <button id="change-ship" disabled class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Change ship (5XP)</button>
-                                            </span>
-                                        </div>
-                                        <div class="mdl-tooltip" data-mdl-for="change-ship-wrapper" id="change-ship-tooltip">New ships are unlocked at pilot skill 4</div>
-                                    </div>
                                     <div class="ship-info-pilot-skill">
                                         <span class="label">Pilot Skill</span>
                                         <span class= "value" id="pilot-skill"></span>
@@ -145,10 +127,44 @@
                                         </span>
                                     </div>
 
+                                    <div class="ship-info">
+                                        <div class="ship-image-stats">
+                                            <div class="img-wrapper">
+                                                <img src="" alt="Ship image" id="ship-info-image">
+                                            </div>
+                                            <div id="ship-info-stats"></div>
+                                            <div id="ship-info-actions"></div>
+                                        </div>
+                                        <div id="ship-info-dial"></div>
+
+                                        <div class="change-ship">
+                                            <span id="change-ship-wrapper">
+                                                <button id="change-ship" disabled class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Change ship (5XP)</button>
+                                            </span>
+                                        </div>
+                                        <div class="mdl-tooltip" data-mdl-for="change-ship-wrapper" id="change-ship-tooltip">New ships are unlocked at pilot skill 4</div>
+                                    </div>
 
                                     <div class="purchased-upgrades">
-                                        <h3>Upgrades</h3>
-                                        <ul id="upgrade-list"></ul>
+                                        <div class="ship-slots">
+                                            <h3>Upgrade slots on ship</h3>
+                                            <div id="ship-info-upgrades"></div>
+                                        </div>
+
+                                        <div class="allowed-list">
+                                            <h3>Upgrades which can be equipped</h3>
+                                            <p>Ships can purchase multiple upgrades of the same type, and choose which to equip into which slot per mission.</p>
+                                            <ul id="allowed-upgrade-list"></ul>
+
+                                            <h3>Upgrades not allowed on this ship</h3>
+                                            <p>These may have been purchased for another ship chassis.</p>
+                                            <ul id="disallowed-upgrade-list"></ul>
+                                        </div>
+                                        <div class="buy-list">
+                                            <h3>Buy new upgrades</h3>
+                                            <ul id="buy-upgrades-list"></ul>
+                                        </div>
+
                                     </div>
                                 </div>
 
