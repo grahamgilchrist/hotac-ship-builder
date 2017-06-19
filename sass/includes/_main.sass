@@ -1,5 +1,5 @@
 .reset
-    margin-bottom: $site-padding
+    margin: $site-padding 0
     overflow: hidden
 
     @include media('print')
@@ -101,9 +101,10 @@
             font-size: 10px
 
 .build-content
-    padding: 0 0 $site-padding
+    padding: 0
 
     @include media($media-main-padding)
+        background-color: #f6f6f6
         padding: 0 $site-padding $site-padding $site-padding
 
     @include media('print')
@@ -111,18 +112,15 @@
         text-align: left
 
     .mdl-tabs__tab-bar
+        margin-bottom: $site-padding 
         @include media('print')
             display: none
-
-    .mdl-tabs__tab
-        width: 50%
 
     .mdl-tabs
         overflow: hidden
 
     .mdl-tabs__panel
         overflow: hidden
-        padding-top: $site-padding
         text-align: center
 
     @include media($media-main-two-col)

@@ -41,7 +41,8 @@ body
         padding: 0 $site-padding
 
 .container
-    padding: $site-padding 0
+    @include media($media-main-padding)
+        padding: 0 0 $site-padding
 
     @include media('print')
         padding: 0
@@ -53,8 +54,7 @@ body
     &.active
         display: block
 
-.new,
-.build-content
+.new
     background-color: #f6f6f6
 
 #message

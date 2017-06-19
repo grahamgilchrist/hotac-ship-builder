@@ -1,16 +1,9 @@
 .purchased-upgrades
     background-color: #fff
     overflow: hidden
-    margin-top: $site-padding
-    padding:
-        top: $site-padding / 2
-        left: $site-padding / 2
-        right: $site-padding / 2
+    font-size: 0
 
-    @include media($media-main-two-col)
-        margin-top: 0
-
-    @include media($media-main-upgrade-padding)
+    @include media($media-main-padding)
         padding:
             top: $site-padding
             left: $site-padding
@@ -29,10 +22,7 @@
 .buy-list
     display: inline-block
     vertical-align: top
-    margin-right: 8px
-
-    &:last-child
-        margin-right: 0
+    margin: 0 4px
 
     h4
         text-align: center
@@ -51,6 +41,9 @@
         span,
         i
             vertical-align: middle
+
+        i
+            font-size: 20px
 
     p,
     li
@@ -99,6 +92,16 @@
 .buy-list
     .mdl-button
         margin-bottom: $site-padding
+        min-width: 140px
+        font-size: 12px
+
+        span,
+        i
+            vertical-align: middle
+
+        i
+            margin-right: 0.5em
+            text-transform: none
 
 
 #ship-info-upgrades

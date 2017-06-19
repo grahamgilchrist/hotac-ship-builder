@@ -245,7 +245,7 @@ module.exports = {
     // },
     renderAddUpgradeButton: function (upgradeType, currentShip, existingUpgrades, pilotSkill) {
         var $div = $('<div>');
-        var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">' + upgradeType + '</button>');
+        var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">' + module.exports.getIconString(upgradeType) + '<span>' + upgradeType + '</span></button>');
         $button.on('click', function () {
             var $modalContent = module.exports.renderUpgradeModalContent(upgradeType, currentShip, existingUpgrades, pilotSkill);
             $.featherlight($modalContent);
