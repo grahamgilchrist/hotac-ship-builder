@@ -34,12 +34,18 @@ module.exports = {
             $allowedList.append($upgradeItem);
         });
 
-        var $disallowedList = $('#disallowed-upgrade-list');
+        var $disallowedList = $('#disabled-upgrade-list');
         $disallowedList.empty();
-        _.forEach(upgrades.disallowed, function (upgrade) {
-            var $upgradeItem = module.exports.renderUpgradeItem(upgrade);
-            $disallowedList.append($upgradeItem);
-        });
+        if (upgrades.disallowed.length > 0) {
+            // there's some disabled upgrades here
+            $('.disabled-upgrades').show();
+            _.forEach(upgrades.disallowed, function (upgrade) {
+                var $upgradeItem = module.exports.renderUpgradeItem(upgrade);
+                $disallowedList.append($upgradeItem);
+            });
+        } else {
+            $('.disabled-upgrades').hide();
+        }
 
         var $buyNewList = $('#buy-upgrades-list');
         $buyNewList.empty();

@@ -108,11 +108,12 @@
                         <div class="build-content">
                             <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
                                 <div class="mdl-tabs__tab-bar">
-                                    <a href="#current-ship-tab" class="mdl-tabs__tab is-active">Current ship status</a>
-                                    <a href="#xp-history-tab" class="mdl-tabs__tab">XP history</a>
+                                    <a href="#ship-stats-tab" class="mdl-tabs__tab is-active">Stats</a>
+                                    <a href="#upgrades-tab" class="mdl-tabs__tab">Upgrades</a>
+                                    <a href="#xp-history-tab" class="mdl-tabs__tab">History</a>
                                 </div>
 
-                                <div class="mdl-tabs__panel is-active" id="current-ship-tab">
+                                <div class="mdl-tabs__panel is-active" id="ship-stats-tab">
 
                                     <div class="ship-info-pilot-skill">
                                         <span class="label">Pilot Skill</span>
@@ -144,24 +145,33 @@
                                         </div>
                                         <div class="mdl-tooltip" data-mdl-for="change-ship-wrapper" id="change-ship-tooltip">New ships are unlocked at pilot skill 4</div>
                                     </div>
+                                </div>
 
+                                <div class="mdl-tabs__panel" id="upgrades-tab">
                                     <div class="purchased-upgrades">
+                                        <h3>Upgrades</h3>
+
                                         <div class="ship-slots">
-                                            <h3>Upgrade slots on ship</h3>
+                                            <h4>Slots on ship</h4>
                                             <div id="ship-info-upgrades"></div>
                                         </div>
 
                                         <div class="allowed-list">
-                                            <h3>Upgrades which can be equipped</h3>
-                                            <p>Ships can purchase multiple upgrades of the same type, and choose which to equip into which slot per mission.</p>
+                                            <h4><span>Purchased upgrades</span> <i class="material-icons" id="purchased-upgrades-info">info_outline</i></h4>
+                                            <div class="mdl-tooltip" data-mdl-for="purchased-upgrades-info">
+                                                <p>Ships can purchase multiple upgrades of the same type, and choose which to equip into which slot per mission.</p>
+                                                <p>Free upgrades do not use a slot to equip.</p>
+                                            </div>
                                             <ul id="allowed-upgrade-list"></ul>
 
-                                            <h3>Upgrades not allowed on this ship</h3>
-                                            <p>These may have been purchased for another ship chassis.</p>
-                                            <ul id="disallowed-upgrade-list"></ul>
+                                            <div class="disabled-upgrades">
+                                                <h4>Disabled upgrades</h4>
+                                                <p>These upgrades cannot be equipped to the current ship.</p>
+                                                <ul id="disabled-upgrade-list"></ul>
+                                            </div>
                                         </div>
                                         <div class="buy-list">
-                                            <h3>Buy new upgrades</h3>
+                                            <h4>Buy new upgrades</h4>
                                             <ul id="buy-upgrades-list"></ul>
                                         </div>
 

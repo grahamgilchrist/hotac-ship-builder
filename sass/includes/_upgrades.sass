@@ -1,10 +1,14 @@
 .purchased-upgrades
+    background-color: #fff
     overflow: hidden
     margin-top: $site-padding
     padding:
         top: $site-padding / 2
         left: $site-padding / 2
         right: $site-padding / 2
+
+    @include media($media-main-two-col)
+        margin-top: 0
 
     @include media($media-main-upgrade-padding)
         padding:
@@ -23,15 +27,30 @@
 .ship-slots,
 .allowed-list,
 .buy-list
-    float: left
-    width: 32%
+    display: inline-block
+    vertical-align: top
+    margin-right: 8px
 
-    h3
-        font-size: 18px
-        line-height: 1.1
+    &:last-child
+        margin-right: 0
+
+    h4
+        text-align: center
+
+.ship-slots
+    width: 150px
+
+.allowed-list,
+.buy-list
+    min-width: 180px
 
 .allowed-list
     text-align: left
+
+    h4
+        span,
+        i
+            vertical-align: middle
 
     p,
     li
@@ -73,6 +92,10 @@
                 display: block
                 zoom: 75%
 
+#disabled-upgrade-list
+    li
+        opacity: 0.4
+
 .buy-list
     .mdl-button
         margin-bottom: $site-padding
@@ -80,24 +103,26 @@
 
 #ship-info-upgrades
     overflow: hidden
-    padding: 0 6px $site-padding
+    padding: 0 0 $site-padding
     width: 100%
     max-width: 300px
 
     ul
         text-align: left
-        // column-count: 2
-        // column-gap: 6px
         margin: 0
 
     li
         background-color: #fff
-        max-width: 141px
         margin-bottom: 6px
         font-size: 10px
         padding: 0 8px
         box-sizing: border-box
         line-height: 28px
+        background-color: #eee
+
+        &.disabled
+            color: #bbb
+            background-color: #f7f7f7
 
         span,
         i
@@ -105,6 +130,3 @@
 
         i
             margin-right: 0.1em
-
-        &.disabled
-            background-color: #eee

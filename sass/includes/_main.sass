@@ -117,59 +117,23 @@
     .mdl-tabs__tab
         width: 50%
 
+    .mdl-tabs
+        overflow: hidden
+
     .mdl-tabs__panel
         overflow: hidden
         padding-top: $site-padding
         text-align: center
 
-.purchased-upgrades
-    background-color: #fff
-
     @include media($media-main-two-col)
-        margin-left: 320px
+        #ship-stats-tab
+            display: block
+            float: left
+            width: 300px
+            margin-right: $site-padding
 
-.ship-info-pilot-skill
-    background-color: #fff
-    padding: $site-padding
-    margin-bottom: $site-padding
+        #upgrades-tab
+            display: block
+            margin-top: 0
+            margin-left: 320px
 
-    @include media($media-main-two-col)
-        width: 300px
-        float: left
-        margin-right: $site-padding
-        padding: 0 0 $site-padding
-
-    @include media('print')
-        width: 270px
-        float: left
-        zoom: 75%
-        margin-right: $site-padding
-
-    span
-        vertical-align: middle
-
-    .label
-        font-size: 22px
-        margin-right: 0.5em
-
-    .value
-        font-size: 28px
-        color: orange
-        background-color: #262626
-        display: inline-block
-        width: 50px
-        height: 50px
-        line-height: 50px
-        border-radius: 50px
-        text-align: center
-
-    .ps-upgrade-wrapper
-        display: inline-block
-        text-align: center
-        margin-left: 1em
-
-        @include media('print')
-            display: none
-
-.change-ship
-    margin-top: $site-padding
