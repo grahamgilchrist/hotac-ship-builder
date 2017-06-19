@@ -20,8 +20,8 @@ module.exports = {
             return xpItem.exportString();
         });
         // add callsign and playername as first items
-        itemExports.unshift(build.callsign);
-        itemExports.unshift(build.playerName);
+        itemExports.unshift(window.encodeURIComponent(build.callsign));
+        itemExports.unshift(window.encodeURIComponent(build.playerName));
         var exportString = '/v1/' + itemExports.join(',');
         return exportString;
     },
@@ -31,8 +31,8 @@ module.exports = {
 
         var splitItems = items.split(',');
 
-        var playerName = splitItems.shift();
-        var callsign = splitItems.shift();
+        var playerName = window.decodeURIComponent(splitItems.shift());
+        var callsign = window.decodeURIComponent(splitItems.shift());
 
         var xpHistory = _.map(splitItems, function (stringItem) {
             var xpItem = new XpItem();
