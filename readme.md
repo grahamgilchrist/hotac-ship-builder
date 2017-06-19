@@ -7,8 +7,8 @@ A live version can be found at: [http://hotac-ship-builder.netlify.com](http://h
 The project is written entirely in javascript and html. Styling is generated using the Sass preprocessor.
 
 Thsi project owes many thanks to two x-wing projects without which, this would have not been possible:
-* [https://github.com/guidokessels/xwing-data](x-wing miniatures data)
-* [https://github.com/geordanr/xwing-miniatures-font](x-wing miniatures font)
+* [x-wing miniatures data](https://github.com/guidokessels/xwing-data)
+* [x-wing miniatures font](https://github.com/geordanr/xwing-miniatures-font)
 
 ## Contributing
 * Bugfix pull requests are welcome
