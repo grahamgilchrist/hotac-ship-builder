@@ -113,8 +113,20 @@
 
     .mdl-tabs__tab-bar
         margin-bottom: $site-padding 
+
         @include media('print')
             display: none
+
+        .ship-tab-button
+            display: none
+
+        @include media($media-main-two-col)
+            .ship-tab-button
+                display: block
+
+            .stats-tab-button,
+            .upgrades-tab-button
+                display: none
 
     .mdl-tabs
         overflow: hidden
@@ -125,13 +137,13 @@
 
     @include media($media-main-two-col)
         #ship-stats-tab
-            display: block
+            // display: block
             float: left
             width: 300px
             margin-right: $site-padding
 
         #upgrades-tab
-            display: block
+            // display: block
             margin-top: 0
             margin-left: 320px
 
