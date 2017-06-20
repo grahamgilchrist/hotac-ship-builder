@@ -31,16 +31,21 @@ module.exports = {
 
         var $allowedList = $('#allowed-upgrade-list');
         $allowedList.empty();
-        // Add purchased upgrades to the list
-        _.forEach(upgrades.allowed, function (upgrade) {
-            var $upgradeItem = module.exports.renderUpgradeItem(upgrade);
-            $allowedList.append($upgradeItem);
-        });
-        // Add pilot abilities to the list
-        _.forEach(build.pilotAbilities, function (pilotAbility) {
-            var $upgradeItem = module.exports.renderPilotUpgradeItem(pilotAbility);
-            $allowedList.append($upgradeItem);
-        });
+        if (upgrades.allowed.length > 0 || build.pilotAbilities.length > 0) {
+            $('.purchased-upgrades .no-upgrades').hide();
+            // Add purchased upgrades to the list
+            _.forEach(upgrades.allowed, function (upgrade) {
+                var $upgradeItem = module.exports.renderUpgradeItem(upgrade);
+                $allowedList.append($upgradeItem);
+            });
+            // Add pilot abilities to the list
+            _.forEach(build.pilotAbilities, function (pilotAbility) {
+                var $upgradeItem = module.exports.renderPilotUpgradeItem(pilotAbility);
+                $allowedList.append($upgradeItem);
+            });
+        } else {
+            $('.purchased-upgrades .no-upgrades').show();
+        }
 
         var $disallowedList = $('#disabled-upgrade-list');
         $disallowedList.empty();
