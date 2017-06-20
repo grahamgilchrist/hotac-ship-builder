@@ -1,11 +1,9 @@
-.purchased-upgrades
-    margin-top: $site-padding
-    padding:
-        top: $site-padding / 2
-        left: $site-padding / 2
-        right: $site-padding / 2
+.upgrades-wrapper
+    background-color: #fff
+    overflow: hidden
+    font-size: 0
 
-    @include media($media-main-upgrade-padding)
+    @include media($media-main-padding)
         padding:
             top: $site-padding
             left: $site-padding
@@ -19,117 +17,125 @@
         @include media('print')
             display: none
 
-#upgrade-list
-    $item-horizontal-margin: 3px
-    font-size: 12px
-    overflow: hidden
-    margin: 0 (-$item-horizontal-margin)
-    // flexbox
-    display: flex
-    align-items: flex-start
-    justify-content: center
-    flex-direction: row
-    flex-wrap: wrap
-    flex-flow: row wrap
-    align-content: flex-end
+.ship-slots,
+.allowed-list,
+.buy-list
+    display: inline-block
+    vertical-align: top
+    margin: 0 4px
+
+    h4
+        text-align: center
+
+.ship-slots
+    width: 150px
+
+.allowed-list
     text-align: left
+    width: 200px
 
-    @include media('print')
-        justify-content: left
+    @include media($media-main-two-col)
+        width: 230px
 
-    > li
-        margin: 0 $item-horizontal-margin $site-padding
-        width: 165px
+    h4
+        span,
+        i
+            vertical-align: middle
 
-        &.disallowed
-            opacity: 0.5
+        i
+            font-size: 20px
 
-        ul
+    p,
+    li
+        font-size: 10px
+        line-height: 1.3
+
+    li
+        background-color: #eee
+        margin-bottom: 6px
+        padding: 5px 8px
+        cursor: pointer
+
+        &:last-child 
             margin-bottom: 0
 
-            &.empty
-                @include media('print')
-                    display: none
+        i.xwing-miniatures-font
+            margin-right: 4px
 
-        li,
-        .mdl-button
-            width: 100%
+        i.eye
+            float: right
+            color: #868686
+            font-size: 20px
 
-        li
-            padding: 5px 10px
-            margin-bottom: 5px
-            overflow: hidden
+        &:hover i.eye
+            color: #000
 
-            @include media('print')
-                width: 120px
-                padding: 0
-
-            &.slot
-                background-color: #fff
-
-                i
-                    margin-right: 0.2em
-
-                span,
-                i
-                    vertical-align: middle
-
-            &.upgrade,
-            &.starting-upgrade
-                cursor: pointer
-                padding-right: 6px
-
-                @include media('print')
-                    padding: 0
-
-                i
-                    float: right
-                    color: #868686
-                    font-size: 20px
-                    margin-top: 2px
-
-                i,
-                span
-                    @include media('print')
-                        display: none
-
-                img
-                    max-width: 100%
-
-                .preview
-                    display: none
-
-                    @include media('print')
-                        display: block
-                        zoom: 75%
-
-            &.starting-upgrade
-                background-color: #eee
-                color: #868686
-
-            &.upgrade
-                background-color: #c8f3c8
-                cursor: pointer
-
-            .equip
-                font-size: 10px
-
-        .mdl-button
+        i.eye,
+        span
             @include media('print')
                 display: none
 
-    h4,
-    p
-        margin-bottom: 0
+        img
+            max-width: 100%
 
-    h4 .number
-        margin-left: 0.7em
+        .preview
+            display: none
+
+            @include media('print')
+                display: block
+                zoom: 75%
+
+.purchased-upgrades
+    .no-upgrades
+        text-align: center       
+
+#disabled-upgrade-list
+    li
+        opacity: 0.4
+
+.buy-list
+    min-width: 180px
+
+    .mdl-button
+        margin-bottom: $site-padding
+        min-width: 140px
         font-size: 12px
-        display: inline-block
-        background-color: $color-primary
-        border-radius: 20px
-        width: 20px
-        height: 20px
-        color: #fff
-        line-height: 20px
-        text-align: center
+
+        span,
+        i
+            vertical-align: middle
+
+        i
+            margin-right: 0.5em
+            text-transform: none
+
+
+#ship-info-upgrades
+    overflow: hidden
+    padding: 0 0 $site-padding
+    width: 100%
+    max-width: 300px
+
+    ul
+        text-align: left
+        margin: 0
+
+    li
+        background-color: #fff
+        margin-bottom: 6px
+        font-size: 10px
+        padding: 0 8px
+        box-sizing: border-box
+        line-height: 28px
+        background-color: #eee
+
+        &.disabled
+            color: #bbb
+            background-color: #f7f7f7
+
+        span,
+        i
+            vertical-align: middle
+
+        i
+            margin-right: 0.1em

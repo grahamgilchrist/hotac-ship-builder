@@ -1,5 +1,5 @@
 .reset
-    margin-bottom: $site-padding
+    margin: $site-padding 0
     overflow: hidden
 
     @include media('print')
@@ -101,9 +101,10 @@
             font-size: 10px
 
 .build-content
-    padding: 0 0 $site-padding
+    padding: 0
 
     @include media($media-main-padding)
+        background-color: #f6f6f6
         padding: 0 $site-padding $site-padding $site-padding
 
     @include media('print')
@@ -111,56 +112,38 @@
         text-align: left
 
     .mdl-tabs__tab-bar
+        margin-bottom: $site-padding 
+
         @include media('print')
             display: none
 
-    .mdl-tabs__tab
-        width: 50%
+        .stats-upgrade-tab-button
+            display: none
+
+        @include media($media-main-two-col)
+            .stats-upgrade-tab-button
+                display: block
+
+            .stats-tab-button,
+            .upgrades-tab-button
+                display: none
+
+    .mdl-tabs
+        overflow: hidden
 
     .mdl-tabs__panel
         overflow: hidden
-        padding-top: $site-padding
         text-align: center
-
-.ship-info-pilot-skill,
-.purchased-upgrades
-    background-color: #fff
 
     @include media($media-main-two-col)
-        margin-left: 320px
+        #ship-stats-tab
+            display: block
+            float: left
+            width: 300px
+            margin-right: $site-padding
 
-.ship-info-pilot-skill
-    padding: $site-padding
+        #upgrades-tab
+            display: block
+            margin-top: 0
+            margin-left: 320px
 
-    @include media('print')
-        float: left
-        clear: left
-
-    span
-        vertical-align: middle
-
-    .label
-        font-size: 22px
-        margin-right: 0.5em
-
-    .value
-        font-size: 28px
-        color: orange
-        background-color: #262626
-        display: inline-block
-        width: 50px
-        height: 50px
-        line-height: 50px
-        border-radius: 50px
-        text-align: center
-
-    .ps-upgrade-wrapper
-        display: inline-block
-        text-align: center
-        margin-left: 1em
-
-        @include media('print')
-            display: none
-
-.change-ship
-    margin-top: $site-padding

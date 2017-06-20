@@ -16,7 +16,7 @@ module.exports = {
     },
     renderTableRow: function (xpItem, resultingXP, xpItemIndex) {
         var $historyItem = $('<tr>');
-        $historyItem.append('<td>' + xpItem.label() + '</td>');
+        $historyItem.append('<td class="label">' + xpItem.label() + '</td>');
         var cost = xpItem.cost();
         var costString = cost;
         var costClass = '';

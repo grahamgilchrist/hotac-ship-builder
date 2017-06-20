@@ -10,6 +10,7 @@ module.exports = {
         // bind new button
         $('#new-build').on('click', module.exports.clickResetButton);
 
+        module.exports.bindTabsButton();
         module.exports.bindXpButton();
         module.exports.bindExportButton();
         module.exports.bindPrintButton();
@@ -36,6 +37,21 @@ module.exports = {
     },
     renderXp: function (xpAmount) {
         $('#xp-current').text(xpAmount);
+    },
+    bindTabsButton: function () {
+        var activeClass = 'is-active';
+        $('.build-content .mdl-tabs__tab').on('click', function () {
+            var targetIdSelector = $(this).attr('href');
+            if (targetIdSelector === '#stats-upgrades-combined-tab') {
+                $(this).closest('.mdl-tabs').find('.stats-tab-button').addClass(activeClass);
+                $('#ship-stats-tab').addClass(activeClass);
+            }
+
+            if (targetIdSelector === '#ship-stats-tab' || targetIdSelector === '#upgrades-tab') {
+                $(this).closest('.mdl-tabs').find('.stats-upgrade-tab-button').addClass(activeClass);
+                $('#stats-upgrades-combined-tab').addClass(activeClass);
+            }
+        });
     },
     bindXpButton: function () {
         $('#add-mission-xp').on('click', function () {
