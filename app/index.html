@@ -108,74 +108,81 @@
                         <div class="build-content">
                             <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
                                 <div class="mdl-tabs__tab-bar">
-                                    <a href="" class="mdl-tabs__tab is-active ship-tab-button">Stats and upgrades</a>
+                                    <a href="#stats-upgrades-combined-tab" class="mdl-tabs__tab is-active stats-upgrade-tab-button">Stats and upgrades</a>
                                     <a href="#ship-stats-tab" class="mdl-tabs__tab is-active stats-tab-button">Stats</a>
                                     <a href="#upgrades-tab" class="mdl-tabs__tab upgrades-tab-button">Upgrades</a>
-                                    <a href="#xp-history-tab" class="mdl-tabs__tab">History</a>
+                                    <a href="#xp-history-tab" class="mdl-tabs__tab history-tab-button">History</a>
                                 </div>
 
-                                <div class="mdl-tabs__panel is-active" id="ship-stats-tab">
+                                <div class="mdl-tabs__panel is-active" id="stats-upgrades-combined-tab">
+                                    <div class="mdl-tabs__panel is-active" id="ship-stats-tab">
 
-                                    <div class="ship-info-pilot-skill">
-                                        <span class="label">Pilot Skill</span>
-                                        <span class= "value" id="pilot-skill"></span>
-                                        <span class="ps-upgrade-wrapper">
-                                            <div>
-                                                <span id="pilot-skill-next-xp-cost"></span><span> XP to update to level </span><span id="pilot-skill-plus-one"></span>
-                                            </div>
-                                            <div>
-                                                <button id="increase-ps" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Upgrade</button>
-                                            </div>
-                                        </span>
-                                    </div>
-
-                                    <div class="ship-info">
-                                        <div class="ship-image-stats">
-                                            <div class="img-wrapper">
-                                                <img src="" alt="Ship image" id="ship-info-image">
-                                            </div>
-                                            <div id="ship-info-stats"></div>
-                                            <div id="ship-info-actions"></div>
-                                        </div>
-                                        <div id="ship-info-dial"></div>
-
-                                        <div class="change-ship">
-                                            <span id="change-ship-wrapper">
-                                                <button id="change-ship" disabled class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Change ship (5XP)</button>
+                                        <div class="ship-info-pilot-skill">
+                                            <span class="label">Pilot Skill</span>
+                                            <span class= "value" id="pilot-skill"></span>
+                                            <span class="ps-upgrade-wrapper">
+                                                <div>
+                                                    <span id="pilot-skill-next-xp-cost"></span><span> XP to update to level </span><span id="pilot-skill-plus-one"></span>
+                                                </div>
+                                                <div>
+                                                    <button id="increase-ps" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Upgrade</button>
+                                                </div>
                                             </span>
                                         </div>
-                                        <div class="mdl-tooltip" data-mdl-for="change-ship-wrapper" id="change-ship-tooltip">New ships are unlocked at pilot skill 4</div>
+
+                                        <div class="ship-info">
+                                            <div class="ship-image-stats">
+                                                <div class="img-wrapper">
+                                                    <img src="" alt="Ship image" id="ship-info-image">
+                                                </div>
+                                                <div id="ship-info-stats"></div>
+                                                <div id="ship-info-actions"></div>
+                                            </div>
+                                            <div id="ship-info-dial"></div>
+
+                                            <div class="change-ship">
+                                                <span id="change-ship-wrapper">
+                                                    <button id="change-ship" disabled class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Change ship (5XP)</button>
+                                                </span>
+                                            </div>
+                                            <div class="mdl-tooltip" data-mdl-for="change-ship-wrapper" id="change-ship-tooltip">New ships are unlocked at pilot skill 4</div>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="mdl-tabs__panel" id="upgrades-tab">
-                                    <div class="purchased-upgrades">
-                                        <h3>Upgrades</h3>
+                                    <div class="mdl-tabs__panel" id="upgrades-tab">
+                                        <div class="purchased-upgrades">
+                                            <h3>Upgrades</h3>
 
-                                        <div class="ship-slots">
-                                            <h4>Slots on ship</h4>
-                                            <div id="ship-info-upgrades"></div>
-                                        </div>
-
-                                        <div class="allowed-list">
-                                            <h4><span>Purchased upgrades</span> <i class="material-icons" id="purchased-upgrades-info">info_outline</i></h4>
-                                            <div class="mdl-tooltip" data-mdl-for="purchased-upgrades-info">
-                                                <p>Ships can purchase multiple upgrades of the same type, and choose which to equip into which slot per mission.</p>
-                                                <p>Free upgrades do not use a slot to equip.</p>
+                                            <div class="ship-slots">
+                                                <h4>Slots on ship</h4>
+                                                <div id="ship-info-upgrades"></div>
                                             </div>
-                                            <ul id="allowed-upgrade-list"></ul>
 
-                                            <div class="disabled-upgrades">
-                                                <h4>Disabled upgrades</h4>
-                                                <p>These upgrades cannot be equipped to the current ship.</p>
-                                                <ul id="disabled-upgrade-list"></ul>
+                                            <div class="allowed-list">
+                                                <div class="free-upgrades">
+                                                    <h4>Free upgrades</h4>
+                                                    <p>Any number of free upgrades may be equipped without filling an upgrade slot on the ship.</p>
+                                                    <ul id="free-upgrade-list"></ul>
+                                                </div>
+
+                                                <h4><span>Purchased upgrades</span> <i class="material-icons" id="purchased-upgrades-info">info_outline</i></h4>
+                                                <div class="mdl-tooltip" data-mdl-for="purchased-upgrades-info">
+                                                    <p>Ships can purchase multiple upgrades of the same type, and choose which to equip into which slot per mission.</p>
+                                                </div>
+                                                <ul id="allowed-upgrade-list"></ul>
+
+                                                <div class="disabled-upgrades">
+                                                    <h4>Disabled upgrades</h4>
+                                                    <p>These upgrades cannot be equipped to the current ship.</p>
+                                                    <ul id="disabled-upgrade-list"></ul>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="buy-list">
-                                            <h4>Buy new upgrades</h4>
-                                            <ul id="buy-upgrades-list"></ul>
-                                        </div>
+                                            <div class="buy-list">
+                                                <h4>Buy new upgrades</h4>
+                                                <ul id="buy-upgrades-list"></ul>
+                                            </div>
 
+                                        </div>
                                     </div>
                                 </div>
 

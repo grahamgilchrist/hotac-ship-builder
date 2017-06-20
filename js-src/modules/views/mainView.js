@@ -39,13 +39,27 @@ module.exports = {
         $('#xp-current').text(xpAmount);
     },
     bindTabsButton: function () {
-        $('.build-content .mdl-tabs__tab-bar .ship-tab-button').on('click', function (e) {
-            // activate both tabs
-            $('#ship-stats-tab').addClass('is-active');
-            $('#upgrades-tab').addClass('is-active');
+        var activeClass = 'is-active';
+        $('.build-content .mdl-tabs__tab').on('click', function (e) {
+            var targetIdSelector = $(this).attr('href');
+            if (targetIdSelector === '#stats-upgrades-combined-tab') {
+                $(this).closest('.mdl-tabs').find('.stats-tab-button').addClass('is-active');
+                $('#ship-stats-tab').addClass('is-active');
+            }
+
+            if (targetIdSelector === '#ship-stats-tab' || targetIdSelector === '#upgrades-tab') {
+                $(this).closest('.mdl-tabs').find('.stats-upgrade-tab-button').addClass('is-active');
+                $('#stats-upgrades-combined-tab').addClass('is-active');
+            }
+        });
+
+        $('.build-content .mdl-tabs__tab-bar .history-tab-button').on('click', function (e) {
+            $(this).closest('.mdl-tabs').find('.mdl-tabs__panel').removeClass(activeClass);
+            $('#xp-history-tab').addClass(activeClass);
             e.preventDefault();
             return false;
         });
+
     },
     bindXpButton: function () {
         $('#add-mission-xp').on('click', function () {
