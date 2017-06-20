@@ -267,11 +267,34 @@ module.exports = {
 
         $button.on('click', function () {
             var $modalContent = module.exports.renderUpgradeModalContent(pilotSkill, filteredUpgrades);
-            $.featherlight($modalContent);
+            module.exports.openOptionSelectModal($modalContent);
         });
         $div.append($button);
 
         return $div;
+    },
+    openOptionSelectModal: function ($modalContent) {
+        var featherLightConfig = {
+            variant: 'option-select',
+            afterOpen: function (event) {
+                var $footer = $('<div class="modal-footer">');
+                var $text = $('<span>item name: points XP</span>');
+                var $summary = $('<div class="summary">');
+                $summary.append($text);
+                $footer.append($summary);
+                var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>Buy upgrade</button>');
+                $button.on('click', function () {
+                    // events.trigger('view.upgrades.buy', chosenUpgradeId);
+                    $.featherlight.close();
+                });
+
+                // chosenUpgradeId = item.id;
+                // $(this).closest('.featherlight').find('.modal-footer button').removeAttr('disabled');
+
+                this.$instance.find('.featherlight-content').append($footer);
+            }
+        };
+        $.featherlight($modalContent, featherLightConfig);
     },
     getFilteredUpgrades: function (upgradeTypeString, existingUpgrades, currentShip) {
         var upgradeTypes = upgradeTypeString.split(',');
@@ -345,6 +368,9 @@ module.exports = {
         _.forEach(filteredUpgrades, function (item) {
             var $upgrade = $('<li><img src="/components/xwing-data/images/' + item.image + '" alt="' + item.name + '"></li>');
             $upgrade.on('click', function () {
+                // deselect other list options
+                $(this).closest('ul').find('li').removeClass('selected');
+                $(this).addClass('selected');
                 var $text = $('<span>' + item.name + ': ' + item.hotacPoints + 'XP</span>');
                 var $summaryElement = $('.featherlight .summary');
                 $summaryElement.html($text);
@@ -436,6 +462,9 @@ module.exports = {
         _.forEach(availablePilots, function (pilotCard) {
             var $upgrade = $('<li><h3>' + pilotCard.name + ' (PS ' + pilotCard.skill + ')</h3><p>' + pilotCard.text + '</p></li>');
             $upgrade.on('click', function () {
+                // deselect other list options
+                $(this).closest('ul').find('li').removeClass('selected');
+                $(this).addClass('selected');
                 var $text = $('<span>' + pilotCard.name + ': ' + pilotCard.skill + 'XP</span>');
                 var $summaryElement = $('.featherlight .summary');
                 $summaryElement.html($text);
