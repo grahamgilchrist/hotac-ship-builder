@@ -1,12 +1,9 @@
-.purchased-upgrades
+.upgrades-wrapper
+    background-color: #fff
     overflow: hidden
-    margin-top: $site-padding
-    padding:
-        top: $site-padding / 2
-        left: $site-padding / 2
-        right: $site-padding / 2
+    font-size: 0
 
-    @include media($media-main-upgrade-padding)
+    @include media($media-main-padding)
         padding:
             top: $site-padding
             left: $site-padding
@@ -23,15 +20,30 @@
 .ship-slots,
 .allowed-list,
 .buy-list
-    float: left
-    width: 32%
+    display: inline-block
+    vertical-align: top
+    margin: 0 4px
 
-    h3
-        font-size: 18px
-        line-height: 1.1
+    h4
+        text-align: center
+
+.ship-slots
+    width: 150px
 
 .allowed-list
     text-align: left
+    width: 200px
+
+    @include media($media-main-two-col)
+        width: 230px
+
+    h4
+        span,
+        i
+            vertical-align: middle
+
+        i
+            font-size: 20px
 
     p,
     li
@@ -73,31 +85,53 @@
                 display: block
                 zoom: 75%
 
+.purchased-upgrades
+    .no-upgrades
+        text-align: center       
+
+#disabled-upgrade-list
+    li
+        opacity: 0.4
+
 .buy-list
+    min-width: 180px
+
     .mdl-button
         margin-bottom: $site-padding
+        min-width: 140px
+        font-size: 12px
+
+        span,
+        i
+            vertical-align: middle
+
+        i
+            margin-right: 0.5em
+            text-transform: none
 
 
 #ship-info-upgrades
     overflow: hidden
-    padding: 0 6px $site-padding
+    padding: 0 0 $site-padding
     width: 100%
     max-width: 300px
 
     ul
         text-align: left
-        // column-count: 2
-        // column-gap: 6px
         margin: 0
 
     li
         background-color: #fff
-        max-width: 141px
         margin-bottom: 6px
         font-size: 10px
         padding: 0 8px
         box-sizing: border-box
         line-height: 28px
+        background-color: #eee
+
+        &.disabled
+            color: #bbb
+            background-color: #f7f7f7
 
         span,
         i
@@ -105,6 +139,3 @@
 
         i
             margin-right: 0.1em
-
-        &.disabled
-            background-color: #eee

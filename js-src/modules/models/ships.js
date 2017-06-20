@@ -54,19 +54,19 @@ var hotacShips = [
                 'Astromech'
             ],
             [
-                'Torpedo',
-                'Bomb'
+                'Torpedo'
             ],
             [
-                'Torpedo',
-                'Bomb'
+                'Torpedo'
             ],
             [
                 'Turret'
             ]
         ],
         startingUpgrades: [
-            getUpgradeByXws('btla4ywing')
+            getUpgradeByXws('btla4ywing'),
+            getUpgradeByXws('bombloadout'),
+            getUpgradeByXws('bombloadout')
         ]
     },
     {

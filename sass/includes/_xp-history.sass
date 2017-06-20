@@ -5,6 +5,25 @@
     table
         display: inline-block
 
+    th
+        text-align: center
+
+    // hide first revert button as it is just the current state
     tr:first-child
         td.revert button
             display: none
+
+    td.label
+        text-align: left
+
+    th,
+    td
+        padding: $site-padding / 2
+
+        &:first-child
+            padding-left: $site-padding
+
+        &:last-child
+            padding-right: $site-padding
+
+    @include media($media-main-padding)

@@ -16,30 +16,49 @@ module.exports = {
         var upgradesAllowedInBuild = module.exports.numberOfUsableUpgrades(build.pilotSkill, build.currentShip, build.upgrades);
         var upgrades = module.exports.getAllowedUpgrades(build, upgradesAllowedInBuild);
 
+        var $freeList = $('#free-upgrade-list');
+        $freeList.empty();
+        if (build.currentShip.startingUpgrades.length > 0) {
+            $('.free-upgrades').show();
+            // Add starting upgrades to the list
+            _.forEach(build.currentShip.startingUpgrades, function (upgrade) {
+                var $upgradeItem = module.exports.renderStartingUpgradeItem(upgrade);
+                $freeList.append($upgradeItem);
+            });
+        } else {
+            $('.free-upgrades').hide();
+        }
+
         var $allowedList = $('#allowed-upgrade-list');
         $allowedList.empty();
-        // Add starting upgrades to the list
-        _.forEach(build.currentShip.startingUpgrades, function (upgrade) {
-            var $upgradeItem = module.exports.renderStartingUpgradeItem(upgrade);
-            $allowedList.append($upgradeItem);
-        });
-        // Add purchased upgrades to the list
-        _.forEach(upgrades.allowed, function (upgrade) {
-            var $upgradeItem = module.exports.renderUpgradeItem(upgrade);
-            $allowedList.append($upgradeItem);
-        });
-        // Add pilot abilities to the list
-        _.forEach(build.pilotAbilities, function (pilotAbility) {
-            var $upgradeItem = module.exports.renderPilotUpgradeItem(pilotAbility);
-            $allowedList.append($upgradeItem);
-        });
+        if (upgrades.allowed.length > 0 || build.pilotAbilities.length > 0) {
+            $('.purchased-upgrades .no-upgrades').hide();
+            // Add purchased upgrades to the list
+            _.forEach(upgrades.allowed, function (upgrade) {
+                var $upgradeItem = module.exports.renderUpgradeItem(upgrade);
+                $allowedList.append($upgradeItem);
+            });
+            // Add pilot abilities to the list
+            _.forEach(build.pilotAbilities, function (pilotAbility) {
+                var $upgradeItem = module.exports.renderPilotUpgradeItem(pilotAbility);
+                $allowedList.append($upgradeItem);
+            });
+        } else {
+            $('.purchased-upgrades .no-upgrades').show();
+        }
 
-        var $disallowedList = $('#disallowed-upgrade-list');
+        var $disallowedList = $('#disabled-upgrade-list');
         $disallowedList.empty();
-        _.forEach(upgrades.disallowed, function (upgrade) {
-            var $upgradeItem = module.exports.renderUpgradeItem(upgrade);
-            $disallowedList.append($upgradeItem);
-        });
+        if (upgrades.disallowed.length > 0) {
+            // there's some disabled upgrades here
+            $('.disabled-upgrades').show();
+            _.forEach(upgrades.disallowed, function (upgrade) {
+                var $upgradeItem = module.exports.renderUpgradeItem(upgrade);
+                $disallowedList.append($upgradeItem);
+            });
+        } else {
+            $('.disabled-upgrades').hide();
+        }
 
         var $buyNewList = $('#buy-upgrades-list');
         $buyNewList.empty();
@@ -239,23 +258,43 @@ module.exports = {
     // },
     renderAddUpgradeButton: function (upgradeType, currentShip, existingUpgrades, pilotSkill) {
         var $div = $('<div>');
-        var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">' + upgradeType + '</button>');
+        var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">' + module.exports.getIconString(upgradeType) + '<span>' + upgradeType + '</span></button>');
+        var filteredUpgrades = module.exports.getFilteredUpgrades(upgradeType, existingUpgrades, currentShip);
+        // Disable button if nothing to show in modal
+        if (_.size(filteredUpgrades) === 0) {
+            $button.attr('disabled', 'disabled');
+        }
+
         $button.on('click', function () {
-            var $modalContent = module.exports.renderUpgradeModalContent(upgradeType, currentShip, existingUpgrades, pilotSkill);
+            var $modalContent = module.exports.renderUpgradeModalContent(pilotSkill, filteredUpgrades);
             $.featherlight($modalContent);
         });
         $div.append($button);
 
         return $div;
     },
-    renderUpgradeModalContent: function (upgradeTypeString, currentShip, existingUpgrades, pilotSkill) {
-        var $modalContent = $('<div>');
-
+    getFilteredUpgrades: function (upgradeTypeString, existingUpgrades, currentShip) {
         var upgradeTypes = upgradeTypeString.split(',');
 
-        var tabs = [];
+        var filteredUpgradesByType = {};
+
         _.each(upgradeTypes, function (upgradeType) {
-            var $tab = module.exports.renderCardListModalContent(upgradeType, currentShip, existingUpgrades);
+            var upgradesOfType = upgrades[upgradeType];
+            var existingUpgradesOfType = existingUpgrades[upgradeType];
+            var filteredUpgrades = module.exports.getUpgradesToShow(upgradesOfType, currentShip, existingUpgradesOfType);
+            if (filteredUpgrades.length > 0) {
+                filteredUpgradesByType[upgradeType] = filteredUpgrades;
+            }
+        });
+
+        return filteredUpgradesByType;
+    },
+    renderUpgradeModalContent: function (pilotSkill, filteredUpgradesByType) {
+        var $modalContent = $('<div>');
+
+        var tabs = [];
+        _.each(filteredUpgradesByType, function (filteredUpgrades, upgradeType) {
+            var $tab = module.exports.renderCardListModalContent(upgradeType, filteredUpgrades);
             tabs.push({
                 name: upgradeType,
                 $content: $tab
@@ -295,12 +334,7 @@ module.exports = {
 
         return $modalContent;
     },
-    renderCardListModalContent: function (upgradeType, currentShip, existingUpgrades) {
-        var upgradesOfType = upgrades[upgradeType];
-        var existingUpgradesOfType = existingUpgrades[upgradeType];
-
-        var filteredUpgrades = module.exports.getUpgradesToShow(upgradesOfType, currentShip, existingUpgradesOfType);
-
+    renderCardListModalContent: function (upgradeType, filteredUpgrades) {
         var chosenUpgradeId;
 
         var $modalContent = $('<div class="card-image-list" id="modal-card-image-list-' + upgradeType + '">');
