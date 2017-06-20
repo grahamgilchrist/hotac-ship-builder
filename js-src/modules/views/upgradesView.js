@@ -16,13 +16,21 @@ module.exports = {
         var upgradesAllowedInBuild = module.exports.numberOfUsableUpgrades(build.pilotSkill, build.currentShip, build.upgrades);
         var upgrades = module.exports.getAllowedUpgrades(build, upgradesAllowedInBuild);
 
+        var $freeList = $('#free-upgrade-list');
+        $freeList.empty();
+        if (upgrades.disallowed.length > 0) {
+            $('.free-upgrades').show();
+            // Add starting upgrades to the list
+            _.forEach(build.currentShip.startingUpgrades, function (upgrade) {
+                var $upgradeItem = module.exports.renderStartingUpgradeItem(upgrade);
+                $freeList.append($upgradeItem);
+            });
+        } else {
+            $('.free-upgrades').hide();
+        }
+
         var $allowedList = $('#allowed-upgrade-list');
         $allowedList.empty();
-        // Add starting upgrades to the list
-        _.forEach(build.currentShip.startingUpgrades, function (upgrade) {
-            var $upgradeItem = module.exports.renderStartingUpgradeItem(upgrade);
-            $allowedList.append($upgradeItem);
-        });
         // Add purchased upgrades to the list
         _.forEach(upgrades.allowed, function (upgrade) {
             var $upgradeItem = module.exports.renderUpgradeItem(upgrade);
