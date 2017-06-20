@@ -40,26 +40,18 @@ module.exports = {
     },
     bindTabsButton: function () {
         var activeClass = 'is-active';
-        $('.build-content .mdl-tabs__tab').on('click', function (e) {
+        $('.build-content .mdl-tabs__tab').on('click', function () {
             var targetIdSelector = $(this).attr('href');
             if (targetIdSelector === '#stats-upgrades-combined-tab') {
-                $(this).closest('.mdl-tabs').find('.stats-tab-button').addClass('is-active');
-                $('#ship-stats-tab').addClass('is-active');
+                $(this).closest('.mdl-tabs').find('.stats-tab-button').addClass(activeClass);
+                $('#ship-stats-tab').addClass(activeClass);
             }
 
             if (targetIdSelector === '#ship-stats-tab' || targetIdSelector === '#upgrades-tab') {
-                $(this).closest('.mdl-tabs').find('.stats-upgrade-tab-button').addClass('is-active');
-                $('#stats-upgrades-combined-tab').addClass('is-active');
+                $(this).closest('.mdl-tabs').find('.stats-upgrade-tab-button').addClass(activeClass);
+                $('#stats-upgrades-combined-tab').addClass(activeClass);
             }
         });
-
-        $('.build-content .mdl-tabs__tab-bar .history-tab-button').on('click', function (e) {
-            $(this).closest('.mdl-tabs').find('.mdl-tabs__panel').removeClass(activeClass);
-            $('#xp-history-tab').addClass(activeClass);
-            e.preventDefault();
-            return false;
-        });
-
     },
     bindXpButton: function () {
         $('#add-mission-xp').on('click', function () {
