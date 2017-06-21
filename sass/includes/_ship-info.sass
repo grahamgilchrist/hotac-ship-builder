@@ -87,9 +87,26 @@
 
         table
             margin: 0
+            font-size: 16px
 
         td
-            padding: 5px
+            padding: 6px
+            width: 35px
+            height: 35px
+
+            div
+                height: 100%
+
+            &.maneuver
+                cursor: pointer
+
+            &.selected div
+                box-shadow: #45b3f9 0px 0px 6px 3px
+
+            i
+                position: relative
+                top: 4px
+                font-size: 18px
 
         .red
             color: red
