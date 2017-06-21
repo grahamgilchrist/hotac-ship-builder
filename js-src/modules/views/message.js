@@ -10,7 +10,7 @@ module.exports = {
         var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Undo</button>');
 
         $button.on('click', function () {
-            events.trigger('view.xpHistory.revert', xpItemIndex);
+            events.trigger('view.xpHistory.revert', xpItemIndex - 1);
         });
 
         $messageWrapper.append($message);

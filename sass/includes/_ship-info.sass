@@ -14,7 +14,6 @@
         margin-right: 20px
 
     .ship-image-stats,
-    #ship-info-upgrades,
     #ship-info-dial,
     .change-ship
         display: inline-block
@@ -90,23 +89,22 @@
             font-size: 16px
 
         td
-            padding: 6px
-            width: 35px
-            height: 35px
-
-            div
-                height: 100%
+            padding: 0
 
             &.maneuver
                 cursor: pointer
 
-            &.selected div
+            &.selected i
                 box-shadow: #45b3f9 0px 0px 6px 3px
 
             i
-                position: relative
-                top: 4px
+                display: block
+                margin: 6px
                 font-size: 18px
+                height: 100%
+                width: 35px
+                height: 35px
+                line-height: 35px
 
         .red
             color: red

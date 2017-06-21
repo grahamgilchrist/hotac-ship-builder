@@ -97,8 +97,8 @@ module.exports = {
             shipInfoView.renderShipStats(build.currentShip);
             shipInfoView.renderShipActions(build.currentShip, build.upgrades);
             shipInfoView.renderShipImage(build.currentShip);
-            shipInfoView.renderShipUpgrades(build.currentShip, build.pilotSkill);
             shipInfoView.renderShipDial(build.currentShip);
+            upgradesView.renderShipUpgrades(build.currentShip, build.pilotSkill, build.upgrades);
             upgradesView.renderUpgradesList(build);
             pilotSkillView.renderWithPs(build.pilotSkill);
             upgradesView.renderUpgradesList(build);
@@ -115,8 +115,8 @@ module.exports = {
                 shipInfoView.renderShipStats(build.currentShip);
                 shipInfoView.renderShipActions(build.currentShip, build.upgrades);
                 shipInfoView.renderShipImage(build.currentShip);
-                shipInfoView.renderShipUpgrades(build.currentShip, build.pilotSkill);
                 shipInfoView.renderShipDial(build.currentShip);
+                upgradesView.renderShipUpgrades(build.currentShip, build.pilotSkill, build.upgrades);
                 upgradesView.renderUpgradesList(build);
                 changeShipView.renderShipView(build.pilotSkill, build.currentShip);
             }
@@ -127,7 +127,7 @@ module.exports = {
                 pilotSkillView.renderWithPs(build.pilotSkill);
                 upgradesView.renderUpgradesList(build);
                 changeShipView.renderShipView(build.pilotSkill, build.currentShip);
-                shipInfoView.renderShipUpgrades(build.currentShip, build.pilotSkill);
+                upgradesView.renderShipUpgrades(build.currentShip, build.pilotSkill, build.upgrades);
             }
         });
 
@@ -139,6 +139,7 @@ module.exports = {
             if (build.ready) {
                 upgradesView.renderUpgradesList(build);
                 shipInfoView.renderShipActions(build.currentShip, build.upgrades);
+                upgradesView.renderShipUpgrades(build.currentShip, build.pilotSkill, build.upgrades);
             }
         });
 

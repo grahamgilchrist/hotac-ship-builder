@@ -43,80 +43,6 @@ module.exports = {
         var imgUrl = '/components/xwing-data/images/' + currentShip.pilotCard.image;
         $shipImage.attr('src', imgUrl);
     },
-    renderShipUpgrades: function (currentShip, pilotSkill) {
-        var $shipUpgrades = $('#ship-info-upgrades');
-        $shipUpgrades.empty();
-
-        var $ul = $('<ul>');
-
-        var upgradeSlots = module.exports.getShipUpgrades(currentShip);
-
-        _.each(upgradeSlots, function (upgradeSlot) {
-            var titleString = module.exports.getIconString(upgradeSlot.type) + ' <span>' + upgradeSlot.type + '</span>';
-            var $li = $('<li>' + titleString + '</li>');
-            if (pilotSkill < upgradeSlot.pilotSkill) {
-                $li.addClass('disabled');
-                $li.append('<span> (PS ' + upgradeSlot.pilotSkill + ')</span>');
-            }
-            $ul.append($li);
-        });
-
-        $shipUpgrades.append($ul);
-    },
-    getIconString: function (upgradeSlotType) {
-        var iconId = upgradeSlotType.replace(' ', '').replace('-', '');
-        iconId = iconId.toLowerCase();
-        var iconString = '<i class="xwing-miniatures-font xwing-miniatures-font-' + iconId + '"></i>';
-        return iconString;
-    },
-    getShipUpgrades: function (currentShip) {
-        // elite slots are dependent on pilot level
-
-        var usableUpgrades = _.map(currentShip.upgradeSlots, function (upgradeSlot) {
-            return {
-                type: upgradeSlot
-            };
-        });
-
-        usableUpgrades = usableUpgrades.concat([
-            {
-                type: 'Title'
-            },
-            {
-                type: 'Modification'
-            },
-            {
-                type: 'Modification',
-                pilotSkill: 4
-            },
-            {
-                type: 'Modification',
-                pilotSkill: 6
-            },
-            {
-                type: 'Modification',
-                pilotSkill: 8
-            },
-            {
-                type: 'Elite',
-                pilotSkill: 3
-            },
-            {
-                type: 'Elite',
-                pilotSkill: 5
-            },
-            {
-                type: 'Elite',
-                pilotSkill: 7
-            },
-            {
-                type: 'Elite',
-                pilotSkill: 9
-            }
-        ]);
-
-        return usableUpgrades;
-    },
     renderShipDial: function (currentShip) {
         var $shipUpgrades = $('#ship-info-dial');
         $shipUpgrades.empty();
@@ -190,8 +116,9 @@ module.exports = {
                     if (maneuver === 3) {
                         maneuverClass = 'red';
                     }
-                    var $td = $('<td class="maneuver ' + maneuverClass + '"><div>' + maneuverString + '</div></td>');
+                    var $td = $('<td class="' + maneuverClass + '">' + maneuverString + '</td>');
                     if (maneuverString) {
+                        $td.addClass('maneuver');
                         $td.on('click', function () {
                             var selectedClass = 'selected';
                             $(this).closest('table').find('td').removeClass(selectedClass);
