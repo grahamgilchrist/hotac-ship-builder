@@ -1,6 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
+var events = require('./events');
 
 module.exports = {
     init: function () {
@@ -32,5 +33,40 @@ module.exports = {
             variant: 'confirm-buttons'
         };
         $.featherlight($modalContent, featherlightConfig);
+    },
+    openOptionSelectModal: function ($modalContent, buttonText) {
+        var featherLightConfig = {
+            variant: 'option-select',
+            afterOpen: function () {
+                $.featherlight.defaults.afterOpen();
+                var lastSelectedItem;
+
+                var $footer = $('<div class="modal-footer">');
+                var $footerInner = $('<div class="modal-footer-inner">');
+                var $summary = $('<div class="summary"><span></span></div>');
+                var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>' + buttonText + '</button>');
+                $button.on('click', function () {
+                    if (lastSelectedItem.selectedUpgradeId) {
+                        events.trigger(lastSelectedItem.selectedUpgradeEvent, lastSelectedItem.selectedUpgradeId);
+                    }
+                    $.featherlight.close();
+                });
+                $footer.append($footerInner);
+                $footerInner.append($summary);
+                $footerInner.append($button);
+
+                // Do some trickery to set the max height and allow us to have a fixed footer in the modal
+                var $featherlightContent = this.$instance.find('.featherlight-content');
+                var $featherlightInner = this.$instance.find('.featherlight-inner');
+                var height = $featherlightContent.height();
+                $featherlightInner.css('max-height', height + 'px');
+                this.$instance.find('.featherlight-content').append($footer);
+
+                $featherlightInner.on('select', 'li', function (event, eventData) {
+                    lastSelectedItem = eventData;
+                });
+            }
+        };
+        $.featherlight($modalContent, featherLightConfig);
     }
 };
