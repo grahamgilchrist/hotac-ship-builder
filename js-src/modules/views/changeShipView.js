@@ -3,7 +3,7 @@
 var $ = require('jquery');
 var _ = require('lodash');
 
-var events = require('../controllers/events');
+var modalController = require('../controllers/modals');
 var ships = require('../models/ships');
 
 module.exports = {
@@ -23,15 +23,12 @@ module.exports = {
     bindChangeShipButton: function (currentShip) {
         $('#change-ship').off('click').on('click', function () {
             var $modalContent = module.exports.renderChangeShipModalContent(currentShip);
-            $.featherlight($modalContent);
+            modalController.openOptionSelectModal($modalContent, 'Choose ship');
         });
     },
     renderChangeShipModalContent: function (currentShip) {
         var $modalContent = $('<div class="ship-options-list">');
-        var $footer = $('<div class="modal-footer">');
-        var $summary = $('<div class="summary">');
         var $shipList = $('<ul>');
-        var chosenShipId;
 
         // filter out current ship from list
         var filteredShips = _.filter(ships, function (ship) {
@@ -45,31 +42,23 @@ module.exports = {
             $item.append($img);
             $item.append('<h3>' + item.shipData.name + '</h3>');
             $item.on('click', function () {
+                // deselect other list options
+                $(this).closest('ul').find('li').removeClass('selected');
+                $(this).addClass('selected');
                 var $text = $('<span>' + item.shipData.name + ': 5XP</span>');
                 var $summaryElement = $('.featherlight .summary');
                 $summaryElement.html($text);
-                chosenShipId = item.id;
+                $(this).trigger('select', {
+                    selectedUpgradeEvent: 'view.changeShip.changeShip',
+                    selectedUpgradeId: item.id
+                });
                 $(this).closest('.featherlight').find('.modal-footer button').removeAttr('disabled');
-            });
-
-            $item.on('dblclick', function () {
-                events.trigger('view.changeShip.changeShip', item.id);
-                $.featherlight.close();
             });
 
             $shipList.append($item);
         });
 
-        var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>Choose ship</button>');
-        $button.on('click', function () {
-            events.trigger('view.changeShip.changeShip', chosenShipId);
-            $.featherlight.close();
-        });
-
-        $footer.append($summary);
-        $footer.append($button);
         $modalContent.append($shipList);
-        $modalContent.append($footer);
 
         return $modalContent;
     }

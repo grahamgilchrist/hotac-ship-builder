@@ -32,12 +32,8 @@ var hotacShips = [
         shipData: getShipDataById('xwing'),
         pilotCard: getPilotByXws('redsquadronpilot'),
         upgradeSlots: [
-            [
-                'Astromech'
-            ],
-            [
-                'Torpedo'
-            ]
+            'Astromech',
+            'Torpedo'
         ],
         startingUpgrades: [
             getUpgradeByXws('integratedastromech')
@@ -50,18 +46,10 @@ var hotacShips = [
         shipData: getShipDataById('ywing'),
         pilotCard: getPilotByXws('goldsquadronpilot'),
         upgradeSlots: [
-            [
-                'Astromech'
-            ],
-            [
-                'Torpedo'
-            ],
-            [
-                'Torpedo'
-            ],
-            [
-                'Turret'
-            ]
+            'Astromech',
+            'Torpedo',
+            'Torpedo',
+            'Turret'
         ],
         startingUpgrades: [
             getUpgradeByXws('btla4ywing'),
@@ -74,12 +62,8 @@ var hotacShips = [
         shipData: getShipDataById('awing'),
         pilotCard: getPilotByXws('arvelcrynyd'),
         upgradeSlots: [
-            [
-                'Elite'
-            ],
-            [
-                'Missile'
-            ]
+            'Elite',
+            'Missile'
         ],
         startingUpgrades: [
             getUpgradeByXws('awingtestpilot')
@@ -90,18 +74,10 @@ var hotacShips = [
         shipData: getShipDataById('bwing'),
         pilotCard: getPilotByXws('bluesquadronpilot'),
         upgradeSlots: [
-            [
-                'Torpedo'
-            ],
-            [
-                'Torpedo'
-            ],
-            [
-                'Cannon'
-            ],
-            [
-                'System'
-            ]
+            'Torpedo',
+            'Torpedo',
+            'Cannon',
+            'System'
         ],
         startingUpgrades: [
             getUpgradeByXws('bwinge2')
@@ -112,12 +88,8 @@ var hotacShips = [
         shipData: getShipDataById('hwk290'),
         pilotCard: getPilotByXws('kylekatarn'),
         upgradeSlots: [
-            [
-                'Turret'
-            ],
-            [
-                'Crew'
-            ]
+            'Turret',
+            'Crew'
         ]
     },
     {
@@ -125,15 +97,9 @@ var hotacShips = [
         shipData: getShipDataById('t70xwing'),
         pilotCard: getPilotByXws('redace'),
         upgradeSlots: [
-            [
-                'Astromech'
-            ],
-            [
-                'Torpedo'
-            ],
-            [
-                'Tech'
-            ]
+            'Astromech',
+            'Torpedo',
+            'Tech'
         ]
     },
     {
@@ -141,9 +107,7 @@ var hotacShips = [
         shipData: getShipDataById('z95headhunter'),
         pilotCard: getPilotByXws('lieutenantblount'),
         upgradeSlots: [
-            [
-                'Missile'
-            ]
+            'Missile'
         ]
     },
     {
@@ -151,15 +115,9 @@ var hotacShips = [
         shipData: getShipDataById('ewing'),
         pilotCard: getPilotByXws('blackmoonsquadronpilot'),
         upgradeSlots: [
-            [
-                'Astromech'
-            ],
-            [
-                'Torpedo'
-            ],
-            [
-                'System'
-            ]
+            'Astromech',
+            'Torpedo',
+            'System'
         ]
     },
     {
@@ -167,27 +125,13 @@ var hotacShips = [
         shipData: getShipDataById('kwing'),
         pilotCard: getPilotByXws('wardensquadronpilot'),
         upgradeSlots: [
-            [
-                'Turret'
-            ],
-            [
-                'Torpedo'
-            ],
-            [
-                'Torpedo'
-            ],
-            [
-                'Missile'
-            ],
-            [
-                'Crew'
-            ],
-            [
-                'Bomb'
-            ],
-            [
-                'Bomb'
-            ]
+            'Turret',
+            'Torpedo',
+            'Torpedo',
+            'Missile',
+            'Crew',
+            'Bomb',
+            'Bomb'
         ]
     },
     {
@@ -195,12 +139,8 @@ var hotacShips = [
         shipData: getShipDataById('attackshuttle'),
         pilotCard: getPilotByXws('herasyndulla'),
         upgradeSlots: [
-            [
-                'Turret'
-            ],
-            [
-                'Crew'
-            ]
+            'Turret',
+            'Crew'
         ]
     },
     {
@@ -208,15 +148,9 @@ var hotacShips = [
         shipData: getShipDataById('arc170'),
         pilotCard: getPilotByXws('sharabey'),
         upgradeSlots: [
-            [
-                'Torpedo'
-            ],
-            [
-                'Crew'
-            ],
-            [
-                'Astromech'
-            ]
+            'Torpedo',
+            'Crew',
+            'Astromech'
         ],
         startingUpgrades: [
             getUpgradeByXws('allianceoverhaul')

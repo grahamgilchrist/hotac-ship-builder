@@ -3,12 +3,12 @@
 var $ = require('jquery');
 var _ = require('lodash');
 
-var events = require('../controllers/events');
 var pilotsWithAbilities = require('../models/pilots').pilotsWithAbilities;
 var pilots = _.uniqBy(pilotsWithAbilities, function (pilot) {
     return pilot.text;
 });
 var upgrades = require('../models/upgrades').keyed;
+var modalController = require('../controllers/modals');
 
 module.exports = {
     renderUpgradesList: function (build) {
@@ -91,100 +91,6 @@ module.exports = {
             disallowed: disallowedUpgrades
         };
     },
-    // renderUpgradesList2: function (build) {
-    //     // Get a list of the slots allowed for this build (determined by ship and PS) and the number of each upgrade per slot
-    //     var numUpgradesAllowedInBuildByType = module.exports.numberOfUsableUpgrades(build.pilotSkill, build.currentShip, build.upgrades);
-
-    //     // Get grouped allowed/disallowed upgrade slots for this build
-    //     var upgradesBySlot = module.exports.getAllowedDisallowedUpgradesBySlot(build, numUpgradesAllowedInBuildByType);
-
-    //     // Sort ships starting upgrades by slot type
-    //     var startingUpgradesByType = module.exports.groupStartingUpgradesByType(build.currentShip.startingUpgrades);
-
-    //     $('#allowed-upgrade-list').empty();
-    //     var $slotList;
-    //     var $upgradeItem;
-    //     _.forEach(upgradesBySlot.allowed, function (upgradesList, slotType) {
-    //         $upgradeItem = $('<li>');
-    //         // List of upgrades that match this slot type
-    //         $slotList = module.exports.renderSlotList(slotType, startingUpgradesByType[slotType], upgradesList, numUpgradesAllowedInBuildByType[slotType].allowed, build.pilotAbilities);
-    //         $upgradeItem.append($slotList);
-
-    //         // Add new upgrade button
-    //         var $upgradeAddButton = module.exports.renderAddUpgradeButton(slotType, build.currentShip, build.upgrades, build.pilotSkill);
-    //         $upgradeItem.append($upgradeAddButton);
-
-    //         $('#allowed-upgrade-list').append($upgradeItem);
-    //     });
-
-    //     // Show disallowed upgrades
-    //     _.forEach(upgradesBySlot.disallowed, function (upgradesList, slotType) {
-    //         $upgradeItem = $('<li class="disallowed">');
-    //         $slotList = module.exports.renderSlotList(slotType, [], upgradesList, 0, build.pilotAbilities);
-    //         $upgradeItem.append($slotList);
-    //         $('#allowed-upgrade-list').append($upgradeItem);
-    //     });
-    // },
-    // getAllowedDisallowedUpgradesBySlot: function (build, numUpgradesAllowedInBuildByType) {
-    //     var purchasedUpgradesByType = _.clone(build.upgrades, true);
-
-    //     var allowedUpgradesBySlot = {};
-    //     var disallowedUpgradesBySlot = {};
-
-    //     // Make sure we have at least an empty entry for every slot the build is allowed to take
-    //     _.forEach(numUpgradesAllowedInBuildByType, function (slotSizes, slotTypeString) {
-    //         allowedUpgradesBySlot[slotTypeString] = [];
-    //     });
-
-    //     // Populate allowed and disallowed slot lists with the purchased upgrades
-    //     _.forEach(purchasedUpgradesByType, function (upgradesList, slotType) {
-    //         // Find the keys of any slots in the build that match these upgrades
-    //         var matchingSlotKeys = module.exports.getMatchingBuildSlots(numUpgradesAllowedInBuildByType, slotType);
-    //         if (matchingSlotKeys.length > 0) {
-    //             // Allowed in build
-    //             _.forEach(matchingSlotKeys, function (matchingSlotKey) {
-    //                 allowedUpgradesBySlot[matchingSlotKey] = allowedUpgradesBySlot[matchingSlotKey].concat(upgradesList);
-    //             });
-    //         } else {
-    //             // This slot not allowed in this build (restricted by ship?)
-    //             disallowedUpgradesBySlot[slotType] = upgradesList;
-    //         }
-    //     });
-
-    //     return {
-    //         allowed: allowedUpgradesBySlot,
-    //         disallowed: disallowedUpgradesBySlot
-    //     };
-    // },
-    // Given a set of upgrades and a slot type, assign the upgrades to any slot which
-    // getMatchingBuildSlots: function (slotTypesAllowedInBuild, upgradesSlotType) {
-    //     var matchingSlotKeys = [];
-
-    //     // Look through all the allowed slots for this build and return any that match the specified slot type
-    //     // Build may have multiple of the same slots (e.g. bombs) or have some combined slots (e.g. mod/crew in b-wing)
-    //     _.forEach(slotTypesAllowedInBuild, function (slotSizes, allowedSlotTypeKey) {
-    //         // this may be a slot which allows multiple upgrade types, so convert to an array
-    //         var allowedSlotTypes = allowedSlotTypeKey.split(',');
-
-    //         // Does the specified Slot type match any of the possible allowed types for this build?
-    //         if (allowedSlotTypes.indexOf(upgradesSlotType) >= 0) {
-    //             matchingSlotKeys.push(allowedSlotTypeKey);
-    //         }
-    //     });
-    //     return matchingSlotKeys;
-    // },
-    // groupStartingUpgradesByType: function (startingUpgrades) {
-    //     // Sort ships starting upgrades by slot type
-    //     var startingUpgradesByType = {};
-    //     _.each(startingUpgrades, function (startingUpgrade) {
-    //         var slotType = startingUpgrade.slot;
-    //         if (!startingUpgradesByType[slotType]) {
-    //             startingUpgradesByType[slotType] = [];
-    //         }
-    //         startingUpgradesByType[slotType].push(startingUpgrade);
-    //     });
-    //     return startingUpgradesByType;
-    // },
     renderUpgradeItem: function (upgrade) {
         var imageUrl = '/components/xwing-data/images/' + upgrade.image;
         var $item = $('<li class="upgrade" data-featherlight="' + imageUrl + '">' + module.exports.getIconString(upgrade.slot) + '<span>' + upgrade.name + '</span><i class="material-icons eye">remove_red_eye</i><img class="preview" src="' + imageUrl + '"></li>');
@@ -196,61 +102,12 @@ module.exports = {
 
         return $item;
     },
-    // renderSlotList: function (slotType, startingUpgrades, purchasedUpgrades, numUpgradesAllowedInSlot, pilotAbilities) {
-    //     var $ul = $('<ul>');
-    //     if (_.isUndefined(startingUpgrades) || startingUpgrades.length === 0) {
-    //         if (_.isUndefined(purchasedUpgrades) || purchasedUpgrades.length === 0) {
-    //             $ul.addClass('empty');
-    //         }
-    //     }
-
-    //     // Get title of slot
-    //     var upgradeNames = slotType.split(',');
-    //     var titleStrings = _.map(upgradeNames, function (upgradeName) {
-    //         return module.exports.getIconString(upgradeName) + '<span>' + upgradeName + '</span>';
-    //     });
-    //     var titleString = titleStrings.join(' / ');
-
-    //     var $li = $('<li class="slot">' + titleString + '<div class="equip">Can equip ' + numUpgradesAllowedInSlot + '</div></li>');
-    //     $ul.append($li);
-
-    //     _.each(startingUpgrades, function (upgrade) {
-    //         var $li = $('<li class="starting-upgrade" data-featherlight="/components/xwing-data/images/' + upgrade.image + '"><span>' + upgrade.name + '</span><i class="material-icons">remove_red_eye</i><img class="preview" src="/components/xwing-data/images/' + upgrade.image + '"></li>');
-    //         $ul.append($li);
-    //     });
-
-    //     _.each(purchasedUpgrades, function (upgrade) {
-    //         var $li = $('<li class="upgrade" data-featherlight="/components/xwing-data/images/' + upgrade.image + '"><span>' + upgrade.name + '</span><i class="material-icons">remove_red_eye</i><img class="preview" src="/components/xwing-data/images/' + upgrade.image + '"></li>');
-    //         $ul.append($li);
-    //     });
-
-    //     if (slotType === 'Elite') {
-    //         _.each(pilotAbilities, function (pilot) {
-    //             var escapedText = pilot.text.replace(/"/g, '&quot;');
-    //             var $li = $('<li class="upgrade" data-featherlight="' + escapedText + '" data-featherlight-type="text">Ability: ' + pilot.name + '</li>');
-    //             $ul.append($li);
-    //         });
-    //     }
-
-    //     return $ul;
-    // },
     getIconString: function (upgradeSlotType) {
         var iconId = upgradeSlotType.replace(' ', '').replace('-', '');
         iconId = iconId.toLowerCase();
         var iconString = '<i class="xwing-miniatures-font xwing-miniatures-font-' + iconId + '"></i>';
         return iconString;
     },
-    // renderAddUpgradeButton2: function (upgradeType, currentShip, existingUpgrades, pilotSkill) {
-    //     var $div = $('<div>');
-    //     var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Add</button>');
-    //     $button.on('click', function () {
-    //         var $modalContent = module.exports.renderUpgradeModalContent(upgradeType, currentShip, existingUpgrades, pilotSkill);
-    //         $.featherlight($modalContent);
-    //     });
-    //     $div.append($button);
-
-    //     return $div;
-    // },
     renderAddUpgradeButton: function (upgradeType, currentShip, existingUpgrades, pilotSkill) {
         var $li = $('<li>');
         var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">' + module.exports.getIconString(upgradeType) + '<span>' + upgradeType + '</span></button>');
@@ -262,46 +119,11 @@ module.exports = {
 
         $button.on('click', function () {
             var $modalContent = module.exports.renderUpgradeModalContent(pilotSkill, filteredUpgrades);
-            module.exports.openOptionSelectModal($modalContent);
+            modalController.openOptionSelectModal($modalContent, 'Buy upgrade');
         });
         $li.append($button);
 
         return $li;
-    },
-    openOptionSelectModal: function ($modalContent) {
-        var featherLightConfig = {
-            variant: 'option-select',
-            afterOpen: function () {
-                $.featherlight.defaults.afterOpen();
-                var lastSelectedItem;
-
-                var $footer = $('<div class="modal-footer">');
-                var $footerInner = $('<div class="modal-footer-inner">');
-                var $summary = $('<div class="summary"><span></span></div>');
-                var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>Buy upgrade</button>');
-                $button.on('click', function () {
-                    if (lastSelectedItem.selectedUpgradeId) {
-                        events.trigger(lastSelectedItem.selectedUpgradeEvent, lastSelectedItem.selectedUpgradeId);
-                    }
-                    $.featherlight.close();
-                });
-                $footer.append($footerInner);
-                $footerInner.append($summary);
-                $footerInner.append($button);
-
-                // Do some trickery to set the max height and allow us to have a fixed footer in the modal
-                var $featherlightContent = this.$instance.find('.featherlight-content');
-                var $featherlightInner = this.$instance.find('.featherlight-inner');
-                var height = $featherlightContent.height();
-                $featherlightInner.css('max-height', height + 'px');
-                this.$instance.find('.featherlight-content').append($footer);
-
-                $featherlightInner.on('select', 'li', function (event, eventData) {
-                    lastSelectedItem = eventData;
-                });
-            }
-        };
-        $.featherlight($modalContent, featherLightConfig);
     },
     getFilteredUpgrades: function (upgradeTypeString, existingUpgrades, currentShip) {
         var upgradeTypes = upgradeTypeString.split(',');
@@ -387,11 +209,6 @@ module.exports = {
                 $(this).closest('.featherlight').find('.modal-footer button').removeAttr('disabled');
             });
 
-            $upgrade.on('dblclick', function () {
-                events.trigger('view.upgrades.buy', item.id);
-                $.featherlight.close();
-            });
-
             $upgradeList.append($upgrade);
         });
 
@@ -473,11 +290,6 @@ module.exports = {
                 $(this).closest('.featherlight').find('.modal-footer button').removeAttr('disabled');
             });
 
-            $upgrade.on('dblclick', function () {
-                events.trigger('view.pilotAbilities.buy', pilotCard.id);
-                $.featherlight.close();
-            });
-
             $upgradeList.append($upgrade);
         });
 
@@ -526,9 +338,6 @@ module.exports = {
             };
         }
 
-        // Array to track the actual slot names allowed by the ship (not just the combined keys)
-        // Used to check validity of slots added by upgrade cards
-        var allowedShipSlots = [];
         var addToSlot = function (slotKey, max, allowed) {
             if (!usableUpgrades[slotKey]) {
                 usableUpgrades[slotKey] = {
@@ -549,7 +358,7 @@ module.exports = {
             if (processedGrantForIds.indexOf(upgrade.id) === -1) {
                 // Only process this if we haven't already done so
                 var slotType = upgrade.slot;
-                if (usableUpgrades[slotType] || allowedShipSlots.indexOf(slotType) >= 0) {
+                if (usableUpgrades[slotType]) {
                     // slot is allowed on ship, so lets process any addiitonal slots the upgrade grants
                     if (upgrade.grants) {
                         _.each(upgrade.grants, function (grant) {
@@ -578,10 +387,8 @@ module.exports = {
 
         // Add slots for the ship type
         var upgradeSlots = currentShip.upgradeSlots;
-        _.each(upgradeSlots, function (upgradeArray) {
-            var upgradeKey = upgradeArray.join(',');
-            addToSlot(upgradeKey, 1, 1);
-            allowedShipSlots = allowedShipSlots.concat(upgradeArray);
+        _.each(upgradeSlots, function (slotType) {
+            addToSlot(slotType, 1, 1);
         });
 
         // Do any starting upgrade grants before the purchased ones

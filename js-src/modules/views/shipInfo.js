@@ -52,16 +52,7 @@ module.exports = {
         var upgradeSlots = module.exports.getShipUpgrades(currentShip);
 
         _.each(upgradeSlots, function (upgradeSlot) {
-            var upgradeNames = [];
-            if (_.isArray(upgradeSlot.type)) {
-                upgradeNames = upgradeSlot.type;
-            } else if (_.isString(upgradeSlot.type)) {
-                upgradeNames.push(upgradeSlot.type);
-            }
-            var titleStrings = _.map(upgradeNames, function (upgradeName) {
-                return module.exports.getIconString(upgradeName) + ' <span>' + upgradeName + '</span>';
-            });
-            var titleString = titleStrings.join(' / ');
+            var titleString = module.exports.getIconString(upgradeSlot.type) + ' <span>' + upgradeSlot.type + '</span>';
             var $li = $('<li>' + titleString + '</li>');
             if (pilotSkill < upgradeSlot.pilotSkill) {
                 $li.addClass('disabled');
@@ -89,37 +80,37 @@ module.exports = {
 
         usableUpgrades = usableUpgrades.concat([
             {
-                type: ['Title']
+                type: 'Title'
             },
             {
-                type: ['Modification']
+                type: 'Modification'
             },
             {
-                type: ['Modification'],
+                type: 'Modification',
                 pilotSkill: 4
             },
             {
-                type: ['Modification'],
+                type: 'Modification',
                 pilotSkill: 6
             },
             {
-                type: ['Modification'],
+                type: 'Modification',
                 pilotSkill: 8
             },
             {
-                type: ['Elite'],
+                type: 'Elite',
                 pilotSkill: 3
             },
             {
-                type: ['Elite'],
+                type: 'Elite',
                 pilotSkill: 5
             },
             {
-                type: ['Elite'],
+                type: 'Elite',
                 pilotSkill: 7
             },
             {
-                type: ['Elite'],
+                type: 'Elite',
                 pilotSkill: 9
             }
         ]);
