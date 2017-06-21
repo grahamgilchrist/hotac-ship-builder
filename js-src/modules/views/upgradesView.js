@@ -22,7 +22,7 @@ module.exports = {
             $('.free-upgrades').show();
             // Add starting upgrades to the list
             _.forEach(build.currentShip.startingUpgrades, function (upgrade) {
-                var $upgradeItem = module.exports.renderStartingUpgradeItem(upgrade);
+                var $upgradeItem = module.exports.renderUpgradeItem(upgrade);
                 $freeList.append($upgradeItem);
             });
         } else {
@@ -185,11 +185,6 @@ module.exports = {
     //     });
     //     return startingUpgradesByType;
     // },
-    renderStartingUpgradeItem: function (upgrade) {
-        var imageUrl = '/components/xwing-data/images/' + upgrade.image;
-        var $item = $('<li class="upgrade" data-featherlight="' + imageUrl + '">' + module.exports.getIconString(upgrade.slot) + '<span>' + upgrade.name + ' (Free)</span><i class="material-icons eye">remove_red_eye</i><img class="preview" src="' + imageUrl + '"></li>');
-        return $item;
-    },
     renderUpgradeItem: function (upgrade) {
         var imageUrl = '/components/xwing-data/images/' + upgrade.image;
         var $item = $('<li class="upgrade" data-featherlight="' + imageUrl + '">' + module.exports.getIconString(upgrade.slot) + '<span>' + upgrade.name + '</span><i class="material-icons eye">remove_red_eye</i><img class="preview" src="' + imageUrl + '"></li>');
@@ -276,22 +271,34 @@ module.exports = {
     openOptionSelectModal: function ($modalContent) {
         var featherLightConfig = {
             variant: 'option-select',
-            afterOpen: function (event) {
+            afterOpen: function () {
+                $.featherlight.defaults.afterOpen();
+                var lastSelectedItem;
+
                 var $footer = $('<div class="modal-footer">');
-                var $text = $('<span>item name: points XP</span>');
-                var $summary = $('<div class="summary">');
-                $summary.append($text);
-                $footer.append($summary);
+                var $footerInner = $('<div class="modal-footer-inner">');
+                var $summary = $('<div class="summary"><span></span></div>');
                 var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>Buy upgrade</button>');
                 $button.on('click', function () {
-                    // events.trigger('view.upgrades.buy', chosenUpgradeId);
+                    if (lastSelectedItem.selectedUpgradeId) {
+                        events.trigger(lastSelectedItem.selectedUpgradeEvent, lastSelectedItem.selectedUpgradeId);
+                    }
                     $.featherlight.close();
                 });
+                $footer.append($footerInner);
+                $footerInner.append($summary);
+                $footerInner.append($button);
 
-                // chosenUpgradeId = item.id;
-                // $(this).closest('.featherlight').find('.modal-footer button').removeAttr('disabled');
-
+                // Do some trickery to set the max height and allow us to have a fixed footer in the modal
+                var $featherlightContent = this.$instance.find('.featherlight-content');
+                var $featherlightInner = this.$instance.find('.featherlight-inner');
+                var height = $featherlightContent.height();
+                $featherlightInner.css('max-height', height + 'px');
                 this.$instance.find('.featherlight-content').append($footer);
+
+                $featherlightInner.on('select', 'li', function (event, eventData) {
+                    lastSelectedItem = eventData;
+                });
             }
         };
         $.featherlight($modalContent, featherLightConfig);
@@ -313,8 +320,6 @@ module.exports = {
         return filteredUpgradesByType;
     },
     renderUpgradeModalContent: function (pilotSkill, filteredUpgradesByType) {
-        var $modalContent = $('<div>');
-
         var tabs = [];
         _.each(filteredUpgradesByType, function (filteredUpgrades, upgradeType) {
             var $tab = module.exports.renderCardListModalContent(upgradeType, filteredUpgrades);
@@ -332,10 +337,15 @@ module.exports = {
             }
         });
 
-        if (tabs.length > 1) {
+        return module.exports.renderTabs(tabs);
+    },
+    renderTabs: function (tabsObject) {
+        var $modalContent = $('<div>');
+
+        if (tabsObject.length > 1) {
             // tab link elements
             var $tabsBar = $('<div class="mdl-tabs__tab-bar">');
-            _.each(tabs, function (tab) {
+            _.each(tabsObject, function (tab) {
                 var tabId = tab.$content.attr('id');
                 var $tabLink = $('<a href="#' + tabId + '" class="mdl-tabs__tab">' + tab.name + '</a>');
                 $tabsBar.append($tabLink);
@@ -345,24 +355,20 @@ module.exports = {
             // create DOM structure
             $modalContent.addClass('mdl-tabs mdl-js-tabs mdl-js-ripple-effect');
             $modalContent.prepend($tabsBar);
-            tabs[0].$content.addClass('is-active');
-            _.each(tabs, function (tab) {
+            tabsObject[0].$content.addClass('is-active');
+            _.each(tabsObject, function (tab) {
                 tab.$content.addClass('mdl-tabs__panel');
             });
         }
 
-        _.each(tabs, function (tab) {
+        _.each(tabsObject, function (tab) {
             $modalContent.append(tab.$content);
         });
 
         return $modalContent;
     },
     renderCardListModalContent: function (upgradeType, filteredUpgrades) {
-        var chosenUpgradeId;
-
         var $modalContent = $('<div class="card-image-list" id="modal-card-image-list-' + upgradeType + '">');
-        var $footer = $('<div class="modal-footer">');
-        var $summary = $('<div class="summary">');
         var $upgradeList = $('<ul>');
 
         _.forEach(filteredUpgrades, function (item) {
@@ -374,7 +380,10 @@ module.exports = {
                 var $text = $('<span>' + item.name + ': ' + item.hotacPoints + 'XP</span>');
                 var $summaryElement = $('.featherlight .summary');
                 $summaryElement.html($text);
-                chosenUpgradeId = item.id;
+                $(this).trigger('select', {
+                    selectedUpgradeEvent: 'view.upgrades.buy',
+                    selectedUpgradeId: item.id
+                });
                 $(this).closest('.featherlight').find('.modal-footer button').removeAttr('disabled');
             });
 
@@ -386,16 +395,7 @@ module.exports = {
             $upgradeList.append($upgrade);
         });
 
-        var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>Buy upgrade</button>');
-        $button.on('click', function () {
-            events.trigger('view.upgrades.buy', chosenUpgradeId);
-            $.featherlight.close();
-        });
-
-        $footer.append($summary);
-        $footer.append($button);
         $modalContent.append($upgradeList);
-        $modalContent.append($footer);
 
         return $modalContent;
     },
@@ -453,10 +453,7 @@ module.exports = {
             return pilot.skill <= pilotSkill;
         });
 
-        var chosenPilotId;
-
         var $modalContent = $('<div class="pilot-ability-list" id="modal-pilot-ability-list">');
-        var $summary = $('<div class="summary">');
         var $upgradeList = $('<ul>');
 
         _.forEach(availablePilots, function (pilotCard) {
@@ -468,7 +465,12 @@ module.exports = {
                 var $text = $('<span>' + pilotCard.name + ': ' + pilotCard.skill + 'XP</span>');
                 var $summaryElement = $('.featherlight .summary');
                 $summaryElement.html($text);
-                chosenPilotId = pilotCard.id;
+                $(this).trigger('select', {
+                    selectedUpgradeEvent: 'view.pilotAbilities.buy',
+                    selectedUpgradeId: pilotCard.id
+                });
+
+                $(this).closest('.featherlight').find('.modal-footer button').removeAttr('disabled');
             });
 
             $upgrade.on('dblclick', function () {
@@ -479,15 +481,7 @@ module.exports = {
             $upgradeList.append($upgrade);
         });
 
-        var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Buy ability</button>');
-        $button.on('click', function () {
-            events.trigger('view.pilotAbilities.buy', chosenPilotId);
-            $.featherlight.close();
-        });
-
         $modalContent.append($upgradeList);
-        $modalContent.append($summary);
-        $modalContent.append($button);
 
         return $modalContent;
     },
