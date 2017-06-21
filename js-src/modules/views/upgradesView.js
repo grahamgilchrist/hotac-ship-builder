@@ -252,7 +252,7 @@ module.exports = {
     //     return $div;
     // },
     renderAddUpgradeButton: function (upgradeType, currentShip, existingUpgrades, pilotSkill) {
-        var $div = $('<div>');
+        var $li = $('<li>');
         var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">' + module.exports.getIconString(upgradeType) + '<span>' + upgradeType + '</span></button>');
         var filteredUpgrades = module.exports.getFilteredUpgrades(upgradeType, existingUpgrades, currentShip);
         // Disable button if nothing to show in modal
@@ -264,9 +264,9 @@ module.exports = {
             var $modalContent = module.exports.renderUpgradeModalContent(pilotSkill, filteredUpgrades);
             module.exports.openOptionSelectModal($modalContent);
         });
-        $div.append($button);
+        $li.append($button);
 
-        return $div;
+        return $li;
     },
     openOptionSelectModal: function ($modalContent) {
         var featherLightConfig = {
