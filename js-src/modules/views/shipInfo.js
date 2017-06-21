@@ -190,7 +190,14 @@ module.exports = {
                     if (maneuver === 3) {
                         maneuverClass = 'red';
                     }
-                    var $td = $('<td class="' + maneuverClass + '">' + maneuverString + '</td>');
+                    var $td = $('<td class="maneuver ' + maneuverClass + '"><div>' + maneuverString + '</div></td>');
+                    if (maneuverString) {
+                        $td.on('click', function () {
+                            var selectedClass = 'selected';
+                            $(this).closest('table').find('td').removeClass(selectedClass);
+                            $(this).addClass(selectedClass);
+                        });
+                    }
                     $tr.append($td);
                 });
                 $table.append($tr);
