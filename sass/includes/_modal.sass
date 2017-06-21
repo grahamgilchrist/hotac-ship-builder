@@ -1,4 +1,5 @@
 .featherlight
+    $close-icon-size: 45px
     $footer-height: 40px
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
     -webkit-tap-highlight-color: transparent
@@ -6,8 +7,8 @@
     .featherlight-close-icon
         background-color: #ff4081
         color: #fff
-        width: 45px
-        height: 45px
+        width: $close-icon-size
+        height: $close-icon-size
         font-size: 20px
 
     .featherlight-inner
@@ -103,6 +104,25 @@
 
         button
             margin-left: 1em
+
+    &.confirm-buttons
+        .featherlight-content
+            padding-top: $close-icon-size
+            text-align: center
+
+            .message
+                margin: $site-padding
+                text-align: left
+                font-size: 14px
+
+                @include media($media-featherlight-wide)
+                    margin: $site-padding / 2
+
+            .buttons
+                display: inline-block
+
+                .cancel
+                    margin-right: $site-padding
 
 .share-modal
     input
