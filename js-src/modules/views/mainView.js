@@ -4,6 +4,7 @@ var $ = require('jquery');
 var _ = require('lodash');
 
 var events = require('../controllers/events');
+var modalController = require('../controllers/modals');
 
 module.exports = {
     init: function () {
@@ -16,12 +17,11 @@ module.exports = {
         module.exports.bindPrintButton();
     },
     clickResetButton: function () {
-        var result = window.confirm('Are you sure you want to start a new ship? The existing build will be lost');
-        if (!result) {
-            return;
-        }
-
-        events.trigger('view.main.reset');
+        var successCallback = function () {
+            events.trigger('view.main.reset');
+        };
+        var message = 'Are you sure you want to start a new ship? The existing build will be lost';
+        modalController.openConfirmModal(message, successCallback);
     },
     hide: function () {
         $('.main').removeClass('active');
