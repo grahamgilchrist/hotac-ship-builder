@@ -1,5 +1,7 @@
 .featherlight
-    $footer-height: 50px
+    $footer-height: 40px
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+    -webkit-tap-highlight-color: transparent
 
     .featherlight-close-icon
         background-color: #ff4081
@@ -12,17 +14,20 @@
         position: relative
 
     .card-image-list
-        padding-bottom: $footer-height
         text-align: center
 
         li
             display: inline-block
-            margin: 3px
+            padding: 3px
             cursor: pointer
 
         img
             width: 164px
             height: 264px
+            border-radius: 12px
+
+        li.selected img
+            box-shadow: #45b3f9 0px 0px 6px 3px
 
     .pilot-ability-list
         text-align: left
@@ -30,38 +35,21 @@
         li
             border-bottom: 1px solid #eee
             padding: 1em
+            margin: 0 6px
             cursor: pointer
 
             &:last-child
                 border-bottom: none
 
+            &.selected
+                box-shadow: #45b3f9 0px 0px 6px 3px
+
         h3,
         p
             margin-bottom: 0
 
-
-    .modal-footer
-        position: absolute
-        bottom: 0
-        left: 0
-        padding: 0 20px
-        text-align: center
-        width: 100%
-
-        .summary,
-        button
-            vertical-align: middle
-
-        .summary
-            display: inline-block
-            font:
-                size: 18px
-                weight: 700
-            margin-right: 1em
-
     .ship-options-list
         text-align: center
-        padding-bottom: $footer-height
 
         li
             border: 1px solid #eee
@@ -84,6 +72,37 @@
 
         h3
             margin: 0
+
+    &.option-select
+        .featherlight-content
+            padding-bottom: $footer-height + $site-padding
+
+        .featherlight-inner
+            overflow: auto
+
+    .modal-footer
+        position: absolute
+        bottom: 0
+        left: 0
+        padding: $site-padding $site-padding 0
+        text-align: center
+        width: 100%
+        height: $footer-height + $site-padding
+        background-color: #fff
+
+        .modal-footer-inner
+            display: flex
+            align-items: center
+            justify-content: center
+
+        .summary
+            font:
+                size: 18px
+                weight: 700
+            text-align: center
+
+        button
+            margin-left: 1em
 
 .share-modal
     input
