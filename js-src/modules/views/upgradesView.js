@@ -18,7 +18,7 @@ module.exports = {
 
         var $freeList = $('#free-upgrade-list');
         $freeList.empty();
-        if (build.currentShip.startingUpgrades.length > 0) {
+        if (build.currentShip.startingUpgrades && build.currentShip.startingUpgrades.length > 0) {
             $('.free-upgrades').show();
             // Add starting upgrades to the list
             _.forEach(build.currentShip.startingUpgrades, function (upgrade) {
