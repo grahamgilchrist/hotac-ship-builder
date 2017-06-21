@@ -99,7 +99,13 @@ module.exports = {
         });
     },
     showShipTab: function () {
-        var $tabLink = $('.mdl-tabs__tab[href="#current-ship-tab"]');
-        $tabLink.get(0).click();
+        var $tabLink = $('.mdl-tabs__tab[href="#stats-upgrade-tab-button"]');
+        if ($tabLink.css('display') === 'block') {
+            // parent wrapper tab shoudl be display, so show that
+            $tabLink.get(0).click();
+        } else {
+            $tabLink = $('.mdl-tabs__tab[href="#ship-stats-tab"]');
+            $tabLink.get(0).click();
+        }
     }
 };
