@@ -3,7 +3,6 @@
 var $ = require('jquery');
 var _ = require('lodash');
 
-var events = require('../controllers/events');
 var modalController = require('../controllers/modals');
 var ships = require('../models/ships');
 
