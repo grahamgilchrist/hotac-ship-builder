@@ -526,9 +526,6 @@ module.exports = {
             };
         }
 
-        // Array to track the actual slot names allowed by the ship (not just the combined keys)
-        // Used to check validity of slots added by upgrade cards
-        var allowedShipSlots = [];
         var addToSlot = function (slotKey, max, allowed) {
             if (!usableUpgrades[slotKey]) {
                 usableUpgrades[slotKey] = {
@@ -549,7 +546,7 @@ module.exports = {
             if (processedGrantForIds.indexOf(upgrade.id) === -1) {
                 // Only process this if we haven't already done so
                 var slotType = upgrade.slot;
-                if (usableUpgrades[slotType] || allowedShipSlots.indexOf(slotType) >= 0) {
+                if (usableUpgrades[slotType]) {
                     // slot is allowed on ship, so lets process any addiitonal slots the upgrade grants
                     if (upgrade.grants) {
                         _.each(upgrade.grants, function (grant) {
@@ -578,10 +575,8 @@ module.exports = {
 
         // Add slots for the ship type
         var upgradeSlots = currentShip.upgradeSlots;
-        _.each(upgradeSlots, function (upgradeArray) {
-            var upgradeKey = upgradeArray.join(',');
-            addToSlot(upgradeKey, 1, 1);
-            allowedShipSlots = allowedShipSlots.concat(upgradeArray);
+        _.each(upgradeSlots, function (slotType) {
+            addToSlot(slotType, 1, 1);
         });
 
         // Do any starting upgrade grants before the purchased ones
