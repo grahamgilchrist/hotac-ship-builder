@@ -350,6 +350,23 @@ module.exports = {
             }
         };
 
+        // Add slots for the ship type
+        var upgradeSlots = currentShip.upgradeSlots;
+        _.each(upgradeSlots, function (slotType) {
+            addToSlot(slotType, 1, 1);
+        });
+
+        // Add slots for the upgrade cards
+        var slotsFromUpgrades = module.exports.getSlotsFromUpgrades(usableUpgrades, currentShip.startingUpgrades, upgradesByType);
+        _.each(slotsFromUpgrades, function (slotType) {
+            addToSlot(slotType, 1, 1);
+        });
+
+        return usableUpgrades;
+    },
+    getSlotsFromUpgrades: function (usableUpgrades, startingUpgrades, upgradesByType) {
+        var additionalSlotTypes = [];
+
         // array to track which upgrades we've processed grants for, and prevent infinite loop
         var processedGrantForIds = [];
         var processGrants = function (upgrade) {
@@ -358,13 +375,13 @@ module.exports = {
             if (processedGrantForIds.indexOf(upgrade.id) === -1) {
                 // Only process this if we haven't already done so
                 var slotType = upgrade.slot;
-                if (usableUpgrades[slotType]) {
-                    // slot is allowed on ship, so lets process any addiitonal slots the upgrade grants
+                if (usableUpgrades[slotType] || additionalSlotTypes.indexOf(slotType) >= 0) {
+                    // slot is allowed on ship, so lets process any additional slots the upgrade grants
                     if (upgrade.grants) {
                         _.each(upgrade.grants, function (grant) {
                             if (grant.type === 'slot') {
                                 foundGrant = true;
-                                addToSlot(grant.name, 1, 1);
+                                additionalSlotTypes.push(grant.name);
                             }
                         });
                     }
@@ -385,19 +402,106 @@ module.exports = {
             } while (found);
         };
 
-        // Add slots for the ship type
-        var upgradeSlots = currentShip.upgradeSlots;
-        _.each(upgradeSlots, function (slotType) {
-            addToSlot(slotType, 1, 1);
-        });
-
         // Do any starting upgrade grants before the purchased ones
-        processGrantsList(currentShip.startingUpgrades);
+        processGrantsList(startingUpgrades);
 
         // Add slots given by upgrades/starting upgrades
         _.each(upgradesByType, function (upgradesList) {
             processGrantsList(upgradesList);
         });
+
+        return additionalSlotTypes;
+    },
+    renderShipUpgrades: function (currentShip, pilotSkill, upgradesByType) {
+        // Process and create list for ship chassis slots
+        var $shipSlots = $('#ship-slots-default');
+        $shipSlots.empty();
+
+        var $ul = $('<ul>');
+
+        var upgradeSlots = module.exports.getShipUpgrades(currentShip);
+
+        _.each(upgradeSlots, function (upgradeSlot) {
+            var titleString = module.exports.getIconString(upgradeSlot.type) + ' <span>' + upgradeSlot.type + '</span>';
+            var $li = $('<li>' + titleString + '</li>');
+            if (pilotSkill < upgradeSlot.pilotSkill) {
+                $li.addClass('disabled');
+                $li.append('<span> (PS ' + upgradeSlot.pilotSkill + ')</span>');
+            }
+            $ul.append($li);
+        });
+
+        $shipSlots.append($ul);
+
+        // Process and create list for slots added by upgrades
+        var usableUpgrades = {};
+        _.each(upgradeSlots, function (upgradeSlot) {
+            usableUpgrades[upgradeSlot.type] = {};
+        });
+        var slotsFromUpgrades = module.exports.getSlotsFromUpgrades(usableUpgrades, currentShip.startingUpgrades, upgradesByType);
+
+        if (slotsFromUpgrades.length > 0) {
+            var $shipSlotsFromUpgrades = $('#ship-slots-upgrades');
+            $shipSlotsFromUpgrades.empty();
+            $ul = $('<ul>');
+
+            _.each(slotsFromUpgrades, function (upgradeSlot) {
+                var titleString = module.exports.getIconString(upgradeSlot) + ' <span>' + upgradeSlot + '</span>';
+                var $li = $('<li>' + titleString + '</li>');
+                $ul.append($li);
+            });
+
+            $shipSlotsFromUpgrades.append($ul);
+            $('#ship-slots-upgrades-wrapper').show();
+        } else {
+            $('#ship-slots-upgrades-wrapper').hide();
+        }
+    },
+    getShipUpgrades: function (currentShip) {
+        // elite slots are dependent on pilot level
+
+        var usableUpgrades = _.map(currentShip.upgradeSlots, function (upgradeSlot) {
+            return {
+                type: upgradeSlot
+            };
+        });
+
+        usableUpgrades = usableUpgrades.concat([
+            {
+                type: 'Title'
+            },
+            {
+                type: 'Modification'
+            },
+            {
+                type: 'Modification',
+                pilotSkill: 4
+            },
+            {
+                type: 'Modification',
+                pilotSkill: 6
+            },
+            {
+                type: 'Modification',
+                pilotSkill: 8
+            },
+            {
+                type: 'Elite',
+                pilotSkill: 3
+            },
+            {
+                type: 'Elite',
+                pilotSkill: 5
+            },
+            {
+                type: 'Elite',
+                pilotSkill: 7
+            },
+            {
+                type: 'Elite',
+                pilotSkill: 9
+            }
+        ]);
 
         return usableUpgrades;
     }
