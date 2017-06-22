@@ -34,6 +34,24 @@ module.exports = {
         };
         $.featherlight($modalContent, featherlightConfig);
     },
+    openMessageModal: function (message) {
+        var $modalContent = $('<div>');
+        var $message = $('<div class="message">' + message + '</div>');
+        var $buttonsWrapper = $('<div class="buttons">');
+        var $okButton = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent ok">Ok</button>');
+        $buttonsWrapper.append($okButton);
+        $modalContent.append($message);
+        $modalContent.append($buttonsWrapper);
+
+        $okButton.on('click', function () {
+            $.featherlight.close();
+        });
+
+        var featherlightConfig = {
+            variant: 'message'
+        };
+        $.featherlight($modalContent, featherlightConfig);
+    },
     openOptionSelectModal: function ($modalContent, buttonText) {
         var featherLightConfig = {
             variant: 'option-select',
@@ -64,6 +82,12 @@ module.exports = {
 
                 $featherlightInner.on('select', 'li', function (event, eventData) {
                     lastSelectedItem = eventData;
+                    $button.removeAttr('disabled');
+                    // deselect other list options
+                    $(this).closest('ul').find('li').removeClass('selected');
+                    $(this).addClass('selected');
+                    var $text = '<span>' + eventData.text + '</span>';
+                    $summary.html($text);
                 });
             }
         };

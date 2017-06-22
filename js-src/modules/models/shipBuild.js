@@ -67,7 +67,7 @@ ShipBuild.prototype.getPilotById = function (pilotId) {
 
 ShipBuild.prototype.addXp = function (xp) {
     this.currentXp += xp;
-    events.trigger('model.build.xp.update', this.currentXp);
+    events.trigger('model.build.xp.update', this);
 };
 
 ShipBuild.prototype.setStartingShip = function (shipId) {

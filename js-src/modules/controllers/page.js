@@ -24,7 +24,6 @@ module.exports = {
         module.exports.bindModelEvents();
 
         mainView.init();
-        pilotSkillView.init();
         newView.init();
 
         var urlHash = hashController.get();
@@ -100,10 +99,10 @@ module.exports = {
             shipInfoView.renderShipDial(build.currentShip);
             upgradesView.renderShipUpgrades(build.currentShip, build.pilotSkill, build.upgrades);
             upgradesView.renderUpgradesList(build);
-            pilotSkillView.renderWithPs(build.pilotSkill);
+            pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
             upgradesView.renderUpgradesList(build);
             xpHistoryView.renderTable(build);
-            changeShipView.renderShipView(build.pilotSkill, build.currentShip);
+            changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
             messageView.clear();
             var newHash = hashController.generateExportString(build);
             hashController.set(newHash);
@@ -118,21 +117,23 @@ module.exports = {
                 shipInfoView.renderShipDial(build.currentShip);
                 upgradesView.renderShipUpgrades(build.currentShip, build.pilotSkill, build.upgrades);
                 upgradesView.renderUpgradesList(build);
-                changeShipView.renderShipView(build.pilotSkill, build.currentShip);
+                changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
             }
         });
 
         events.on('model.build.pilotSkill.update', function (event, build) {
             if (build.ready) {
-                pilotSkillView.renderWithPs(build.pilotSkill);
+                pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
                 upgradesView.renderUpgradesList(build);
-                changeShipView.renderShipView(build.pilotSkill, build.currentShip);
+                changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
                 upgradesView.renderShipUpgrades(build.currentShip, build.pilotSkill, build.upgrades);
             }
         });
 
-        events.on('model.build.xp.update', function (event, xp) {
-            mainView.renderXp(xp);
+        events.on('model.build.xp.update', function (event, build) {
+            mainView.renderXp(build.currentXp);
+            changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
+            pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
         });
 
         events.on('model.build.upgrades.update', function (event, build) {

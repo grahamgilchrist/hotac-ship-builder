@@ -7,9 +7,9 @@ var modalController = require('../controllers/modals');
 var ships = require('../models/ships');
 
 module.exports = {
-    renderShipView: function (pilotSkill, currentShip) {
+    renderShipView: function (pilotSkill, currentShip, currentXp) {
         module.exports.toggleButtonDisplay(pilotSkill);
-        module.exports.bindChangeShipButton(currentShip);
+        module.exports.bindChangeShipButton(currentShip, currentXp);
     },
     toggleButtonDisplay: function (pilotSkill) {
         if (pilotSkill < 4) {
@@ -20,13 +20,13 @@ module.exports = {
             $('#change-ship-tooltip').hide();
         }
     },
-    bindChangeShipButton: function (currentShip) {
+    bindChangeShipButton: function (currentShip, currentXp) {
         $('#change-ship').off('click').on('click', function () {
-            var $modalContent = module.exports.renderChangeShipModalContent(currentShip);
+            var $modalContent = module.exports.renderChangeShipModalContent(currentShip, currentXp);
             modalController.openOptionSelectModal($modalContent, 'Choose ship');
         });
     },
-    renderChangeShipModalContent: function (currentShip) {
+    renderChangeShipModalContent: function (currentShip, currentXp) {
         var $modalContent = $('<div class="ship-options-list">');
         var $shipList = $('<ul>');
 
@@ -41,19 +41,21 @@ module.exports = {
             var $img = $('<div class="img-wrapper"><img src="/components/xwing-data/images/' + item.pilotCard.image + '" alt="' + item.shipData.name + '"><div>');
             $item.append($img);
             $item.append('<h3>' + item.shipData.name + '</h3>');
-            $item.on('click', function () {
-                // deselect other list options
-                $(this).closest('ul').find('li').removeClass('selected');
-                $(this).addClass('selected');
-                var $text = $('<span>' + item.shipData.name + ': 5XP</span>');
-                var $summaryElement = $('.featherlight .summary');
-                $summaryElement.html($text);
-                $(this).trigger('select', {
-                    selectedUpgradeEvent: 'view.changeShip.changeShip',
-                    selectedUpgradeId: item.id
+
+            var changeShipCost = 5;
+            if (currentXp >= changeShipCost) {
+                // We have enough XP to buy this item
+                $item.on('click', function () {
+                    $(this).trigger('select', {
+                        selectedUpgradeEvent: 'view.changeShip.changeShip',
+                        selectedUpgradeId: item.id,
+                        text: item.shipData.name + ': 5XP'
+                    });
                 });
-                $(this).closest('.featherlight').find('.modal-footer button').removeAttr('disabled');
-            });
+            } else {
+                // not enough XP
+                $item.addClass('cannot-afford');
+            }
 
             $shipList.append($item);
         });
