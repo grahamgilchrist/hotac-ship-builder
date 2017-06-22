@@ -125,7 +125,27 @@
                 .cancel
                     margin-right: $site-padding
 
-.share-modal
-    input
-        width: 100%
-        padding: 5px 10px
+    &.add-xp
+        .featherlight-content
+            padding-right: $close-icon-size + ($site-padding / 2)
+            text-align: center
+
+            @include media($media-featherlight-wide)
+                padding-right: $close-icon-size + $site-padding
+
+            input,
+            button
+                vertical-align: middle
+
+            input
+                width: 3em
+                font-size: 24px
+                padding: 5px 10px
+
+            button
+                margin-left: $site-padding
+
+    .share-modal
+        input
+            width: 100%
+            padding: 5px 10px
