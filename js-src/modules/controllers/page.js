@@ -24,7 +24,6 @@ module.exports = {
         module.exports.bindModelEvents();
 
         mainView.init();
-        pilotSkillView.init();
         newView.init();
 
         var urlHash = hashController.get();
@@ -100,10 +99,10 @@ module.exports = {
             shipInfoView.renderShipDial(build.currentShip);
             upgradesView.renderShipUpgrades(build.currentShip, build.pilotSkill, build.upgrades);
             upgradesView.renderUpgradesList(build);
-            pilotSkillView.renderWithPs(build.pilotSkill);
+            pilotSkillView.renderWithPs(build);
             upgradesView.renderUpgradesList(build);
             xpHistoryView.renderTable(build);
-            changeShipView.renderShipView(build.pilotSkill, build.currentShip);
+            changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
             messageView.clear();
             var newHash = hashController.generateExportString(build);
             hashController.set(newHash);
@@ -118,15 +117,15 @@ module.exports = {
                 shipInfoView.renderShipDial(build.currentShip);
                 upgradesView.renderShipUpgrades(build.currentShip, build.pilotSkill, build.upgrades);
                 upgradesView.renderUpgradesList(build);
-                changeShipView.renderShipView(build.pilotSkill, build.currentShip);
+                changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
             }
         });
 
         events.on('model.build.pilotSkill.update', function (event, build) {
             if (build.ready) {
-                pilotSkillView.renderWithPs(build.pilotSkill);
+                pilotSkillView.renderWithPs(build);
                 upgradesView.renderUpgradesList(build);
-                changeShipView.renderShipView(build.pilotSkill, build.currentShip);
+                changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
                 upgradesView.renderShipUpgrades(build.currentShip, build.pilotSkill, build.upgrades);
             }
         });
@@ -151,6 +150,7 @@ module.exports = {
 
         events.on('model.build.xpHistory.add', function (event, data) {
             if (data.build.ready) {
+                changeShipView.renderShipView(data.build.pilotSkill, data.build.currentShip, data.build.currentXp);
                 var xpItemIndex = data.build.xpHistory.length - 1;
                 xpHistoryView.renderTableRow(data.xpItem, data.build.currentXp, xpItemIndex);
                 messageView.renderMessage(data.xpItem, xpItemIndex);

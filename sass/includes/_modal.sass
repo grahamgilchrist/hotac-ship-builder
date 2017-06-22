@@ -30,12 +30,16 @@
         li.selected img
             box-shadow: #45b3f9 0px 0px 6px 3px
 
+        li.cannot-afford
+            opacity: 0.6
+            cursor: not-allowed
+
     .pilot-ability-list
         text-align: left
 
         li
             border-bottom: 1px solid #eee
-            padding: 1em
+            padding: $site-padding / 2
             margin: 0 6px
             cursor: pointer
 
@@ -44,6 +48,19 @@
 
             &.selected
                 box-shadow: #45b3f9 0px 0px 6px 3px
+
+            &.cannot-afford
+                opacity: 0.6
+                background-color: #eee
+                cursor: not-allowed
+
+            h3
+                font-size: 20px
+                line-height: 30px
+
+            .cost,
+            p
+                font-size: 12px
 
         h3,
         p
@@ -62,6 +79,10 @@
 
             &.selected
                 box-shadow: #45b3f9 0px 0px 6px 3px
+
+            &.cannot-afford
+                opacity: 0.4
+                cursor: not-allowed
 
         .img-wrapper
             height: 122px
@@ -106,18 +127,19 @@
         button
             margin-left: 1em
 
-    &.confirm-buttons
+    &.confirm-buttons,
+    &.message
         .featherlight-content
             padding-top: $close-icon-size
             text-align: center
 
             .message
-                margin: $site-padding
+                margin: $site-padding / 2
                 text-align: left
                 font-size: 14px
 
                 @include media($media-featherlight-wide)
-                    margin: $site-padding / 2
+                    margin: $site-padding
 
             .buttons
                 display: inline-block
@@ -144,6 +166,13 @@
 
             button
                 margin-left: $site-padding
+
+    &.preview-pilot-ability
+        .featherlight-content
+            padding-top: $close-icon-size + ($site-padding / 2)
+
+            @include media($media-featherlight-wide)
+                padding-top: $close-icon-size + $site-padding
 
     .share-modal
         input
