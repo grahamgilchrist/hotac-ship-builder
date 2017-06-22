@@ -58,7 +58,8 @@ module.exports = {
 
             var $modalContent = $('<div>');
             var $header = $('<h2>Add XP earned from a mission</h2>');
-            var $input = $('<div><input type="text" id="mission-xp-amount"></div>');
+            var $form = $('<form>');
+            var $input = $('<input type="text" id="mission-xp-amount">');
             var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Add</button>');
 
             $button.on('click', function () {
@@ -72,11 +73,16 @@ module.exports = {
                 $.featherlight.close();
             });
 
+            $form.append($input);
+            $form.append($button);
             $modalContent.append($header);
-            $modalContent.append($input);
-            $modalContent.append($button);
+            $modalContent.append($form);
 
-            $.featherlight($modalContent);
+            var featherlightConfig = {
+                variant: 'add-xp'
+            };
+
+            $.featherlight($modalContent, featherlightConfig);
             $('#mission-xp-amount').focus();
         });
     },
