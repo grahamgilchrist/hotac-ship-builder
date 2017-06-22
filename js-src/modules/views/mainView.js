@@ -66,7 +66,7 @@ module.exports = {
                 var stringXpAmount = $('#mission-xp-amount').val();
                 var xpAmount = parseInt(stringXpAmount, 10);
 
-                if (!_.isNaN(xpAmount)) {
+                if (!_.isNaN(xpAmount) && xpAmount > 0) {
                     events.trigger('view.main.addMissionXp', xpAmount);
                 }
 
