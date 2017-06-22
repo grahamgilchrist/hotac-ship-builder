@@ -269,26 +269,27 @@ module.exports = {
         return filteredUpgrades;
     },
     renderPilotAbilityModalContent: function (build) {
-        // Only show pilots of current PS or lower
-        var availablePilots = _.filter(pilots, function (pilot) {
-            return pilot.skill <= build.pilotSkill;
-        });
-
         var $modalContent = $('<div class="pilot-ability-list" id="modal-pilot-ability-list">');
         var $upgradeList = $('<ul>');
 
-        _.forEach(availablePilots, function (pilotCard) {
+        _.forEach(pilots, function (pilotCard) {
             var upgradeCost = pilotCard.skill;
             var $upgrade = $('<li><h3>' + pilotCard.name + ' <span class="cost">(' + upgradeCost + 'XP)</span></h3><p>' + pilotCard.text + '</p></li>');
             if (build.currentXp >= upgradeCost) {
-                // We have enough XP to buy this item
-                $upgrade.on('click', function () {
-                    $(this).trigger('select', {
-                        selectedUpgradeEvent: 'view.pilotAbilities.buy',
-                        selectedUpgradeId: pilotCard.id,
-                        text: pilotCard.name + ': ' + pilotCard.skill + 'XP'
+
+                if (build.pilotSkill >= pilotCard.skill) {
+                    // We have enough XP to buy this item
+                    $upgrade.on('click', function () {
+                        $(this).trigger('select', {
+                            selectedUpgradeEvent: 'view.pilotAbilities.buy',
+                            selectedUpgradeId: pilotCard.id,
+                            text: pilotCard.name + ': ' + pilotCard.skill + 'XP'
+                        });
                     });
-                });
+                } else {
+                    // not high enough PS level yet
+                    $upgrade.addClass('disabled');
+                }
             } else {
                 // not enough XP
                 $upgrade.addClass('cannot-afford');
