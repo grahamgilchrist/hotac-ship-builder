@@ -6,18 +6,18 @@ var events = require('../controllers/events');
 var modalController = require('../controllers/modals');
 
 module.exports = {
-    renderWithPs: function (build) {
-        $('#pilot-skill').text(build.pilotSkill);
-        $('#pilot-skill-plus-one').text(build.pilotSkill + 1);
-        var costOfNextUpgrade = module.exports.getNextUpgradeCost(build.pilotSkill);
+    renderWithPs: function (pilotSkill, currentXp) {
+        $('#pilot-skill').text(pilotSkill);
+        $('#pilot-skill-plus-one').text(pilotSkill + 1);
+        var costOfNextUpgrade = module.exports.getNextUpgradeCost(pilotSkill);
         $('#pilot-skill-next-xp-cost').text(costOfNextUpgrade);
 
         $('#increase-ps').off('click').on('click', function () {
-            var costOfNextUpgrade = module.exports.getNextUpgradeCost(build.pilotSkill);
-            if (build.currentXp >= costOfNextUpgrade) {
+            var costOfNextUpgrade = module.exports.getNextUpgradeCost(pilotSkill);
+            if (currentXp >= costOfNextUpgrade) {
                 events.trigger('view.main.increasePs');
             } else {
-                var message = 'You do not have enough XP to upgrade. Upgrading to PS ' + (build.pilotSkill + 1) + ' will cost ' + costOfNextUpgrade + ' XP.';
+                var message = 'You do not have enough XP to upgrade. Upgrading to PS ' + (pilotSkill + 1) + ' will cost ' + costOfNextUpgrade + ' XP.';
                 modalController.openMessageModal(message);
             }
         });

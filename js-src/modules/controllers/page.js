@@ -99,7 +99,7 @@ module.exports = {
             shipInfoView.renderShipDial(build.currentShip);
             upgradesView.renderShipUpgrades(build.currentShip, build.pilotSkill, build.upgrades);
             upgradesView.renderUpgradesList(build);
-            pilotSkillView.renderWithPs(build);
+            pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
             upgradesView.renderUpgradesList(build);
             xpHistoryView.renderTable(build);
             changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
@@ -123,15 +123,17 @@ module.exports = {
 
         events.on('model.build.pilotSkill.update', function (event, build) {
             if (build.ready) {
-                pilotSkillView.renderWithPs(build);
+                pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
                 upgradesView.renderUpgradesList(build);
                 changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
                 upgradesView.renderShipUpgrades(build.currentShip, build.pilotSkill, build.upgrades);
             }
         });
 
-        events.on('model.build.xp.update', function (event, xp) {
-            mainView.renderXp(xp);
+        events.on('model.build.xp.update', function (event, build) {
+            mainView.renderXp(build.currentXp);
+            changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
+            pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
         });
 
         events.on('model.build.upgrades.update', function (event, build) {
@@ -150,7 +152,6 @@ module.exports = {
 
         events.on('model.build.xpHistory.add', function (event, data) {
             if (data.build.ready) {
-                changeShipView.renderShipView(data.build.pilotSkill, data.build.currentShip, data.build.currentXp);
                 var xpItemIndex = data.build.xpHistory.length - 1;
                 xpHistoryView.renderTableRow(data.xpItem, data.build.currentXp, xpItemIndex);
                 messageView.renderMessage(data.xpItem, xpItemIndex);
