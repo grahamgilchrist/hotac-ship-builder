@@ -89,6 +89,12 @@ module.exports = {
                     var $text = '<span>' + eventData.text + '</span>';
                     $summary.html($text);
                 });
+
+                $featherlightInner.on('click', '.mdl-tabs__tab', function () {
+                    $button.attr('disabled', 'disabled');
+                    lastSelectedItem = null;
+                    $summary.html('');
+                });
             }
         };
         $.featherlight($modalContent, featherLightConfig);
