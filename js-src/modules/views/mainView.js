@@ -4,24 +4,11 @@ var $ = require('jquery');
 var _ = require('lodash');
 
 var events = require('../controllers/events');
-var modalController = require('../controllers/modals');
 
 module.exports = {
     init: function () {
-        // bind new button
-        $('#new-build').on('click', module.exports.clickResetButton);
-
         module.exports.bindTabsButton();
         module.exports.bindXpButton();
-        module.exports.bindExportButton();
-        module.exports.bindPrintButton();
-    },
-    clickResetButton: function () {
-        var successCallback = function () {
-            events.trigger('view.main.reset');
-        };
-        var message = 'Are you sure you want to start a new ship? The existing build will be lost';
-        modalController.openConfirmModal(message, successCallback);
     },
     hide: function () {
         $('.main').removeClass('active');
@@ -84,24 +71,6 @@ module.exports = {
 
             $.featherlight($modalContent, featherlightConfig);
             $('#mission-xp-amount').focus();
-        });
-    },
-    bindPrintButton: function () {
-        $('#print').on('click', function () {
-            window.print();
-        });
-    },
-    bindExportButton: function () {
-        $('#export').on('click', function () {
-            var $modalContent = $('<div class="share-modal">');
-            $modalContent.append('<h3>Share ship build</h3>');
-            $modalContent.append('<p>Copy and share the link below via email, social media etc. to allow others to view this build</p>');
-            var $input = $('<input type="text" value="' + window.location.href + '">');
-            $input.on('focus', function () {
-                this.select();
-            });
-            $modalContent.append($input);
-            $.featherlight($modalContent);
         });
     },
     showShipTab: function () {

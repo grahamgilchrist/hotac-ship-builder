@@ -2,30 +2,6 @@ body
     @include media('print')
         zoom: 75%
 
-.header
-    overflow: hidden
-    background-color: $color-primary
-    color: #fff
-
-    h1
-        font-size: 24px
-        margin: $vertical-spacing 0
-
-        @include media($media-header-med-size)
-            font-size: 30px
-            margin: $vertical-spacing-med 0
-
-        .subtitle
-            display: block
-            font-size: 14px
-            line-height: 1
-
-            @include media($media-header-med-size)
-                font-size: 18px
-
-            @include media('print')
-                display: inline-block
-
 .structure
     max-width: 1200px
     margin: 0 auto
@@ -34,15 +10,9 @@ body
     @include media('print')
         padding: 0
 
-.current-build .structure
-    padding: 0
-
-    @include media($media-main-padding)
-        padding: 0 $site-padding
-
 .container
     @include media($media-main-padding)
-        padding: 0 0 $site-padding
+        padding: $site-padding 0
 
     @include media('print')
         padding: 0
@@ -54,8 +24,12 @@ body
     &.active
         display: block
 
-.new
-    background-color: #f6f6f6
+.main
+    .structure
+        padding: 0
+
+        @include media($media-main-padding)
+            padding: 0 $site-padding
 
 #message
     overflow: hidden

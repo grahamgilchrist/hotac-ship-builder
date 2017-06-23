@@ -1,0 +1,74 @@
+.header
+    overflow: hidden
+    background-color: $color-primary
+    color: #fff
+
+    .structure
+        padding: 0 ($site-padding / 2)
+
+        @include media($media-header-button-inline)
+            padding: 0 $site-padding
+
+    .drawer-button,
+    h1
+        display: inline-block
+        vertical-align: middle
+
+    .drawer-button
+        height: 48px
+        width: 48px
+        border: 0
+        text-align: center
+        cursor: pointer
+        font-size: 26px
+        line-height: 56px
+        display: none
+
+        &.active
+            display: inline-block
+
+            @include media($media-header-button-inline)
+                display: none
+
+    h1
+        font-size: 24px
+        margin: $vertical-spacing 0
+
+        @include media($media-header-med-size)
+            font-size: 30px
+            margin: $vertical-spacing-med 0
+
+        .subtitle
+            display: block
+            font-size: 14px
+            line-height: 1
+
+            @include media($media-header-med-size)
+                font-size: 18px
+
+            @include media('print')
+                display: inline-block
+
+    .header-buttons
+        margin: 25px 0
+        float: right
+        display: none
+
+        &.active
+            @include media($media-header-button-inline)
+                display: block
+
+        @include media('print')
+            display: none
+
+    #new-build
+        margin-right: $site-padding
+
+    #print,
+    #export
+        padding: 0 8px
+        min-width: 48px
+        float: right
+
+    #export
+        margin-right: $site-padding / 2

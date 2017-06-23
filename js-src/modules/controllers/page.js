@@ -4,6 +4,7 @@ var XpItem = require('../models/xpItem');
 var itemTypes = require('../models/itemTypes');
 var Build = require('../models/shipBuild');
 var events = require('./events');
+var headerView = require('../views/header');
 var newView = require('../views/newView');
 var mainView = require('../views/mainView');
 var shipInfoView = require('../views/shipInfo');
@@ -23,6 +24,7 @@ module.exports = {
         module.exports.bindOtherViewEvents();
         module.exports.bindModelEvents();
 
+        headerView.init();
         mainView.init();
         newView.init();
 
@@ -32,9 +34,11 @@ module.exports = {
             var buildData = hashController.parseExportStringToHistory(urlHash);
             currentBuild = new Build(buildData.xpHistory, buildData.callsign, buildData.playerName);
             mainView.show();
+            headerView.showButtons();
         } else {
             // No build provided via URL, so show new build form
             newView.show();
+            headerView.hideButtons();
         }
     },
     bindNewViewEvents: function () {
@@ -47,6 +51,7 @@ module.exports = {
             currentBuild = new Build(startingXpHistory, data.callsign, data.playerName);
             newView.hide();
             mainView.show();
+            headerView.showButtons();
         });
     },
     bindMainViewEvents: function () {
@@ -54,6 +59,7 @@ module.exports = {
             mainView.hide();
             newView.reset();
             newView.show();
+            headerView.hideButtons();
             hashController.clear();
         });
 

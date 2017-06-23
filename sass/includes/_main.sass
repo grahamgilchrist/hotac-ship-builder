@@ -1,24 +1,11 @@
-.reset
-    margin: $site-padding 0
-    overflow: hidden
-
-    @include media('print')
-        display: none
-
-#print,
-#export
-    float: right
-    padding: 0 8px
-    min-width: 48px
-
-#export
-    margin-right: $site-padding / 2
-
 .build-header
     overflow: hidden
     background-color: $color-primary
     color: #fff
-    padding: $site-padding
+    padding: 15px $site-padding $site-padding
+
+    @include media($media-main-padding)
+        padding: $site-padding
 
     @include media('print')
         padding: 0
