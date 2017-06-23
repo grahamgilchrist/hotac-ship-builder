@@ -147,7 +147,7 @@ module.exports = {
             var $tab = module.exports.renderCardListModalContent(upgradeType, build, filteredUpgrades);
             var tabName = upgradeType;
             if (upgradeType === 'Elite') {
-                tabName = 'Elite card';
+                tabName = 'Elite cards';
             }
             tabs.push({
                 name: tabName,
@@ -157,7 +157,7 @@ module.exports = {
             if (upgradeType === 'Elite') {
                 var $abilityTab = module.exports.renderPilotAbilityModalContent(build);
                 tabs.push({
-                    name: 'Elite pilot abilities',
+                    name: 'Pilot abilities',
                     $content: $abilityTab
                 });
             }
