@@ -98,7 +98,6 @@ module.exports = {
             shipInfoView.renderShipImage(build.currentShip);
             shipInfoView.renderShipDial(build.currentShip);
             upgradesView.renderShipUpgrades(build.currentShip, build.pilotSkill, build.upgrades);
-            upgradesView.renderUpgradesList(build);
             pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
             upgradesView.renderUpgradesList(build);
             xpHistoryView.renderTable(build);
