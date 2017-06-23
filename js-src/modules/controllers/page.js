@@ -4,6 +4,7 @@ var XpItem = require('../models/xpItem');
 var itemTypes = require('../models/itemTypes');
 var Build = require('../models/shipBuild');
 var events = require('./events');
+var headerView = require('../views/header');
 var newView = require('../views/newView');
 var mainView = require('../views/mainView');
 var shipInfoView = require('../views/shipInfo');
@@ -23,6 +24,7 @@ module.exports = {
         module.exports.bindOtherViewEvents();
         module.exports.bindModelEvents();
 
+        headerView.init();
         mainView.init();
         newView.init();
 

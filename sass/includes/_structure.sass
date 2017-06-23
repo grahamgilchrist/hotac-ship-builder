@@ -2,10 +2,41 @@ body
     @include media('print')
         zoom: 75%
 
+.structure
+    max-width: 1200px
+    margin: 0 auto
+    padding: 0 $site-padding
+
+    @include media('print')
+        padding: 0
+
 .header
     overflow: hidden
     background-color: $color-primary
     color: #fff
+
+    .structure
+        padding: 0 ($site-padding / 2)
+
+        @include media($media-header-button-inline)
+            padding: 0 $site-padding
+
+    .drawer-button,
+    h1
+        display: inline-block
+        vertical-align: middle
+
+    .drawer-button
+        height: 48px
+        width: 48px
+        border: 0
+        text-align: center
+        cursor: pointer
+        font-size: 26px
+        line-height: 56px
+
+        @include media($media-header-button-inline)
+            display: none
 
     h1
         font-size: 24px
@@ -31,9 +62,11 @@ body
 
     .header-buttons
         margin: 25px 0
+        float: right
+        display: none
 
         @include media($media-header-button-inline)
-            float: right
+            display: block
 
         @include media('print')
             display: none
@@ -50,20 +83,6 @@ body
     #export
         margin-right: $site-padding / 2
 
-.structure
-    max-width: 1200px
-    margin: 0 auto
-    padding: 0 $site-padding
-
-    @include media('print')
-        padding: 0
-
-.current-build .structure
-    padding: 0
-
-    @include media($media-main-padding)
-        padding: 0 $site-padding
-
 .container
     @include media($media-main-padding)
         padding: $site-padding 0
@@ -78,8 +97,12 @@ body
     &.active
         display: block
 
-.new
-    background-color: #f6f6f6
+.main
+    .structure
+        padding: 0
+
+        @include media($media-main-padding)
+            padding: 0 $site-padding
 
 #message
     overflow: hidden
@@ -99,3 +122,49 @@ body
 
         button
             margin-left: $site-padding
+
+.drawer-wrapper
+    position: absolute
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
+    display: none
+    z-index: 2
+
+    .drawer-background
+        position: absolute
+        top: 0
+        bottom: 0
+        left: 0
+        right: 0
+        background-color: rgba(0, 0, 0, .5)
+        width: 100%
+        height: 100%
+
+    .drawer
+        width: 240px
+        height: 100%
+        background-color: #fafafa
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12)
+        border-right: 1px solid #e0e0e0
+        transform: translateX(-250px)
+        transition-duration: .2s
+        transition-timing-function: cubic-bezier(.4, 0, .2, 1)
+        transition-property: transform
+        color: #424242
+        padding: $site-padding
+
+        .mdl-layout-title,
+        button
+            margin-bottom: $site-padding
+
+        button
+            display: block
+            width: 100%
+
+    &.active
+        display: block
+
+        .drawer
+            transform: translateX(0)

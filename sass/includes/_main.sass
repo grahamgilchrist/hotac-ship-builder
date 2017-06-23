@@ -2,7 +2,10 @@
     overflow: hidden
     background-color: $color-primary
     color: #fff
-    padding: $site-padding
+    padding: 15px $site-padding $site-padding
+
+    @include media($media-main-padding)
+        padding: $site-padding
 
     @include media('print')
         padding: 0
