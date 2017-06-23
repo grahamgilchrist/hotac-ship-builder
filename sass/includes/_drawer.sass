@@ -1,0 +1,56 @@
+.drawer-wrapper
+    position: absolute
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
+    // display: none
+    z-index: 2
+    pointer-events: none
+
+    .drawer-background
+        position: absolute
+        top: 0
+        bottom: 0
+        left: 0
+        right: 0
+        background-color: rgba(0, 0, 0, .5)
+        width: 100%
+        height: 100%
+        visibility: hidden
+        transition-property: opacity
+        opacity: 0
+        transition-duration: .2s
+        transition-timing-function: cubic-bezier(.4, 0, .2, 1)
+
+    .drawer
+        width: 240px
+        height: 100%
+        background-color: #fafafa
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12)
+        border-right: 1px solid #e0e0e0
+        transform: translateX(-250px)
+        transition-duration: .2s
+        transition-timing-function: cubic-bezier(.4, 0, .2, 1)
+        transition-property: transform
+        color: #424242
+        padding: $site-padding
+
+        .mdl-layout-title,
+        button
+            margin-bottom: $site-padding
+
+        button
+            display: block
+            width: 100%
+
+    &.active
+        // display: block
+        pointer-events: auto
+
+        .drawer
+            transform: translateX(0)
+
+        .drawer-background
+            opacity: 1
+            visibility: visible

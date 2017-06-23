@@ -34,9 +34,11 @@ module.exports = {
             var buildData = hashController.parseExportStringToHistory(urlHash);
             currentBuild = new Build(buildData.xpHistory, buildData.callsign, buildData.playerName);
             mainView.show();
+            headerView.showButtons();
         } else {
             // No build provided via URL, so show new build form
             newView.show();
+            headerView.hideButtons();
         }
     },
     bindNewViewEvents: function () {
@@ -49,6 +51,7 @@ module.exports = {
             currentBuild = new Build(startingXpHistory, data.callsign, data.playerName);
             newView.hide();
             mainView.show();
+            headerView.showButtons();
         });
     },
     bindMainViewEvents: function () {
@@ -56,6 +59,7 @@ module.exports = {
             mainView.hide();
             newView.reset();
             newView.show();
+            headerView.hideButtons();
             hashController.clear();
         });
 
