@@ -11,6 +11,9 @@ body
         font-size: 24px
         margin: $vertical-spacing 0
 
+        @include media($media-header-button-inline)
+            float: left
+
         @include media($media-header-med-size)
             font-size: 30px
             margin: $vertical-spacing-med 0
@@ -25,6 +28,27 @@ body
 
             @include media('print')
                 display: inline-block
+
+    .header-buttons
+        margin: 25px 0
+
+        @include media($media-header-button-inline)
+            float: right
+
+        @include media('print')
+            display: none
+
+    #new-build
+        margin-right: $site-padding
+
+    #print,
+    #export
+        padding: 0 8px
+        min-width: 48px
+        float: right
+
+    #export
+        margin-right: $site-padding / 2
 
 .structure
     max-width: 1200px
@@ -42,7 +66,7 @@ body
 
 .container
     @include media($media-main-padding)
-        padding: 0 0 $site-padding
+        padding: $site-padding 0
 
     @include media('print')
         padding: 0
