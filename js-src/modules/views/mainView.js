@@ -38,6 +38,8 @@ module.exports = {
                 $(this).closest('.mdl-tabs').find('.stats-upgrade-tab-button').addClass(activeClass);
                 $('#stats-upgrades-combined-tab').addClass(activeClass);
             }
+
+            $(this).closest('.mdl-tabs').find('[href="' + targetIdSelector + '"]').addClass(activeClass);
         });
     },
     bindXpButton: function () {
