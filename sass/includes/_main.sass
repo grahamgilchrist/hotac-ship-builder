@@ -105,16 +105,15 @@
         @include media('print')
             display: none
 
-        .stats-upgrade-tab-button
+        &.wide
             display: none
 
         @include media($media-main-two-col)
-            .stats-upgrade-tab-button
-                display: block
-
-            .stats-tab-button,
-            .upgrades-tab-button
+            &.narrow
                 display: none
+
+            &.wide
+                display: block
 
     .mdl-tabs
         overflow: hidden
