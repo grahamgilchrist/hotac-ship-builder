@@ -85,7 +85,7 @@ module.exports = {
             var maneuverSpeed = dialManeuvers.length - 1 - speedIndex;
             var $tr = $('<tr>');
             // first row show speed
-            var $td = $('<td>' + maneuverSpeed + '</td>');
+            var $td = $('<td class="speed">' + maneuverSpeed + '</td>');
             $tr.append($td);
 
             // don't show speed zero if there are no maneuvers
@@ -116,9 +116,9 @@ module.exports = {
                     if (maneuver === 3) {
                         maneuverClass = 'red';
                     }
-                    var $td = $('<td class="' + maneuverClass + '">' + maneuverString + '</td>');
+                    var $td = $('<td>' + maneuverString + '</td>');
                     if (maneuverString) {
-                        $td.addClass('maneuver');
+                        $td.addClass('maneuver ' + maneuverClass);
                         $td.on('click', function () {
                             var selectedClass = 'selected';
                             $(this).closest('table').find('td').removeClass(selectedClass);
