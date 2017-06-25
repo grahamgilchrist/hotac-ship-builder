@@ -12,6 +12,7 @@ var pilotSkillView = require('../views/pilotSkillView');
 var changeShipView = require('../views/changeShipView');
 var upgradesView = require('../views/upgradesView');
 var xpHistoryView = require('../views/xpHistory');
+var killsView = require('../views/killsView');
 var messageView = require('../views/message');
 var hashController = require('./urlHash');
 

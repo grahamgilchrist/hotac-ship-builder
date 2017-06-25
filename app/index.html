@@ -116,11 +116,12 @@
                                 <a href="#ship-stats-tab" class="mdl-tabs__tab is-active stats-tab-button">Stats</a>
                                 <a href="#upgrades-tab" class="mdl-tabs__tab upgrades-tab-button">Upgrades</a>
                                 <a href="#xp-history-tab" class="mdl-tabs__tab history-tab-button">History</a>
-                                <!-- <a href="#kills-tab" class="mdl-tabs__tab kills-tab-button">Kills</a> -->
+                                <a href="#kills-tab" class="mdl-tabs__tab kills-tab-button">Kills</a>
                             </div>
                             <div class="mdl-tabs__tab-bar wide">
                                 <a href="#stats-upgrades-combined-tab" class="mdl-tabs__tab is-active stats-upgrade-tab-button">Stats and upgrades</a>
                                 <a href="#xp-history-tab" class="mdl-tabs__tab history-tab-button">History</a>
+                                <a href="#kills-tab" class="mdl-tabs__tab kills-tab-button">Kills</a>
                             </div>
 
                             <div class="mdl-tabs__panel is-active" id="stats-upgrades-combined-tab">
@@ -221,6 +222,76 @@
                                 </table>
 
                             </div>
+
+                            <div class="mdl-tabs__panel" id="kills-tab">
+                                <h3>Destroyed ships tracker</h3>
+                                <table>
+                                    <thead>
+                                        <th>Ship type</th>
+                                        <th>Number</th>
+                                    </thead>
+                                    <tbody id="kill-history">
+                                    </tbody>
+                                </table>
+                                <div>
+                                    <div class="kill-ship-type">
+                                        <label>
+                                            <i class="xwing-miniatures-ship xwing-miniatures-ship-tiefighter"></i>
+                                        </label>
+                                        <input type="text">
+                                    </div>
+                                    <div class="kill-ship-type">
+                                        <label>
+                                            <i class="xwing-miniatures-ship xwing-miniatures-ship-tieinterceptor"></i>
+                                        </label>
+                                        <input type="text">
+                                    </div>
+                                    <div class="kill-ship-type">
+                                        <label>
+                                            <i class="xwing-miniatures-ship xwing-miniatures-ship-tieadvanced"></i>
+                                        </label>
+                                        <input type="text">
+                                    </div>
+                                    <div class="kill-ship-type">
+                                        <label>
+                                            <i class="xwing-miniatures-ship xwing-miniatures-ship-tiebomber"></i>
+                                        </label>
+                                        <input type="text">
+                                    </div>
+                                    <div class="kill-ship-type">
+                                        <label>
+                                            <i class="xwing-miniatures-ship xwing-miniatures-ship-tiedefender"></i>
+                                        </label>
+                                        <input type="text">
+                                    </div>
+                                    <div class="kill-ship-type">
+                                        <label>
+                                            <i class="xwing-miniatures-ship xwing-miniatures-ship-tiephantom"></i>
+                                        </label>
+                                        <input type="text">
+                                    </div>
+                                    <div class="kill-ship-type">
+                                        <label>
+                                            <i class="xwing-miniatures-ship xwing-miniatures-ship-lambdaclassshuttle"></i>
+                                        </label>
+                                        <input type="text">
+                                    </div>
+                                    <div class="kill-ship-type">
+                                        <label>
+                                            <i class="xwing-miniatures-ship xwing-miniatures-ship-vt49decimator"></i>
+                                        </label>
+                                        <input type="text">
+                                    </div>
+                                    <div class="kill-ship-type">
+                                        <label>
+                                            Tower
+                                        </label>
+                                        <input type="text">
+                                    </div>
+                                    <button id="new-kill" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Add new kill</button>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
