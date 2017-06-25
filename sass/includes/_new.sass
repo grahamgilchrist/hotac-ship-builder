@@ -3,16 +3,11 @@
     padding: $site-padding
     text-align: center
 
+    @include media($media-main-padding)
+        margin: 0 $site-padding
+
     h2
         line-height: 1
-
-    .form-group
-        margin: $site-padding 0
-        // remove inline block spacing
-        font-size: 0
-
-        &:last-child
-            margin-bottom: 0
 
     label,
     input,
@@ -30,6 +25,10 @@
         font-weight: 700
         font-size: 14px
         margin-bottom: 0.5em
+        white-space: nowrap
+
+        .required
+            color: $colour-error
 
         @include media($media-new-inline-labels)
             width: 24%
@@ -50,3 +49,37 @@
             min-width: 100px
             max-width: 400px
             width: 76%
+
+    .form-group
+        margin: $site-padding 0
+        // remove inline block spacing
+        font-size: 0
+
+        &:last-child
+            margin-bottom: 0
+
+        &.error
+            input
+                border: 1px solid $colour-error 
+
+        .error
+            display: block
+            width: 100%
+
+            .message
+                color: $colour-error
+                font-size: 12px
+
+            @include media($media-new-inline-labels)
+                .message,
+                .error-pad
+                    display: inline-block
+
+                .message
+                    text-align: left
+                    width: 76%
+                    max-width: 400px
+
+                .error-pad
+                    width: 24%
+                    padding-right: 1em
