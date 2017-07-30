@@ -99,42 +99,77 @@
         padding: 0
         text-align: left
 
+    .mdl-tabs
+        overflow: hidden
+
     .mdl-tabs__tab-bar
         margin-bottom: $site-padding 
 
         @include media('print')
             display: none
 
-        &.wide
+    // undo default underline from material lite styles
+    .mdl-tabs.is-upgraded .mdl-tabs__tab
+        &.is-active:after
             display: none
 
-        @include media($media-main-two-col)
-            &.narrow
+    .mdl-tabs__tab
+        &.narrow-only
+            @include media($media-main-two-col)
                 display: none
 
-            &.wide
+        &.wide-only
+            display: none
+
+            @include media($media-main-two-col)
                 display: block
 
-    .mdl-tabs
-        overflow: hidden
+        &:after
+            // :after copied from existing mdl lite styles
+            height: 2px
+            width: 100%
+            display: none
+            content: " "
+            bottom: 0
+            left: 0
+            position: absolute
+            background: #3f51b5
+            -webkit-animation: border-expand .2s cubic-bezier(.4, 0, .4, 1).01s alternate forwards
+            animation: border-expand .2s cubic-bezier(.4, 0, .4, 1).01s alternate forwards
+            transition: all 1s cubic-bezier(.4, 0, 1, 1)
+
+        &.narrow-is-active:after
+            display: block
+
+        @include media($media-main-two-col)
+            &.narrow-is-active:after
+                display: none
+
+            &.wide-is-active:after
+                display: block
 
     .tabs-panel
         overflow: hidden
         text-align: center
         display: none
 
-        &.is-active
+        &.narrow-is-active
             display: block
+
+        @include media($media-main-two-col)
+            &.narrow-is-active
+                display: none
+
+            &.wide-is-active
+                display: block
 
     @include media($media-main-two-col)
         #ship-stats-tab
-            display: block
             float: left
             width: 300px
             margin-right: $site-padding
 
         #upgrades-tab
-            display: block
             margin-top: 0
             margin-left: 320px
 

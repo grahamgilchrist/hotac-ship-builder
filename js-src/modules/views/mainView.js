@@ -26,25 +26,50 @@ module.exports = {
         $('#xp-current').text(xpAmount);
     },
     bindTabsButton: function () {
-        var activeClass = 'is-active';
+        var narrowActiveClass = 'narrow-is-active';
+        var wideActiveClass = 'wide-is-active';
         $('.build-content .mdl-tabs__tab').on('click', function () {
-            var targetTabIdSelector = $(this).attr('href');
-            var $targetTabPanel = $(targetTabIdSelector);
-            var extraTabSelector = $(this).attr('extra-tab');
-            $('.tabs-panel').removeClass(activeClass);
-            $targetTabPanel.addClass(activeClass);
+            // Hide all panels to start
+            $('.tabs-panel').removeClass(narrowActiveClass + ' ' + wideActiveClass);
 
-            if (extraTabSelector) {
-                var $extraTabPanel = $(extraTabSelector);
-                $extraTabPanel.addClass(activeClass);
+            // activate tab panels for narrow mode
+            var narrowTabSelector = $(this).attr('href');
+            var $narrowTabPanel = $(narrowTabSelector);
+            $narrowTabPanel.addClass(narrowActiveClass);
+
+            // activate tab panels for wide mode
+            var wideTabString = $(this).attr('wide-tabs');
+            if (wideTabString) {
+                var wideTabSelectors = wideTabString.split(',');
+                wideTabSelectors.forEach(function (wideTabSelector) {
+                    var $wideTabPanel = $(wideTabSelector);
+                    $wideTabPanel.addClass(wideActiveClass);
+                });
             }
 
-            // Also highlight the approipriate items in the other hidden menu.
-            // Narrow or wide menu which isn't being show
+            // Also highlight the appropriate items in the menu
             var $tabsWrapper = $(this).closest('.mdl-tabs');
-            var $tabButtons = $tabsWrapper.find('.mdl-tabs__tab[href="' + targetTabIdSelector + '"], .mdl-tabs__tab[extra-tab="' + targetTabIdSelector + '"]');
-            $tabButtons.addClass(activeClass);
+            $tabsWrapper.find('.mdl-tabs__tab').removeClass(narrowActiveClass + ' is-active ' + wideActiveClass);
+
+            // if ($(this).hasClass('wide-only')) {
+
+            // }
+            // Highlight any items which match the a single tab
+            var $narrowTabButtons = $tabsWrapper.find('.mdl-tabs__tab[href="' + narrowTabSelector + '"]');
+            $narrowTabButtons.addClass(narrowActiveClass);
+            // activate any other wide-only tabs which match the same wide tabs selection as this item
+            var $wideTabButtons = $tabsWrapper.find('.mdl-tabs__tab[wide-tabs="' + wideTabString + '"]');
+            $wideTabButtons.addClass(wideActiveClass);
         });
+    },
+    showShipTab: function () {
+        var $narrowTabBar = $('.mdl-tabs__tab-bar.narrow');
+        var $wideTabBar = $('.mdl-tabs__tab-bar.wide');
+        if ($narrowTabBar.css('display') !== 'none') {
+            $narrowTabBar.find('.mdl-tabs__tab').get(0).click();
+        } else {
+            $wideTabBar.find('.mdl-tabs__tab').get(0).click();
+        }
     },
     bindXpButton: function () {
         $('#add-mission-xp').on('click', function () {
@@ -78,15 +103,5 @@ module.exports = {
             $.featherlight($modalContent, featherlightConfig);
             $('#mission-xp-amount').focus();
         });
-    },
-    showShipTab: function () {
-        var $tabLink = $('.mdl-tabs__tab[href="#stats-upgrade-tab-button"]');
-        if ($tabLink.css('display') === 'block') {
-            // parent wrapper tab is active so show that
-            $tabLink.get(0).click();
-        } else {
-            $tabLink = $('.mdl-tabs__tab[href="#ship-stats-tab"]');
-            $tabLink.get(0).click();
-        }
     }
 };
