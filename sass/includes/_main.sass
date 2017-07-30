@@ -118,9 +118,13 @@
     .mdl-tabs
         overflow: hidden
 
-    .mdl-tabs__panel
+    .tabs-panel
         overflow: hidden
         text-align: center
+        display: none
+
+        &.is-active
+            display: block
 
     @include media($media-main-two-col)
         #ship-stats-tab

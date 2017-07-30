@@ -28,18 +28,22 @@ module.exports = {
     bindTabsButton: function () {
         var activeClass = 'is-active';
         $('.build-content .mdl-tabs__tab').on('click', function () {
-            var targetIdSelector = $(this).attr('href');
-            if (targetIdSelector === '#stats-upgrades-combined-tab') {
-                $(this).closest('.mdl-tabs').find('.stats-tab-button').addClass(activeClass);
-                $('#ship-stats-tab').addClass(activeClass);
+            var targetTabIdSelector = $(this).attr('href');
+            var $targetTabPanel = $(targetTabIdSelector);
+            var extraTabSelector = $(this).attr('extra-tab');
+            $('.tabs-panel').removeClass(activeClass);
+            $targetTabPanel.addClass(activeClass);
+
+            if (extraTabSelector) {
+                var $extraTabPanel = $(extraTabSelector);
+                $extraTabPanel.addClass(activeClass);
             }
 
-            if (targetIdSelector === '#ship-stats-tab' || targetIdSelector === '#upgrades-tab') {
-                $(this).closest('.mdl-tabs').find('.stats-upgrade-tab-button').addClass(activeClass);
-                $('#stats-upgrades-combined-tab').addClass(activeClass);
-            }
-
-            $(this).closest('.mdl-tabs').find('[href="' + targetIdSelector + '"]').addClass(activeClass);
+            // Also highlight the approipriate items in the other hidden menu.
+            // Narrow or wide menu which isn't being show
+            var $tabsWrapper = $(this).closest('.mdl-tabs');
+            var $tabButtons = $tabsWrapper.find('.mdl-tabs__tab[href="' + targetTabIdSelector + '"], .mdl-tabs__tab[extra-tab="' + targetTabIdSelector + '"]');
+            $tabButtons.addClass(activeClass);
         });
     },
     bindXpButton: function () {
