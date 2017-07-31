@@ -98,39 +98,3 @@
     @include media('print')
         padding: 0
         text-align: left
-
-    .mdl-tabs__tab-bar
-        margin-bottom: $site-padding 
-
-        @include media('print')
-            display: none
-
-        &.wide
-            display: none
-
-        @include media($media-main-two-col)
-            &.narrow
-                display: none
-
-            &.wide
-                display: block
-
-    .mdl-tabs
-        overflow: hidden
-
-    .mdl-tabs__panel
-        overflow: hidden
-        text-align: center
-
-    @include media($media-main-two-col)
-        #ship-stats-tab
-            display: block
-            float: left
-            width: 300px
-            margin-right: $site-padding
-
-        #upgrades-tab
-            display: block
-            margin-top: 0
-            margin-left: 320px
-
