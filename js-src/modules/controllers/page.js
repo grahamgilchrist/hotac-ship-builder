@@ -90,9 +90,9 @@ module.exports = {
             for (var i = 0; i <= xpItemIndex; i++) {
                 newHistory.push(currentBuild.xpHistory[i]);
             }
-            // trash the existing build and star a new one with the new history
+            // trash the existing build and start a new one with the new history
             currentBuild = new Build(newHistory, currentBuild.callsign, currentBuild.playerName);
-            mainView.showShipTab();
+            mainView.resetTabs();
         });
     },
     bindModelEvents: function () {
