@@ -2,18 +2,10 @@
 
 var $ = require('jquery');
 var _ = require('lodash');
-var events = require('../controllers/events');
-var modalController = require('../controllers/modals');
+// var events = require('../controllers/events');
+// var modalController = require('../controllers/modals');
 
 module.exports = {
-    init: function () {
-        module.exports.bindAddKilllButton();
-    },
-    bindAddKilllButton: function () {
-        $('#new-kill').on('click', function () {
-            
-        });
-    },
     renderTable: function (build) {
         $('#kill-history').empty();
 
