@@ -1,22 +1,27 @@
 'use strict';
 
 var $ = require('jquery');
-var _ = require('lodash');
-// var events = require('../controllers/events');
-// var modalController = require('../controllers/modals');
+var enemies = require('../models/enemies');
 
 module.exports = {
-    renderTable: function (build) {
-        $('#kill-history').empty();
+    renderTable: function () {
+        var $table = $('#kill-history');
+        $table.empty();
 
-        _.each(build.kills, function (kill) {
-            module.exports.renderTableRow(kill);
+        enemies.forEach(function (enemy) {
+            var $row = module.exports.renderTableRow(enemy);
+            $table.append($row);
         });
     },
-    renderTableRow: function (kill) {
-        var $historyItem = $('<tr>');
-        $historyItem.append('<td class="label">' + kill.ship.name + '</td>');
-        $historyItem.append('<td>' + kill.number + '</td>');
-        $('#kill-history').append($historyItem);
+    renderTableRow: function (enemy) {
+        var $row = $('<tr>');
+        var label = enemy.ship.name;
+        if (enemy.ship.xws) {
+            // we've got some ship data
+            label = '<i class="xwing-miniatures-ship xwing-miniatures-ship-' + enemy.xws + '"></i>';
+        }
+        $row.append('<td class="label">' + label + '</td>');
+        $row.append('<td>XXX</td>');
+        return $row;
     }
 };

@@ -109,6 +109,7 @@ module.exports = {
             upgradesView.renderUpgradesList(build);
             xpHistoryView.renderTable(build);
             changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
+            enemiesView.renderTable();
             messageView.clear();
             var newHash = hashController.generateExportString(build);
             hashController.set(newHash);
