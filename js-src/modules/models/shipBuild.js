@@ -38,7 +38,7 @@ ShipBuild.prototype.processHistory = function (xpHistory) {
         } else if (xpItem.upgradeType === itemTypes.BUY_UPGRADE) {
             thisBuild.buyUpgrade(xpItem.data.upgradeId);
         } else if (xpItem.upgradeType === itemTypes.MISSION) {
-            thisBuild.addMissionXp(xpItem.data.missionXp);
+            thisBuild.addMissionResults(xpItem.data.missionXp);
         } else if (xpItem.upgradeType === itemTypes.BUY_PILOT_ABILITY) {
             thisBuild.buyPilotAbility(xpItem.data.pilotId);
         }
@@ -108,9 +108,9 @@ ShipBuild.prototype.changeShip = function (shipId) {
     events.trigger('model.build.currentShip.update', this);
 };
 
-ShipBuild.prototype.addMissionXp = function (xpAmount) {
+ShipBuild.prototype.addMissionResults = function (missionResults) {
     this.addToHistory(itemTypes.MISSION, {
-        missionXp: xpAmount
+        missionXp: missionResults.xp
     });
 };
 

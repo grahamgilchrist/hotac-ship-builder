@@ -68,8 +68,8 @@ module.exports = {
             currentBuild.increasePilotSkill();
         });
 
-        events.on('view.main.addMissionXp', function (event, xpAmount) {
-            currentBuild.addMissionXp(xpAmount);
+        events.on('view.main.addMissionResults', function (event, missionResults) {
+            currentBuild.addMissionResults(missionResults);
         });
     },
     bindOtherViewEvents: function () {

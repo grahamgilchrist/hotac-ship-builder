@@ -16,27 +16,18 @@ module.exports = {
 
         var $missionSelect = $('<select id="mission-select">');
         missions.forEach(function (mission) {
-            var $option = $('<option vlaue="' + mission.id + '">' + mission.label + '</option>');
+            var $option = $('<option value="' + mission.id + '">' + mission.label + '</option>');
             $missionSelect.append($option);
         });
 
-        var $table = $('<table>');
+        var $table = $('<table id="mission-enemies">');
         _.each(enemies, function (enemy) {
             var $row = module.exports.renderTableRow(enemy);
             $table.append($row);
         });
 
         var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Add</button>');
-        $button.on('click', function () {
-            var stringXpAmount = $('#mission-xp-amount').val();
-            var xpAmount = parseInt(stringXpAmount, 10);
-
-            if (!_.isNaN(xpAmount) && xpAmount > 0) {
-                events.trigger('view.main.addMissionXp', xpAmount);
-            }
-
-            $.featherlight.close();
-        });
+        $button.on('click', module.exports.submitResults);
 
         $form.append($missionSelect);
         $form.append($input);
@@ -57,7 +48,33 @@ module.exports = {
             label = '<i class="xwing-miniatures-ship xwing-miniatures-ship-' + enemy.xws + '"></i>';
         }
         $row.append('<td class="label">' + label + '</td>');
-        $row.append('<td><input type="text" id="number-' + enemy.xws + '"></td>');
+        $row.append('<td><input type="text" xws="' + enemy.xws + '"></td>');
         return $row;
+    },
+    submitResults: function () {
+        var stringXpAmount = $('#mission-xp-amount').val();
+        var xpAmount = parseInt(stringXpAmount, 10);
+
+        var missionId = $('#mission-select').val();
+
+        var enemies = {};
+        $('#mission-enemies tr input').each(function () {
+            var stringNumberDefeated = $(this).val();
+            var numberDefeated = parseInt(stringNumberDefeated, 10);
+            if (numberDefeated) {
+                var xws = $(this).attr('xws');
+                enemies[xws] = numberDefeated;
+            }
+        });
+
+        if (!_.isNaN(xpAmount) && xpAmount > 0) {
+            events.trigger('view.main.addMissionResults', {
+                xp: xpAmount,
+                missionId: missionId,
+                enemies: enemies
+            });
+        }
+
+        $.featherlight.close();
     }
 };
