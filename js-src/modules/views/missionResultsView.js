@@ -30,7 +30,7 @@ module.exports = {
         var xpAmount = parseInt(stringXpAmount, 10);
 
         if (!_.isNaN(xpAmount) && xpAmount > 0) {
-            events.trigger('view.main.addMissionResults', xpAmount);
+            events.trigger('view.main.addMissionXp', xpAmount);
         }
 
         $.featherlight.close();
