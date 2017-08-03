@@ -171,8 +171,10 @@ module.exports = {
             }
         });
 
-        events.on('model.build.enemies.change', function (event, enemiesData) {
-            enemiesView.renderTable(enemiesData);
+        events.on('model.build.enemies.change', function (event, build) {
+            enemiesView.renderTable(build.enemyDefeats);
+            var newHash = hashController.generateExportString(build);
+            hashController.set(newHash);
         });
     }
 };

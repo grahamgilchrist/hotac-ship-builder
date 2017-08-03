@@ -20,6 +20,8 @@ module.exports = {
             return xpItem.exportString();
         });
         // add callsign and playername as first items
+        var enemiesList = build.enemyExportString();
+        itemExports.unshift(enemiesList);
         itemExports.unshift(window.encodeURIComponent(build.callsign));
         itemExports.unshift(window.encodeURIComponent(build.playerName));
         var exportString = '/v1/' + itemExports.join(',');
@@ -33,6 +35,7 @@ module.exports = {
 
         var playerName = window.decodeURIComponent(splitItems.shift());
         var callsign = window.decodeURIComponent(splitItems.shift());
+        var enemies = build.parseEnemyString(splitItems.shift());
 
         var xpHistory = _.map(splitItems, function (stringItem) {
             var xpItem = new XpItem();
@@ -43,7 +46,8 @@ module.exports = {
         return {
             xpHistory: xpHistory,
             callsign: callsign,
-            playerName: playerName
+            playerName: playerName,
+            enemies: enemies
         };
     }
 };
