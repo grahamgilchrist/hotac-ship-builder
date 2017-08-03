@@ -95,6 +95,10 @@ module.exports = {
             currentBuild = new Build(newHistory, currentBuild.callsign, currentBuild.playerName);
             mainView.resetTabs();
         });
+
+        events.on('view.enemies.adjustNumber', function (event, data) {
+            currentBuild.adjustEnemies(data.xws, data.amount);
+        });
     },
     bindModelEvents: function () {
         events.on('model.build.ready', function (event, build) {
@@ -165,6 +169,10 @@ module.exports = {
                 var newHash = hashController.generateExportString(data.build);
                 hashController.set(newHash);
             }
+        });
+
+        events.on('model.build.enemies.change', function (event, enemiesData) {
+            enemiesView.renderTable(enemiesData);
         });
     }
 };

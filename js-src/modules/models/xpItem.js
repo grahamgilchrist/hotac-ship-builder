@@ -131,4 +131,3 @@ XpItem.prototype.getPilotById = function (pilotId) {
 };
 
 module.exports = XpItem;
-

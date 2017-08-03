@@ -17,6 +17,7 @@ var ShipBuild = function (xpHistory, callsign, playerName) {
     this.currentXp = 0;
     this.pilotAbilities = [];
     this.upgrades = {};
+    this.enemyDefeats = {};
 
     this.setPilotSkill(2);
     this.processHistory(xpHistory);
@@ -133,6 +134,12 @@ ShipBuild.prototype.buyPilotAbility = function (pilotId) {
     var pilot = this.getPilotById(pilotId);
     this.pilotAbilities.push(pilot);
     events.trigger('model.build.pilotAbilities.update', this);
+};
+
+ShipBuild.prototype.adjustEnemies = function (enemyShipXws, amount) {
+    var existingNumber = this.enemyDefeats[enemyShipXws] || 0;
+    this.enemyDefeats[enemyShipXws] = existingNumber + amount;
+    events.trigger('model.build.enemies.change', this.enemyDefeats);
 };
 
 module.exports = ShipBuild;
