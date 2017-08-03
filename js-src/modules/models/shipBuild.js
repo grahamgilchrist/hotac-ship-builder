@@ -138,7 +138,11 @@ ShipBuild.prototype.buyPilotAbility = function (pilotId) {
 
 ShipBuild.prototype.adjustEnemies = function (enemyShipXws, amount) {
     var existingNumber = this.enemyDefeats[enemyShipXws] || 0;
-    this.enemyDefeats[enemyShipXws] = existingNumber + amount;
+    var newCount = existingNumber + amount;
+    if (newCount < 0) {
+        newCount = 0;
+    }
+    this.enemyDefeats[enemyShipXws] = newCount;
     events.trigger('model.build.enemies.change', this.enemyDefeats);
 };
 
