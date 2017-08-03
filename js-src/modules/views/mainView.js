@@ -33,6 +33,7 @@ module.exports = {
             };
 
             $.featherlight($modalContent, featherlightConfig);
+            missionView.focus();
         });
     },
     resetTabs: function () {

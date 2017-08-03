@@ -109,9 +109,9 @@ ShipBuild.prototype.changeShip = function (shipId) {
     events.trigger('model.build.currentShip.update', this);
 };
 
-ShipBuild.prototype.addMissionResults = function (missionResults) {
+ShipBuild.prototype.addMissionResults = function (xpAmount) {
     this.addToHistory(itemTypes.MISSION, {
-        missionXp: missionResults.xp
+        missionXp: xpAmount
     });
 };
 
