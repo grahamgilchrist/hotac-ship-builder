@@ -69,7 +69,6 @@ module.exports = {
         });
 
         events.on('view.main.addMissionResults', function (event, xpAmount) {
-            console.log('xpAmount', xpAmount);
             currentBuild.addMissionResults(xpAmount);
         });
     },
