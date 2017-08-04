@@ -7,10 +7,10 @@ var XpItem = require('./xpItem');
 var itemTypes = require('./itemTypes');
 var upgrades = require('../models/upgrades').all;
 var pilots = require('../models/pilots').allRebels;
-var enemies = require('../models/enemies');
+var EnemyDefeatsModel = require('../models/enemyDefeats');
 
 // Ship build
-var ShipBuild = function (xpHistory, callsign, playerName) {
+var ShipBuild = function (xpHistory, callsign, playerName, enemyDefeats) {
     this.callsign = callsign;
     this.playerName = playerName;
     this.currentShip = null;
@@ -18,7 +18,7 @@ var ShipBuild = function (xpHistory, callsign, playerName) {
     this.currentXp = 0;
     this.pilotAbilities = [];
     this.upgrades = {};
-    this.enemyDefeats = {};
+    this.enemyDefeats = new EnemyDefeatsModel(enemyDefeats);
 
     this.setPilotSkill(2);
     this.processHistory(xpHistory);
@@ -135,49 +135,6 @@ ShipBuild.prototype.buyPilotAbility = function (pilotId) {
     var pilot = this.getPilotById(pilotId);
     this.pilotAbilities.push(pilot);
     events.trigger('model.build.pilotAbilities.update', this);
-};
-
-ShipBuild.prototype.adjustEnemies = function (enemyShipXws, amount) {
-    var existingNumber = this.enemyDefeats[enemyShipXws] || 0;
-    var newCount = existingNumber + amount;
-    if (newCount > 0) {
-        this.enemyDefeats[enemyShipXws] = newCount;
-    } else {
-        delete this.enemyDefeats[enemyShipXws];
-    }
-    events.trigger('model.build.enemies.change', this);
-};
-
-ShipBuild.prototype.enemyExportString = function () {
-    var exportValues = [];
-    _.forEach(this.enemyDefeats, function (count, xws) {
-        var enemyShip = _.find(enemies, {
-            xws: xws
-        });
-        var exportValue = enemyShip.id + '=' + count;
-        exportValues.push(exportValue);
-    });
-    return exportValues.join(':');
-};
-
-ShipBuild.prototype.parseEnemyString = function (string) {
-    var itemValues = string.split(':');
-    var enemiesDefeated = {};
-
-    itemValues.forEach(function (itemString) {
-        var splitParts = itemString.split('=');
-        var shipId = splitParts[0];
-        var count = splitParts[1];
-        var enemyModel = _.find(enemies, {
-            id: shipId
-        });
-        if (enemyModel.xws && count) {
-            enemiesDefeated[enemyModel.xws] = count;
-        }
-
-        return enemiesDefeated;
-    });
-
 };
 
 module.exports = ShipBuild;

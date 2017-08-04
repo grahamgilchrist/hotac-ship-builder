@@ -33,7 +33,7 @@ module.exports = {
         if (urlHash && urlHash.length > 0) {
             // We got a hash in URL, so create a build based on it
             var buildData = hashController.parseExportStringToHistory(urlHash);
-            currentBuild = new Build(buildData.xpHistory, buildData.callsign, buildData.playerName);
+            currentBuild = new Build(buildData.xpHistory, buildData.callsign, buildData.playerName, buildData.enemies);
             mainView.show();
             headerView.showButtons();
         } else {
@@ -49,7 +49,7 @@ module.exports = {
                     shipId: data.shipId
                 })
             ];
-            currentBuild = new Build(startingXpHistory, data.callsign, data.playerName);
+            currentBuild = new Build(startingXpHistory, data.callsign, data.playerName, {});
             newView.hide();
             mainView.show();
             headerView.showButtons();
@@ -96,8 +96,8 @@ module.exports = {
             mainView.resetTabs();
         });
 
-        events.on('view.enemies.adjustNumber', function (event, data) {
-            currentBuild.adjustEnemies(data.xws, data.amount);
+        events.on('view.enemies.adjustCount', function (event, data) {
+            currentBuild.enemyDefeats.adjustCount(data.xws, data.amount);
         });
     },
     bindModelEvents: function () {
@@ -113,7 +113,7 @@ module.exports = {
             upgradesView.renderUpgradesList(build);
             xpHistoryView.renderTable(build);
             changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
-            enemiesView.renderTable();
+            enemiesView.renderTable(build.enemyDefeats.get());
             messageView.clear();
             var newHash = hashController.generateExportString(build);
             hashController.set(newHash);
@@ -171,10 +171,12 @@ module.exports = {
             }
         });
 
-        events.on('model.build.enemies.change', function (event, build) {
-            enemiesView.renderTable(build.enemyDefeats);
-            var newHash = hashController.generateExportString(build);
-            hashController.set(newHash);
+        events.on('model.enemies.change', function (event, enemyDefeats) {
+            if (currentBuild.ready) {
+                enemiesView.renderTable(enemyDefeats.get());
+                var newHash = hashController.generateExportString(currentBuild);
+                hashController.set(newHash);
+            }
         });
     }
 };

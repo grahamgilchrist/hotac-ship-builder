@@ -47,7 +47,7 @@ module.exports = {
         return $row;
     },
     addEnemy: function (amount, xws) {
-        events.trigger('view.enemies.adjustNumber', {
+        events.trigger('view.enemies.adjustCount', {
             xws: xws,
             amount: amount
         });
