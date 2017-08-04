@@ -113,15 +113,15 @@
                     <div class="build-content">
                         <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
                             <div class="mdl-tabs__tab-bar narrow">
-                                <a href="#ship-stats-tab" wide-tabs="#ship-stats-tab,#upgrades-tab" class="mdl-tabs__tab is-active">Stats</a>
+                                <a href="#ship-stats-tab" wide-tabs="#ship-stats-tab,#upgrades-tab" class="mdl-tabs__tab is-active"><span>Stats</span></a>
                                 <a href="#upgrades-tab" wide-tabs="#ship-stats-tab,#upgrades-tab" class="mdl-tabs__tab">Upgrades</a>
                                 <a href="#xp-history-tab" wide-tabs="#xp-history-tab" class="mdl-tabs__tab">History</a>
-                                <!-- <a href="#kills-tab" class="mdl-tabs__tab kills-tab-button">Kills</a> -->
+                                <a href="#enemies-tab" wide-tabs="#enemies-tab" class="mdl-tabs__tab">Enemies</a>
                             </div>
                             <div class="mdl-tabs__tab-bar wide">
                                 <a href="#ship-stats-tab" wide-tabs="#ship-stats-tab,#upgrades-tab" class="mdl-tabs__tab is-active">Stats and upgrades</a>
                                 <a href="#xp-history-tab" wide-tabs="#xp-history-tab" class="mdl-tabs__tab">History</a>
-                                <!-- <a href="#kills-tab" class="mdl-tabs__tab kills-tab-button">Kills</a> -->
+                                <a href="#enemies-tab" wide-tabs="#enemies-tab" class="mdl-tabs__tab">Enemies</a>
                             </div>
 
                             <div class="tabs-panel narrow-is-active wide-is-active" id="ship-stats-tab">
@@ -220,6 +220,19 @@
                                 </table>
 
                             </div>
+
+                            <div class="mdl-tabs__panel" id="enemies-tab">
+                                <h3>Destroyed enemies</h3>
+                                <table>
+                                    <thead>
+                                        <th>Ship type</th>
+                                        <th>Number destroyed</th>
+                                    </thead>
+                                    <tbody id="kill-history">
+                                    </tbody>
+                                </table>
+                            </div>
+
                         </div>
                     </div>
                 </div>
