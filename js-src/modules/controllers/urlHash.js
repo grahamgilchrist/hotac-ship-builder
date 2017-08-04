@@ -32,7 +32,7 @@ module.exports = {
         var splitParts = exportString.split('/');
         var urlVersion = splitParts[1];
 
-        var parseVersionFunction = module.exports.parseUrlStringVersions[urlVersion]
+        var parseVersionFunction = module.exports.parseUrlStringVersions[urlVersion];
         return parseVersionFunction(splitParts);
     },
     parseUrlStringVersions: {
