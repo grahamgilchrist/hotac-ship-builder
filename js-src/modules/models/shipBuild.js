@@ -7,9 +7,10 @@ var XpItem = require('./xpItem');
 var itemTypes = require('./itemTypes');
 var upgrades = require('../models/upgrades').all;
 var pilots = require('../models/pilots').allRebels;
+var EnemyDefeatsModel = require('../models/enemyDefeats');
 
 // Ship build
-var ShipBuild = function (xpHistory, callsign, playerName) {
+var ShipBuild = function (xpHistory, callsign, playerName, enemyDefeats) {
     this.callsign = callsign;
     this.playerName = playerName;
     this.currentShip = null;
@@ -17,6 +18,7 @@ var ShipBuild = function (xpHistory, callsign, playerName) {
     this.currentXp = 0;
     this.pilotAbilities = [];
     this.upgrades = {};
+    this.enemyDefeats = new EnemyDefeatsModel(enemyDefeats);
 
     this.setPilotSkill(2);
     this.processHistory(xpHistory);

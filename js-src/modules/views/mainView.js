@@ -1,13 +1,13 @@
 'use strict';
 
 var $ = require('jquery');
-var _ = require('lodash');
 
-var events = require('../controllers/events');
+var mainTabs = require('./mainTabs');
+var missionView = require('./missionResultsView');
 
 module.exports = {
     init: function () {
-        module.exports.bindTabsButton();
+        mainTabs.init();
         module.exports.bindXpButton();
     },
     hide: function () {
@@ -25,64 +25,18 @@ module.exports = {
     renderXp: function (xpAmount) {
         $('#xp-current').text(xpAmount);
     },
-    bindTabsButton: function () {
-        var activeClass = 'is-active';
-        $('.build-content .mdl-tabs__tab').on('click', function () {
-            var targetIdSelector = $(this).attr('href');
-            if (targetIdSelector === '#stats-upgrades-combined-tab') {
-                $(this).closest('.mdl-tabs').find('.stats-tab-button').addClass(activeClass);
-                $('#ship-stats-tab').addClass(activeClass);
-            }
-
-            if (targetIdSelector === '#ship-stats-tab' || targetIdSelector === '#upgrades-tab') {
-                $(this).closest('.mdl-tabs').find('.stats-upgrade-tab-button').addClass(activeClass);
-                $('#stats-upgrades-combined-tab').addClass(activeClass);
-            }
-
-            $(this).closest('.mdl-tabs').find('[href="' + targetIdSelector + '"]').addClass(activeClass);
-        });
-    },
     bindXpButton: function () {
         $('#add-mission-xp').on('click', function () {
-
-            var $modalContent = $('<div>');
-            var $header = $('<h2>Add XP earned from a mission</h2>');
-            var $form = $('<form>');
-            var $input = $('<input type="text" id="mission-xp-amount">');
-            var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Add</button>');
-
-            $button.on('click', function () {
-                var stringXpAmount = $('#mission-xp-amount').val();
-                var xpAmount = parseInt(stringXpAmount, 10);
-
-                if (!_.isNaN(xpAmount) && xpAmount > 0) {
-                    events.trigger('view.main.addMissionXp', xpAmount);
-                }
-
-                $.featherlight.close();
-            });
-
-            $form.append($input);
-            $form.append($button);
-            $modalContent.append($header);
-            $modalContent.append($form);
-
+            var $modalContent = missionView.renderView();
             var featherlightConfig = {
                 variant: 'add-xp'
             };
 
             $.featherlight($modalContent, featherlightConfig);
-            $('#mission-xp-amount').focus();
+            missionView.focus();
         });
     },
-    showShipTab: function () {
-        var $tabLink = $('.mdl-tabs__tab[href="#stats-upgrade-tab-button"]');
-        if ($tabLink.css('display') === 'block') {
-            // parent wrapper tab is active so show that
-            $tabLink.get(0).click();
-        } else {
-            $tabLink = $('.mdl-tabs__tab[href="#ship-stats-tab"]');
-            $tabLink.get(0).click();
-        }
+    resetTabs: function () {
+        mainTabs.showShipTab();
     }
 };

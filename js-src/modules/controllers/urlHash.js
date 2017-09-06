@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var XpItem = require('../models/xpItem');
+var EnemyDefeatsModel = require('../models/enemyDefeats');
 
 module.exports = {
     set: function (exportString) {
@@ -20,30 +21,64 @@ module.exports = {
             return xpItem.exportString();
         });
         // add callsign and playername as first items
+        var enemiesList = build.enemyDefeats.exportString();
+        itemExports.unshift(enemiesList);
         itemExports.unshift(window.encodeURIComponent(build.callsign));
         itemExports.unshift(window.encodeURIComponent(build.playerName));
-        var exportString = '/v1/' + itemExports.join(',');
+        var exportString = '/v2/' + itemExports.join(',');
         return exportString;
     },
     parseExportStringToHistory: function (exportString) {
         var splitParts = exportString.split('/');
-        var items = splitParts[2];
+        var urlVersion = splitParts[1];
 
-        var splitItems = items.split(',');
+        var parseVersionFunction = module.exports.parseUrlStringVersions[urlVersion];
+        return parseVersionFunction(splitParts);
+    },
+    parseUrlStringVersions: {
+        v1: function (splitParts) {
+            var items = splitParts[2];
 
-        var playerName = window.decodeURIComponent(splitItems.shift());
-        var callsign = window.decodeURIComponent(splitItems.shift());
+            var splitItems = items.split(',');
 
-        var xpHistory = _.map(splitItems, function (stringItem) {
-            var xpItem = new XpItem();
-            xpItem.parseExportString(stringItem);
-            return xpItem;
-        });
+            var playerName = window.decodeURIComponent(splitItems.shift());
+            var callsign = window.decodeURIComponent(splitItems.shift());
 
-        return {
-            xpHistory: xpHistory,
-            callsign: callsign,
-            playerName: playerName
-        };
+            var xpHistory = _.map(splitItems, function (stringItem) {
+                var xpItem = new XpItem();
+                xpItem.parseExportString(stringItem);
+                return xpItem;
+            });
+
+            return {
+                xpHistory: xpHistory,
+                callsign: callsign,
+                playerName: playerName,
+                enemies: {}
+            };
+        },
+        v2: function (splitParts) {
+            var items = splitParts[2];
+
+            var splitItems = items.split(',');
+
+            var playerName = window.decodeURIComponent(splitItems.shift());
+            var callsign = window.decodeURIComponent(splitItems.shift());
+            var enemyDefeats = new EnemyDefeatsModel();
+            enemyDefeats.parseUrlString(splitItems.shift());
+
+            var xpHistory = _.map(splitItems, function (stringItem) {
+                var xpItem = new XpItem();
+                xpItem.parseExportString(stringItem);
+                return xpItem;
+            });
+
+            return {
+                xpHistory: xpHistory,
+                callsign: callsign,
+                playerName: playerName,
+                enemies: enemyDefeats.get()
+            };
+        }
     }
 };
