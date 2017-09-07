@@ -11,6 +11,24 @@ var upgrades = require('../models/upgrades').keyed;
 var modalController = require('../controllers/modals');
 
 module.exports = {
+    clickEquipSlot: function (upgradeType, build) {
+        var isDisabled = $(this).hasClass('disabled');
+        var equippedUpgradeID = $(this).attr('upgrade-id');
+
+        if (isDisabled) {
+            return;
+        }
+
+        if (!equippedUpgradeID) {
+            // open modal to choose
+            var filteredUpgrades = module.exports.getFilteredUpgrades(upgradeType, build.upgrades, build.currentShip);
+            var $modalContent = module.exports.renderUpgradeModalContent(build, filteredUpgrades);
+            modalController.openOptionSelectModal($modalContent, 'Buy upgrade');
+        } else {
+            // open modal preview with delete button
+        }
+
+    },
     renderUpgradesList: function (build) {
         // Get a list of the slots allowed for this build (determined by ship and PS) and the number of each upgrade per slot
         var upgradesAllowedInBuild = module.exports.numberOfUsableUpgrades(build.pilotSkill, build.currentShip, build.upgrades);
@@ -59,14 +77,6 @@ module.exports = {
         } else {
             $('.disabled-upgrades').hide();
         }
-
-        var $buyNewList = $('#buy-upgrades-list');
-        $buyNewList.empty();
-        _.forEach(upgradesAllowedInBuild, function (slotInfo, slotType) {
-            var $button = module.exports.renderAddUpgradeButton(slotType, build);
-            $buyNewList.append($button);
-        });
-
     },
     getAllowedUpgrades: function (build, upgradesAllowedInBuild) {
         var purchasedUpgradesByType = _.clone(build.upgrades, true);
@@ -107,23 +117,6 @@ module.exports = {
         iconId = iconId.toLowerCase();
         var iconString = '<i class="xwing-miniatures-font xwing-miniatures-font-' + iconId + '"></i>';
         return iconString;
-    },
-    renderAddUpgradeButton: function (upgradeType, build) {
-        var $li = $('<li>');
-        var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">' + module.exports.getIconString(upgradeType) + '<span>' + upgradeType + '</span></button>');
-        var filteredUpgrades = module.exports.getFilteredUpgrades(upgradeType, build.upgrades, build.currentShip);
-        // Disable button if nothing to show in modal
-        if (_.size(filteredUpgrades) === 0) {
-            $button.attr('disabled', 'disabled');
-        }
-
-        $button.on('click', function () {
-            var $modalContent = module.exports.renderUpgradeModalContent(build, filteredUpgrades);
-            modalController.openOptionSelectModal($modalContent, 'Buy upgrade');
-        });
-        $li.append($button);
-
-        return $li;
     },
     getFilteredUpgrades: function (upgradeTypeString, existingUpgrades, currentShip) {
         var upgradeTypes = upgradeTypeString.split(',');
@@ -417,21 +410,25 @@ module.exports = {
 
         return additionalSlotTypes;
     },
-    renderShipUpgrades: function (currentShip, pilotSkill, upgradesByType) {
+    renderShipUpgrades: function (build) {
         // Process and create list for ship chassis slots
         var $shipSlots = $('#ship-slots-default');
         $shipSlots.empty();
 
         var $ul = $('<ul>');
 
-        var upgradeSlots = module.exports.getShipUpgrades(currentShip);
+        var upgradeSlots = module.exports.getShipUpgrades(build.currentShip);
 
         _.each(upgradeSlots, function (upgradeSlot) {
             var titleString = module.exports.getIconString(upgradeSlot.type) + ' <span>' + upgradeSlot.type + '</span>';
             var $li = $('<li>' + titleString + '</li>');
-            if (pilotSkill < upgradeSlot.pilotSkill) {
+            if (build.pilotSkill < upgradeSlot.pilotSkill) {
                 $li.addClass('disabled');
                 $li.append('<span> (PS ' + upgradeSlot.pilotSkill + ')</span>');
+            } else {
+                $li.on('click', function () {
+                    module.exports.clickEquipSlot(upgradeSlot.type, build);
+                });
             }
             $ul.append($li);
         });
@@ -443,7 +440,7 @@ module.exports = {
         _.each(upgradeSlots, function (upgradeSlot) {
             usableUpgrades[upgradeSlot.type] = {};
         });
-        var slotsFromUpgrades = module.exports.getSlotsFromUpgrades(usableUpgrades, currentShip.startingUpgrades, upgradesByType);
+        var slotsFromUpgrades = module.exports.getSlotsFromUpgrades(usableUpgrades, build.currentShip.startingUpgrades, build.upgradesByType);
 
         if (slotsFromUpgrades.length > 0) {
             var $shipSlotsFromUpgrades = $('#ship-slots-upgrades');

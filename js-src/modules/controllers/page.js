@@ -108,7 +108,7 @@ module.exports = {
             shipInfoView.renderShipActions(build.currentShip, build.upgrades);
             shipInfoView.renderShipImage(build.currentShip);
             shipInfoView.renderShipDial(build.currentShip);
-            upgradesView.renderShipUpgrades(build.currentShip, build.pilotSkill, build.upgrades);
+            upgradesView.renderShipUpgrades(build);
             pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
             upgradesView.renderUpgradesList(build);
             xpHistoryView.renderTable(build);
@@ -126,7 +126,7 @@ module.exports = {
                 shipInfoView.renderShipActions(build.currentShip, build.upgrades);
                 shipInfoView.renderShipImage(build.currentShip);
                 shipInfoView.renderShipDial(build.currentShip);
-                upgradesView.renderShipUpgrades(build.currentShip, build.pilotSkill, build.upgrades);
+                upgradesView.renderShipUpgrades(build);
                 upgradesView.renderUpgradesList(build);
                 changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
             }
@@ -137,7 +137,7 @@ module.exports = {
                 pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
                 upgradesView.renderUpgradesList(build);
                 changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
-                upgradesView.renderShipUpgrades(build.currentShip, build.pilotSkill, build.upgrades);
+                upgradesView.renderShipUpgrades(build);
             }
         });
 
@@ -151,7 +151,7 @@ module.exports = {
             if (build.ready) {
                 upgradesView.renderUpgradesList(build);
                 shipInfoView.renderShipActions(build.currentShip, build.upgrades);
-                upgradesView.renderShipUpgrades(build.currentShip, build.pilotSkill, build.upgrades);
+                upgradesView.renderShipUpgrades(build);
             }
         });
 
