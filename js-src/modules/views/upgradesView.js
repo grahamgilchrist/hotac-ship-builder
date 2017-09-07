@@ -11,7 +11,7 @@ var upgrades = require('../models/upgrades').keyed;
 var modalController = require('../controllers/modals');
 
 module.exports = {
-    clickEquipSlot: function (upgradeType, build) {
+    clickEquipSlot: function (filteredUpgrades, build) {
         var isDisabled = $(this).hasClass('disabled');
         var equippedUpgradeID = $(this).attr('upgrade-id');
 
@@ -21,7 +21,6 @@ module.exports = {
 
         if (!equippedUpgradeID) {
             // open modal to choose
-            var filteredUpgrades = module.exports.getFilteredUpgrades(upgradeType, build.upgrades, build.currentShip);
             var $modalContent = module.exports.renderUpgradeModalContent(build, filteredUpgrades);
             modalController.openOptionSelectModal($modalContent, 'Buy upgrade');
         } else {
@@ -420,6 +419,13 @@ module.exports = {
         var upgradeSlots = module.exports.getShipUpgrades(build.currentShip);
 
         _.each(upgradeSlots, function (upgradeSlot) {
+            var filteredUpgradesByType = module.exports.getFilteredUpgrades(upgradeSlot.type, build.upgrades, build.currentShip);
+
+            // Don't show this slot if there are no available upgrades for it (e.g. a title slot for a ship with no titles)
+            if (!filteredUpgradesByType[upgradeSlot.type] || filteredUpgradesByType[upgradeSlot.type].length < 1) {
+                return;
+            }
+
             var titleString = module.exports.getIconString(upgradeSlot.type) + ' <span>' + upgradeSlot.type + '</span>';
             var $li = $('<li>' + titleString + '</li>');
             if (build.pilotSkill < upgradeSlot.pilotSkill) {
@@ -427,7 +433,7 @@ module.exports = {
                 $li.append('<span> (PS ' + upgradeSlot.pilotSkill + ')</span>');
             } else {
                 $li.on('click', function () {
-                    module.exports.clickEquipSlot(upgradeSlot.type, build);
+                    module.exports.clickEquipSlot(filteredUpgradesByType, build);
                 });
             }
             $ul.append($li);
