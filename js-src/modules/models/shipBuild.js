@@ -162,9 +162,17 @@ ShipBuild.prototype.equipUpgrade = function (upgradeId) {
 };
 
 ShipBuild.prototype.equipAbility = function (pilotId) {
-    // TODO: check if abiltiy allowed on ship
+    // TODO: check if ability allowed on ship
     var pilot = this.getPilotById(pilotId);
     this.equippedUpgrades.pilotAbilities.push(pilot);
+    events.trigger('model.build.equippedUpgrades.update', this);
+};
+
+ShipBuild.prototype.unequipUpgrade = function (upgradeId) {
+    // TODO: check if upgrade allowed on ship
+    _.remove(this.equippedUpgrades.upgrades, function (item) {
+        return item.id === upgradeId;
+    });
     events.trigger('model.build.equippedUpgrades.update', this);
 };
 

@@ -83,8 +83,8 @@ module.exports = {
             currentBuild.equipAbility(pilotId);
         });
 
-        events.on('view.changeShip.changeShip', function (event, shipId) {
-            currentBuild.changeShip(shipId);
+        events.on('view.unequip.upgrade', function (event, upgradeId) {
+            currentBuild.unequipUpgrade(upgradeId);
         });
 
         events.on('view.xpHistory.revert', function (event, xpItemIndex) {

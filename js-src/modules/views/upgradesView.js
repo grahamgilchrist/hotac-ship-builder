@@ -9,24 +9,16 @@ var pilots = _.uniqBy(pilotsWithAbilities, function (pilot) {
 });
 var upgrades = require('../models/upgrades').keyed;
 var modalController = require('../controllers/modals');
+var events = require('../controllers/events');
 
 module.exports = {
     clickEquipSlot: function (filteredUpgrades, build) {
-        var isDisabled = $(this).hasClass('disabled');
-        var equippedUpgradeID = $(this).attr('upgrade-id');
-
-        if (isDisabled) {
-            return;
-        }
-
-        if (!equippedUpgradeID) {
-            // open modal to choose
-            var $modalContent = module.exports.renderUpgradeModalContent(build, filteredUpgrades);
-            modalController.openOptionSelectModal($modalContent, 'Buy upgrade');
-        } else {
-            // open modal preview with delete button
-        }
-
+        // open modal to choose upgrade to equip
+        var $modalContent = module.exports.renderUpgradeModalContent(build, filteredUpgrades);
+        modalController.openOptionSelectModal($modalContent, 'Buy upgrade');
+    },
+    removeEquipSlot: function (upgradeId) {
+        events.trigger('view.unequip.upgrade', upgradeId);
     },
     renderUpgradesList: function (build) {
         // Get a list of the slots allowed for this build (determined by ship and PS) and the number of each upgrade per slot
@@ -435,7 +427,6 @@ module.exports = {
             var $li = $('<li></li>');
             $li.append(module.exports.getIconString(upgradeSlot.type));
 
-
             if (build.pilotSkill < upgradeSlot.pilotSkill) {
                 // Disabled
                 $li.addClass('disabled');
@@ -463,12 +454,18 @@ module.exports = {
                 $li.append(' <span class="title">' + slotTitle + '</span>');
 
                 if (equipped) {
+                    var $icon = $('<i class="material-icons">ic_not_interested</i>');
+                    $li.append($icon);
                     $li.addClass('equipped');
+                    $icon.on('click', function () {
+                        module.exports.removeEquipSlot(matchingUpgrade.id, build);
+                    });
+                } else {
+                    $li.on('click', function () {
+                        module.exports.clickEquipSlot(filteredUpgradesByType, build);
+                    });
                 }
 
-                $li.on('click', function () {
-                    module.exports.clickEquipSlot(filteredUpgradesByType, build);
-                });
             }
             $ul.append($li);
         });
