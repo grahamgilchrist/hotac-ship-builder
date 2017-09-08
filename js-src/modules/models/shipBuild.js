@@ -10,7 +10,7 @@ var pilots = require('../models/pilots').allRebels;
 var EnemyDefeatsModel = require('../models/enemyDefeats');
 
 // Ship build
-var ShipBuild = function (xpHistory, callsign, playerName, enemyDefeats) {
+var ShipBuild = function (xpHistory, callsign, playerName, enemyDefeats, equippedUpgrades, equippedAbilities) {
     this.callsign = callsign;
     this.playerName = playerName;
     this.currentShip = null;
@@ -22,9 +22,26 @@ var ShipBuild = function (xpHistory, callsign, playerName, enemyDefeats) {
 
     this.setPilotSkill(2);
     this.processHistory(xpHistory);
+    this.processEquippedItems(equippedUpgrades, equippedAbilities);
     this.ready = true;
 
     events.trigger('model.build.ready', this);
+};
+
+ShipBuild.prototype.processEquippedItems = function (equippedUpgrades, equippedAbilities) {
+    var thisBuild = this;
+
+    this.equippedUpgrades = {
+        upgrades: [],
+        pilotAbilities: []
+    };
+
+    this.equippedUpgrades.upgrades = _.map(equippedUpgrades, function (upgradeId) {
+        return thisBuild.getUpgradeById(upgradeId);
+    });
+    this.equippedUpgrades.pilotAbilities = _.map(equippedAbilities, function (pilotId) {
+        return thisBuild.getPilotById(pilotId);
+    });
 };
 
 ShipBuild.prototype.processHistory = function (xpHistory) {
@@ -135,6 +152,34 @@ ShipBuild.prototype.buyPilotAbility = function (pilotId) {
     var pilot = this.getPilotById(pilotId);
     this.pilotAbilities.push(pilot);
     events.trigger('model.build.pilotAbilities.update', this);
+};
+
+ShipBuild.prototype.equipUpgrade = function (upgradeId) {
+    // TODO: check if upgrade allowed on ship
+    var upgrade = this.getUpgradeById(upgradeId);
+    this.equippedUpgrades.upgrades.push(upgrade);
+    events.trigger('model.build.equippedUpgrades.update', this);
+};
+
+ShipBuild.prototype.equipAbility = function (pilotId) {
+    // TODO: check if abiltiy allowed on ship
+    var pilot = this.getPilotById(pilotId);
+    this.equippedUpgrades.pilotAbilities.push(pilot);
+    events.trigger('model.build.equippedUpgrades.update', this);
+};
+
+ShipBuild.prototype.exportEquippedUpgradesString = function () {
+    var upgradeIds = _.map(this.equippedUpgrades.upgrades, function (item) {
+        return item.id;
+    });
+    return JSON.stringify(upgradeIds);
+};
+
+ShipBuild.prototype.exportEquippedAbilitiesString = function () {
+    var pilotIds = _.map(this.equippedUpgrades.pilotAbilities, function (item) {
+        return item.id;
+    });
+    return JSON.stringify(pilotIds);
 };
 
 module.exports = ShipBuild;

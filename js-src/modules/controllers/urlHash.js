@@ -17,15 +17,30 @@ module.exports = {
         document.location.hash = '';
     },
     generateExportString: function (build) {
-        var itemExports = _.map(build.xpHistory, function (xpItem) {
+        var urlComponents = [];
+
+        // add callsign and playername as first items
+        urlComponents.push(window.encodeURIComponent(build.callsign));
+        urlComponents.push(window.encodeURIComponent(build.playerName));
+
+        // Add defeated enemies
+        var enemiesList = build.enemyDefeats.exportString();
+        urlComponents.push(enemiesList);
+
+        // Add equipped upgrades
+        var upgradesString = build.exportEquippedUpgradesString();
+        var abilitiesString = build.exportEquippedAbilitiesString();
+        urlComponents.push(upgradesString);
+        urlComponents.push(abilitiesString);
+
+        // Add XP history items
+        var xpHistoryUrlItems = _.map(build.xpHistory, function (xpItem) {
             return xpItem.exportString();
         });
-        // add callsign and playername as first items
-        var enemiesList = build.enemyDefeats.exportString();
-        itemExports.unshift(enemiesList);
-        itemExports.unshift(window.encodeURIComponent(build.callsign));
-        itemExports.unshift(window.encodeURIComponent(build.playerName));
-        var exportString = '/v2/' + itemExports.join(',');
+        var xpHistoryString = xpHistoryUrlItems.join(',');
+        urlComponents.push(xpHistoryString);
+
+        var exportString = '/v3/' + urlComponents.join('|');
         return exportString;
     },
     parseExportStringToHistory: function (exportString) {
@@ -54,9 +69,12 @@ module.exports = {
                 xpHistory: xpHistory,
                 callsign: callsign,
                 playerName: playerName,
-                enemies: {}
+                enemies: {},
+                equippedUpgrades: [],
+                equippedAbilities: []
             };
         },
+        // v2 adds enemies
         v2: function (splitParts) {
             var items = splitParts[2];
 
@@ -77,7 +95,41 @@ module.exports = {
                 xpHistory: xpHistory,
                 callsign: callsign,
                 playerName: playerName,
-                enemies: enemyDefeats.get()
+                enemies: enemyDefeats.get(),
+                equippedUpgrades: [],
+                equippedAbilities: []
+            };
+        },
+        // v3 adds equipped upgrades
+        v3: function (splitParts) {
+            var items = splitParts[2];
+
+            var splitItems = items.split('|');
+
+            var playerName = window.decodeURIComponent(splitItems.shift());
+            var callsign = window.decodeURIComponent(splitItems.shift());
+
+            var enemyDefeats = new EnemyDefeatsModel();
+            enemyDefeats.parseUrlString(splitItems.shift());
+
+            var equippedUpgrades = JSON.parse(splitItems.shift());
+            var equippedAbilities = JSON.parse(splitItems.shift());
+
+            var xpHistoryString = splitItems.shift();
+            var xpHistoryItems = xpHistoryString.split(',');
+            var xpHistory = _.map(xpHistoryItems, function (stringItem) {
+                var xpItem = new XpItem();
+                xpItem.parseExportString(stringItem);
+                return xpItem;
+            });
+
+            return {
+                xpHistory: xpHistory,
+                callsign: callsign,
+                playerName: playerName,
+                enemies: enemyDefeats.get(),
+                equippedUpgrades: equippedUpgrades,
+                equippedAbilities: equippedAbilities
             };
         }
     }

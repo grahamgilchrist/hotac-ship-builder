@@ -33,7 +33,7 @@ module.exports = {
         if (urlHash && urlHash.length > 0) {
             // We got a hash in URL, so create a build based on it
             var buildData = hashController.parseExportStringToHistory(urlHash);
-            currentBuild = new Build(buildData.xpHistory, buildData.callsign, buildData.playerName, buildData.enemies);
+            currentBuild = new Build(buildData.xpHistory, buildData.callsign, buildData.playerName, buildData.enemies, buildData.equippedUpgrades, buildData.equippedAbilities);
             mainView.show();
             headerView.showButtons();
         } else {
@@ -75,10 +75,12 @@ module.exports = {
     bindOtherViewEvents: function () {
         events.on('view.upgrades.buy', function (event, upgradeId) {
             currentBuild.buyUpgrade(upgradeId);
+            currentBuild.equipUpgrade(upgradeId);
         });
 
         events.on('view.pilotAbilities.buy', function (event, pilotId) {
             currentBuild.buyPilotAbility(pilotId);
+            currentBuild.equipAbility(pilotId);
         });
 
         events.on('view.changeShip.changeShip', function (event, shipId) {
@@ -152,6 +154,14 @@ module.exports = {
                 upgradesView.renderUpgradesList(build);
                 shipInfoView.renderShipActions(build.currentShip, build.upgrades);
                 upgradesView.renderShipUpgrades(build);
+            }
+        });
+
+        events.on('model.build.equippedUpgrades.update', function (event, build) {
+            if (build.ready) {
+                upgradesView.renderShipUpgrades(build);
+                var newHash = hashController.generateExportString(build);
+                hashController.set(newHash);
             }
         });
 

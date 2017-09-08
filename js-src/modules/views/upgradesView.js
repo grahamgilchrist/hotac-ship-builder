@@ -418,6 +418,9 @@ module.exports = {
 
         var upgradeSlots = module.exports.getShipUpgrades(build.currentShip);
 
+        var equippedUpgrades = $.extend(true, [], build.equippedUpgrades.upgrades);
+        // var equippedAbilities = $.extend(true, [], build.equippedUpgrades.pilotAbilities);
+
         _.each(upgradeSlots, function (upgradeSlot) {
             var filteredUpgradesByType = module.exports.getFilteredUpgrades(upgradeSlot.type, build.upgrades, build.currentShip);
 
@@ -426,12 +429,43 @@ module.exports = {
                 return;
             }
 
-            var titleString = module.exports.getIconString(upgradeSlot.type) + ' <span>' + upgradeSlot.type + '</span>';
-            var $li = $('<li>' + titleString + '</li>');
+            var slotTitle = upgradeSlot.type;
+            var equipped = false;
+
+            var $li = $('<li></li>');
+            $li.append(module.exports.getIconString(upgradeSlot.type));
+
+
             if (build.pilotSkill < upgradeSlot.pilotSkill) {
+                // Disabled
                 $li.addClass('disabled');
-                $li.append('<span> (PS ' + upgradeSlot.pilotSkill + ')</span>');
+                $li.append(' <span class="title">' + slotTitle + '</span><span> (PS ' + upgradeSlot.pilotSkill + ')</span>');
             } else {
+                // Not disabled
+
+                // Is there an equipped upgrade for this slot
+                var matchingUpgrade = _.find(equippedUpgrades, function (item) {
+                    return item.slot === upgradeSlot.type;
+                });
+
+                if (matchingUpgrade) {
+                    equipped = true;
+                    slotTitle = matchingUpgrade.name;
+                    _.remove(equippedUpgrades, function (item) {
+                        return item.id === matchingUpgrade.id;
+                    });
+                }
+
+                if (upgradeSlot.type === 'Elite') {
+                    // check for abilities too
+                }
+
+                $li.append(' <span class="title">' + slotTitle + '</span>');
+
+                if (equipped) {
+                    $li.addClass('equipped');
+                }
+
                 $li.on('click', function () {
                     module.exports.clickEquipSlot(filteredUpgradesByType, build);
                 });
