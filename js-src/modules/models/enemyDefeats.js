@@ -4,6 +4,8 @@ var _ = require('lodash');
 var events = require('../controllers/events');
 var enemies = require('../models/enemies');
 
+var exportSplitCharacter = ':';
+
 // Ship build
 var enemyDefeats = function (startingValues) {
     this.enemyDefeats = startingValues || {};
@@ -33,7 +35,7 @@ enemyDefeats.prototype.exportString = function () {
         var exportValue = enemyShip.id + '=' + count;
         exportValues.push(exportValue);
     });
-    var exportString = exportValues.join(':');
+    var exportString = exportValues.join(exportSplitCharacter);
     return exportString;
 };
 
@@ -41,7 +43,7 @@ enemyDefeats.prototype.parseUrlString = function (string) {
     var enemiesDefeated = {};
 
     if (string) {
-        var itemValues = string.split(':');
+        var itemValues = string.split(exportSplitCharacter);
 
         itemValues.forEach(function (itemString) {
             var splitParts = itemString.split('=');
