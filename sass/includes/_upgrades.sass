@@ -21,20 +21,18 @@
 .allowed-list
     display: inline-block
     vertical-align: top
-    margin: 0 4px
+    padding: 0 4px
 
     h4
         text-align: center
 
-.ship-slots
-    width: 130px
+.ship-slots,
+.allowed-list
+    width: 50%
+    max-width: 230px
 
 .allowed-list
     text-align: left
-    width: 200px
-
-    @include media($media-main-two-col)
-        width: 230px
 
     h4
         span,
@@ -104,8 +102,17 @@
         margin: 0
 
     li
-        background-color: #fff
         margin-bottom: 6px
+        padding-right: 29px
+        position: relative
+
+    .slot,
+    i.remove
+        display: inline-block
+        vertical-align: middle
+
+    .slot
+        background-color: #fff
         font-size: 10px
         padding: 0 8px
         box-sizing: border-box
@@ -113,10 +120,10 @@
         border: 1px solid #eee
         border-radius: 4px
         cursor: pointer
+        width: 100%
 
         &.equipped
-            color: orange
-            font-weight: 700
+            background-color: #eee
 
             .title
                 font-style: normal
@@ -133,3 +140,22 @@
 
         i
             margin-right: 0.1em
+
+        i.eye
+            float: right
+            color: #868686
+            font-size: 20px
+            margin-top: 4px
+
+        &:hover i.eye
+            color: #000
+
+    .remove
+        position: absolute
+        right: 0
+        top: 4px
+        cursor: pointer
+        color: #868686
+
+        &:hover
+            color: #000

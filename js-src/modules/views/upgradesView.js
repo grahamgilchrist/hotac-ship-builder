@@ -425,12 +425,14 @@ module.exports = {
             var equipped = false;
 
             var $li = $('<li></li>');
-            $li.append(module.exports.getIconString(upgradeSlot.type));
+            var $slot = $('<div class="slot"></div>');
+            $slot.append(module.exports.getIconString(upgradeSlot.type));
+            $li.append($slot);
 
             if (build.pilotSkill < upgradeSlot.pilotSkill) {
                 // Disabled
-                $li.addClass('disabled');
-                $li.append(' <span class="title">' + slotTitle + '</span><span> (PS ' + upgradeSlot.pilotSkill + ')</span>');
+                $slot.addClass('disabled');
+                $slot.append(' <span class="title">' + slotTitle + '</span><span> (PS ' + upgradeSlot.pilotSkill + ')</span>');
             } else {
                 // Not disabled
 
@@ -451,17 +453,22 @@ module.exports = {
                     // check for abilities too
                 }
 
-                $li.append(' <span class="title">' + slotTitle + '</span>');
+                $slot.append(' <span class="title">' + slotTitle + '</span>');
 
                 if (equipped) {
-                    var $icon = $('<i class="material-icons">ic_not_interested</i>');
+                    var imageUrl = '/components/xwing-data/images/' + matchingUpgrade.image;
+                    $slot.append('<i class="material-icons eye">remove_red_eye</i>');
+                    $slot.attr('data-featherlight', imageUrl);
+                    // var $item = $('<li class="upgrade" data-featherlight="' + imageUrl + '"><span>' + upgrade.name + '</span><i class="material-icons eye">remove_red_eye</i><img class="preview" src="' + imageUrl + '"></li>');
+
+                    var $icon = $('<i class="material-icons remove">remove_circle_outline</i>');
                     $li.append($icon);
-                    $li.addClass('equipped');
+                    $slot.addClass('equipped');
                     $icon.on('click', function () {
                         module.exports.removeEquipSlot(matchingUpgrade.id, build);
                     });
                 } else {
-                    $li.on('click', function () {
+                    $slot.on('click', function () {
                         module.exports.clickEquipSlot(filteredUpgradesByType, build);
                     });
                 }
