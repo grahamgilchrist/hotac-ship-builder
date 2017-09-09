@@ -1,7 +1,7 @@
 'use strict';
 
-var XpItem = require('../models/xpItem');
-var itemTypes = require('../models/itemTypes');
+var XpItem = require('../models/shipBuild/xpItem');
+var itemTypes = require('../models/shipBuild/itemTypes');
 var Build = require('../models/shipBuild');
 var events = require('./events');
 var headerView = require('../views/header');
@@ -81,6 +81,10 @@ module.exports = {
         events.on('view.pilotAbilities.buy', function (event, pilotId) {
             currentBuild.buyPilotAbility(pilotId);
             currentBuild.equipAbility(pilotId);
+        });
+
+        events.on('view.equip.upgrade', function (event, upgradeId) {
+            currentBuild.equipUpgrade(upgradeId);
         });
 
         events.on('view.unequip.upgrade', function (event, upgradeId) {

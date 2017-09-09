@@ -1,7 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
-var XpItem = require('../models/xpItem');
+var XpItem = require('../models/shipBuild/xpItem');
 var EnemyDefeatsModel = require('../models/enemyDefeats');
 
 module.exports = {

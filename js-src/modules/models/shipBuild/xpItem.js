@@ -2,9 +2,9 @@
 
 var _ = require('lodash');
 var itemTypes = require('./itemTypes');
-var ships = require('./ships');
-var upgrades = require('../models/upgrades').all;
-var pilots = require('../models/pilots').allRebels;
+var ships = require('../ships');
+var upgrades = require('../upgrades').all;
+var pilots = require('../pilots').allRebels;
 
 var XpItem = function (upgradeType, data) {
     this.upgradeType = upgradeType;

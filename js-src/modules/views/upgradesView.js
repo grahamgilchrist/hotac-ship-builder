@@ -10,11 +10,12 @@ var pilots = _.uniqBy(pilotsWithAbilities, function (pilot) {
 var upgrades = require('../models/upgrades').keyed;
 var modalController = require('../controllers/modals');
 var events = require('../controllers/events');
+var upgradeSlotsModel = require('../models/shipBuild/upgradeSlots');
 
 module.exports = {
-    clickEquipSlot: function (filteredUpgrades, build) {
+    clickEquipSlot: function (equippedUpgradesByType, filteredUpgrades, build) {
         // open modal to choose upgrade to equip
-        var $modalContent = module.exports.renderUpgradeModalContent(build, filteredUpgrades);
+        var $modalContent = module.exports.renderUpgradeModalContent(build, filteredUpgrades, equippedUpgradesByType);
         modalController.openOptionSelectModal($modalContent, 'Buy upgrade');
     },
     removeEquipSlot: function (upgradeId) {
@@ -125,11 +126,18 @@ module.exports = {
 
         return filteredUpgradesByType;
     },
-    renderUpgradeModalContent: function (build, filteredUpgradesByType) {
+    renderUpgradeModalContent: function (build, filteredUpgradesByType, equippedUpgrades) {
         var tabs = [];
+
         _.each(filteredUpgradesByType, function (filteredUpgrades, upgradeType) {
+            var $equippedUpgradesTab = module.exports.renderEquippedCardListModalContent(upgradeType, build, equippedUpgrades);
+            tabs.push({
+                name: 'Existing ' + upgradeType,
+                $content: $equippedUpgradesTab
+            });
+
             var $tab = module.exports.renderCardListModalContent(upgradeType, build, filteredUpgrades);
-            var tabName = upgradeType;
+            var tabName = 'Buy new ' + upgradeType;
             if (upgradeType === 'Elite') {
                 tabName = 'Elite cards';
             }
@@ -196,6 +204,29 @@ module.exports = {
                 // not enough XP
                 $upgrade.addClass('cannot-afford');
             }
+
+            $upgradeList.append($upgrade);
+        });
+
+        $modalContent.append($upgradeList);
+
+        return $modalContent;
+    },
+    renderEquippedCardListModalContent: function (upgradeType, build, equippedUpgrades) {
+        var $modalContent = $('<div class="card-image-list" id="modal-card-image-list-equipped-' + upgradeType + '">');
+        var $upgradeList = $('<ul>');
+
+        _.forEach(equippedUpgrades, function (item) {
+            var $upgrade = $('<li><img src="/components/xwing-data/images/' + item.image + '" alt="' + item.name + '"></li>');
+
+            // We have enough XP to buy this item
+            $upgrade.on('click', function () {
+                $(this).trigger('select', {
+                    selectedUpgradeEvent: 'view.equip.upgrade',
+                    selectedUpgradeId: item.id,
+                    text: item.name
+                });
+            });
 
             $upgradeList.append($upgrade);
         });
@@ -346,60 +377,12 @@ module.exports = {
         });
 
         // Add slots for the upgrade cards
-        var slotsFromUpgrades = module.exports.getSlotsFromUpgrades(usableUpgrades, currentShip.startingUpgrades, upgradesByType);
+        var slotsFromUpgrades = upgradeSlotsModel.getSlotsFromUpgrades(usableUpgrades, currentShip.startingUpgrades, upgradesByType);
         _.each(slotsFromUpgrades, function (slotType) {
             addToSlot(slotType, 1, 1);
         });
 
         return usableUpgrades;
-    },
-    getSlotsFromUpgrades: function (usableUpgrades, startingUpgrades, upgradesByType) {
-        var additionalSlotTypes = [];
-
-        // array to track which upgrades we've processed grants for, and prevent infinite loop
-        var processedGrantForIds = [];
-        var processGrants = function (upgrade) {
-            // Is the type of this upgrade allowed on this ship?
-            var foundGrant = false;
-            if (processedGrantForIds.indexOf(upgrade.id) === -1) {
-                // Only process this if we haven't already done so
-                var slotType = upgrade.slot;
-                if (usableUpgrades[slotType] || additionalSlotTypes.indexOf(slotType) >= 0) {
-                    // slot is allowed on ship, so lets process any additional slots the upgrade grants
-                    if (upgrade.grants) {
-                        _.each(upgrade.grants, function (grant) {
-                            if (grant.type === 'slot') {
-                                foundGrant = true;
-                                additionalSlotTypes.push(grant.name);
-                            }
-                        });
-                    }
-                }
-            }
-            return foundGrant;
-        };
-
-        var processGrantsList = function (upgradeList) {
-            var found = false;
-            // keep looping while we find results. If we find a grant, we have to process the
-            // whole list again, in case it affects another upgrade
-            do {
-                found = _.find(upgradeList, processGrants);
-                if (found && found.id) {
-                    processedGrantForIds.push(found.id);
-                }
-            } while (found);
-        };
-
-        // Do any starting upgrade grants before the purchased ones
-        processGrantsList(startingUpgrades);
-
-        // Add slots given by upgrades/starting upgrades
-        _.each(upgradesByType, function (upgradesList) {
-            processGrantsList(upgradesList);
-        });
-
-        return additionalSlotTypes;
     },
     renderShipUpgrades: function (build) {
         // Process and create list for ship chassis slots
@@ -408,7 +391,7 @@ module.exports = {
 
         var $ul = $('<ul>');
 
-        var upgradeSlots = module.exports.getShipUpgrades(build.currentShip);
+        var upgradeSlots = upgradeSlotsModel.getShipSlots(build.currentShip);
 
         var equippedUpgrades = $.extend(true, [], build.equippedUpgrades.upgrades);
         // var equippedAbilities = $.extend(true, [], build.equippedUpgrades.pilotAbilities);
@@ -469,7 +452,7 @@ module.exports = {
                     });
                 } else {
                     $slot.on('click', function () {
-                        module.exports.clickEquipSlot(filteredUpgradesByType, build);
+                        module.exports.clickEquipSlot(build.upgrades[upgradeSlot.type], filteredUpgradesByType, build);
                     });
                 }
 
@@ -484,7 +467,7 @@ module.exports = {
         _.each(upgradeSlots, function (upgradeSlot) {
             usableUpgrades[upgradeSlot.type] = {};
         });
-        var slotsFromUpgrades = module.exports.getSlotsFromUpgrades(usableUpgrades, build.currentShip.startingUpgrades, build.upgradesByType);
+        var slotsFromUpgrades = upgradeSlotsModel.getSlotsFromUpgrades(usableUpgrades, build.currentShip.startingUpgrades, build.upgradesByType);
 
         if (slotsFromUpgrades.length > 0) {
             var $shipSlotsFromUpgrades = $('#ship-slots-upgrades');
@@ -502,53 +485,5 @@ module.exports = {
         } else {
             $('#ship-slots-upgrades-wrapper').hide();
         }
-    },
-    getShipUpgrades: function (currentShip) {
-        // elite slots are dependent on pilot level
-
-        var usableUpgrades = _.map(currentShip.upgradeSlots, function (upgradeSlot) {
-            return {
-                type: upgradeSlot
-            };
-        });
-
-        usableUpgrades = usableUpgrades.concat([
-            {
-                type: 'Title'
-            },
-            {
-                type: 'Modification'
-            },
-            {
-                type: 'Modification',
-                pilotSkill: 4
-            },
-            {
-                type: 'Modification',
-                pilotSkill: 6
-            },
-            {
-                type: 'Modification',
-                pilotSkill: 8
-            },
-            {
-                type: 'Elite',
-                pilotSkill: 3
-            },
-            {
-                type: 'Elite',
-                pilotSkill: 5
-            },
-            {
-                type: 'Elite',
-                pilotSkill: 7
-            },
-            {
-                type: 'Elite',
-                pilotSkill: 9
-            }
-        ]);
-
-        return usableUpgrades;
     }
 };
