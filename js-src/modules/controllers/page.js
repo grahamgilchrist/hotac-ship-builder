@@ -114,7 +114,7 @@ module.exports = {
             shipInfoView.renderShipActions(build.currentShip, build.upgrades);
             shipInfoView.renderShipImage(build.currentShip);
             shipInfoView.renderShipDial(build.currentShip);
-            upgradesView.renderShipUpgrades(build);
+            upgradesView.renderShipSlotsList(build);
             pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
             upgradesView.renderUpgradesList(build);
             xpHistoryView.renderTable(build);
@@ -132,7 +132,7 @@ module.exports = {
                 shipInfoView.renderShipActions(build.currentShip, build.upgrades);
                 shipInfoView.renderShipImage(build.currentShip);
                 shipInfoView.renderShipDial(build.currentShip);
-                upgradesView.renderShipUpgrades(build);
+                upgradesView.renderShipSlotsList(build);
                 upgradesView.renderUpgradesList(build);
                 changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
             }
@@ -143,7 +143,7 @@ module.exports = {
                 pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
                 upgradesView.renderUpgradesList(build);
                 changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
-                upgradesView.renderShipUpgrades(build);
+                upgradesView.renderShipSlotsList(build);
             }
         });
 
@@ -157,13 +157,13 @@ module.exports = {
             if (build.ready) {
                 upgradesView.renderUpgradesList(build);
                 shipInfoView.renderShipActions(build.currentShip, build.upgrades);
-                upgradesView.renderShipUpgrades(build);
+                upgradesView.renderShipSlotsList(build);
             }
         });
 
         events.on('model.build.equippedUpgrades.update', function (event, build) {
             if (build.ready) {
-                upgradesView.renderShipUpgrades(build);
+                upgradesView.renderShipSlotsList(build);
                 var newHash = hashController.generateExportString(build);
                 hashController.set(newHash);
             }

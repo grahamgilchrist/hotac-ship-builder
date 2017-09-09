@@ -13,13 +13,111 @@ var upgradesModel = require('../models/shipBuild/upgrades');
 var upgradeSlotsModel = require('../models/shipBuild/upgradeSlots');
 
 module.exports = {
-    clickEquipSlot: function (upgradeType, equippedUpgradesByType, filteredUpgrades, build) {
-        // open modal to choose upgrade to equip
-        var $modalContent = module.exports.renderUpgradeModalContent(build, upgradeType, filteredUpgrades, equippedUpgradesByType);
-        modalController.openOptionSelectModal($modalContent, 'Buy upgrade');
+    renderShipSlotsList: function (build) {
+        // Process and create list for ship chassis slots
+        var $shipSlots = $('#ship-slots-default');
+        $shipSlots.empty();
+
+        var $ul = $('<ul>');
+
+        var upgradeSlots = upgradeSlotsModel.getShipSlots(build.currentShip);
+
+        var equippedUpgrades = $.extend(true, [], build.equippedUpgrades.upgrades);
+        // var equippedAbilities = $.extend(true, [], build.equippedUpgrades.pilotAbilities);
+
+        _.each(upgradeSlots, function (upgradeSlot) {
+            var $li = module.exports.renderShipSlot(upgradeSlot, build, equippedUpgrades);
+            $ul.append($li);
+        });
+
+        $shipSlots.append($ul);
+
+        // Process and create list for slots added by upgrades
+        var slotsFromUpgrades = upgradeSlotsModel.getSlotsFromUpgrades(build.currentShip, build.upgradesByType);
+
+        var $shipSlotsFromUpgrades = $('#ship-slots-upgrades');
+        $shipSlotsFromUpgrades.empty();
+
+        if (slotsFromUpgrades.length > 0) {
+            $ul = $('<ul>');
+
+            _.each(slotsFromUpgrades, function (upgradeType) {
+                var upgradeSlot = {
+                    type: upgradeType
+                };
+                var $li = module.exports.renderShipSlot(upgradeSlot, build, equippedUpgrades);
+                $ul.append($li);
+            });
+
+            $shipSlotsFromUpgrades.append($ul);
+            $('#ship-slots-upgrades-wrapper').show();
+        } else {
+            $('#ship-slots-upgrades-wrapper').hide();
+        }
     },
-    removeEquipSlot: function (upgradeId) {
-        events.trigger('view.unequip.upgrade', upgradeId);
+    renderShipSlot: function (upgradeSlot, build, equippedUpgrades) {
+
+        var filteredUpgradesByType = upgradesModel.getFilteredUpgrades(upgradeSlot.type, build.upgrades, build.currentShip);
+
+        // Don't show this slot if there are no available upgrades for it (e.g. a title slot for a ship with no titles)
+        if (!filteredUpgradesByType || filteredUpgradesByType.length < 1) {
+            return;
+        }
+
+        var slotTitle = upgradeSlot.type;
+        var equipped = false;
+
+        var $li = $('<li></li>');
+        var $slot = $('<div class="slot"></div>');
+        $slot.append(module.exports.getIconString(upgradeSlot.type));
+        $li.append($slot);
+
+        if (build.pilotSkill < upgradeSlot.pilotSkill) {
+            // Disabled
+            $slot.addClass('disabled');
+            $slot.append(' <span class="title">' + slotTitle + '</span><span> (PS ' + upgradeSlot.pilotSkill + ')</span>');
+        } else {
+            // Not disabled
+
+            // Is there an equipped upgrade for this slot
+            var matchingUpgrade = _.find(equippedUpgrades, function (item) {
+                return item.slot === upgradeSlot.type;
+            });
+
+            if (matchingUpgrade) {
+                equipped = true;
+                slotTitle = matchingUpgrade.name;
+                _.remove(equippedUpgrades, function (item) {
+                    return item.id === matchingUpgrade.id;
+                });
+            }
+
+            if (upgradeSlot.type === 'Elite') {
+                // check for abilities too
+            }
+
+            $slot.append(' <span class="title">' + slotTitle + '</span>');
+
+            if (equipped) {
+                var imageUrl = '/components/xwing-data/images/' + matchingUpgrade.image;
+                $slot.append('<i class="material-icons eye">remove_red_eye</i>');
+                $slot.attr('data-featherlight', imageUrl);
+                // var $item = $('<li class="upgrade" data-featherlight="' + imageUrl + '"><span>' + upgrade.name + '</span><i class="material-icons eye">remove_red_eye</i><img class="preview" src="' + imageUrl + '"></li>');
+
+                var $icon = $('<i class="material-icons remove">remove_circle_outline</i>');
+                $li.append($icon);
+                $slot.addClass('equipped');
+                $icon.on('click', function () {
+                    module.exports.removeEquipSlot(matchingUpgrade.id, build);
+                });
+            } else {
+                $slot.on('click', function () {
+                    module.exports.clickEquipSlot(upgradeSlot.type, build.upgrades[upgradeSlot.type], filteredUpgradesByType, build);
+                });
+            }
+        }
+
+        return $li;
     },
     renderUpgradesList: function (build) {
         // Get a list of the slots allowed for this build (determined by ship and PS) and the number of each upgrade per slot
@@ -85,6 +183,14 @@ module.exports = {
         iconId = iconId.toLowerCase();
         var iconString = '<i class="xwing-miniatures-font xwing-miniatures-font-' + iconId + '"></i>';
         return iconString;
+    },
+    clickEquipSlot: function (upgradeType, equippedUpgradesByType, filteredUpgrades, build) {
+        // open modal to choose upgrade to equip
+        var $modalContent = module.exports.renderUpgradeModalContent(build, upgradeType, filteredUpgrades, equippedUpgradesByType);
+        modalController.openOptionSelectModal($modalContent, 'Buy upgrade');
+    },
+    removeEquipSlot: function (upgradeId) {
+        events.trigger('view.unequip.upgrade', upgradeId);
     },
     renderUpgradeModalContent: function (build, upgradeType, filteredUpgradesByType, equippedUpgrades) {
         var tabs = [];
@@ -226,107 +332,5 @@ module.exports = {
         $modalContent.append($upgradeList);
 
         return $modalContent;
-    },
-    renderShipUpgrades: function (build) {
-        // Process and create list for ship chassis slots
-        var $shipSlots = $('#ship-slots-default');
-        $shipSlots.empty();
-
-        var $ul = $('<ul>');
-
-        var upgradeSlots = upgradeSlotsModel.getShipSlots(build.currentShip);
-
-        var equippedUpgrades = $.extend(true, [], build.equippedUpgrades.upgrades);
-        // var equippedAbilities = $.extend(true, [], build.equippedUpgrades.pilotAbilities);
-
-        _.each(upgradeSlots, function (upgradeSlot) {
-            var filteredUpgradesByType = upgradesModel.getFilteredUpgrades(upgradeSlot.type, build.upgrades, build.currentShip);
-
-            // Don't show this slot if there are no available upgrades for it (e.g. a title slot for a ship with no titles)
-            if (!filteredUpgradesByType || filteredUpgradesByType.length < 1) {
-                return;
-            }
-
-            var slotTitle = upgradeSlot.type;
-            var equipped = false;
-
-            var $li = $('<li></li>');
-            var $slot = $('<div class="slot"></div>');
-            $slot.append(module.exports.getIconString(upgradeSlot.type));
-            $li.append($slot);
-
-            if (build.pilotSkill < upgradeSlot.pilotSkill) {
-                // Disabled
-                $slot.addClass('disabled');
-                $slot.append(' <span class="title">' + slotTitle + '</span><span> (PS ' + upgradeSlot.pilotSkill + ')</span>');
-            } else {
-                // Not disabled
-
-                // Is there an equipped upgrade for this slot
-                var matchingUpgrade = _.find(equippedUpgrades, function (item) {
-                    return item.slot === upgradeSlot.type;
-                });
-
-                if (matchingUpgrade) {
-                    equipped = true;
-                    slotTitle = matchingUpgrade.name;
-                    _.remove(equippedUpgrades, function (item) {
-                        return item.id === matchingUpgrade.id;
-                    });
-                }
-
-                if (upgradeSlot.type === 'Elite') {
-                    // check for abilities too
-                }
-
-                $slot.append(' <span class="title">' + slotTitle + '</span>');
-
-                if (equipped) {
-                    var imageUrl = '/components/xwing-data/images/' + matchingUpgrade.image;
-                    $slot.append('<i class="material-icons eye">remove_red_eye</i>');
-                    $slot.attr('data-featherlight', imageUrl);
-                    // var $item = $('<li class="upgrade" data-featherlight="' + imageUrl + '"><span>' + upgrade.name + '</span><i class="material-icons eye">remove_red_eye</i><img class="preview" src="' + imageUrl + '"></li>');
-
-                    var $icon = $('<i class="material-icons remove">remove_circle_outline</i>');
-                    $li.append($icon);
-                    $slot.addClass('equipped');
-                    $icon.on('click', function () {
-                        module.exports.removeEquipSlot(matchingUpgrade.id, build);
-                    });
-                } else {
-                    $slot.on('click', function () {
-                        module.exports.clickEquipSlot(upgradeSlot.type, build.upgrades[upgradeSlot.type], filteredUpgradesByType, build);
-                    });
-                }
-
-            }
-            $ul.append($li);
-        });
-
-        $shipSlots.append($ul);
-
-        // Process and create list for slots added by upgrades
-        var usableUpgrades = {};
-        _.each(upgradeSlots, function (upgradeSlot) {
-            usableUpgrades[upgradeSlot.type] = {};
-        });
-        var slotsFromUpgrades = upgradeSlotsModel.getSlotsFromUpgrades(usableUpgrades, build.currentShip.startingUpgrades, build.upgradesByType);
-
-        if (slotsFromUpgrades.length > 0) {
-            var $shipSlotsFromUpgrades = $('#ship-slots-upgrades');
-            $shipSlotsFromUpgrades.empty();
-            $ul = $('<ul>');
-
-            _.each(slotsFromUpgrades, function (upgradeSlot) {
-                var titleString = module.exports.getIconString(upgradeSlot) + ' <span>' + upgradeSlot + '</span>';
-                var $li = $('<li>' + titleString + '</li>');
-                $ul.append($li);
-            });
-
-            $shipSlotsFromUpgrades.append($ul);
-            $('#ship-slots-upgrades-wrapper').show();
-        } else {
-            $('#ship-slots-upgrades-wrapper').hide();
-        }
     }
 };

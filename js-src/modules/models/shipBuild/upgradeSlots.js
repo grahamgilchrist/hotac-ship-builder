@@ -56,12 +56,10 @@ module.exports = {
     },
     // Return array of upgrade types allowed in current state of ship build
     allowedUpgradeTypes: function (pilotSkill, currentShip, upgradesByType) {
-
-        // Add slots for the ship type
         var usableUpgrades = _.extend([], currentShip.upgradeSlots);
 
         // Add slots for the upgrade cards
-        var slotsFromUpgrades = module.exports.getSlotsFromUpgrades(usableUpgrades, currentShip.startingUpgrades, upgradesByType);
+        var slotsFromUpgrades = module.exports.getSlotsFromUpgrades(currentShip, upgradesByType);
         _.each(slotsFromUpgrades, function (slotType) {
             usableUpgrades.push(slotType);
         });
@@ -80,7 +78,14 @@ module.exports = {
         return usableUpgrades;
     },
     // Returns array of slot types granted by starting and purchased upgrade cards
-    getSlotsFromUpgrades: function (usableUpgrades, startingUpgrades, upgradesByType) {
+    getSlotsFromUpgrades: function (currentShip, upgradesByType) {
+        // Add slots for the ship type and unlocked PS levels
+        var usableUpgrades = {};
+        var upgradeSlots = module.exports.getShipSlots(currentShip);
+        _.each(upgradeSlots, function (upgradeSlot) {
+            usableUpgrades[upgradeSlot.type] = {};
+        });
+
         var additionalSlotTypes = [];
 
         // array to track which upgrades we've processed grants for, and prevent infinite loop
@@ -119,7 +124,7 @@ module.exports = {
         };
 
         // Do any starting upgrade grants before the purchased ones
-        processGrantsList(startingUpgrades);
+        processGrantsList(currentShip.startingUpgrades);
 
         // Add slots given by upgrades/starting upgrades
         _.each(upgradesByType, function (upgradesList) {
