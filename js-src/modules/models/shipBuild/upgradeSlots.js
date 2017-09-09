@@ -3,6 +3,9 @@
 var _ = require('lodash');
 
 module.exports = {
+    // Return array of all the possible slots allowed on the ship
+    // Each item contains slot type and required pilotSkill to unlock
+    // This is the total number of slots possible base don the ship chassis
     getShipSlots: function (currentShip) {
         // elite slots are dependent on pilot level
 
@@ -51,6 +54,32 @@ module.exports = {
 
         return usableUpgrades;
     },
+    // Return array of upgrade types allowed in current state of ship build
+    allowedUpgradeTypes: function (pilotSkill, currentShip, upgradesByType) {
+
+        // Add slots for the ship type
+        var usableUpgrades = _.extend([], currentShip.upgradeSlots);
+
+        // Add slots for the upgrade cards
+        var slotsFromUpgrades = module.exports.getSlotsFromUpgrades(usableUpgrades, currentShip.startingUpgrades, upgradesByType);
+        _.each(slotsFromUpgrades, function (slotType) {
+            usableUpgrades.push(slotType);
+        });
+
+        usableUpgrades.push('Modification');
+        usableUpgrades.push('Title');
+
+        // elite slots are dependent on pilot level
+        if (pilotSkill >= 3) {
+            usableUpgrades.push('Elite');
+        }
+
+        // Remove any duplicates in array
+        usableUpgrades = _.uniq(usableUpgrades);
+
+        return usableUpgrades;
+    },
+    // Returns array of slot types granted by starting and purchased upgrade cards
     getSlotsFromUpgrades: function (usableUpgrades, startingUpgrades, upgradesByType) {
         var additionalSlotTypes = [];
 
