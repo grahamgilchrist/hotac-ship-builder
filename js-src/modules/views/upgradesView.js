@@ -45,7 +45,7 @@ module.exports = {
                 var upgradeSlot = {
                     type: upgradeType
                 };
-                var $li = module.exports.renderShipSlot(upgradeSlot, build, equippedUpgrades);
+                var $li = module.exports.renderShipSlot(upgradeSlot, build, equippedUpgradesTab);
                 $ul.append($li);
             });
 
@@ -64,7 +64,10 @@ module.exports = {
             return;
         }
 
-        var slotTitle = upgradeSlot.type;
+        var slotHtml = '<span class="title">' + upgradeSlot.type + '</span>';
+        if (upgradeSlot.pilotSkill) {
+            slotHtml += '<span> (PS ' + upgradeSlot.pilotSkill + ')</span>';
+        }
         var equipped = false;
 
         var $li = $('<li></li>');
@@ -75,7 +78,7 @@ module.exports = {
         if (build.pilotSkill < upgradeSlot.pilotSkill) {
             // Disabled
             $slot.addClass('disabled');
-            $slot.append(' <span class="title">' + slotTitle + '</span><span> (PS ' + upgradeSlot.pilotSkill + ')</span>');
+            $slot.append(slotHtml);
         } else {
             // Not disabled
 
@@ -86,7 +89,7 @@ module.exports = {
 
             if (matchingUpgrade) {
                 equipped = true;
-                slotTitle = matchingUpgrade.name;
+                slotHtml = '<span class="title">' + matchingUpgrade.name + '</span>';
                 _.remove(equippedUpgrades, function (item) {
                     return item.id === matchingUpgrade.id;
                 });
@@ -96,7 +99,7 @@ module.exports = {
                 // check for abilities too
             }
 
-            $slot.append(' <span class="title">' + slotTitle + '</span>');
+            $slot.append(slotHtml);
 
             if (equipped) {
                 var imageUrl = '/components/xwing-data/images/' + matchingUpgrade.image;
