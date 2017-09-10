@@ -180,22 +180,22 @@ module.exports = {
         // Get a list of the slots allowed for this build (determined by ship and PS) and the number of each upgrade per slot
         var upgrades = upgradesModel.getAllowedUpgrades(build);
 
-        var $allowedList = $('#allowed-upgrade-list');
-        $allowedList.empty();
-        if (upgrades.allowed.length > 0 || build.pilotAbilities.length > 0) {
-            $('.purchased-upgrades .no-upgrades').hide();
+        var $unusedList = $('#unused-upgrade-list');
+        $unusedList.empty();
+        if (upgrades.unequipped.length > 0 || build.pilotAbilities.length > 0) {
+            $('.unused-upgrades-wrapper').show();
             // Add purchased upgrades to the list
-            _.forEach(upgrades.allowed, function (upgrade) {
+            _.forEach(upgrades.unequipped, function (upgrade) {
                 var $upgradeItem = module.exports.renderUpgradeItem(upgrade);
-                $allowedList.append($upgradeItem);
+                $unusedList.append($upgradeItem);
             });
             // Add pilot abilities to the list
             _.forEach(build.pilotAbilities, function (pilotAbility) {
                 var $upgradeItem = module.exports.renderPilotUpgradeItem(pilotAbility);
-                $allowedList.append($upgradeItem);
+                $unusedList.append($upgradeItem);
             });
         } else {
-            $('.purchased-upgrades .no-upgrades').show();
+            $('.unused-upgrades-wrapper').hide();
         }
 
         var $disallowedList = $('#disabled-upgrade-list');

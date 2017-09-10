@@ -168,6 +168,7 @@ module.exports = {
         events.on('model.build.equippedUpgrades.update', function (event, build) {
             if (build.ready) {
                 upgradesView.renderShipSlotsList(build);
+                upgradesView.renderUpgradesList(build);
                 var newHash = hashController.generateExportString(build);
                 hashController.set(newHash);
             }

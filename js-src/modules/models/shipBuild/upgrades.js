@@ -27,8 +27,10 @@ module.exports = {
             }
         });
 
+        var unequipped = _.difference(allowedUpgrades, build.equippedUpgrades.upgrades);
+
         return {
-            allowed: allowedUpgrades,
+            unequipped: unequipped,
             disallowed: disallowedUpgrades
         };
     },
