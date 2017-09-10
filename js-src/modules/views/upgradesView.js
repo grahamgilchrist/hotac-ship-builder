@@ -56,10 +56,7 @@ module.exports = {
         if (upgradeSlots.fromUpgrades.length > 0) {
             $ul = $('<ul>');
 
-            _.each(upgradeSlots.fromUpgrades, function (upgradeType) {
-                var upgradeSlot = {
-                    type: upgradeType
-                };
+            _.each(upgradeSlots.fromUpgrades, function (upgradeSlot) {
                 var $li = module.exports.renderShipSlot(upgradeSlot, build, equippedUpgrades);
                 $ul.append($li);
             });

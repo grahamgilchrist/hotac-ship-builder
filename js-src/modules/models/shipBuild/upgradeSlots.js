@@ -74,6 +74,34 @@ module.exports = {
             fromUpgrades: slotsFromUpgrades
         };
     },
+    // Returns array of slot types granted by starting and purchased upgrade cards
+    getSlotsFromUpgrades: function (build) {
+        var additionalSlotTypes = [];
+
+        var processGrantsList = function (upgradeList) {
+            _.each(upgradeList, function (upgrade) {
+                if (upgrade.grants) {
+                    _.each(upgrade.grants, function (grant) {
+                        if (grant.type === 'slot') {
+                            additionalSlotTypes.push(grant.name);
+                        }
+                    });
+                }
+            });
+        };
+
+        // Process any additional slots from equipped upgrades
+        processGrantsList(build.equippedUpgrades.upgrades);
+
+        additionalSlotTypes = _.map(additionalSlotTypes, function (upgradeType) {
+            var upgradeSlot = {
+                type: upgradeType
+            };
+            return upgradeSlot;
+        });
+
+        return additionalSlotTypes;
+    },
     // Return array of upgrade types enabled in current state of ship build (enabled + upgrades)
     allUsableSlotTypes: function (build) {
         var shipSlots = module.exports.getShipSlots(build);
@@ -91,28 +119,5 @@ module.exports = {
         allEnabledSlotTypes = _.uniq(allEnabledSlotTypes);
 
         return allEnabledSlotTypes;
-    },
-    // Returns array of slot types granted by starting and purchased upgrade cards
-    getSlotsFromUpgrades: function (build) {
-        var additionalSlotTypes = [];
-
-        var processGrantsList = function (upgradeList) {
-            _.each(upgradeList, function (upgrade) {
-                if (upgrade.grants) {
-                    _.each(upgrade.grants, function (grant) {
-                        if (grant.type === 'slot') {
-                            additionalSlotTypes.push(grant.name);
-                        }
-                    });
-                }
-            });
-        };
-
-        // Do any starting upgrade grants before the purchased ones
-        processGrantsList(build.currentShip.startingUpgrades);
-        // Process any additional slots from equipped upgrades
-        processGrantsList(build.equippedUpgrades.upgrades);
-
-        return additionalSlotTypes;
     }
 };
