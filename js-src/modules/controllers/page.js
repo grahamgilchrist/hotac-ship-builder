@@ -83,6 +83,10 @@ module.exports = {
             currentBuild.equipAbility(pilotId);
         });
 
+        events.on('view.changeShip.changeShip', function (event, shipId) {
+            currentBuild.changeShip(shipId);
+        });
+
         events.on('view.equip.upgrade', function (event, upgradeId) {
             currentBuild.equipUpgrade(upgradeId);
         });
