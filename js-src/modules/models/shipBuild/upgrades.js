@@ -8,7 +8,7 @@ module.exports = {
     // Looks at purchased upgrades in current build and return arrays of upgrades split by allowed/disallowed
     //  e.g. Can they be equipped on with chassis/upgrades?
     getAllowedUpgrades: function (build) {
-        var upgradesAllowedInBuild = upgradeSlotsModel.allowedUpgradeTypes(build.pilotSkill, build.currentShip, build.upgrades);
+        var upgradesAllowedInBuild = upgradeSlotsModel.allUsableSlotTypes(build);
 
         var purchasedUpgradesByType = _.clone(build.upgrades, true);
 

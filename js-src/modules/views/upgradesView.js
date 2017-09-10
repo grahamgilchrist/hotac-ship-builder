@@ -15,37 +15,56 @@ var upgradeSlotsModel = require('../models/shipBuild/upgradeSlots');
 module.exports = {
     renderShipSlotsList: function (build) {
         // Process and create list for ship chassis slots
+        var $freeShipSlots = $('#ship-slots-free');
+        $freeShipSlots.empty();
+
+        // Process and create list for ship chassis slots
         var $shipSlots = $('#ship-slots-default');
         $shipSlots.empty();
 
         var $ul = $('<ul>');
+        _.each(build.currentShip.startingUpgrades, function (upgrade) {
+            var upgradeSlot = {
+                type: upgrade.slot
+            };
+            var $li = module.exports.renderShipSlot(upgradeSlot, build, [upgrade]);
+            $ul.append($li);
+        });
+        $freeShipSlots.append($ul);
 
-        var upgradeSlots = upgradeSlotsModel.getShipSlots(build.currentShip);
+        var upgradeSlots = upgradeSlotsModel.getShipSlots(build);
 
         var equippedUpgrades = $.extend(true, [], build.equippedUpgrades.upgrades);
         // var equippedAbilities = $.extend(true, [], build.equippedUpgrades.pilotAbilities);
 
-        _.each(upgradeSlots, function (upgradeSlot) {
+        // Output allowed slots
+        $ul = $('<ul>');
+        _.each(upgradeSlots.enabled, function (upgradeSlot) {
             var $li = module.exports.renderShipSlot(upgradeSlot, build, equippedUpgrades);
             $ul.append($li);
         });
 
-        $shipSlots.append($ul);
+        // Output disabled slots
+        _.each(upgradeSlots.disabled, function (upgradeSlot) {
+            if (build.pilotSkill < upgradeSlot.pilotSkill) {
+                var $li = module.exports.renderShipSlot(upgradeSlot, build, equippedUpgrades);
+                $ul.append($li);
+            }
+        });
 
-        // Process and create list for slots added by upgrades
-        var slotsFromUpgrades = upgradeSlotsModel.getSlotsFromUpgrades(build.currentShip, build.upgradesByType);
+        $shipSlots.append($ul);
 
         var $shipSlotsFromUpgrades = $('#ship-slots-upgrades');
         $shipSlotsFromUpgrades.empty();
 
-        if (slotsFromUpgrades.length > 0) {
+        if (upgradeSlots.fromUpgrades.length > 0) {
             $ul = $('<ul>');
 
-            _.each(slotsFromUpgrades, function (upgradeType) {
+            _.each(upgradeSlots.fromUpgrades, function (upgradeType) {
                 var upgradeSlot = {
                     type: upgradeType
                 };
-                var $li = module.exports.renderShipSlot(upgradeSlot, build, equippedUpgradesTab);
+                var $li = module.exports.renderShipSlot(upgradeSlot, build, equippedUpgrades);
                 $ul.append($li);
             });
 
@@ -125,19 +144,6 @@ module.exports = {
     renderUpgradesList: function (build) {
         // Get a list of the slots allowed for this build (determined by ship and PS) and the number of each upgrade per slot
         var upgrades = upgradesModel.getAllowedUpgrades(build);
-
-        var $freeList = $('#free-upgrade-list');
-        $freeList.empty();
-        if (build.currentShip.startingUpgrades && build.currentShip.startingUpgrades.length > 0) {
-            $('.free-upgrades').show();
-            // Add starting upgrades to the list
-            _.forEach(build.currentShip.startingUpgrades, function (upgrade) {
-                var $upgradeItem = module.exports.renderUpgradeItem(upgrade);
-                $freeList.append($upgradeItem);
-            });
-        } else {
-            $('.free-upgrades').hide();
-        }
 
         var $allowedList = $('#allowed-upgrade-list');
         $allowedList.empty();
