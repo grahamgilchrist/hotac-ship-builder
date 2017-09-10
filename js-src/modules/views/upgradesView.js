@@ -14,29 +14,25 @@ var upgradeSlotsModel = require('../models/shipBuild/upgradeSlots');
 
 module.exports = {
     renderShipSlotsList: function (build) {
+        var equippedUpgrades = $.extend(true, [], build.equippedUpgrades.upgrades);
+        // var equippedAbilities = $.extend(true, [], build.equippedUpgrades.pilotAbilities);
+
         // Process and create list for ship chassis slots
         var $freeShipSlots = $('#ship-slots-free');
         $freeShipSlots.empty();
+
+        var $ul = $('<ul>');
+        _.each(build.currentShip.startingUpgrades, function (upgrade) {
+            var $li = module.exports.renderFreeShipSlot(upgrade, build, equippedUpgrades);
+            $ul.append($li);
+        });
+        $freeShipSlots.append($ul);
 
         // Process and create list for ship chassis slots
         var $shipSlots = $('#ship-slots-default');
         $shipSlots.empty();
 
-        var $ul = $('<ul>');
-        _.each(build.currentShip.startingUpgrades, function (upgrade) {
-            var upgradeSlot = {
-                type: upgrade.slot
-            };
-            var $li = module.exports.renderShipSlot(upgradeSlot, build, [upgrade]);
-            $ul.append($li);
-        });
-        $freeShipSlots.append($ul);
-
         var upgradeSlots = upgradeSlotsModel.getShipSlots(build);
-
-        var equippedUpgrades = $.extend(true, [], build.equippedUpgrades.upgrades);
-        // var equippedAbilities = $.extend(true, [], build.equippedUpgrades.pilotAbilities);
-
         // Output allowed slots
         $ul = $('<ul>');
         _.each(upgradeSlots.enabled, function (upgradeSlot) {
@@ -124,8 +120,6 @@ module.exports = {
                 var imageUrl = '/components/xwing-data/images/' + matchingUpgrade.image;
                 $slot.append('<i class="material-icons eye">remove_red_eye</i>');
                 $slot.attr('data-featherlight', imageUrl);
-                // var $item = $('<li class="upgrade" data-featherlight="' + imageUrl + '"><span>' + upgrade.name + '</span><i class="material-icons eye">remove_red_eye</i><img class="preview" src="' + imageUrl + '"></li>');
-
                 var $icon = $('<i class="material-icons remove">remove_circle_outline</i>');
                 $li.append($icon);
                 $slot.addClass('equipped');
@@ -137,6 +131,50 @@ module.exports = {
                     module.exports.clickEquipSlot(upgradeSlot.type, build.upgrades[upgradeSlot.type], filteredUpgradesByType, build);
                 });
             }
+        }
+
+        return $li;
+    },
+    renderFreeShipSlot: function (upgrade, build, equippedUpgrades) {
+
+        var slotHtml = '<span class="title">' + upgrade.name + '</span>';
+        var equipped = false;
+
+        var $li = $('<li></li>');
+        var $slot = $('<div class="slot"></div>');
+        $slot.append(module.exports.getIconString(upgrade.slot));
+        $li.append($slot);
+
+        // Is there an equipped upgrade that matches this free one?
+        var matchingUpgrade = _.find(equippedUpgrades, function (item) {
+            return item.id === upgrade.id;
+        });
+
+        if (matchingUpgrade) {
+            equipped = true;
+            _.remove(equippedUpgrades, function (item) {
+                return item.id === matchingUpgrade.id;
+            });
+        }
+
+        $slot.append(slotHtml);
+        var $icon = $('<i class="material-icons remove">remove_circle_outline</i>');
+
+        if (equipped) {
+            var imageUrl = '/components/xwing-data/images/' + matchingUpgrade.image;
+            $slot.append('<i class="material-icons eye">remove_red_eye</i>');
+            $slot.attr('data-featherlight', imageUrl);
+            $li.append($icon);
+            $slot.addClass('equipped');
+            $icon.on('click', function () {
+                events.trigger('view.unequip.upgrade', upgrade.id);
+            });
+        } else {
+            $icon = $('<i class="material-icons remove">add_circle_outline</i>');
+            $li.append($icon);
+            $icon.on('click', function () {
+                events.trigger('view.equip.upgrade', upgrade.id);
+            });
         }
 
         return $li;
