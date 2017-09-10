@@ -69,7 +69,7 @@ module.exports = {
     },
     renderShipSlot: function (upgradeSlot, build, equippedUpgrades) {
 
-        var filteredUpgradesByType = upgradesModel.getFilteredUpgrades(upgradeSlot.type, build.upgrades, build.currentShip);
+        var filteredUpgradesByType = upgradesModel.getFilteredUpgrades(upgradeSlot.type, build);
 
         // Don't show this slot if there are no available upgrades for it (e.g. a title slot for a ship with no titles)
         if (!filteredUpgradesByType || filteredUpgradesByType.length < 1) {
@@ -177,15 +177,12 @@ module.exports = {
         return $li;
     },
     renderUpgradesList: function (build) {
-        // Get a list of the slots allowed for this build (determined by ship and PS) and the number of each upgrade per slot
-        var upgrades = upgradesModel.getAllowedUpgrades(build);
-
         var $unusedList = $('#unused-upgrade-list');
         $unusedList.empty();
-        if (upgrades.unequipped.length > 0 || build.pilotAbilities.length > 0) {
+        if (build.upgrades.unequipped.length > 0 || build.pilotAbilities.length > 0) {
             $('.unused-upgrades-wrapper').show();
             // Add purchased upgrades to the list
-            _.forEach(upgrades.unequipped, function (upgrade) {
+            _.forEach(build.upgrades.unequipped, function (upgrade) {
                 var $upgradeItem = module.exports.renderUpgradeItem(upgrade);
                 $unusedList.append($upgradeItem);
             });
@@ -200,10 +197,10 @@ module.exports = {
 
         var $disallowedList = $('#disabled-upgrade-list');
         $disallowedList.empty();
-        if (upgrades.disallowed.length > 0) {
+        if (build.upgrades.disabled.length > 0) {
             // there's some disabled upgrades here
             $('.disabled-upgrades').show();
-            _.forEach(upgrades.disallowed, function (upgrade) {
+            _.forEach(build.upgrades.disabled, function (upgrade) {
                 var $upgradeItem = module.exports.renderUpgradeItem(upgrade);
                 $disallowedList.append($upgradeItem);
             });

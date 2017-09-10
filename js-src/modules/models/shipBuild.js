@@ -8,6 +8,7 @@ var itemTypes = require('./shipBuild/itemTypes');
 var upgrades = require('../models/upgrades').all;
 var pilots = require('../models/pilots').allRebels;
 var EnemyDefeatsModel = require('../models/enemyDefeats');
+var UpgradesModel = require('./shipBuild/upgradesModel');
 
 // Ship build
 var ShipBuild = function (xpHistory, callsign, playerName, enemyDefeats, equippedUpgrades, equippedAbilities) {
@@ -17,14 +18,21 @@ var ShipBuild = function (xpHistory, callsign, playerName, enemyDefeats, equippe
     this.xpHistory = [];
     this.currentXp = 0;
     this.pilotAbilities = [];
-    this.upgrades = {};
+
     this.enemyDefeats = new EnemyDefeatsModel(enemyDefeats);
 
     this.setPilotSkill(2);
     this.processHistory(xpHistory);
     this.processEquippedItems(equippedUpgrades, equippedAbilities);
-    this.ready = true;
 
+    var upgradeIds = _(xpHistory).filter(function (xpItem) {
+        return xpItem.upgradeType === itemTypes.BUY_UPGRADE;
+    }).map(function (xpItem) {
+        return xpItem.data.upgradeId;
+    }).value();
+    this.upgrades = new UpgradesModel(this, upgradeIds, equippedUpgrades);
+
+    this.ready = true;
     events.trigger('model.build.ready', this);
 };
 
@@ -55,7 +63,9 @@ ShipBuild.prototype.processHistory = function (xpHistory) {
         } else if (xpItem.upgradeType === itemTypes.PILOT_SKILL) {
             thisBuild.increasePilotSkill();
         } else if (xpItem.upgradeType === itemTypes.BUY_UPGRADE) {
-            thisBuild.buyUpgrade(xpItem.data.upgradeId);
+            thisBuild.addToHistory(itemTypes.BUY_UPGRADE, {
+                upgradeId: xpItem.data.upgradeId
+            });
         } else if (xpItem.upgradeType === itemTypes.MISSION) {
             thisBuild.addMissionXp(xpItem.data.missionXp);
         } else if (xpItem.upgradeType === itemTypes.BUY_PILOT_ABILITY) {
@@ -131,18 +141,6 @@ ShipBuild.prototype.addMissionXp = function (xpAmount) {
     this.addToHistory(itemTypes.MISSION, {
         missionXp: xpAmount
     });
-};
-
-ShipBuild.prototype.buyUpgrade = function (upgradeId) {
-    this.addToHistory(itemTypes.BUY_UPGRADE, {
-        upgradeId: upgradeId
-    });
-    var upgrade = this.getUpgradeById(upgradeId);
-    if (!this.upgrades[upgrade.slot]) {
-        this.upgrades[upgrade.slot] = [];
-    }
-    this.upgrades[upgrade.slot].push(upgrade);
-    events.trigger('model.build.upgrades.update', this);
 };
 
 ShipBuild.prototype.buyPilotAbility = function (pilotId) {

@@ -74,7 +74,10 @@ module.exports = {
     },
     bindOtherViewEvents: function () {
         events.on('view.upgrades.buy', function (event, upgradeId) {
-            currentBuild.buyUpgrade(upgradeId);
+            currentBuild.addToHistory(itemTypes.BUY_UPGRADE, {
+                upgradeId: upgradeId
+            });
+            currentBuild.upgrades.buyCard(upgradeId);
             currentBuild.equipUpgrade(upgradeId);
         });
 
@@ -115,7 +118,7 @@ module.exports = {
             mainView.renderTitle(build);
             mainView.renderXp(build.currentXp);
             shipInfoView.renderShipStats(build.currentShip);
-            shipInfoView.renderShipActions(build.currentShip, build.upgrades);
+            shipInfoView.renderShipActions(build.currentShip, build.equippedUpgrades.upgrades);
             shipInfoView.renderShipImage(build.currentShip);
             shipInfoView.renderShipDial(build.currentShip);
             upgradesView.renderShipSlotsList(build);
@@ -133,7 +136,7 @@ module.exports = {
             if (build.ready) {
                 mainView.renderTitle(build);
                 shipInfoView.renderShipStats(build.currentShip);
-                shipInfoView.renderShipActions(build.currentShip, build.upgrades);
+                shipInfoView.renderShipActions(build.currentShip, build.equippedUpgrades.upgrades);
                 shipInfoView.renderShipImage(build.currentShip);
                 shipInfoView.renderShipDial(build.currentShip);
                 upgradesView.renderShipSlotsList(build);
@@ -160,7 +163,7 @@ module.exports = {
         events.on('model.build.upgrades.update', function (event, build) {
             if (build.ready) {
                 upgradesView.renderUpgradesList(build);
-                shipInfoView.renderShipActions(build.currentShip, build.upgrades);
+                shipInfoView.renderShipActions(build.currentShip, build.equippedUpgrades.upgrades);
                 upgradesView.renderShipSlotsList(build);
             }
         });
