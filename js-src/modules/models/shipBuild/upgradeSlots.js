@@ -82,7 +82,7 @@ module.exports = {
             return slot.type;
         });
 
-        var unProcessedUpgrades = _.filter(build.equippedUpgrades.upgrades, function (upgrade) {
+        var unProcessedUpgrades = _.filter(build.upgrades.equipped, function (upgrade) {
             return upgrade.grants;
         });
 

@@ -3,7 +3,7 @@
 var _ = require('lodash');
 var allUpgrades = require('../upgrades').all;
 var upgradeSlotsModel = require('./upgradeSlots');
-var pilots = require('../pilots').allRebels;
+// var pilots = require('../pilots').allRebels;
 var events = require('../../controllers/events');
 
 var upgradesModel = function (build, upgradeIdList, equippedIdList) {
@@ -12,7 +12,6 @@ var upgradesModel = function (build, upgradeIdList, equippedIdList) {
     this.all = this.upgradesFromIds(upgradeIdList);
     this.equipped = this.upgradesFromIds(equippedIdList);
     this.validateEquipped();
-    this.refreshUpgradesState();
 };
 
 upgradesModel.prototype.upgradesFromIds = function (upgradeIdList) {
@@ -101,19 +100,33 @@ upgradesModel.prototype.buyCard = function (upgradeId) {
     var upgrade = this.getUpgradeById(upgradeId);
     this.all.push(upgrade);
     this.refreshUpgradesState();
-    events.trigger('model.build.upgrades.update', this);
+    events.trigger('model.build.upgrades.update', this.build);
 };
 
-upgradesModel.prototype.buyPilotAbility = function () {
+// upgradesModel.prototype.buyPilotAbility = function () {
 
+// };
+
+upgradesModel.prototype.equip = function (upgradeId) {
+    var upgrade = this.getUpgradeById(upgradeId);
+    this.equipped.push(upgrade);
+    this.validateEquipped();
+    this.refreshUpgradesState();
+    events.trigger('model.build.equippedUpgrades.update', this.build);
 };
 
-upgradesModel.prototype.equip = function () {
-
-};
-
-upgradesModel.prototype.unequip = function () {
-
+upgradesModel.prototype.unequip = function (upgradeId) {
+    // find the first instance of this upgrade in the equipped list.
+    // We only look for the first time it appears, as there may be several of the same card equipped
+    var removeIndex = _.findIndex(this.equipped, function (upgrade) {
+        return upgrade.id === upgradeId;
+    });
+    // Now remove found index from equipped list
+    if (removeIndex > -1) {
+        this.equipped.splice(removeIndex, 1);
+        this.refreshUpgradesState();
+        events.trigger('model.build.equippedUpgrades.update', this.build);
+    }
 };
 
 upgradesModel.prototype.getUpgradeById = function (upgradeId) {

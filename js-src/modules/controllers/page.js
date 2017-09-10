@@ -78,7 +78,7 @@ module.exports = {
                 upgradeId: upgradeId
             });
             currentBuild.upgrades.buyCard(upgradeId);
-            currentBuild.equipUpgrade(upgradeId);
+            currentBuild.upgrades.equip(upgradeId);
         });
 
         events.on('view.pilotAbilities.buy', function (event, pilotId) {
@@ -90,12 +90,12 @@ module.exports = {
             currentBuild.changeShip(shipId);
         });
 
-        events.on('view.equip.upgrade', function (event, upgradeId) {
-            currentBuild.equipUpgrade(upgradeId);
+        events.on('view.upgrades.equip', function (event, upgradeId) {
+            currentBuild.upgrades.equip(upgradeId);
         });
 
-        events.on('view.unequip.upgrade', function (event, upgradeId) {
-            currentBuild.unequipUpgrade(upgradeId);
+        events.on('view.upgrades.unequip', function (event, upgradeId) {
+            currentBuild.upgrades.unequip(upgradeId);
         });
 
         events.on('view.xpHistory.revert', function (event, xpItemIndex) {
@@ -118,7 +118,7 @@ module.exports = {
             mainView.renderTitle(build);
             mainView.renderXp(build.currentXp);
             shipInfoView.renderShipStats(build.currentShip);
-            shipInfoView.renderShipActions(build.currentShip, build.equippedUpgrades.upgrades);
+            shipInfoView.renderShipActions(build.currentShip, build.upgrades.equipped);
             shipInfoView.renderShipImage(build.currentShip);
             shipInfoView.renderShipDial(build.currentShip);
             upgradesView.renderShipSlotsList(build);
@@ -136,7 +136,7 @@ module.exports = {
             if (build.ready) {
                 mainView.renderTitle(build);
                 shipInfoView.renderShipStats(build.currentShip);
-                shipInfoView.renderShipActions(build.currentShip, build.equippedUpgrades.upgrades);
+                shipInfoView.renderShipActions(build.currentShip, build.upgrades.equipped);
                 shipInfoView.renderShipImage(build.currentShip);
                 shipInfoView.renderShipDial(build.currentShip);
                 upgradesView.renderShipSlotsList(build);
@@ -163,7 +163,7 @@ module.exports = {
         events.on('model.build.upgrades.update', function (event, build) {
             if (build.ready) {
                 upgradesView.renderUpgradesList(build);
-                shipInfoView.renderShipActions(build.currentShip, build.equippedUpgrades.upgrades);
+                shipInfoView.renderShipActions(build.currentShip, build.upgrades.equipped);
                 upgradesView.renderShipSlotsList(build);
             }
         });

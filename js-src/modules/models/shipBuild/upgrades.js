@@ -1,7 +1,6 @@
 'use strict';
 
 var _ = require('lodash');
-var upgradeSlotsModel = require('./upgradeSlots');
 var upgrades = require('../upgrades').keyed;
 
 module.exports = {

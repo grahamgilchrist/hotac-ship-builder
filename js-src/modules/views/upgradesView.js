@@ -14,7 +14,7 @@ var upgradeSlotsModel = require('../models/shipBuild/upgradeSlots');
 
 module.exports = {
     renderShipSlotsList: function (build) {
-        var equippedUpgrades = $.extend(true, [], build.equippedUpgrades.upgrades);
+        var equippedUpgrades = $.extend(true, [], build.upgrades.equipped);
         // var equippedAbilities = $.extend(true, [], build.equippedUpgrades.pilotAbilities);
 
         // Process and create list for ship chassis slots
@@ -125,7 +125,7 @@ module.exports = {
                 });
             } else {
                 $slot.on('click', function () {
-                    module.exports.clickEquipSlot(upgradeSlot.type, build.upgrades[upgradeSlot.type], filteredUpgradesByType, build);
+                    module.exports.clickEquipSlot(upgradeSlot.type, build.upgrades.allForType(upgradeSlot.type), filteredUpgradesByType, build);
                 });
             }
         }
@@ -227,22 +227,22 @@ module.exports = {
     },
     clickEquipSlot: function (upgradeType, equippedUpgradesByType, filteredUpgrades, build) {
         // open modal to choose upgrade to equip
-        var $modalContent = module.exports.renderUpgradeModalContent(build, upgradeType, filteredUpgrades, equippedUpgradesByType);
+        var $modalContent = module.exports.renderUpgradeModalContent(upgradeType, build, equippedUpgradesByType, filteredUpgrades);
         modalController.openOptionSelectModal($modalContent, 'Buy upgrade');
     },
     removeEquipSlot: function (upgradeId) {
-        events.trigger('view.unequip.upgrade', upgradeId);
+        events.trigger('view.upgrades.unequip', upgradeId);
     },
-    renderUpgradeModalContent: function (build, upgradeType, filteredUpgradesByType, equippedUpgrades) {
+    renderUpgradeModalContent: function (upgradeType, build, equippedUpgrades, filteredUpgradesByType) {
         var tabs = [];
 
-        var $equippedUpgradesTab = module.exports.renderEquippedCardListModalContent(upgradeType, build, equippedUpgrades);
+        var $equippedUpgradesTab = module.exports.renderEquippedCardListModalContent(build, equippedUpgrades);
         tabs.push({
             name: 'Existing ' + upgradeType,
             $content: $equippedUpgradesTab
         });
 
-        var $tab = module.exports.renderCardListModalContent(upgradeType, build, filteredUpgradesByType);
+        var $tab = module.exports.renderCardListModalContent(build, filteredUpgradesByType);
         var tabName = 'Buy new ' + upgradeType;
         if (upgradeType === 'Elite') {
             tabName = 'Elite cards';
@@ -290,8 +290,8 @@ module.exports = {
 
         return $modalContent;
     },
-    renderCardListModalContent: function (upgradeType, build, filteredUpgrades) {
-        var $modalContent = $('<div class="card-image-list" id="modal-card-image-list-' + upgradeType + '">');
+    renderCardListModalContent: function (build, filteredUpgrades) {
+        var $modalContent = $('<div class="card-image-list" id="modal-card-image-list">');
         var $upgradeList = $('<ul>');
 
         _.forEach(filteredUpgrades, function (item) {
@@ -317,8 +317,8 @@ module.exports = {
 
         return $modalContent;
     },
-    renderEquippedCardListModalContent: function (upgradeType, build, equippedUpgrades) {
-        var $modalContent = $('<div class="card-image-list" id="modal-card-image-list-equipped-' + upgradeType + '">');
+    renderEquippedCardListModalContent: function (build, equippedUpgrades) {
+        var $modalContent = $('<div class="card-image-list" id="modal-card-image-list-equipped">');
         var $upgradeList = $('<ul>');
 
         _.forEach(equippedUpgrades, function (item) {
@@ -327,7 +327,7 @@ module.exports = {
             // We have enough XP to buy this item
             $upgrade.on('click', function () {
                 $(this).trigger('select', {
-                    selectedUpgradeEvent: 'view.equip.upgrade',
+                    selectedUpgradeEvent: 'view.upgrades.equip',
                     selectedUpgradeId: item.id,
                     text: item.name
                 });
