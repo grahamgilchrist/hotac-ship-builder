@@ -12,13 +12,15 @@ var events = require('../controllers/events');
 
 module.exports = {
     renderShipSlotsList: function (build) {
+        var upgradeSlots = build.upgradeSlots.assignedSlots;
+
         // Process and create list for ship chassis slots
         var $freeShipSlots = $('#ship-slots-free');
         $freeShipSlots.empty();
 
         var $ul = $('<ul>');
-        _.each(build.currentShip.startingUpgrades, function (upgrade) {
-            var $li = module.exports.renderFreeShipSlot(upgrade, build);
+        _.each(upgradeSlots.free, function (upgradeSlot) {
+            var $li = module.exports.renderFreeShipSlot(upgradeSlot, build);
             $ul.append($li);
         });
         $freeShipSlots.append($ul);
@@ -27,7 +29,6 @@ module.exports = {
         var $shipSlots = $('#ship-slots-default');
         $shipSlots.empty();
 
-        var upgradeSlots = build.upgradeSlots.assignedSlots;
         // Output allowed slots
         $ul = $('<ul>');
         _.each(upgradeSlots.enabled, function (upgradeSlot) {
@@ -63,10 +64,10 @@ module.exports = {
         }
     },
     renderShipSlot: function (upgradeSlot, build) {
-        var filteredUpgradesByType = build.upgrades.getAvailableToBuy(upgradeSlot.type);
+        var upgradesAvailableToBuy = build.upgrades.getAvailableToBuy(upgradeSlot.type);
 
         // Don't show this slot if there are no available upgrades for it (e.g. a title slot for a ship with no titles)
-        if (!filteredUpgradesByType || filteredUpgradesByType.length < 1) {
+        if (!upgradesAvailableToBuy || upgradesAvailableToBuy.length < 1) {
             return;
         }
 
@@ -103,52 +104,40 @@ module.exports = {
                 });
             } else {
                 $slot.on('click', function () {
-                    module.exports.clickEquipSlot(upgradeSlot.type, build.upgrades.allForType(upgradeSlot.type), filteredUpgradesByType, build);
+                    var unusedUpgradesForType = _.filter(build.upgrades.unequipped, function (upgrade) {
+                        return upgrade.slot === upgradeSlot.type;
+                    });
+                    module.exports.clickEquipSlot(upgradeSlot.type, unusedUpgradesForType, upgradesAvailableToBuy, build);
                 });
             }
         }
 
         return $li;
     },
-    renderFreeShipSlot: function (upgrade, build, equippedUpgrades) {
-
-        var slotHtml = '<span class="title">' + upgrade.name + '</span>';
-        var equipped = false;
-
+    renderFreeShipSlot: function (upgradeSlot) {
         var $li = $('<li></li>');
         var $slot = $('<div class="slot"></div>');
-        $slot.append(module.exports.getIconString(upgrade.slot));
+        $slot.append(module.exports.getIconString(upgradeSlot.type));
+        $slot.append('<span class="title">' + upgradeSlot.upgrade.name + '</span>');
+        $slot.append('<i class="material-icons eye">remove_red_eye</i>');
+        var imageUrl = '/components/xwing-data/images/' + upgradeSlot.upgrade.image;
+        $slot.attr('data-featherlight', imageUrl);
         $li.append($slot);
 
-        // Is there an equipped upgrade that matches this free one?
-        var matchingUpgrade = _.find(equippedUpgrades, function (item) {
-            return item.id === upgrade.id;
-        });
+        var $icon;
 
-        if (matchingUpgrade) {
-            equipped = true;
-            _.remove(equippedUpgrades, function (item) {
-                return item.id === matchingUpgrade.id;
-            });
-        }
-
-        $slot.append(slotHtml);
-        var $icon = $('<i class="material-icons remove">remove_circle_outline</i>');
-
-        if (equipped) {
-            var imageUrl = '/components/xwing-data/images/' + matchingUpgrade.image;
-            $slot.append('<i class="material-icons eye">remove_red_eye</i>');
-            $slot.attr('data-featherlight', imageUrl);
+        if (upgradeSlot.equipped) {
+            $icon = $('<i class="material-icons remove">remove_circle_outline</i>');
             $li.append($icon);
             $slot.addClass('equipped');
             $icon.on('click', function () {
-                events.trigger('view.unequip.upgrade', upgrade.id);
+                events.trigger('view.upgrades.unequip', upgradeSlot.upgrade.id);
             });
         } else {
             $icon = $('<i class="material-icons remove">add_circle_outline</i>');
             $li.append($icon);
             $icon.on('click', function () {
-                events.trigger('view.equip.upgrade', upgrade.id);
+                events.trigger('view.upgrades.equip', upgradeSlot.upgrade.id);
             });
         }
 
@@ -203,26 +192,26 @@ module.exports = {
         var iconString = '<i class="xwing-miniatures-font xwing-miniatures-font-' + iconId + '"></i>';
         return iconString;
     },
-    clickEquipSlot: function (upgradeType, equippedUpgradesByType, filteredUpgrades, build) {
+    clickEquipSlot: function (upgradeType, unusedUpgrades, upgradesAvailableToBuy, build) {
         // open modal to choose upgrade to equip
-        var $modalContent = module.exports.renderUpgradeModalContent(upgradeType, build, equippedUpgradesByType, filteredUpgrades);
+        var $modalContent = module.exports.renderUpgradeModalContent(upgradeType, unusedUpgrades, upgradesAvailableToBuy, build);
         modalController.openOptionSelectModal($modalContent, 'Buy upgrade');
     },
     removeEquipSlot: function (upgradeId) {
         events.trigger('view.upgrades.unequip', upgradeId);
     },
-    renderUpgradeModalContent: function (upgradeType, build, equippedUpgrades, filteredUpgradesByType) {
+    renderUpgradeModalContent: function (upgradeType, unusedUpgrades, upgradesAvailableToBuy, build) {
         var tabs = [];
 
-        if (equippedUpgrades.length > 0) {
-            var $equippedUpgradesTab = module.exports.renderEquippedCardListModalContent(build, equippedUpgrades);
+        if (unusedUpgrades.length > 0) {
+            var $equippedUpgradesTab = module.exports.renderUnusedCardListModalContent(build, unusedUpgrades);
             tabs.push({
                 name: 'Existing ' + upgradeType,
                 $content: $equippedUpgradesTab
             });
         }
 
-        var $tab = module.exports.renderCardListModalContent(build, filteredUpgradesByType);
+        var $tab = module.exports.renderCardListModalContent(build, upgradesAvailableToBuy);
         var tabName = 'Buy new ' + upgradeType;
         if (upgradeType === 'Elite') {
             tabName = 'Elite cards';
@@ -270,11 +259,11 @@ module.exports = {
 
         return $modalContent;
     },
-    renderCardListModalContent: function (build, filteredUpgrades) {
+    renderCardListModalContent: function (build, upgradesAvailableToBuy) {
         var $modalContent = $('<div class="card-image-list" id="modal-card-image-list">');
         var $upgradeList = $('<ul>');
 
-        _.forEach(filteredUpgrades, function (item) {
+        _.forEach(upgradesAvailableToBuy, function (item) {
             var $upgrade = $('<li><img src="/components/xwing-data/images/' + item.image + '" alt="' + item.name + '"></li>');
             if (build.currentXp >= item.points) {
                 // We have enough XP to buy this item
@@ -297,11 +286,11 @@ module.exports = {
 
         return $modalContent;
     },
-    renderEquippedCardListModalContent: function (build, equippedUpgrades) {
+    renderUnusedCardListModalContent: function (build, unusedUpgrades) {
         var $modalContent = $('<div class="card-image-list" id="modal-card-image-list-equipped">');
         var $upgradeList = $('<ul>');
 
-        _.forEach(equippedUpgrades, function (item) {
+        _.forEach(unusedUpgrades, function (item) {
             var $upgrade = $('<li><img src="/components/xwing-data/images/' + item.image + '" alt="' + item.name + '"></li>');
 
             // We have enough XP to buy this item

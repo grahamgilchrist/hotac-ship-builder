@@ -5,11 +5,13 @@ var allUpgrades = require('../upgrades').all;
 var keyedUpgrades = require('../upgrades').keyed;
 // var pilots = require('../pilots').allRebels;
 var events = require('../../controllers/events');
+var arrayUtils = require('../../utils/array-utils');
 
 var upgradesModel = function (build, upgradeIdList, equippedIdList) {
     this.build = build;
     // Upgrades in order of purchase
-    this.all = this.upgradesFromIds(upgradeIdList);
+    this.purchased = this.upgradesFromIds(upgradeIdList);
+    this.all = this.purchased.concat(this.build.currentShip.startingUpgrades);
     this.equipped = this.upgradesFromIds(equippedIdList);
     this.validateEquipped();
 };
@@ -19,14 +21,14 @@ upgradesModel.prototype.upgradesFromIds = function (upgradeIdList) {
 };
 
 upgradesModel.prototype.validateEquipped = function () {
-    // Make sure equipped list only contains upgrades we have purchased
-    this.equipped = _.intersection(this.equipped, this.all);
+    // Make sure equipped list only contains upgrades we have purchased or started with
+    this.equipped = arrayUtils.intersectionSingle(this.equipped, this.all);
 
     // TODO: Make sure equipped list only contains upgrade types allowed on ship
 };
 
 upgradesModel.prototype.allForType = function (slotType) {
-    return _.filter(this.all, function (upgrade) {
+    return _.filter(this.purchased, function (upgrade) {
         return upgrade.slot === slotType;
     });
 };
@@ -35,14 +37,22 @@ upgradesModel.prototype.refreshUpgradesState = function () {
     // Upgrades sorted alphabetically by slot type and then name
     this.sorted = this.getSorted();
     // upgrades object keyed by slot type with values being array or upgrades for that slot
-    this.allbyType = this.getAllByType();
-    this.unequipped = _.difference(this.all, this.equipped);
+    this.allbyType = this.getPurchasedByType();
     // Can only call refreshDisabled() once equipped is set
     this.disabled = this.getDisabled();
+    this.unequipped = this.getUnequipped();
+};
+
+upgradesModel.prototype.getUnequipped = function () {
+    // Remove *All* copies of any upgrades which should be disabled
+    var notDisabled = _.difference(this.purchased, this.disabled);
+    // Remove one copy of each item which is equipped
+    var unequipped = arrayUtils.differenceSingle(notDisabled, this.equipped);
+    return unequipped;
 };
 
 upgradesModel.prototype.getSorted = function () {
-    var sortedUpgrades = _.clone(this.all);
+    var sortedUpgrades = _.clone(this.purchased);
     sortedUpgrades.sort(function (a, b) {
         // sort by slot type first
         if (a.slot < b.slot) {
@@ -65,9 +75,9 @@ upgradesModel.prototype.getSorted = function () {
     return sortedUpgrades;
 };
 
-upgradesModel.prototype.getAllByType = function () {
+upgradesModel.prototype.getPurchasedByType = function () {
     var allbyType = {};
-    _.each(this.all, function (upgrade) {
+    _.each(this.purchased, function (upgrade) {
         var slotType = upgrade.slot;
         if (!allbyType[slotType]) {
             allbyType[slotType] = [];
@@ -79,15 +89,15 @@ upgradesModel.prototype.getAllByType = function () {
 };
 
 upgradesModel.prototype.getDisabled = function () {
-    var upgradesAllowedInBuild = this.build.upgradeSlots.allUsableSlotTypes();
+    var slotsAllowedInBuild = this.build.upgradeSlots.allUsableSlotTypes();
 
-    var purchasedUpgradesByType = _.clone(this.allbyType, true);
+    var purchasedUpgradesByType = _.clone(this.getPurchasedByType, true);
 
     var disabledUpgrades = [];
 
     _.forEach(purchasedUpgradesByType, function (upgradesList, slotType) {
         // Find the keys of any slots in the build that match these upgrades
-        if (upgradesAllowedInBuild.indexOf(slotType) === -1) {
+        if (slotsAllowedInBuild.indexOf(slotType) === -1) {
             // This slot not allowed in this build
             disabledUpgrades = disabledUpgrades.concat(upgradesList);
         }
@@ -98,7 +108,7 @@ upgradesModel.prototype.getDisabled = function () {
 
 upgradesModel.prototype.buyCard = function (upgradeId) {
     var upgrade = this.getUpgradeById(upgradeId);
-    this.all.push(upgrade);
+    this.purchased.push(upgrade);
     this.refreshUpgradesState();
     events.trigger('model.build.upgrades.update', this.build);
 };
@@ -140,56 +150,54 @@ upgradesModel.prototype.getUpgradeById = function (upgradeId) {
 // Return array of upgrades of specific type which are legal to purchased for current build
 //  (e.g. restricted by chassis, size, already a starting upgrade, already purchased etc.)
 upgradesModel.prototype.getAvailableToBuy = function (upgradeType) {
-    var thisModel = this;
     var upgradesOfType = keyedUpgrades[upgradeType];
-    var existingUpgradesOfType = this.allForType(upgradeType);
+    var allowedUpgrades = _.filter(upgradesOfType, _.bind(this.upgradeAllowed, this));
+    return allowedUpgrades;
+};
 
-    var filteredUpgrades = _.filter(upgradesOfType, function (upgrade) {
-        // Remove any upgrades for different ships
-        if (upgrade.ship && upgrade.ship.indexOf(thisModel.build.currentShip.shipData.name) < 0) {
-            return false;
-        }
+upgradesModel.prototype.upgradeAllowed = function (upgrade) {
+    // Remove any upgrades for different ships
+    if (upgrade.ship && upgrade.ship.indexOf(this.build.currentShip.shipData.name) < 0) {
+        return false;
+    }
 
-        // Remove any upgrades for different ship sizes
-        if (upgrade.size && upgrade.size.indexOf(thisModel.build.currentShip.shipData.size) < 0) {
-            return false;
-        }
+    // Remove any upgrades for different ship sizes
+    if (upgrade.size && upgrade.size.indexOf(this.build.currentShip.shipData.size) < 0) {
+        return false;
+    }
 
-        // Don't show anything which is a starting upgrade for the ship
-        if (thisModel.build.currentShip.startingUpgrades) {
-            var found = _.find(thisModel.build.currentShip.startingUpgrades, function (startingUpgrade) {
-                return startingUpgrade.xws === upgrade.xws;
-            });
-            if (found) {
-                return false;
-            }
-        }
-
-        // Remove any upgrades the build already has
-        var upgradeExists = _.find(existingUpgradesOfType, function (existingUpgrade) {
-            return existingUpgrade.id === upgrade.id;
+    // Don't show anything which is a starting upgrade for the ship
+    if (this.build.currentShip.startingUpgrades) {
+        var found = _.find(this.build.currentShip.startingUpgrades, function (startingUpgrade) {
+            return startingUpgrade.xws === upgrade.xws;
         });
-
-        if (upgradeExists) {
-            var upgradeIsAllowed = false;
-            // filter out any upgrades the player already has
-            // except
-            // * secondary weapons & bombs
-            if (upgrade.slot === 'Bomb' || upgrade.slot === 'Torpedo' || upgrade.slot === 'Cannon' || upgrade.slot === 'Turret' || upgrade.slot === 'Missile') {
-                upgradeIsAllowed = true;
-            // * hull upgrade and shield upgrade
-            } else if (upgrade.xws === 'hullupgrade' || upgrade.xws === 'shieldupgrade') {
-                upgradeIsAllowed = true;
-            }
-            if (!upgradeIsAllowed) {
-                return false;
-            }
+        if (found) {
+            return false;
         }
+    }
 
-        return true;
+    // Remove any upgrades the build already has
+    var upgradeExists = _.find(this.purchased, function (existingUpgrade) {
+        return existingUpgrade.id === upgrade.id;
     });
 
-    return filteredUpgrades;
+    if (upgradeExists) {
+        var upgradeIsAllowed = false;
+        // filter out any upgrades the player already has
+        // except
+        // * secondary weapons & bombs
+        if (upgrade.slot === 'Bomb' || upgrade.slot === 'Torpedo' || upgrade.slot === 'Cannon' || upgrade.slot === 'Turret' || upgrade.slot === 'Missile') {
+            upgradeIsAllowed = true;
+        // * hull upgrade and shield upgrade
+        } else if (upgrade.xws === 'hullupgrade' || upgrade.xws === 'shieldupgrade') {
+            upgradeIsAllowed = true;
+        }
+        if (!upgradeIsAllowed) {
+            return false;
+        }
+    }
+
+    return true;
 };
 
 module.exports = upgradesModel;

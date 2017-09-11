@@ -2,6 +2,7 @@
 
 var $ = require('jquery');
 var _ = require('lodash');
+var arrayUtils = require('../../utils/array-utils');
 
 var upgradeSlotsModel = function (build) {
     this.build = build;
@@ -14,7 +15,6 @@ upgradeSlotsModel.prototype.getShipSlots = function () {
     var thisBuild = this.build;
 
     // elite slots are dependent on pilot level
-
     var allBaseSlots = _.map(this.build.currentShip.upgradeSlots, function (upgradeSlot) {
         return {
             type: upgradeSlot
@@ -73,7 +73,15 @@ upgradeSlotsModel.prototype.getShipSlots = function () {
 
     var slotsFromUpgrades = this.getSlotsFromUpgrades(enabledSlots);
 
+    var startingSlots = _.map(this.build.currentShip.startingUpgrades, function (upgrade) {
+        return {
+            type: upgrade.slot,
+            upgrade: upgrade
+        };
+    });
+
     return {
+        free: startingSlots,
         allBase: allBaseSlots,
         enabled: enabledSlots,
         disabled: disabledSlots,
@@ -168,6 +176,10 @@ upgradeSlotsModel.prototype.getAssigned = function () {
 
     var upgradeSlots = this.getShipSlots();
 
+    _.each(upgradeSlots.free, function (upgradeSlot) {
+        thisModel.assignFreeSlot(upgradeSlot, equippedUpgrades);
+    });
+
     _.each(upgradeSlots.enabled, function (upgradeSlot) {
         thisModel.assignSlot(upgradeSlot, equippedUpgrades);
     });
@@ -179,6 +191,19 @@ upgradeSlotsModel.prototype.getAssigned = function () {
     return upgradeSlots;
 };
 
+upgradeSlotsModel.prototype.assignFreeSlot = function (upgradeSlot, equippedUpgrades) {
+    // Is there an equipped upgrade for this slot?
+    var matchingUpgrade = _.find(equippedUpgrades, function (item) {
+        return item.id === upgradeSlot.upgrade.id;
+    });
+
+    if (matchingUpgrade) {
+        arrayUtils.removeFirstValue(equippedUpgrades, matchingUpgrade);
+    }
+
+    upgradeSlot.equipped = matchingUpgrade;
+};
+
 upgradeSlotsModel.prototype.assignSlot = function (upgradeSlot, equippedUpgrades) {
     // Is there an equipped upgrade for this slot?
     var matchingUpgrade = _.find(equippedUpgrades, function (item) {
@@ -186,9 +211,7 @@ upgradeSlotsModel.prototype.assignSlot = function (upgradeSlot, equippedUpgrades
     });
 
     if (matchingUpgrade) {
-        _.remove(equippedUpgrades, function (item) {
-            return item.id === matchingUpgrade.id;
-        });
+        arrayUtils.removeFirstValue(equippedUpgrades, matchingUpgrade);
     }
 
     if (upgradeSlot.type === 'Elite') {
