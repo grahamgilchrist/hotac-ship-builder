@@ -117,7 +117,7 @@ module.exports = {
         events.on('model.build.ready', function (event, build) {
             mainView.renderTitle(build);
             mainView.renderXp(build.currentXp);
-            shipInfoView.renderShipStats(build.currentShip);
+            shipInfoView.renderShipStats(build.currentShip, build.upgrades.equipped);
             shipInfoView.renderShipActions(build.currentShip, build.upgrades.equipped);
             shipInfoView.renderShipImage(build.currentShip);
             shipInfoView.renderShipDial(build.currentShip);
@@ -135,7 +135,7 @@ module.exports = {
         events.on('model.build.currentShip.update', function (event, build) {
             if (build.ready) {
                 mainView.renderTitle(build);
-                shipInfoView.renderShipStats(build.currentShip);
+                shipInfoView.renderShipStats(build.currentShip, build.upgrades.equipped);
                 shipInfoView.renderShipActions(build.currentShip, build.upgrades.equipped);
                 shipInfoView.renderShipImage(build.currentShip);
                 shipInfoView.renderShipDial(build.currentShip);
@@ -160,18 +160,18 @@ module.exports = {
             pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
         });
 
-        events.on('model.build.upgrades.update', function (event, build) {
-            if (build.ready) {
-                upgradesView.renderUpgradesList(build);
-                shipInfoView.renderShipActions(build.currentShip, build.upgrades.equipped);
-                upgradesView.renderShipSlotsList(build);
-            }
-        });
+        // events.on('model.build.upgrades.update', function (event, build) {
+        //     if (build.ready) {
+        //         upgradesView.renderUpgradesList(build);
+        //     }
+        // });
 
         events.on('model.build.equippedUpgrades.update', function (event, build) {
             if (build.ready) {
                 upgradesView.renderShipSlotsList(build);
                 upgradesView.renderUpgradesList(build);
+                shipInfoView.renderShipActions(build.currentShip, build.upgrades.equipped);
+                shipInfoView.renderShipStats(build.currentShip, build.upgrades.equipped);
                 var newHash = hashController.generateExportString(build);
                 hashController.set(newHash);
             }

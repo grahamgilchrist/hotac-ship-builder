@@ -11,6 +11,7 @@ var upgradesModel = function (build, upgradeIdList, equippedIdList) {
     this.build = build;
     // Upgrades in order of purchase
     this.purchased = this.upgradesFromIds(upgradeIdList);
+    this.all = this.purchased.concat(this.build.currentShip.startingUpgrades);
     this.equipped = this.upgradesFromIds(equippedIdList);
     this.validateEquipped();
 };

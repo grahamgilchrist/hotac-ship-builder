@@ -4,13 +4,30 @@ var $ = require('jquery');
 var _ = require('lodash');
 
 module.exports = {
-    renderShipStats: function (currentShip) {
+    renderShipStats: function (currentShip, equippedUpgrades) {
+        var statValues = {
+            attack: currentShip.shipData.attack,
+            agility: currentShip.shipData.agility,
+            hull: currentShip.shipData.hull,
+            shields: currentShip.shipData.shields
+        };
+        // Add nay stats from upgrades
+        _.each(equippedUpgrades, function (upgrade) {
+            if (upgrade.grants) {
+                _.each(upgrade.grants, function (grant) {
+                    if (grant.type === 'stats') {
+                        statValues[grant.name] += grant.value;
+                    }
+                });
+            }
+        });
+
         var $shipStats = $('#ship-info-stats');
         $shipStats.empty();
-        $shipStats.append('<span class="attack"><i class="xwing-miniatures-font xwing-miniatures-font-attack"></i> ' + currentShip.shipData.attack + '</span>');
-        $shipStats.append('<span class="agility"><i class="xwing-miniatures-font xwing-miniatures-font-agility"></i> ' + currentShip.shipData.agility + '</span>');
-        $shipStats.append('<span class="hull"><i class="xwing-miniatures-font xwing-miniatures-font-hull"></i> ' + currentShip.shipData.hull + '</span>');
-        $shipStats.append('<span class="shield"><i class="xwing-miniatures-font xwing-miniatures-font-shield"></i> ' + currentShip.shipData.shields + '</span>');
+        $shipStats.append('<span class="attack"><i class="xwing-miniatures-font xwing-miniatures-font-attack"></i> ' + statValues.attack + '</span>');
+        $shipStats.append('<span class="agility"><i class="xwing-miniatures-font xwing-miniatures-font-agility"></i> ' + statValues.agility + '</span>');
+        $shipStats.append('<span class="hull"><i class="xwing-miniatures-font xwing-miniatures-font-hull"></i> ' + statValues.hull + '</span>');
+        $shipStats.append('<span class="shield"><i class="xwing-miniatures-font xwing-miniatures-font-shield"></i> ' + statValues.shields + '</span>');
     },
     renderShipActions: function (currentShip, equippedUpgrades) {
         var $shipActions = $('#ship-info-actions');
