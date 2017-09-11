@@ -9,7 +9,7 @@ var pilots = _.uniqBy(pilotsWithAbilities, function (pilot) {
 });
 var modalController = require('../controllers/modals');
 var events = require('../controllers/events');
-var upgradeSlotsModel = require('../models/shipBuild/upgradeSlots');
+var upgradeSlotsModel = require('../models/shipBuild/upgradeSlotsHelper');
 
 module.exports = {
     renderShipSlotsList: function (build) {

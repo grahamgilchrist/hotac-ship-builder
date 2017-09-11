@@ -2,7 +2,8 @@
 
 var _ = require('lodash');
 var allUpgrades = require('../upgrades').all;
-var upgradeSlotsModel = require('./upgradeSlots');
+var keyedUpgrades = require('../upgrades').keyed;
+var upgradeSlotsModel = require('./upgradeSlotsHelper');
 // var pilots = require('../pilots').allRebels;
 var events = require('../../controllers/events');
 
@@ -138,23 +139,24 @@ upgradesModel.prototype.getUpgradeById = function (upgradeId) {
 // Return array of upgrades of specific type which are legal to purchased for current build
 //  (e.g. restricted by chassis, size, already a starting upgrade, already purchased etc.)
 upgradesModel.prototype.getAvailableToBuy = function (upgradeType) {
-    var upgradesOfType = allUpgrades[upgradeType];
-    var existingUpgradesOfType = this.upgrades.allForType(upgradeType);
+    var thisModel = this;
+    var upgradesOfType = keyedUpgrades[upgradeType];
+    var existingUpgradesOfType = this.allForType(upgradeType);
 
     var filteredUpgrades = _.filter(upgradesOfType, function (upgrade) {
         // Remove any upgrades for different ships
-        if (upgrade.ship && upgrade.ship.indexOf(this.build.currentShip.shipData.name) < 0) {
+        if (upgrade.ship && upgrade.ship.indexOf(thisModel.build.currentShip.shipData.name) < 0) {
             return false;
         }
 
         // Remove any upgrades for different ship sizes
-        if (upgrade.size && upgrade.size.indexOf(this.build.currentShip.shipData.size) < 0) {
+        if (upgrade.size && upgrade.size.indexOf(thisModel.build.currentShip.shipData.size) < 0) {
             return false;
         }
 
         // Don't show anything which is a starting upgrade for the ship
-        if (this.build.currentShip.startingUpgrades) {
-            var found = _.find(this.build.currentShip.startingUpgrades, function (startingUpgrade) {
+        if (thisModel.build.currentShip.startingUpgrades) {
+            var found = _.find(thisModel.build.currentShip.startingUpgrades, function (startingUpgrade) {
                 return startingUpgrade.xws === upgrade.xws;
             });
             if (found) {
