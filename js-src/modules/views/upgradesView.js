@@ -9,7 +9,6 @@ var pilots = _.uniqBy(pilotsWithAbilities, function (pilot) {
 });
 var modalController = require('../controllers/modals');
 var events = require('../controllers/events');
-var upgradeSlotsModel = require('../models/shipBuild/upgradeSlotsHelper');
 
 module.exports = {
     renderShipSlotsList: function (build) {
@@ -31,7 +30,7 @@ module.exports = {
         var $shipSlots = $('#ship-slots-default');
         $shipSlots.empty();
 
-        var upgradeSlots = upgradeSlotsModel.getShipSlots(build);
+        var upgradeSlots = build.upgradeSlots.getShipSlots();
         // Output allowed slots
         $ul = $('<ul>');
         _.each(upgradeSlots.enabled, function (upgradeSlot) {

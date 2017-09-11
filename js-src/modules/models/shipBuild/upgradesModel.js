@@ -3,7 +3,6 @@
 var _ = require('lodash');
 var allUpgrades = require('../upgrades').all;
 var keyedUpgrades = require('../upgrades').keyed;
-var upgradeSlotsModel = require('./upgradeSlotsHelper');
 // var pilots = require('../pilots').allRebels;
 var events = require('../../controllers/events');
 
@@ -80,7 +79,7 @@ upgradesModel.prototype.getAllByType = function () {
 };
 
 upgradesModel.prototype.getDisabled = function () {
-    var upgradesAllowedInBuild = upgradeSlotsModel.allUsableSlotTypes(this.build);
+    var upgradesAllowedInBuild = this.build.upgradeSlots.allUsableSlotTypes();
 
     var purchasedUpgradesByType = _.clone(this.allbyType, true);
 

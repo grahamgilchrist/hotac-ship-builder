@@ -9,6 +9,7 @@ var upgrades = require('../models/upgrades').all;
 var pilots = require('../models/pilots').allRebels;
 var EnemyDefeatsModel = require('../models/enemyDefeats');
 var UpgradesModel = require('./shipBuild/upgradesModel');
+var UpgradesSlotsModel = require('./shipBuild/upgradeSlots');
 
 // Ship build
 var ShipBuild = function (xpHistory, callsign, playerName, enemyDefeats, equippedUpgrades, equippedAbilities) {
@@ -29,6 +30,8 @@ var ShipBuild = function (xpHistory, callsign, playerName, enemyDefeats, equippe
     }).map(function (xpItem) {
         return xpItem.data.upgradeId;
     }).value();
+
+    this.upgradeSlots = new UpgradesSlotsModel(this);
     this.upgrades = new UpgradesModel(this, upgradeIds, equippedUpgrades);
     this.upgrades.refreshUpgradesState();
 
