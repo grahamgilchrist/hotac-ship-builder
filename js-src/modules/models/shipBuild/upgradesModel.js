@@ -11,7 +11,6 @@ var upgradesModel = function (build, upgradeIdList, equippedIdList) {
     this.build = build;
     // Upgrades in order of purchase
     this.purchased = this.upgradesFromIds(upgradeIdList);
-    this.all = this.purchased.concat(this.build.currentShip.startingUpgrades);
     this.equipped = this.upgradesFromIds(equippedIdList);
     this.validateEquipped();
 };
@@ -34,6 +33,7 @@ upgradesModel.prototype.allForType = function (slotType) {
 };
 
 upgradesModel.prototype.refreshUpgradesState = function () {
+    this.all = this.purchased.concat(this.build.currentShip.startingUpgrades);
     // Upgrades sorted alphabetically by slot type and then name
     this.sorted = this.getSorted();
     // upgrades object keyed by slot type with values being array or upgrades for that slot
