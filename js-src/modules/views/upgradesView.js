@@ -214,11 +214,13 @@ module.exports = {
     renderUpgradeModalContent: function (upgradeType, build, equippedUpgrades, filteredUpgradesByType) {
         var tabs = [];
 
-        var $equippedUpgradesTab = module.exports.renderEquippedCardListModalContent(build, equippedUpgrades);
-        tabs.push({
-            name: 'Existing ' + upgradeType,
-            $content: $equippedUpgradesTab
-        });
+        if (equippedUpgrades.length > 0) {
+                var $equippedUpgradesTab = module.exports.renderEquippedCardListModalContent(build, equippedUpgrades);
+                tabs.push({
+                    name: 'Existing ' + upgradeType,
+                    $content: $equippedUpgradesTab
+                });
+        }
 
         var $tab = module.exports.renderCardListModalContent(build, filteredUpgradesByType);
         var tabName = 'Buy new ' + upgradeType;
