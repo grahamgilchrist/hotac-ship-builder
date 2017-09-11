@@ -112,6 +112,7 @@ upgradesModel.prototype.equip = function (upgradeId) {
     this.equipped.push(upgrade);
     this.validateEquipped();
     this.refreshUpgradesState();
+    this.build.upgradeSlots.assignEquipped();
     events.trigger('model.build.equippedUpgrades.update', this.build);
 };
 
@@ -125,6 +126,7 @@ upgradesModel.prototype.unequip = function (upgradeId) {
     if (removeIndex > -1) {
         this.equipped.splice(removeIndex, 1);
         this.refreshUpgradesState();
+        this.build.upgradeSlots.assignEquipped();
         events.trigger('model.build.equippedUpgrades.update', this.build);
     }
 };

@@ -155,8 +155,12 @@ upgradeSlotsModel.prototype.allUsableSlotTypes = function () {
     return allEnabledSlotTypes;
 };
 
+upgradeSlotsModel.prototype.assignEquipped = function () {
+    this.assignedSlots = this.getAssigned();
+};
+
 // Return array of upgrade types enabled in current state of ship build (enabled + upgrades)
-upgradeSlotsModel.prototype.getAssignedSlots = function () {
+upgradeSlotsModel.prototype.getAssigned = function () {
     var thisModel = this;
 
     var equippedUpgrades = $.extend(true, [], this.build.upgrades.equipped);

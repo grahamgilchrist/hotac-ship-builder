@@ -27,7 +27,7 @@ module.exports = {
         var $shipSlots = $('#ship-slots-default');
         $shipSlots.empty();
 
-        var upgradeSlots = build.upgradeSlots.getAssignedSlots();
+        var upgradeSlots = build.upgradeSlots.assignedSlots;
         // Output allowed slots
         $ul = $('<ul>');
         _.each(upgradeSlots.enabled, function (upgradeSlot) {
@@ -63,7 +63,6 @@ module.exports = {
         }
     },
     renderShipSlot: function (upgradeSlot, build) {
-
         var filteredUpgradesByType = build.upgrades.getAvailableToBuy(upgradeSlot.type);
 
         // Don't show this slot if there are no available upgrades for it (e.g. a title slot for a ship with no titles)

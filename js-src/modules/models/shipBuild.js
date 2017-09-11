@@ -34,6 +34,7 @@ var ShipBuild = function (xpHistory, callsign, playerName, enemyDefeats, equippe
     this.upgradeSlots = new UpgradesSlotsModel(this);
     this.upgrades = new UpgradesModel(this, upgradeIds, equippedUpgrades);
     this.upgrades.refreshUpgradesState();
+    this.upgradeSlots.assignEquipped();
 
     this.ready = true;
     events.trigger('model.build.ready', this);
