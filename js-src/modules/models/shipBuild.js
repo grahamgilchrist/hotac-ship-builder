@@ -122,6 +122,10 @@ ShipBuild.prototype.changeShip = function (shipId) {
         shipId: shipId
     });
     this.currentShip = this.getShipById(shipId);
+    if (this.ready === true) {
+        this.upgrades.refreshUpgradesState();
+        this.upgradeSlots.assignEquipped();
+    }
     events.trigger('model.build.currentShip.update', this);
 };
 
