@@ -135,4 +135,58 @@ upgradesModel.prototype.getUpgradeById = function (upgradeId) {
     });
 };
 
+// Return array of upgrades of specific type which are legal to purchased for current build
+//  (e.g. restricted by chassis, size, already a starting upgrade, already purchased etc.)
+upgradesModel.prototype.getAvailableToBuy = function (upgradeType) {
+    var upgradesOfType = allUpgrades[upgradeType];
+    var existingUpgradesOfType = this.upgrades.allForType(upgradeType);
+
+    var filteredUpgrades = _.filter(upgradesOfType, function (upgrade) {
+        // Remove any upgrades for different ships
+        if (upgrade.ship && upgrade.ship.indexOf(this.build.currentShip.shipData.name) < 0) {
+            return false;
+        }
+
+        // Remove any upgrades for different ship sizes
+        if (upgrade.size && upgrade.size.indexOf(this.build.currentShip.shipData.size) < 0) {
+            return false;
+        }
+
+        // Don't show anything which is a starting upgrade for the ship
+        if (this.build.currentShip.startingUpgrades) {
+            var found = _.find(this.build.currentShip.startingUpgrades, function (startingUpgrade) {
+                return startingUpgrade.xws === upgrade.xws;
+            });
+            if (found) {
+                return false;
+            }
+        }
+
+        // Remove any upgrades the build already has
+        var upgradeExists = _.find(existingUpgradesOfType, function (existingUpgrade) {
+            return existingUpgrade.id === upgrade.id;
+        });
+
+        if (upgradeExists) {
+            var upgradeIsAllowed = false;
+            // filter out any upgrades the player already has
+            // except
+            // * secondary weapons & bombs
+            if (upgrade.slot === 'Bomb' || upgrade.slot === 'Torpedo' || upgrade.slot === 'Cannon' || upgrade.slot === 'Turret' || upgrade.slot === 'Missile') {
+                upgradeIsAllowed = true;
+            // * hull upgrade and shield upgrade
+            } else if (upgrade.xws === 'hullupgrade' || upgrade.xws === 'shieldupgrade') {
+                upgradeIsAllowed = true;
+            }
+            if (!upgradeIsAllowed) {
+                return false;
+            }
+        }
+
+        return true;
+    });
+
+    return filteredUpgrades;
+};
+
 module.exports = upgradesModel;

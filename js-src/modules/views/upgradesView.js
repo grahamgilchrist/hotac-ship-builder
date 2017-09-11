@@ -9,7 +9,6 @@ var pilots = _.uniqBy(pilotsWithAbilities, function (pilot) {
 });
 var modalController = require('../controllers/modals');
 var events = require('../controllers/events');
-var upgradesModel = require('../models/shipBuild/upgrades');
 var upgradeSlotsModel = require('../models/shipBuild/upgradeSlots');
 
 module.exports = {
@@ -69,7 +68,7 @@ module.exports = {
     },
     renderShipSlot: function (upgradeSlot, build, equippedUpgrades) {
 
-        var filteredUpgradesByType = upgradesModel.getFilteredUpgrades(upgradeSlot.type, build);
+        var filteredUpgradesByType = build.upgrades.getAvailableToBuy(upgradeSlot.type);
 
         // Don't show this slot if there are no available upgrades for it (e.g. a title slot for a ship with no titles)
         if (!filteredUpgradesByType || filteredUpgradesByType.length < 1) {
