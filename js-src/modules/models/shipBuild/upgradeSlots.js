@@ -1,5 +1,6 @@
 'use strict';
 
+var $ = require('jquery');
 var _ = require('lodash');
 
 var upgradeSlotsModel = function (build) {
@@ -152,6 +153,45 @@ upgradeSlotsModel.prototype.allUsableSlotTypes = function () {
     allEnabledSlotTypes = _.uniq(allEnabledSlotTypes);
 
     return allEnabledSlotTypes;
+};
+
+// Return array of upgrade types enabled in current state of ship build (enabled + upgrades)
+upgradeSlotsModel.prototype.getAssignedSlots = function () {
+    var thisModel = this;
+
+    var equippedUpgrades = $.extend(true, [], this.build.upgrades.equipped);
+    // var equippedAbilities = $.extend(true, [], build.equippedUpgrades.pilotAbilities);
+
+    var upgradeSlots = this.getShipSlots();
+
+    _.each(upgradeSlots.enabled, function (upgradeSlot) {
+        thisModel.assignSlot(upgradeSlot, equippedUpgrades);
+    });
+
+    _.each(upgradeSlots.fromUpgrades, function (upgradeSlot) {
+        thisModel.assignSlot(upgradeSlot, equippedUpgrades);
+    });
+
+    return upgradeSlots;
+};
+
+upgradeSlotsModel.prototype.assignSlot = function (upgradeSlot, equippedUpgrades) {
+    // Is there an equipped upgrade for this slot?
+    var matchingUpgrade = _.find(equippedUpgrades, function (item) {
+        return item.slot === upgradeSlot.type;
+    });
+
+    if (matchingUpgrade) {
+        _.remove(equippedUpgrades, function (item) {
+            return item.id === matchingUpgrade.id;
+        });
+    }
+
+    if (upgradeSlot.type === 'Elite') {
+        // check for abilities too
+    }
+
+    upgradeSlot.equipped = matchingUpgrade;
 };
 
 module.exports = upgradeSlotsModel;

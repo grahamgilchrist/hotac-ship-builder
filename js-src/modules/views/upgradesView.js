@@ -12,16 +12,13 @@ var events = require('../controllers/events');
 
 module.exports = {
     renderShipSlotsList: function (build) {
-        var equippedUpgrades = $.extend(true, [], build.upgrades.equipped);
-        // var equippedAbilities = $.extend(true, [], build.equippedUpgrades.pilotAbilities);
-
         // Process and create list for ship chassis slots
         var $freeShipSlots = $('#ship-slots-free');
         $freeShipSlots.empty();
 
         var $ul = $('<ul>');
         _.each(build.currentShip.startingUpgrades, function (upgrade) {
-            var $li = module.exports.renderFreeShipSlot(upgrade, build, equippedUpgrades);
+            var $li = module.exports.renderFreeShipSlot(upgrade, build);
             $ul.append($li);
         });
         $freeShipSlots.append($ul);
@@ -30,18 +27,18 @@ module.exports = {
         var $shipSlots = $('#ship-slots-default');
         $shipSlots.empty();
 
-        var upgradeSlots = build.upgradeSlots.getShipSlots();
+        var upgradeSlots = build.upgradeSlots.getAssignedSlots();
         // Output allowed slots
         $ul = $('<ul>');
         _.each(upgradeSlots.enabled, function (upgradeSlot) {
-            var $li = module.exports.renderShipSlot(upgradeSlot, build, equippedUpgrades);
+            var $li = module.exports.renderShipSlot(upgradeSlot, build);
             $ul.append($li);
         });
 
         // Output disabled slots
         _.each(upgradeSlots.disabled, function (upgradeSlot) {
             if (build.pilotSkill < upgradeSlot.pilotSkill) {
-                var $li = module.exports.renderShipSlot(upgradeSlot, build, equippedUpgrades);
+                var $li = module.exports.renderShipSlot(upgradeSlot, build);
                 $ul.append($li);
             }
         });
@@ -55,7 +52,7 @@ module.exports = {
             $ul = $('<ul>');
 
             _.each(upgradeSlots.fromUpgrades, function (upgradeSlot) {
-                var $li = module.exports.renderShipSlot(upgradeSlot, build, equippedUpgrades);
+                var $li = module.exports.renderShipSlot(upgradeSlot, build);
                 $ul.append($li);
             });
 
@@ -65,7 +62,7 @@ module.exports = {
             $('#ship-slots-upgrades-wrapper').hide();
         }
     },
-    renderShipSlot: function (upgradeSlot, build, equippedUpgrades) {
+    renderShipSlot: function (upgradeSlot, build) {
 
         var filteredUpgradesByType = build.upgrades.getAvailableToBuy(upgradeSlot.type);
 
@@ -78,7 +75,6 @@ module.exports = {
         if (upgradeSlot.pilotSkill) {
             slotHtml += '<span> (PS ' + upgradeSlot.pilotSkill + ')</span>';
         }
-        var equipped = false;
 
         var $li = $('<li></li>');
         var $slot = $('<div class="slot"></div>');
@@ -90,36 +86,21 @@ module.exports = {
             $slot.addClass('disabled');
             $slot.append(slotHtml);
         } else {
-            // Not disabled
-
-            // Is there an equipped upgrade for this slot
-            var matchingUpgrade = _.find(equippedUpgrades, function (item) {
-                return item.slot === upgradeSlot.type;
-            });
-
-            if (matchingUpgrade) {
-                equipped = true;
-                slotHtml = '<span class="title">' + matchingUpgrade.name + '</span>';
-                _.remove(equippedUpgrades, function (item) {
-                    return item.id === matchingUpgrade.id;
-                });
-            }
-
-            if (upgradeSlot.type === 'Elite') {
-                // check for abilities too
+            if (upgradeSlot.equipped) {
+                slotHtml = '<span class="title">' + upgradeSlot.equipped.name + '</span>';
             }
 
             $slot.append(slotHtml);
 
-            if (equipped) {
-                var imageUrl = '/components/xwing-data/images/' + matchingUpgrade.image;
+            if (upgradeSlot.equipped) {
+                var imageUrl = '/components/xwing-data/images/' + upgradeSlot.equipped.image;
                 $slot.append('<i class="material-icons eye">remove_red_eye</i>');
                 $slot.attr('data-featherlight', imageUrl);
                 var $icon = $('<i class="material-icons remove">remove_circle_outline</i>');
                 $li.append($icon);
                 $slot.addClass('equipped');
                 $icon.on('click', function () {
-                    module.exports.removeEquipSlot(matchingUpgrade.id, build);
+                    module.exports.removeEquipSlot(upgradeSlot.equipped.id, build);
                 });
             } else {
                 $slot.on('click', function () {
