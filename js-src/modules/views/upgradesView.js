@@ -215,11 +215,11 @@ module.exports = {
         var tabs = [];
 
         if (equippedUpgrades.length > 0) {
-                var $equippedUpgradesTab = module.exports.renderEquippedCardListModalContent(build, equippedUpgrades);
-                tabs.push({
-                    name: 'Existing ' + upgradeType,
-                    $content: $equippedUpgradesTab
-                });
+            var $equippedUpgradesTab = module.exports.renderEquippedCardListModalContent(build, equippedUpgrades);
+            tabs.push({
+                name: 'Existing ' + upgradeType,
+                $content: $equippedUpgradesTab
+            });
         }
 
         var $tab = module.exports.renderCardListModalContent(build, filteredUpgradesByType);
