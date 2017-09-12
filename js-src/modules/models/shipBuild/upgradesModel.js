@@ -37,8 +37,6 @@ upgradesModel.prototype.allForType = function (slotType) {
 upgradesModel.prototype.refreshUpgradesState = function () {
     this.validateEquipped();
     this.all = this.purchased.concat(this.build.currentShip.startingUpgrades);
-    // upgrades object keyed by slot type with values being array or upgrades for that slot
-    this.allbyType = this.getPurchasedByType();
     // Can only call refreshDisabled() once equipped is set
     this.disabled = this.getDisabled();
     this.unequipped = this.getUnequipped();
@@ -52,6 +50,7 @@ upgradesModel.prototype.getUnequipped = function () {
     return unequipped;
 };
 
+// upgrades object keyed by slot type with values being array or upgrades for that slot
 upgradesModel.prototype.getPurchasedByType = function () {
     var allbyType = {};
     _.each(this.purchased, function (upgrade) {
@@ -68,7 +67,7 @@ upgradesModel.prototype.getPurchasedByType = function () {
 upgradesModel.prototype.getDisabled = function () {
     var slotsAllowedInBuild = this.build.upgradeSlots.allUsableSlotTypes();
 
-    var purchasedUpgradesByType = _.clone(this.allbyType, true);
+    var purchasedUpgradesByType = _.clone(this.getPurchasedByType(), true);
 
     var disabledUpgrades = [];
 
@@ -80,7 +79,7 @@ upgradesModel.prototype.getDisabled = function () {
         }
     });
 
-    // remove any upgrades not allowed on ship
+    // remove any specific upgrades not allowed on ship
     var specificDisabledUpgrades = _.reject(this.purchased, _.bind(this.upgradeAllowedOnShip, this));
     disabledUpgrades = disabledUpgrades.concat(specificDisabledUpgrades);
 
