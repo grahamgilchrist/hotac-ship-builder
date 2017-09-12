@@ -24,7 +24,8 @@ upgradesModel.prototype.validateEquipped = function () {
     // Make sure equipped list only contains upgrades we have purchased or started with
     this.equipped = arrayUtils.intersectionSingle(this.equipped, this.all);
 
-    // TODO: Make sure equipped list only contains upgrade types allowed on ship
+    // Make sure equipped list only contains upgrade types allowed on ship
+    this.equipped = _.filter(this.equipped, _.bind(this.upgradeAllowedOnShip, this));
 };
 
 upgradesModel.prototype.allForType = function (slotType) {
@@ -34,9 +35,8 @@ upgradesModel.prototype.allForType = function (slotType) {
 };
 
 upgradesModel.prototype.refreshUpgradesState = function () {
+    this.validateEquipped();
     this.all = this.purchased.concat(this.build.currentShip.startingUpgrades);
-    // Upgrades sorted alphabetically by slot type and then name
-    this.sorted = this.getSorted();
     // upgrades object keyed by slot type with values being array or upgrades for that slot
     this.allbyType = this.getPurchasedByType();
     // Can only call refreshDisabled() once equipped is set
@@ -50,30 +50,6 @@ upgradesModel.prototype.getUnequipped = function () {
     // Remove one copy of each item which is equipped
     var unequipped = arrayUtils.differenceSingle(notDisabled, this.equipped);
     return unequipped;
-};
-
-upgradesModel.prototype.getSorted = function () {
-    var sortedUpgrades = _.clone(this.purchased);
-    sortedUpgrades.sort(function (a, b) {
-        // sort by slot type first
-        if (a.slot < b.slot) {
-            return -1;
-        }
-        if (a.slot > b.slot) {
-            return 1;
-        }
-        // sort by name alphabetically second
-        if (a.name < b.name) {
-            return -1;
-        }
-        if (a.name > b.name) {
-            return 1;
-        }
-        // a must be equal to b
-        return 0;
-    });
-
-    return sortedUpgrades;
 };
 
 upgradesModel.prototype.getPurchasedByType = function () {
@@ -92,7 +68,7 @@ upgradesModel.prototype.getPurchasedByType = function () {
 upgradesModel.prototype.getDisabled = function () {
     var slotsAllowedInBuild = this.build.upgradeSlots.allUsableSlotTypes();
 
-    var purchasedUpgradesByType = _.clone(this.getPurchasedByType, true);
+    var purchasedUpgradesByType = _.clone(this.allbyType, true);
 
     var disabledUpgrades = [];
 
@@ -103,6 +79,10 @@ upgradesModel.prototype.getDisabled = function () {
             disabledUpgrades = disabledUpgrades.concat(upgradesList);
         }
     });
+
+    // remove any upgrades not allowed on ship
+    var specificDisabledUpgrades = _.reject(this.purchased, _.bind(this.upgradeAllowedOnShip, this));
+    disabledUpgrades = disabledUpgrades.concat(specificDisabledUpgrades);
 
     return disabledUpgrades;
 };
@@ -152,11 +132,12 @@ upgradesModel.prototype.getUpgradeById = function (upgradeId) {
 //  (e.g. restricted by chassis, size, already a starting upgrade, already purchased etc.)
 upgradesModel.prototype.getAvailableToBuy = function (upgradeType) {
     var upgradesOfType = keyedUpgrades[upgradeType];
-    var allowedUpgrades = _.filter(upgradesOfType, _.bind(this.upgradeAllowed, this));
+    var allowedUpgrades = _.filter(upgradesOfType, _.bind(this.upgradeAllowedOnShip, this));
+    allowedUpgrades = _.filter(allowedUpgrades, _.bind(this.upgradeAllowed, this));
     return allowedUpgrades;
 };
 
-upgradesModel.prototype.upgradeAllowed = function (upgrade) {
+upgradesModel.prototype.upgradeAllowedOnShip = function (upgrade) {
     // Remove any upgrades for different ships
     if (upgrade.ship && upgrade.ship.indexOf(this.build.currentShip.shipData.name) < 0) {
         return false;
@@ -167,6 +148,10 @@ upgradesModel.prototype.upgradeAllowed = function (upgrade) {
         return false;
     }
 
+    return true;
+};
+
+upgradesModel.prototype.upgradeAllowed = function (upgrade) {
     // Don't show anything which is a starting upgrade for the ship
     if (this.build.currentShip.startingUpgrades) {
         var found = _.find(this.build.currentShip.startingUpgrades, function (startingUpgrade) {
@@ -178,7 +163,7 @@ upgradesModel.prototype.upgradeAllowed = function (upgrade) {
     }
 
     // Remove any upgrades the build already has
-    var upgradeExists = _.find(this.purchased, function (existingUpgrade) {
+    var upgradeExists = _.find(this.all, function (existingUpgrade) {
         return existingUpgrade.id === upgrade.id;
     });
 
