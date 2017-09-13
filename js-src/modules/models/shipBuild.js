@@ -33,8 +33,6 @@ var ShipBuild = function (xpHistory, callsign, playerName, enemyDefeats, equippe
 
     this.upgradeSlots = new UpgradesSlotsModel(this);
     this.upgrades = new UpgradesModel(this, upgradeIds, equippedUpgrades, equippedAbilities);
-    this.upgrades.refreshUpgradesState();
-    this.upgradeSlots.assignEquipped();
 
     this.ready = true;
     events.trigger('model.build.ready', this);
@@ -123,8 +121,8 @@ ShipBuild.prototype.changeShip = function (shipId) {
     });
     this.currentShip = this.getShipById(shipId);
     if (this.ready === true) {
+        this.upgradeSlots.reset();
         this.upgrades.refreshUpgradesState();
-        this.upgradeSlots.assignEquipped();
     }
     events.trigger('model.build.currentShip.update', this);
 };

@@ -12,7 +12,7 @@ var events = require('../controllers/events');
 
 module.exports = {
     renderShipSlotsList: function (build) {
-        var upgradeSlots = build.upgradeSlots.assignedSlots;
+        var upgradeSlots = build.upgradeSlots;
 
         // Process and create list for ship chassis slots
         var $freeShipSlots = $('#ship-slots-free');
@@ -49,10 +49,10 @@ module.exports = {
         var $shipSlotsFromUpgrades = $('#ship-slots-upgrades');
         $shipSlotsFromUpgrades.empty();
 
-        if (upgradeSlots.fromUpgrades.length > 0) {
+        if (upgradeSlots.slotsFromUpgrades.length > 0) {
             $ul = $('<ul>');
 
-            _.each(upgradeSlots.fromUpgrades, function (upgradeSlot) {
+            _.each(upgradeSlots.slotsFromUpgrades, function (upgradeSlot) {
                 var $li = module.exports.renderShipSlot(upgradeSlot, build);
                 $ul.append($li);
             });

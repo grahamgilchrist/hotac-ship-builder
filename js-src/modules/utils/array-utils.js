@@ -6,7 +6,7 @@ var _ = require('lodash');
 module.exports = {
     // Removes the first matching item in an array determined by iterator function.
     // Returns new array of removed items. Mutates original array
-    removeFirst: function (array, func) {
+    removeFirstMatchingItem: function (array, func) {
         var matchingIndex = _.findIndex(array, func);
         if (matchingIndex > -1) {
             // we found a match
@@ -14,11 +14,11 @@ module.exports = {
         }
         return removedItem;
     },
-    removeFirstValue: function (array, item) {
+    removeFirstMatchingValue: function (array, item) {
         var iteratorFunction = function (iterateItem) {
             return item === iterateItem;
         };
-        return module.exports.removeFirst(array, iteratorFunction);
+        return module.exports.removeFirstMatchingItem(array, iteratorFunction);
     },
     // removes one item from ArrayA for each matching item in ArrayB
     // Contrast to _.difference which remove all items from ArrayA which are in ArrayB

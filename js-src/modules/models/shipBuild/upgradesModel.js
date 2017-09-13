@@ -11,33 +11,30 @@ var upgradesModel = function (build, upgradeIdList, equippedIdList) {
     this.build = build;
     // Upgrades in order of purchase
     this.purchased = this.upgradesFromIds(upgradeIdList);
-    this.all = this.purchased.concat(this.build.currentShip.startingUpgrades);
     this.equipped = this.upgradesFromIds(equippedIdList);
-    this.validateEquipped();
+    this.refreshUpgradesState();
 };
 
 upgradesModel.prototype.upgradesFromIds = function (upgradeIdList) {
     return _.map(upgradeIdList, this.getUpgradeById);
 };
 
-upgradesModel.prototype.validateEquipped = function () {
+upgradesModel.prototype.validateUpgrades = function (upgradesList) {
     // Make sure equipped list only contains upgrades we have purchased or started with
-    this.equipped = arrayUtils.intersectionSingle(this.equipped, this.all);
-
+    var filteredUpgrades = arrayUtils.intersectionSingle(upgradesList, this.all);
     // Make sure equipped list only contains upgrade types allowed on ship
-    this.equipped = _.filter(this.equipped, _.bind(this.upgradeAllowedOnShip, this));
-};
-
-upgradesModel.prototype.allForType = function (slotType) {
-    return _.filter(this.purchased, function (upgrade) {
-        return upgrade.slot === slotType;
-    });
+    filteredUpgrades = _.filter(this.equipped, _.bind(this.upgradeAllowedOnShip, this));
+    return filteredUpgrades;
 };
 
 upgradesModel.prototype.refreshUpgradesState = function () {
-    this.validateEquipped();
     this.all = this.purchased.concat(this.build.currentShip.startingUpgrades);
-    // Can only call refreshDisabled() once equipped is set
+    // Validate and equip upgrades to slots
+    var validatedEquippedUpgrades = this.validateUpgrades(this.equipped);
+    console.log('validatedEquippedUpgrades', validatedEquippedUpgrades);
+    this.equipped = this.equipUpgradesToSlots(validatedEquippedUpgrades);
+    console.log('this.equipped', this.equipped);
+    // Can only call getDisabled() once equipped is set, as it needs to look at slots potentially added by equipping
     this.disabled = this.getDisabled();
     this.unequipped = this.getUnequipped();
 };
@@ -65,23 +62,19 @@ upgradesModel.prototype.getPurchasedByType = function () {
 };
 
 upgradesModel.prototype.getDisabled = function () {
+    var thisModel = this;
     var slotsAllowedInBuild = this.build.upgradeSlots.allUsableSlotTypes();
-
-    var purchasedUpgradesByType = _.clone(this.getPurchasedByType(), true);
 
     var disabledUpgrades = [];
 
-    _.forEach(purchasedUpgradesByType, function (upgradesList, slotType) {
-        // Find the keys of any slots in the build that match these upgrades
-        if (slotsAllowedInBuild.indexOf(slotType) === -1) {
-            // This slot not allowed in this build
-            disabledUpgrades = disabledUpgrades.concat(upgradesList);
+    _.each(this.purchased, function (upgrade) {
+        var allowedOnShip = thisModel.upgradeAllowedOnShip(upgrade);
+        var allowedInSlots = (slotsAllowedInBuild.indexOf(upgrade.slot) > -1);
+
+        if (!allowedOnShip || !allowedInSlots) {
+            disabledUpgrades.push(upgrade);
         }
     });
-
-    // remove any specific upgrades not allowed on ship
-    var specificDisabledUpgrades = _.reject(this.purchased, _.bind(this.upgradeAllowedOnShip, this));
-    disabledUpgrades = disabledUpgrades.concat(specificDisabledUpgrades);
 
     return disabledUpgrades;
 };
@@ -100,9 +93,7 @@ upgradesModel.prototype.buyCard = function (upgradeId) {
 upgradesModel.prototype.equip = function (upgradeId) {
     var upgrade = this.getUpgradeById(upgradeId);
     this.equipped.push(upgrade);
-    this.validateEquipped();
     this.refreshUpgradesState();
-    this.build.upgradeSlots.assignEquipped();
     events.trigger('model.build.equippedUpgrades.update', this.build);
 };
 
@@ -116,7 +107,6 @@ upgradesModel.prototype.unequip = function (upgradeId) {
     if (removeIndex > -1) {
         this.equipped.splice(removeIndex, 1);
         this.refreshUpgradesState();
-        this.build.upgradeSlots.assignEquipped();
         events.trigger('model.build.equippedUpgrades.update', this.build);
     }
 };
@@ -183,6 +173,90 @@ upgradesModel.prototype.upgradeAllowed = function (upgrade) {
     }
 
     return true;
+};
+
+upgradesModel.prototype.equipUpgradesToSlots = function (upgradesToEquip) {
+    var thisModel = this;
+
+    var remainingUpgradesToEquip = _.clone(upgradesToEquip);
+    var equippedUpgrades = [];
+
+    var upgradeSlots = this.build.upgradeSlots;
+    // Reset additonal slots as we are about to repopulate through equipping
+    upgradeSlots.resetAdditionalSlots();
+
+    _.each(upgradeSlots.free, function (upgradeSlot) {
+        var matchingUpgrade = thisModel.matchFreeSlot(upgradeSlot, remainingUpgradesToEquip);
+        thisModel.equipSlot(upgradeSlot, matchingUpgrade, equippedUpgrades, remainingUpgradesToEquip);
+    });
+
+    var newSlotIndices = [];
+    _.each(upgradeSlots.enabled, function (upgradeSlot) {
+        var matchingUpgrade = thisModel.matchSlot(upgradeSlot, remainingUpgradesToEquip);
+        var slotsAddedIndices = thisModel.equipSlot(upgradeSlot, matchingUpgrade, equippedUpgrades, remainingUpgradesToEquip);
+        // If we added any new slots as part of equipping this upgrade, add them to the list
+        newSlotIndices = newSlotIndices.concat(slotsAddedIndices);
+    });
+
+    // If we added any slots via upgrades, equip to them now
+    while (newSlotIndices.length > 0) {
+        // get the first item index from the array
+        var itemIndex = newSlotIndices.shift();
+        // try to equip to the additional slot at that index
+        var matchingUpgrade = this.matchSlot(this.build.upgradeSlots.slotsFromUpgrades[itemIndex], remainingUpgradesToEquip);
+        var slotsAddedIndices = this.equipSlot(this.build.upgradeSlots.slotsFromUpgrades[itemIndex], matchingUpgrade, equippedUpgrades, remainingUpgradesToEquip);
+        // If we added yet more slots as part of equipping this upgrade, add them to the list
+        newSlotIndices = newSlotIndices.concat(slotsAddedIndices);
+    }
+
+    return equippedUpgrades;
+};
+
+upgradesModel.prototype.matchFreeSlot = function (upgradeSlot, remainingUpgradesToEquip) {
+    // Is there an equipped upgrade for this slot?
+    var matchingUpgrade = _.find(remainingUpgradesToEquip, function (item) {
+        return item.id === upgradeSlot.upgrade.id;
+    });
+    return matchingUpgrade;
+};
+
+upgradesModel.prototype.equipSlot = function (upgradeSlot, upgradeToEquip, equippedUpgrades, remainingUpgradesToEquip) {
+    var addedSlotsIndices = [];
+
+    // clear existing upgrade from slot
+    delete upgradeSlot.equipped;
+
+    if (upgradeToEquip) {
+        // remove this upgrade from the list available to match slots
+        arrayUtils.removeFirstMatchingValue(remainingUpgradesToEquip, upgradeToEquip);
+        equippedUpgrades.push(upgradeToEquip);
+        // Add any extra slots granted by the upgrade
+        addedSlotsIndices = this.addUpgradeGrantsSlot(upgradeToEquip);
+        upgradeSlot.equipped = upgradeToEquip;
+    }
+
+    // If we added additional slots via a grant on this upgrade, let the caller know
+    return addedSlotsIndices;
+};
+
+upgradesModel.prototype.matchSlot = function (upgradeSlot, remainingUpgradesToEquip) {
+    // Is there an equipped upgrade for this slot?
+    var matchingUpgrade = _.find(remainingUpgradesToEquip, function (item) {
+        return item.slot === upgradeSlot.type;
+    });
+    return matchingUpgrade;
+};
+
+upgradesModel.prototype.addUpgradeGrantsSlot = function (upgrade) {
+    var thisModel = this;
+    var addedSlotIndices = [];
+    _.each(upgrade.grants, function (grant) {
+        if (grant.type === 'slot') {
+            var addedSlotIndex = thisModel.build.upgradeSlots.addAdditionalSlot(grant.name);
+            addedSlotIndices.push(addedSlotIndex);
+        }
+    });
+    return addedSlotIndices;
 };
 
 module.exports = upgradesModel;
