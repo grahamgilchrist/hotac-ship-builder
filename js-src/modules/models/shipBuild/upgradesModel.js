@@ -31,9 +31,7 @@ upgradesModel.prototype.refreshUpgradesState = function () {
     this.all = this.purchased.concat(this.build.currentShip.startingUpgrades);
     // Validate and equip upgrades to slots
     var validatedEquippedUpgrades = this.validateUpgrades(this.equipped);
-    console.log('validatedEquippedUpgrades', validatedEquippedUpgrades);
     this.equipped = this.equipUpgradesToSlots(validatedEquippedUpgrades);
-    console.log('this.equipped', this.equipped);
     // Can only call getDisabled() once equipped is set, as it needs to look at slots potentially added by equipping
     this.disabled = this.getDisabled();
     this.unequipped = this.getUnequipped();
@@ -185,12 +183,15 @@ upgradesModel.prototype.equipUpgradesToSlots = function (upgradesToEquip) {
     // Reset additonal slots as we are about to repopulate through equipping
     upgradeSlots.resetAdditionalSlots();
 
+    var newSlotIndices = [];
+
     _.each(upgradeSlots.free, function (upgradeSlot) {
         var matchingUpgrade = thisModel.matchFreeSlot(upgradeSlot, remainingUpgradesToEquip);
-        thisModel.equipSlot(upgradeSlot, matchingUpgrade, equippedUpgrades, remainingUpgradesToEquip);
+        var slotsAddedIndices = thisModel.equipSlot(upgradeSlot, matchingUpgrade, equippedUpgrades, remainingUpgradesToEquip);
+        // If we added any new slots as part of equipping this upgrade, add them to the list
+        newSlotIndices = newSlotIndices.concat(slotsAddedIndices);
     });
 
-    var newSlotIndices = [];
     _.each(upgradeSlots.enabled, function (upgradeSlot) {
         var matchingUpgrade = thisModel.matchSlot(upgradeSlot, remainingUpgradesToEquip);
         var slotsAddedIndices = thisModel.equipSlot(upgradeSlot, matchingUpgrade, equippedUpgrades, remainingUpgradesToEquip);
