@@ -82,20 +82,31 @@ module.exports = {
         });
 
         events.on('view.pilotAbilities.buy', function (event, pilotId) {
-            currentBuild.buyPilotAbility(pilotId);
-            currentBuild.equipAbility(pilotId);
+            currentBuild.addToHistory(itemTypes.BUY_PILOT_ABILITY, {
+                pilotId: pilotId
+            });
+            currentBuild.upgrades.buyPilotAbility(pilotId);
+            currentBuild.upgrades.equipAbility(pilotId);
         });
 
         events.on('view.changeShip.changeShip', function (event, shipId) {
             currentBuild.changeShip(shipId);
         });
 
-        events.on('view.upgrades.equip', function (event, upgradeId) {
+        events.on('view.upgrades.equipUpgrade', function (event, upgradeId) {
             currentBuild.upgrades.equip(upgradeId);
         });
 
-        events.on('view.upgrades.unequip', function (event, upgradeId) {
-            currentBuild.upgrades.unequip(upgradeId);
+        events.on('view.upgrades.equipAbility', function (event, pilotId) {
+            currentBuild.upgrades.equipAbility(pilotId);
+        });
+
+        events.on('view.upgrades.unequipUpgrade', function (event, upgradeId) {
+            currentBuild.upgrades.unequipUpgrade(upgradeId);
+        });
+
+        events.on('view.upgrades.unequipAbility', function (event, pilotId) {
+            currentBuild.upgrades.unequipAbility(pilotId);
         });
 
         events.on('view.xpHistory.revert', function (event, xpItemIndex) {
@@ -160,12 +171,6 @@ module.exports = {
             pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
         });
 
-        // events.on('model.build.upgrades.update', function (event, build) {
-        //     if (build.ready) {
-        //         upgradesView.renderUpgradesList(build);
-        //     }
-        // });
-
         events.on('model.build.equippedUpgrades.update', function (event, build) {
             if (build.ready) {
                 upgradesView.renderShipSlotsList(build);
@@ -174,12 +179,6 @@ module.exports = {
                 shipInfoView.renderShipStats(build.currentShip, build.upgrades.equipped);
                 var newHash = hashController.generateExportString(build);
                 hashController.set(newHash);
-            }
-        });
-
-        events.on('model.build.pilotAbilities.update', function (event, build) {
-            if (build.ready) {
-                upgradesView.renderUpgradesList(build);
             }
         });
 

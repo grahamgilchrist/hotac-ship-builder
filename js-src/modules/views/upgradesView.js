@@ -93,21 +93,34 @@ module.exports = {
             $slot.append(slotHtml);
 
             if (upgradeSlot.equipped) {
-                var imageUrl = '/components/xwing-data/images/' + upgradeSlot.equipped.image;
-                $slot.append('<i class="material-icons eye">remove_red_eye</i>');
-                $slot.attr('data-featherlight', imageUrl);
                 var $icon = $('<i class="material-icons remove">remove_circle_outline</i>');
-                $li.append($icon);
+                $slot.append('<i class="material-icons eye">remove_red_eye</i>');
                 $slot.addClass('equipped');
-                $icon.on('click', function () {
-                    module.exports.removeEquipSlot(upgradeSlot.equipped.id, build);
-                });
+                $li.append($icon);
+
+                if (upgradeSlot.equipped.skill) {
+                    // this is a pilot ability upgrade
+                    $slot.attr('data-featherlight-type', 'text');
+                    $slot.attr('data-featherlight-variant', 'preview-pilot-ability');
+                    var escapedText = upgradeSlot.equipped.text.replace(/"/g, '&quot;');
+                    $slot.attr('data-featherlight', escapedText);
+                    $icon.on('click', function () {
+                        module.exports.removeEquipSlotAbility(upgradeSlot.equipped.id, build);
+                    });
+                } else {
+                    // this is an upgrade card
+                    var imageUrl = '/components/xwing-data/images/' + upgradeSlot.equipped.image;
+                    $slot.attr('data-featherlight', imageUrl);
+                    $icon.on('click', function () {
+                        module.exports.removeEquipSlotUpgrade(upgradeSlot.equipped.id, build);
+                    });
+                }
             } else {
                 $slot.on('click', function () {
                     var unusedUpgradesForType = _.filter(build.upgrades.unequipped, function (upgrade) {
                         return upgrade.slot === upgradeSlot.type;
                     });
-                    module.exports.clickEquipSlot(upgradeSlot.type, unusedUpgradesForType, upgradesAvailableToBuy, build);
+                    module.exports.clickEquipSlot(upgradeSlot.type, unusedUpgradesForType, build.upgrades.unequippedAbilities, upgradesAvailableToBuy, build);
                 });
             }
         }
@@ -146,7 +159,7 @@ module.exports = {
     renderUpgradesList: function (build) {
         var $unusedList = $('#unused-upgrade-list');
         $unusedList.empty();
-        if (build.upgrades.unequipped.length > 0 || build.pilotAbilities.length > 0) {
+        if (build.upgrades.unequipped.length > 0 || build.upgrades.unequippedAbilities.length > 0) {
             $('.unused-upgrades-wrapper').show();
             // Add purchased upgrades to the list
             _.forEach(build.upgrades.unequipped, function (upgrade) {
@@ -154,7 +167,7 @@ module.exports = {
                 $unusedList.append($upgradeItem);
             });
             // Add pilot abilities to the list
-            _.forEach(build.pilotAbilities, function (pilotAbility) {
+            _.forEach(build.upgrades.unequippedAbilities, function (pilotAbility) {
                 var $upgradeItem = module.exports.renderPilotUpgradeItem(pilotAbility);
                 $unusedList.append($upgradeItem);
             });
@@ -192,26 +205,37 @@ module.exports = {
         var iconString = '<i class="xwing-miniatures-font xwing-miniatures-font-' + iconId + '"></i>';
         return iconString;
     },
-    clickEquipSlot: function (upgradeType, unusedUpgrades, upgradesAvailableToBuy, build) {
+    clickEquipSlot: function (upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, build) {
         // open modal to choose upgrade to equip
-        var $modalContent = module.exports.renderUpgradeModalContent(upgradeType, unusedUpgrades, upgradesAvailableToBuy, build);
+        var $modalContent = module.exports.renderUpgradeModalContent(upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, build);
         modalController.openOptionSelectModal($modalContent, 'Buy upgrade');
     },
-    removeEquipSlot: function (upgradeId) {
-        events.trigger('view.upgrades.unequip', upgradeId);
+    removeEquipSlotUpgrade: function (upgradeId) {
+        events.trigger('view.upgrades.unequipUpgrade', upgradeId);
     },
-    renderUpgradeModalContent: function (upgradeType, unusedUpgrades, upgradesAvailableToBuy, build) {
+    removeEquipSlotAbility: function (upgradeId) {
+        events.trigger('view.upgrades.unequipAbility', upgradeId);
+    },
+    renderUpgradeModalContent: function (upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, build) {
         var tabs = [];
 
         if (unusedUpgrades.length > 0) {
-            var $equippedUpgradesTab = module.exports.renderUnusedCardListModalContent(build, unusedUpgrades);
+            var $unusedUpgradesTab = module.exports.renderCardListModalContent(build, unusedUpgrades, 'equip');
             tabs.push({
                 name: 'Existing ' + upgradeType,
-                $content: $equippedUpgradesTab
+                $content: $unusedUpgradesTab
             });
         }
 
-        var $tab = module.exports.renderCardListModalContent(build, upgradesAvailableToBuy);
+        if (unusedAbilities.length > 0) {
+            var $unusedAbilitiesTab = module.exports.renderPilotAbilityModalContent(build, unusedAbilities, 'equip');
+            tabs.push({
+                name: 'Existing abilities',
+                $content: $unusedAbilitiesTab
+            });
+        }
+
+        var $tab = module.exports.renderCardListModalContent(build, upgradesAvailableToBuy, 'buy');
         var tabName = 'Buy new ' + upgradeType;
         if (upgradeType === 'Elite') {
             tabName = 'Elite cards';
@@ -222,7 +246,7 @@ module.exports = {
         });
 
         if (upgradeType === 'Elite') {
-            var $abilityTab = module.exports.renderPilotAbilityModalContent(build);
+            var $abilityTab = module.exports.renderPilotAbilityModalContent(build, pilots, 'buy');
             tabs.push({
                 name: 'Pilot abilities',
                 $content: $abilityTab
@@ -259,24 +283,37 @@ module.exports = {
 
         return $modalContent;
     },
-    renderCardListModalContent: function (build, upgradesAvailableToBuy) {
+    renderCardListModalContent: function (build, upgradesToShow, mode) {
         var $modalContent = $('<div class="card-image-list" id="modal-card-image-list">');
         var $upgradeList = $('<ul>');
 
-        _.forEach(upgradesAvailableToBuy, function (item) {
+        _.forEach(upgradesToShow, function (item) {
             var $upgrade = $('<li><img src="/components/xwing-data/images/' + item.image + '" alt="' + item.name + '"></li>');
-            if (build.currentXp >= item.points) {
-                // We have enough XP to buy this item
+
+            if (mode === 'buy') {
+                if (build.currentXp >= item.points) {
+                    // We have enough XP to buy this item
+                    $upgrade.on('click', function () {
+                        $(this).trigger('select', {
+                            selectedUpgradeEvent: 'view.upgrades.buy',
+                            selectedUpgradeId: item.id,
+                            text: item.name + ': ' + item.hotacPoints + 'XP'
+                        });
+                    });
+                } else {
+                    // not enough XP
+                    $upgrade.addClass('cannot-afford');
+                }
+
+            } else {
+                // mode is equip existing item
                 $upgrade.on('click', function () {
                     $(this).trigger('select', {
-                        selectedUpgradeEvent: 'view.upgrades.buy',
+                        selectedUpgradeEvent: 'view.upgrades.equipUpgrade',
                         selectedUpgradeId: item.id,
-                        text: item.name + ': ' + item.hotacPoints + 'XP'
+                        text: item.name
                     });
                 });
-            } else {
-                // not enough XP
-                $upgrade.addClass('cannot-afford');
             }
 
             $upgradeList.append($upgrade);
@@ -286,54 +323,42 @@ module.exports = {
 
         return $modalContent;
     },
-    renderUnusedCardListModalContent: function (build, unusedUpgrades) {
-        var $modalContent = $('<div class="card-image-list" id="modal-card-image-list-equipped">');
-        var $upgradeList = $('<ul>');
-
-        _.forEach(unusedUpgrades, function (item) {
-            var $upgrade = $('<li><img src="/components/xwing-data/images/' + item.image + '" alt="' + item.name + '"></li>');
-
-            // We have enough XP to buy this item
-            $upgrade.on('click', function () {
-                $(this).trigger('select', {
-                    selectedUpgradeEvent: 'view.upgrades.equip',
-                    selectedUpgradeId: item.id,
-                    text: item.name
-                });
-            });
-
-            $upgradeList.append($upgrade);
-        });
-
-        $modalContent.append($upgradeList);
-
-        return $modalContent;
-    },
-    renderPilotAbilityModalContent: function (build) {
+    renderPilotAbilityModalContent: function (build, abilitiesToShow, mode) {
         var $modalContent = $('<div class="pilot-ability-list" id="modal-pilot-ability-list">');
         var $upgradeList = $('<ul>');
 
-        _.forEach(pilots, function (pilotCard) {
+        _.forEach(abilitiesToShow, function (pilotCard) {
             var upgradeCost = pilotCard.skill;
             var $upgrade = $('<li><h3>' + pilotCard.name + ' <span class="cost">(' + upgradeCost + 'XP)</span></h3><p>' + pilotCard.text + '</p></li>');
-            if (build.currentXp >= upgradeCost) {
 
-                if (build.pilotSkill >= pilotCard.skill) {
-                    // We have enough XP to buy this item
-                    $upgrade.on('click', function () {
-                        $(this).trigger('select', {
-                            selectedUpgradeEvent: 'view.pilotAbilities.buy',
-                            selectedUpgradeId: pilotCard.id,
-                            text: pilotCard.name + ': ' + pilotCard.skill + 'XP'
+            if (mode === 'buy') {
+                if (build.currentXp >= upgradeCost) {
+                    if (build.pilotSkill >= pilotCard.skill) {
+                        // We have enough XP to buy this item
+                        $upgrade.on('click', function () {
+                            $(this).trigger('select', {
+                                selectedUpgradeEvent: 'view.pilotAbilities.buy',
+                                selectedUpgradeId: pilotCard.id,
+                                text: pilotCard.name + ': ' + pilotCard.skill + 'XP'
+                            });
                         });
-                    });
+                    } else {
+                        // not high enough PS level yet
+                        $upgrade.addClass('disabled');
+                    }
                 } else {
-                    // not high enough PS level yet
-                    $upgrade.addClass('disabled');
+                    // not enough XP
+                    $upgrade.addClass('cannot-afford');
                 }
             } else {
-                // not enough XP
-                $upgrade.addClass('cannot-afford');
+                // Mode is to equip existing ability
+                $upgrade.on('click', function () {
+                    $(this).trigger('select', {
+                        selectedUpgradeEvent: 'view.upgrades.equipAbility',
+                        selectedUpgradeId: pilotCard.id,
+                        text: pilotCard.name
+                    });
+                });
             }
 
             $upgradeList.append($upgrade);

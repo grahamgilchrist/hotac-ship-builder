@@ -5,8 +5,7 @@ var ships = require('./ships');
 var events = require('../controllers/events');
 var XpItem = require('./shipBuild/xpItem');
 var itemTypes = require('./shipBuild/itemTypes');
-var upgrades = require('../models/upgrades').all;
-var pilots = require('../models/pilots').allRebels;
+
 var EnemyDefeatsModel = require('../models/enemyDefeats');
 var UpgradesModel = require('./shipBuild/upgradesModel');
 var UpgradesSlotsModel = require('./shipBuild/upgradeSlots');
@@ -18,24 +17,40 @@ var ShipBuild = function (xpHistory, callsign, playerName, enemyDefeats, equippe
     this.currentShip = null;
     this.xpHistory = [];
     this.currentXp = 0;
-    this.pilotAbilities = [];
 
     this.enemyDefeats = new EnemyDefeatsModel(enemyDefeats);
 
     this.setPilotSkill(2);
     this.processHistory(xpHistory);
 
-    var upgradeIds = _(xpHistory).filter(function (xpItem) {
+    var upgradeIds = this.getUpgradeIdsFromHistory();
+    var pilotIds = this.getPilotIdsFromHistory();
+
+    this.upgradeSlots = new UpgradesSlotsModel(this);
+    this.upgrades = new UpgradesModel(this, upgradeIds, equippedUpgrades, pilotIds, equippedAbilities);
+
+    this.ready = true;
+    events.trigger('model.build.ready', this);
+};
+
+ShipBuild.prototype.getPilotIdsFromHistory = function () {
+    var pilotIds = _(this.xpHistory).filter(function (xpItem) {
+        return xpItem.upgradeType === itemTypes.BUY_PILOT_ABILITY;
+    }).map(function (xpItem) {
+        return xpItem.data.pilotId;
+    }).value();
+
+    return pilotIds;
+};
+
+ShipBuild.prototype.getUpgradeIdsFromHistory = function () {
+    var upgradeIds = _(this.xpHistory).filter(function (xpItem) {
         return xpItem.upgradeType === itemTypes.BUY_UPGRADE;
     }).map(function (xpItem) {
         return xpItem.data.upgradeId;
     }).value();
 
-    this.upgradeSlots = new UpgradesSlotsModel(this);
-    this.upgrades = new UpgradesModel(this, upgradeIds, equippedUpgrades, equippedAbilities);
-
-    this.ready = true;
-    events.trigger('model.build.ready', this);
+    return upgradeIds;
 };
 
 ShipBuild.prototype.processHistory = function (xpHistory) {
@@ -55,7 +70,9 @@ ShipBuild.prototype.processHistory = function (xpHistory) {
         } else if (xpItem.upgradeType === itemTypes.MISSION) {
             thisBuild.addMissionXp(xpItem.data.missionXp);
         } else if (xpItem.upgradeType === itemTypes.BUY_PILOT_ABILITY) {
-            thisBuild.buyPilotAbility(xpItem.data.pilotId);
+            thisBuild.addToHistory(itemTypes.BUY_PILOT_ABILITY, {
+                pilotId: xpItem.data.pilotId
+            });
         }
     });
 };
@@ -66,18 +83,6 @@ ShipBuild.prototype.getShipById = function (shipId) {
     });
     var newModel = _.clone(hotacShipModel, true);
     return newModel;
-};
-
-ShipBuild.prototype.getUpgradeById = function (upgradeId) {
-    return _.find(upgrades, function (upgradeItem) {
-        return upgradeItem.id === upgradeId;
-    });
-};
-
-ShipBuild.prototype.getPilotById = function (pilotId) {
-    return _.find(pilots, function (pilotCard) {
-        return pilotCard.id === pilotId;
-    });
 };
 
 ShipBuild.prototype.addXp = function (xp) {
@@ -138,32 +143,15 @@ ShipBuild.prototype.addMissionXp = function (xpAmount) {
     });
 };
 
-ShipBuild.prototype.buyPilotAbility = function (pilotId) {
-    this.addToHistory(itemTypes.BUY_PILOT_ABILITY, {
-        pilotId: pilotId
-    });
-    var pilot = this.getPilotById(pilotId);
-    this.pilotAbilities.push(pilot);
-    events.trigger('model.build.pilotAbilities.update', this);
-};
-
-ShipBuild.prototype.equipAbility = function (pilotId) {
-    // TODO: check if ability allowed on ship
-    var pilot = this.getPilotById(pilotId);
-    this.equippedUpgrades.pilotAbilities.push(pilot);
-    events.trigger('model.build.equippedUpgrades.update', this);
-};
-
 ShipBuild.prototype.exportEquippedUpgradesString = function () {
-    var upgradeIds = _.map(this.upgrades.equipped, function (item) {
+    var upgradeIds = _.map(this.upgrades.equippedUpgrades, function (item) {
         return item.id;
     });
     return JSON.stringify(upgradeIds);
 };
 
 ShipBuild.prototype.exportEquippedAbilitiesString = function () {
-    // var pilotIds = _.map(this.equippedUpgrades.pilotAbilities, function (item) {
-    var pilotIds = _.map([], function (item) {
+    var pilotIds = _.map(this.upgrades.equippedAbilities, function (item) {
         return item.id;
     });
     return JSON.stringify(pilotIds);
