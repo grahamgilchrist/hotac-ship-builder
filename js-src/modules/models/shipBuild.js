@@ -103,6 +103,7 @@ ShipBuild.prototype.increasePilotSkill = function () {
     this.addToHistory(itemTypes.PILOT_SKILL, {
         pilotSkill: this.pilotSkill
     });
+    this.upgradeSlots.reset();
 };
 
 ShipBuild.prototype.addToHistory = function (type, data) {
