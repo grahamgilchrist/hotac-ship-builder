@@ -144,13 +144,13 @@ module.exports = {
             $li.append($icon);
             $slot.addClass('equipped');
             $icon.on('click', function () {
-                events.trigger('view.upgrades.unequip', upgradeSlot.upgrade.id);
+                events.trigger('view.upgrades.unequipUpgrade', upgradeSlot.upgrade.id);
             });
         } else {
             $icon = $('<i class="material-icons remove">add_circle_outline</i>');
             $li.append($icon);
             $icon.on('click', function () {
-                events.trigger('view.upgrades.equip', upgradeSlot.upgrade.id);
+                events.trigger('view.upgrades.equipUpgrade', upgradeSlot.upgrade.id);
             });
         }
 
