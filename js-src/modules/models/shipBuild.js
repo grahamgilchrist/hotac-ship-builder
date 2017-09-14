@@ -95,15 +95,19 @@ ShipBuild.prototype.setStartingShip = function (shipId) {
 
 ShipBuild.prototype.setPilotSkill = function (ps) {
     this.pilotSkill = ps;
-    events.trigger('model.build.pilotSkill.update', this);
 };
 
 ShipBuild.prototype.increasePilotSkill = function () {
-    this.setPilotSkill(this.pilotSkill + 1);
+    var newPilotSkill = this.pilotSkill + 1;
     this.addToHistory(itemTypes.PILOT_SKILL, {
-        pilotSkill: this.pilotSkill
+        pilotSkill: newPilotSkill
     });
-    this.upgradeSlots.reset();
+    this.setPilotSkill(newPilotSkill);
+    if (this.ready === true) {
+        this.upgradeSlots.reset();
+        this.upgrades.refreshUpgradesState();
+    }
+    events.trigger('model.build.pilotSkill.update', this);
 };
 
 ShipBuild.prototype.addToHistory = function (type, data) {
