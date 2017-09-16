@@ -121,19 +121,6 @@
 
                             <div class="mdl-tabs__panel is-active" id="summary-tab">
 
-                                <div class="ship-info-pilot-skill">
-                                    <span class="label">Pilot Skill</span>
-                                    <span class= "value" id="pilot-skill"></span>
-                                    <span class="ps-upgrade-wrapper">
-                                        <div>
-                                            <span id="pilot-skill-next-xp-cost"></span><span> XP to update to level </span><span id="pilot-skill-plus-one"></span>
-                                        </div>
-                                        <div>
-                                            <button id="increase-ps" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Upgrade</button>
-                                        </div>
-                                    </span>
-                                </div>
-
                                 <div class="ship-info">
                                     <div class="ship-image-stats">
                                         <div class="img-wrapper">
@@ -143,6 +130,25 @@
                                         <div id="ship-info-actions"></div>
                                     </div>
                                     <div id="ship-info-dial"></div>
+                                </div>
+                            </div>
+
+                            <div class="mdl-tabs__panel" id="upgrades-tab">
+                                <div class="upgrades-wrapper">
+                                    <h3>Upgrades</h3>
+
+                                    <div class="ship-info-pilot-skill">
+                                        <span class="label">Pilot Skill</span>
+                                        <span class= "value" id="pilot-skill"></span>
+                                        <span class="ps-upgrade-wrapper">
+                                            <div>
+                                                <span id="pilot-skill-next-xp-cost"></span><span> XP to update to level </span><span id="pilot-skill-plus-one"></span>
+                                            </div>
+                                            <div>
+                                                <button id="increase-ps" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Upgrade</button>
+                                            </div>
+                                        </span>
+                                    </div>
 
                                     <div class="change-ship">
                                         <span id="change-ship-wrapper">
@@ -150,12 +156,6 @@
                                         </span>
                                     </div>
                                     <div class="mdl-tooltip" data-mdl-for="change-ship-wrapper" id="change-ship-tooltip">New ships are unlocked at pilot skill 4</div>
-                                </div>
-                            </div>
-
-                            <div class="mdl-tabs__panel" id="upgrades-tab">
-                                <div class="upgrades-wrapper">
-                                    <h3>Upgrades</h3>
 
                                     <div class="ship-slots">
                                         <div id="ship-slots-free-wrapper" class="ship-slots-list">
