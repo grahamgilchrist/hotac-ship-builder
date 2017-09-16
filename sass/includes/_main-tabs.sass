@@ -8,16 +8,6 @@
         @include media('print')
             display: none
 
-        &.wide
-            display: none
-
-        @include media($media-main-two-col)
-            &.narrow
-                display: none
-
-            &.wide
-                display: block
-
     .mdl-tabs__tab
         padding: 0 14px
 
@@ -27,25 +17,3 @@
     .tabs-panel
         overflow: hidden
         text-align: center
-        display: none
-
-        &.narrow-is-active
-            display: block
-
-        @include media($media-main-two-col)
-            &.narrow-is-active
-                display: none
-
-            &.wide-is-active
-                display: block
-
-    @include media($media-main-two-col)
-        #ship-stats-tab
-            float: left
-            width: 300px
-            margin-right: $site-padding
-
-        #upgrades-tab
-            margin-top: 0
-            margin-left: 320px
-

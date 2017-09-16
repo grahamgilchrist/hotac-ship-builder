@@ -2,12 +2,10 @@
 
 var $ = require('jquery');
 
-var mainTabs = require('./mainTabs');
 var missionView = require('./missionResultsView');
 
 module.exports = {
     init: function () {
-        mainTabs.init();
         module.exports.bindXpButton();
     },
     hide: function () {
