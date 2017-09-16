@@ -94,7 +94,7 @@ module.exports = {
 
             if (upgradeSlot.equipped) {
                 var $icon = $('<i class="material-icons remove">remove_circle_outline</i>');
-                $slot.append('<i class="material-icons eye">remove_red_eye</i>');
+                $slot.append('<i class="material-icons eye">zoom_in</i>');
                 $slot.addClass('equipped');
                 $li.append($icon);
 
@@ -116,6 +116,7 @@ module.exports = {
                     });
                 }
             } else {
+                $slot.addClass('unequipped');
                 $slot.on('click', function () {
                     var unusedUpgradesForType = _.filter(build.upgrades.unequipped, function (upgrade) {
                         return upgrade.slot === upgradeSlot.type;
@@ -132,7 +133,7 @@ module.exports = {
         var $slot = $('<div class="slot"></div>');
         $slot.append(module.exports.getIconString(upgradeSlot.type));
         $slot.append('<span class="title">' + upgradeSlot.upgrade.name + '</span>');
-        $slot.append('<i class="material-icons eye">remove_red_eye</i>');
+        $slot.append('<i class="material-icons eye">zoom_in</i>');
         var imageUrl = '/components/xwing-data/images/' + upgradeSlot.upgrade.image;
         $slot.attr('data-featherlight', imageUrl);
         $li.append($slot);
@@ -149,6 +150,7 @@ module.exports = {
         } else {
             $icon = $('<i class="material-icons remove">add_circle_outline</i>');
             $li.append($icon);
+            $slot.addClass('unequipped');
             $icon.on('click', function () {
                 events.trigger('view.upgrades.equipUpgrade', upgradeSlot.upgrade.id);
             });
@@ -159,7 +161,18 @@ module.exports = {
     renderUpgradesList: function (build) {
         var $unusedList = $('#unused-upgrade-list');
         $unusedList.empty();
-        if (build.upgrades.unequipped.length > 0 || build.upgrades.unequippedAbilities.length > 0) {
+
+        var hasUnequippedUpgrades = (build.upgrades.unequipped.length > 0 || build.upgrades.unequippedAbilities.length > 0);
+        var hasDisabledUpgrades = (build.upgrades.disabled.length > 0);
+        var hasDisabledOrUnequippedUpgrades = (hasDisabledUpgrades || hasUnequippedUpgrades);
+
+        if (!hasDisabledOrUnequippedUpgrades) {
+            $('.allowed-list').hide();
+        } else {
+            $('.allowed-list').show();
+        }
+
+        if (hasUnequippedUpgrades) {
             $('.unused-upgrades-wrapper').show();
             // Add purchased upgrades to the list
             _.forEach(build.upgrades.unequipped, function (upgrade) {
@@ -177,7 +190,7 @@ module.exports = {
 
         var $disallowedList = $('#disabled-upgrade-list');
         $disallowedList.empty();
-        if (build.upgrades.disabled.length > 0) {
+        if (hasDisabledUpgrades) {
             // there's some disabled upgrades here
             $('.disabled-upgrades').show();
             _.forEach(build.upgrades.disabled, function (upgrade) {
@@ -190,12 +203,12 @@ module.exports = {
     },
     renderUpgradeItem: function (upgrade) {
         var imageUrl = '/components/xwing-data/images/' + upgrade.image;
-        var $item = $('<li class="upgrade" data-featherlight="' + imageUrl + '">' + module.exports.getIconString(upgrade.slot) + '<span>' + upgrade.name + '</span><i class="material-icons eye">remove_red_eye</i><img class="preview" src="' + imageUrl + '"></li>');
+        var $item = $('<li class="upgrade" data-featherlight="' + imageUrl + '">' + module.exports.getIconString(upgrade.slot) + '<span>' + upgrade.name + '</span><i class="material-icons eye">zoom_in</i><img class="preview" src="' + imageUrl + '"></li>');
         return $item;
     },
     renderPilotUpgradeItem: function (pilot) {
         var escapedText = pilot.text.replace(/"/g, '&quot;');
-        var $item = $('<li class="upgrade" data-featherlight="' + escapedText + '" data-featherlight-type="text" data-featherlight-variant="preview-pilot-ability">' + module.exports.getIconString('Elite') + '<span>Ability: ' + pilot.name + '</span><i class="material-icons eye">remove_red_eye</i></li>');
+        var $item = $('<li class="upgrade" data-featherlight="' + escapedText + '" data-featherlight-type="text" data-featherlight-variant="preview-pilot-ability">' + module.exports.getIconString('Elite') + '<span>Ability: ' + pilot.name + '</span><i class="material-icons eye">zoom_in</i></li>');
 
         return $item;
     },
@@ -284,7 +297,7 @@ module.exports = {
         return $modalContent;
     },
     renderCardListModalContent: function (build, upgradesToShow, mode) {
-        var $modalContent = $('<div class="card-image-list" id="modal-card-image-list">');
+        var $modalContent = $('<div class="card-image-list" id="modal-card-image-list-' + mode + '">');
         var $upgradeList = $('<ul>');
 
         _.forEach(upgradesToShow, function (item) {
@@ -305,7 +318,7 @@ module.exports = {
                     $upgrade.addClass('cannot-afford');
                 }
 
-            } else {
+            } else if (mode === 'equip') {
                 // mode is equip existing item
                 $upgrade.on('click', function () {
                     $(this).trigger('select', {
