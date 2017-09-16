@@ -52,9 +52,7 @@ var hotacShips = [
             'Turret'
         ],
         startingUpgrades: [
-            getUpgradeByXws('btla4ywing'),
-            getUpgradeByXws('bombloadout'),
-            getUpgradeByXws('bombloadout')
+            getUpgradeByXws('btla4ywing')
         ]
     },
     {

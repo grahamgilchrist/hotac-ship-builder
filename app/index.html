@@ -163,8 +163,17 @@
                                     <h3>Upgrades</h3>
 
                                     <div class="ship-slots">
-                                        <h4>Slots on ship</h4>
-                                        <div id="ship-slots-default" class="ship-slots-list"></div>
+                                        <div id="ship-slots-free-wrapper" class="ship-slots-list">
+                                            <h4><span>Free upgrades</span> <i class="material-icons" id="free-upgrades-info">info_outline</i></h4>
+                                            <div class="mdl-tooltip" data-mdl-for="free-upgrades-info">
+                                                Any number of free upgrades may be equipped without filling an upgrade slot on the ship.
+                                            </div>
+                                            <ul id="ship-slots-free"></ul>
+                                        </div>
+                                        <div class="ship-slots-list">
+                                            <h4>Slots on ship</h4>
+                                            <div id="ship-slots-default"></div>
+                                        </div>
                                         <div id="ship-slots-upgrades-wrapper">
                                             <h4><span>Slots from upgrades</span> <i class="material-icons" id="slots-from-upgrades-info">info_outline</i></h4>
                                             <div class="mdl-tooltip" data-mdl-for="slots-from-upgrades-info">
@@ -175,21 +184,12 @@
                                     </div>
 
                                     <div class="allowed-list">
-                                        <div class="free-upgrades">
-                                            <h4><span>Free upgrades</span> <i class="material-icons" id="free-upgrades-info">info_outline</i></h4>
-                                            <div class="mdl-tooltip" data-mdl-for="free-upgrades-info">
-                                                Any number of free upgrades may be equipped without filling an upgrade slot on the ship.
+                                        <div class="unused-upgrades-wrapper">
+                                            <h4><span>Unused upgrades</span> <i class="material-icons" id="unused-upgrades-info">info_outline</i></h4>
+                                            <div class="mdl-tooltip" data-mdl-for="unused-upgrades-info">
+                                                Upgrades which have been purchased but are not currently ewquipped.
                                             </div>
-                                            <ul id="free-upgrade-list"></ul>
-                                        </div>
-
-                                        <div class="purchased-upgrades">
-                                            <h4><span>Purchased upgrades</span> <i class="material-icons" id="purchased-upgrades-info">info_outline</i></h4>
-                                            <div class="mdl-tooltip" data-mdl-for="purchased-upgrades-info">
-                                                Ships can purchase multiple upgrades of the same type, and choose which to equip into which slot per mission.
-                                            </div>
-                                            <ul id="allowed-upgrade-list"></ul>
-                                            <p class="no-upgrades">No upgrades have been purchased yet.</p>
+                                            <ul id="unused-upgrade-list"></ul>
                                         </div>
 
                                         <div class="disabled-upgrades">
@@ -198,11 +198,6 @@
                                             <ul id="disabled-upgrade-list"></ul>
                                         </div>
                                     </div>
-                                    <div class="buy-list">
-                                        <h4>Buy new upgrades</h4>
-                                        <ul id="buy-upgrades-list"></ul>
-                                    </div>
-
                                 </div>
                             </div>
 

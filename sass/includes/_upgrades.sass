@@ -18,26 +18,22 @@
             display: none
 
 .ship-slots,
-.allowed-list,
-.buy-list
+.allowed-list
     display: inline-block
     vertical-align: top
-    margin: 0 4px
+    padding: 0 10px
+    min-width: 50%
+    max-width: 230px
 
-    h4
-        text-align: center
-
-.ship-slots
-    width: 130px
-
-.allowed-list
-    text-align: left
-    width: 200px
-
-    @include media($media-main-two-col)
+    @include media($media-main-padding)
+        min-width: auto
         width: 230px
 
     h4
+        text-align: center
+        margin-bottom: 8px
+        line-height: 1.3
+
         span,
         i
             vertical-align: middle
@@ -45,6 +41,9 @@
         i
             font-size: 20px
             cursor: pointer
+
+.allowed-list
+    text-align: left
 
     p,
     li
@@ -86,57 +85,90 @@
                 display: block
                 zoom: 75%
 
-.purchased-upgrades
-    .no-upgrades
-        text-align: center       
-
 #disabled-upgrade-list
     li
         opacity: 0.4
 
-.buy-list
-    min-width: 180px
-
-    .mdl-button
-        margin-bottom: $site-padding
-        min-width: 140px
-        font-size: 12px
-
-        span,
-        i
-            vertical-align: middle
-
-        i
-            margin-right: 0.5em
-            text-transform: none
-
-
 .ship-slots-list
+    $slot-padding-right: 29px
     overflow: hidden
     padding: 0 0 $site-padding
     width: 100%
     max-width: 300px
+
+    h4
+        margin-right: $slot-padding-right
 
     ul
         text-align: left
         margin: 0
 
     li
-        background-color: #fff
         margin-bottom: 6px
+        padding-right: $slot-padding-right
+        position: relative
+
+    .slot,
+    i.remove
+        display: inline-block
+        vertical-align: middle
+
+    .slot
+        background-color: #fff
         font-size: 10px
-        padding: 0 8px
+        padding: 5px 8px
         box-sizing: border-box
-        line-height: 28px
+        line-height: 1.3
         border: 1px solid #eee
         border-radius: 4px
+        cursor: pointer
+        width: 100%
+
+        &.unequipped
+            // box-shadow: 2px 2px 3px 0px #eaeaea
+            border-color: #d4d4d4
+
+        &.equipped
+            background-color: #eee
+            // box-shadow: 2px 2px 2px 0px #c7c7c7
+
+            .title
+                font-style: normal
 
         &.disabled
             color: #bbb
+
+        .title
+            font-style: italic
 
         span,
         i
             vertical-align: middle
 
         i
-            margin-right: 0.1em
+            margin-right: 3px
+
+        i.eye
+            float: right
+            color: #868686
+            font-size: 20px
+            margin-top: 4px
+            margin-left: 3px
+
+        &:hover i.eye
+            color: #000
+
+    i.remove
+        position: absolute
+        right: 0
+        top: 4px
+        cursor: pointer
+        color: #868686
+        // color: $color-accent
+        // text-shadow: 2px 2px 2px 0px #c7c7c7
+
+        &:hover
+            color: #000
+
+#ship-slots-free-wrapper
+    padding-bottom: 0

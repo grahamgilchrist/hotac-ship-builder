@@ -1,7 +1,7 @@
 'use strict';
 
-var XpItem = require('../models/xpItem');
-var itemTypes = require('../models/itemTypes');
+var XpItem = require('../models/shipBuild/xpItem');
+var itemTypes = require('../models/shipBuild/itemTypes');
 var Build = require('../models/shipBuild');
 var events = require('./events');
 var headerView = require('../views/header');
@@ -33,7 +33,7 @@ module.exports = {
         if (urlHash && urlHash.length > 0) {
             // We got a hash in URL, so create a build based on it
             var buildData = hashController.parseExportStringToHistory(urlHash);
-            currentBuild = new Build(buildData.xpHistory, buildData.callsign, buildData.playerName, buildData.enemies);
+            currentBuild = new Build(buildData.xpHistory, buildData.callsign, buildData.playerName, buildData.enemies, buildData.equippedUpgrades, buildData.equippedAbilities);
             mainView.show();
             headerView.showButtons();
         } else {
@@ -74,15 +74,39 @@ module.exports = {
     },
     bindOtherViewEvents: function () {
         events.on('view.upgrades.buy', function (event, upgradeId) {
-            currentBuild.buyUpgrade(upgradeId);
+            currentBuild.addToHistory(itemTypes.BUY_UPGRADE, {
+                upgradeId: upgradeId
+            });
+            currentBuild.upgrades.buyCard(upgradeId);
+            currentBuild.upgrades.equip(upgradeId);
         });
 
         events.on('view.pilotAbilities.buy', function (event, pilotId) {
-            currentBuild.buyPilotAbility(pilotId);
+            currentBuild.addToHistory(itemTypes.BUY_PILOT_ABILITY, {
+                pilotId: pilotId
+            });
+            currentBuild.upgrades.buyPilotAbility(pilotId);
+            currentBuild.upgrades.equipAbility(pilotId);
         });
 
         events.on('view.changeShip.changeShip', function (event, shipId) {
             currentBuild.changeShip(shipId);
+        });
+
+        events.on('view.upgrades.equipUpgrade', function (event, upgradeId) {
+            currentBuild.upgrades.equip(upgradeId);
+        });
+
+        events.on('view.upgrades.equipAbility', function (event, pilotId) {
+            currentBuild.upgrades.equipAbility(pilotId);
+        });
+
+        events.on('view.upgrades.unequipUpgrade', function (event, upgradeId) {
+            currentBuild.upgrades.unequipUpgrade(upgradeId);
+        });
+
+        events.on('view.upgrades.unequipAbility', function (event, pilotId) {
+            currentBuild.upgrades.unequipAbility(pilotId);
         });
 
         events.on('view.xpHistory.revert', function (event, xpItemIndex) {
@@ -104,11 +128,11 @@ module.exports = {
         events.on('model.build.ready', function (event, build) {
             mainView.renderTitle(build);
             mainView.renderXp(build.currentXp);
-            shipInfoView.renderShipStats(build.currentShip);
-            shipInfoView.renderShipActions(build.currentShip, build.upgrades);
+            shipInfoView.renderShipStats(build.currentShip, build.upgrades.equipped);
+            shipInfoView.renderShipActions(build.currentShip, build.upgrades.equipped);
             shipInfoView.renderShipImage(build.currentShip);
             shipInfoView.renderShipDial(build.currentShip);
-            upgradesView.renderShipUpgrades(build.currentShip, build.pilotSkill, build.upgrades);
+            upgradesView.renderShipSlotsList(build);
             pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
             upgradesView.renderUpgradesList(build);
             xpHistoryView.renderTable(build);
@@ -122,11 +146,11 @@ module.exports = {
         events.on('model.build.currentShip.update', function (event, build) {
             if (build.ready) {
                 mainView.renderTitle(build);
-                shipInfoView.renderShipStats(build.currentShip);
-                shipInfoView.renderShipActions(build.currentShip, build.upgrades);
+                shipInfoView.renderShipStats(build.currentShip, build.upgrades.equipped);
+                shipInfoView.renderShipActions(build.currentShip, build.upgrades.equipped);
                 shipInfoView.renderShipImage(build.currentShip);
                 shipInfoView.renderShipDial(build.currentShip);
-                upgradesView.renderShipUpgrades(build.currentShip, build.pilotSkill, build.upgrades);
+                upgradesView.renderShipSlotsList(build);
                 upgradesView.renderUpgradesList(build);
                 changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
             }
@@ -137,7 +161,7 @@ module.exports = {
                 pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
                 upgradesView.renderUpgradesList(build);
                 changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
-                upgradesView.renderShipUpgrades(build.currentShip, build.pilotSkill, build.upgrades);
+                upgradesView.renderShipSlotsList(build);
             }
         });
 
@@ -147,17 +171,14 @@ module.exports = {
             pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
         });
 
-        events.on('model.build.upgrades.update', function (event, build) {
+        events.on('model.build.equippedUpgrades.update', function (event, build) {
             if (build.ready) {
+                upgradesView.renderShipSlotsList(build);
                 upgradesView.renderUpgradesList(build);
-                shipInfoView.renderShipActions(build.currentShip, build.upgrades);
-                upgradesView.renderShipUpgrades(build.currentShip, build.pilotSkill, build.upgrades);
-            }
-        });
-
-        events.on('model.build.pilotAbilities.update', function (event, build) {
-            if (build.ready) {
-                upgradesView.renderUpgradesList(build);
+                shipInfoView.renderShipActions(build.currentShip, build.upgrades.equipped);
+                shipInfoView.renderShipStats(build.currentShip, build.upgrades.equipped);
+                var newHash = hashController.generateExportString(build);
+                hashController.set(newHash);
             }
         });
 
