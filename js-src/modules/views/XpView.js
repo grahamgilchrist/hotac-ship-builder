@@ -11,7 +11,7 @@ module.exports = {
         $('[bind-xp-current]').text(xpAmount);
     },
     bindXpButton: function () {
-        $('#add-mission-xp').on('click', function () {
+        $('[add-mission-xp]').on('click', function () {
             var $modalContent = missionView.renderView();
             var featherlightConfig = {
                 variant: 'add-xp'

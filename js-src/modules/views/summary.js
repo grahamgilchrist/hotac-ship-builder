@@ -8,6 +8,14 @@ module.exports = {
         var $equippedWrapper = $('[bind-equipped-upgrades]');
         $equippedWrapper.empty();
 
+        if (build.upgrades.equippedUpgrades.length === 0 && build.upgrades.equippedAbilities.length === 0) {
+            $('.summary-equipped h4').hide();
+            $('.summary-equipped h4.empty').show();
+        } else {
+            $('.summary-equipped h4').show();
+            $('.summary-equipped h4.empty').hide();
+        }
+
         var $ul = $('<ul>');
         _.each(build.upgrades.equippedUpgrades, function (upgrade) {
             var $li = module.exports.renderEquippedUpgrade(upgrade);

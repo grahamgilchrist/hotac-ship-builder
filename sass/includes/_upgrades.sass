@@ -5,7 +5,7 @@
 .upgrades-wrapper
     background-color: #fff
     overflow: hidden
-    font-size: 0
+    // font-size: 0
 
     @include media($media-main-padding)
         padding:
@@ -21,10 +21,47 @@
         @include media('print')
             display: none
 
+.add-xp
+    text-align: center
+
+    span,
+    button,
+    i
+        vertical-align: middle
+
+    button
+        $size: 30px
+        width: $size
+        min-width: $size
+        height: $size
+        margin-left: 4px
+
+        i
+            font-size: $size * 0.7
+
+.upgrades-options
+    display: flex
+    justify-content: space-evenly
+    flex-wrap: wrap
+    text-align: center
+
+    @include media($media-upgrade-extra-padding)
+        background-color: #eee
+        margin-bottom: $site-padding
+
+.pilot-skill-upgrade,
+.change-ship
+    margin-bottom: $site-padding
+
+    @include media($media-upgrade-extra-padding)
+        margin-top: $site-padding
+
+.upgrade-slots-wrapper
+    display: flex
+    justify-content: center
+
 .ship-slots,
 .allowed-list
-    display: inline-block
-    vertical-align: top
     padding: 0 10px
     min-width: 50%
     max-width: 230px
@@ -46,52 +83,15 @@
             font-size: 20px
             cursor: pointer
 
-.allowed-list
-    text-align: left
+.upgrade-slots-wrapper.two-list
+    .ship-slots
+        padding-right: 0
 
-    p,
-    li
-        font-size: 10px
-        line-height: 1.3
+    .allowed-list
+        padding-left: 20px
 
-    li
-        background-color: #eee
-        margin-bottom: 6px
-        padding: 5px 8px
-        cursor: pointer
-
-        &:last-child 
-            margin-bottom: 0
-
-        i.xwing-miniatures-font
-            margin-right: 4px
-
-        i.eye
-            float: right
-            color: #868686
-            font-size: 20px
-
-        &:hover i.eye
-            color: #000
-
-        i.eye,
-        span
-            @include media('print')
-                display: none
-
-        img
-            max-width: 100%
-
-        .preview
-            display: none
-
-            @include media('print')
-                display: block
-                zoom: 75%
-
-#disabled-upgrade-list
-    li
-        opacity: 0.4
+#ship-slots-free-wrapper
+    padding-bottom: 0
 
 .ship-slots-list
     $slot-padding-right: 29px
@@ -127,6 +127,9 @@
         border-radius: 4px
         cursor: pointer
         width: 100%
+        flex-grow: 1
+        display: flex
+        align-items: center
 
         &.unequipped
             // box-shadow: 2px 2px 3px 0px #eaeaea
@@ -138,6 +141,7 @@
 
             .title
                 font-style: normal
+                flex-grow: 1
 
         &.disabled
             color: #bbb
@@ -145,21 +149,18 @@
         .title
             font-style: italic
 
-        span,
-        i
-            vertical-align: middle
-
-        i
+        .xwing-miniatures-font
             margin-right: 3px
 
-        i.eye
-            float: right
+        .icon-preview
             color: #868686
             font-size: 20px
-            margin-top: 4px
-            margin-left: 3px
 
-        &:hover i.eye
+        .required-ps
+            margin-left: 3px
+            white-space: nowrap
+
+        &:hover .icon-preview
             color: #000
 
     i.remove
@@ -168,11 +169,58 @@
         top: 4px
         cursor: pointer
         color: #868686
-        // color: $color-accent
-        // text-shadow: 2px 2px 2px 0px #c7c7c7
 
         &:hover
             color: #000
 
-#ship-slots-free-wrapper
-    padding-bottom: 0
+.allowed-list
+    text-align: left
+
+    p,
+    li
+        font-size: 10px
+        line-height: 1.3
+
+    li
+        background-color: #eee
+        margin-bottom: 6px
+        padding: 5px 8px
+        cursor: pointer
+        display: flex
+        align-items: center
+
+        &:last-child 
+            margin-bottom: 0
+
+        i.xwing-miniatures-font
+            margin-right: 4px
+
+        .upgrade-name
+            flex-grow: 1
+
+        i.eye
+            float: right
+            color: #868686
+            font-size: 20px
+
+        &:hover i.eye
+            color: #000
+
+        i.eye,
+        span
+            @include media('print')
+                display: none
+
+        img
+            max-width: 100%
+
+        .preview
+            display: none
+
+            @include media('print')
+                display: block
+                zoom: 75%
+
+#disabled-upgrade-list
+    li
+        opacity: 0.4

@@ -25,7 +25,7 @@ module.exports = {
         });
         $freeShipSlots.append($ul);
 
-        // Process and create list for ship chassis slots
+        // Ship chassis slots
         var $shipSlots = $('#ship-slots-default');
         $shipSlots.empty();
 
@@ -73,7 +73,7 @@ module.exports = {
 
         var slotHtml = '<span class="title">' + upgradeSlot.type + '</span>';
         if (upgradeSlot.pilotSkill) {
-            slotHtml += '<span> (PS ' + upgradeSlot.pilotSkill + ')</span>';
+            slotHtml += '<span class="required-ps"> (PS ' + upgradeSlot.pilotSkill + ')</span>';
         }
 
         var $li = $('<li></li>');
@@ -94,7 +94,7 @@ module.exports = {
 
             if (upgradeSlot.equipped) {
                 var $icon = $('<i class="material-icons remove">remove_circle_outline</i>');
-                $slot.append('<i class="material-icons eye">zoom_in</i>');
+                $slot.append('<i class="material-icons icon-preview">zoom_in</i>');
                 $slot.addClass('equipped');
                 $li.append($icon);
 
@@ -133,7 +133,7 @@ module.exports = {
         var $slot = $('<div class="slot"></div>');
         $slot.append(module.exports.getIconString(upgradeSlot.type));
         $slot.append('<span class="title">' + upgradeSlot.upgrade.name + '</span>');
-        $slot.append('<i class="material-icons eye">zoom_in</i>');
+        $slot.append('<i class="material-icons icon-preview">zoom_in</i>');
         var imageUrl = '/components/xwing-data/images/' + upgradeSlot.upgrade.image;
         $slot.attr('data-featherlight', imageUrl);
         $li.append($slot);
@@ -159,6 +159,7 @@ module.exports = {
         return $li;
     },
     renderUpgradesList: function (build) {
+        var $listsWrapper = $('.upgrade-slots-wrapper');
         var $unusedList = $('#unused-upgrade-list');
         $unusedList.empty();
 
@@ -168,8 +169,10 @@ module.exports = {
 
         if (!hasDisabledOrUnequippedUpgrades) {
             $('.allowed-list').hide();
+            $listsWrapper.removeClass('two-list').addClass('one-list');
         } else {
             $('.allowed-list').show();
+            $listsWrapper.removeClass('one-list').addClass('two-list');
         }
 
         if (hasUnequippedUpgrades) {
@@ -203,12 +206,12 @@ module.exports = {
     },
     renderUpgradeItem: function (upgrade) {
         var imageUrl = '/components/xwing-data/images/' + upgrade.image;
-        var $item = $('<li class="upgrade" data-featherlight="' + imageUrl + '">' + module.exports.getIconString(upgrade.slot) + '<span>' + upgrade.name + '</span><i class="material-icons eye">zoom_in</i><img class="preview" src="' + imageUrl + '"></li>');
+        var $item = $('<li class="upgrade" data-featherlight="' + imageUrl + '">' + module.exports.getIconString(upgrade.slot) + '<span class="upgrade-name">' + upgrade.name + '</span><i class="material-icons eye">zoom_in</i><img class="preview" src="' + imageUrl + '"></li>');
         return $item;
     },
     renderPilotUpgradeItem: function (pilot) {
         var escapedText = pilot.text.replace(/"/g, '&quot;');
-        var $item = $('<li class="upgrade" data-featherlight="' + escapedText + '" data-featherlight-type="text" data-featherlight-variant="preview-pilot-ability">' + module.exports.getIconString('Elite') + '<span>Ability: ' + pilot.name + '</span><i class="material-icons eye">zoom_in</i></li>');
+        var $item = $('<li class="upgrade" data-featherlight="' + escapedText + '" data-featherlight-type="text" data-featherlight-variant="preview-pilot-ability">' + module.exports.getIconString('Elite') + '<span class="upgrade-name">Ability: ' + pilot.name + '</span><i class="material-icons eye">zoom_in</i></li>');
 
         return $item;
     },

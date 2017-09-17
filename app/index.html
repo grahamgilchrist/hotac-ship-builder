@@ -94,7 +94,7 @@
                             <span id="title-callsign"></span> (<span id="title-player-name"></span>)
                         </h2>
                         <h3 class="subtitle">
-                            <span bind-xp-current></span>XP to spend
+                            <span bind-xp-current></span><span>XP to spend</span>
                         </h3>
                     </div>
 
@@ -124,80 +124,74 @@
 
                                     <div class="summary-equipped">
                                         <h4>Equipped Upgrades</h4>
+                                        <h4 class="empty">No upgrades equipped</h4>
                                         <div bind-equipped-upgrades></div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="mdl-tabs__panel" id="upgrades-tab">
-                                <div class="upgrades-wrapper">
-                                    <h3>Upgrades</h3>
 
-                                    <div class="xp-current">
-                                        <span class="label"><span class="label-main">XP</span><span class="label-sub">to spend</span></span>
-                                        <span class="value" bind-xp-current></span>
-                                        <button  id="add-mission-xp" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+                                <div class="upgrades-wrapper">
+                                    <h4 class="add-xp">
+                                        <span>XP to spend:</span> <span bind-xp-current></span> <button add-mission-xp class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored add-xp">
                                             <i class="material-icons">add</i>
                                         </button>
-                                        <div class="mdl-tooltip" data-mdl-for="add-mission-xp">
-                                            Add mission XP
-                                        </div>
-                                    </div>
+                                    </h4>
 
-                                    <div class="ship-info-pilot-skill">
-                                        <span class="label">Pilot Skill</span>
-                                        <span class="value" bind-pilot-skill></span>
-                                        <span class="ps-upgrade-wrapper">
+                                    <div class="upgrades-options">
+                                        <div class="pilot-skill-upgrade">
                                             <div>
-                                                <span bind-pilot-skill-next-xp-cost></span><span> XP to update to level </span><span bind-pilot-skill-plus-one></span>
+                                                <button id="increase-ps" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                                                    Upgrade to PS <span bind-pilot-skill-plus-one></span> (<span bind-pilot-skill-next-xp-cost></span>XP)
+                                                </button>
                                             </div>
-                                            <div>
-                                                <button id="increase-ps" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Upgrade</button>
-                                            </div>
-                                        </span>
+                                        </div>
+
+                                        <div class="change-ship">
+                                            <span id="change-ship-wrapper">
+                                                <button id="change-ship" disabled class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Change ship (5XP)</button>
+                                            </span>
+                                        </div>
+                                        <div class="mdl-tooltip" data-mdl-for="change-ship-wrapper" id="change-ship-tooltip">New ships are unlocked at pilot skill 4</div>
                                     </div>
 
-                                    <div class="change-ship">
-                                        <span id="change-ship-wrapper">
-                                            <button id="change-ship" disabled class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Change ship (5XP)</button>
-                                        </span>
-                                    </div>
-                                    <div class="mdl-tooltip" data-mdl-for="change-ship-wrapper" id="change-ship-tooltip">New ships are unlocked at pilot skill 4</div>
-
-                                    <div class="ship-slots">
-                                        <div id="ship-slots-free-wrapper" class="ship-slots-list">
-                                            <h4><span>Free upgrades</span> <i class="material-icons" id="free-upgrades-info">info_outline</i></h4>
-                                            <div class="mdl-tooltip" data-mdl-for="free-upgrades-info">
-                                                Any number of free upgrades may be equipped without filling an upgrade slot on the ship.
+                                    <div class="upgrade-slots-wrapper">
+                                        <div class="ship-slots">
+                                            <div id="ship-slots-free-wrapper" class="ship-slots-list">
+                                                <h4><span>Free upgrades</span> <i class="material-icons" id="free-upgrades-info">info_outline</i></h4>
+                                                <div class="mdl-tooltip" data-mdl-for="free-upgrades-info">
+                                                    Any number of free upgrades may be equipped without filling an upgrade slot on the ship.
+                                                </div>
+                                                <ul id="ship-slots-free"></ul>
                                             </div>
-                                            <ul id="ship-slots-free"></ul>
-                                        </div>
-                                        <div class="ship-slots-list">
-                                            <h4>Slots on ship</h4>
-                                            <div id="ship-slots-default"></div>
-                                        </div>
-                                        <div id="ship-slots-upgrades-wrapper">
-                                            <h4><span>Slots from upgrades</span> <i class="material-icons" id="slots-from-upgrades-info">info_outline</i></h4>
-                                            <div class="mdl-tooltip" data-mdl-for="slots-from-upgrades-info">
-                                                These slots are generated by upgrade cards or abilities. They are only available when equipping the card/ability which provides the additional slot.
+                                            <div class="ship-slots-list">
+                                                <h4>Slots on ship</h4>
+                                                <div id="ship-slots-default"></div>
                                             </div>
-                                            <div id="ship-slots-upgrades" class="ship-slots-list"></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="allowed-list">
-                                        <div class="unused-upgrades-wrapper">
-                                            <h4><span>Unused upgrades</span> <i class="material-icons" id="unused-upgrades-info">info_outline</i></h4>
-                                            <div class="mdl-tooltip" data-mdl-for="unused-upgrades-info">
-                                                Upgrades which have been purchased but are not currently ewquipped.
+                                            <div id="ship-slots-upgrades-wrapper">
+                                                <h4><span>Slots from upgrades</span> <i class="material-icons" id="slots-from-upgrades-info">info_outline</i></h4>
+                                                <div class="mdl-tooltip" data-mdl-for="slots-from-upgrades-info">
+                                                    These slots are generated by upgrade cards or abilities. They are only available when equipping the card/ability which provides the additional slot.
+                                                </div>
+                                                <div id="ship-slots-upgrades" class="ship-slots-list"></div>
                                             </div>
-                                            <ul id="unused-upgrade-list"></ul>
                                         </div>
 
-                                        <div class="disabled-upgrades">
-                                            <h4>Disabled upgrades</h4>
-                                            <p>These upgrades have been purchased but cannot be equipped to the current ship.</p>
-                                            <ul id="disabled-upgrade-list"></ul>
+                                        <div class="allowed-list">
+                                            <div class="unused-upgrades-wrapper">
+                                                <h4><span>Unused upgrades</span> <i class="material-icons" id="unused-upgrades-info">info_outline</i></h4>
+                                                <div class="mdl-tooltip" data-mdl-for="unused-upgrades-info">
+                                                    Upgrades which have been purchased but are not currently ewquipped.
+                                                </div>
+                                                <ul id="unused-upgrade-list"></ul>
+                                            </div>
+
+                                            <div class="disabled-upgrades">
+                                                <h4>Disabled upgrades</h4>
+                                                <p>These upgrades have been purchased but cannot be equipped to the current ship.</p>
+                                                <ul id="disabled-upgrade-list"></ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
