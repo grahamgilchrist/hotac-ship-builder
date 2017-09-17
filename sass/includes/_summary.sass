@@ -22,7 +22,8 @@
         margin-right: $site-padding
 
 .summary-equipped
-    $item-width: 200px
+    $preview-item-width: 200px
+    $full-item-max-width: 172px
     $item-x-margin: 5px
     margin: 0 auto
     text-align: center
@@ -38,10 +39,7 @@
         margin: 0
 
         @include media($media-summary-two-col)
-            margin: 0 -$item-x-margin 
-
-    li
-        display: inline-block
+            margin: 0 (-$item-x-margin)
 
     img
         max-width: 100%
@@ -54,7 +52,7 @@
         border: 1px solid #eee
         border-radius: 4px
         cursor: pointer
-        width: $item-width
+        width: $preview-item-width
         background-color: #eee
         overflow: hidden
         max-width: 156px
@@ -73,22 +71,33 @@
             font-size: 18px
             color: #868686
 
-        // + .preview
-
     .full
         display: none
-        width: 160px
-        height: 245px
+        // height: 263px
         margin: 5px
         border-radius: 10px
         overflow: hidden
         position: relative
+        cursor: pointer
 
         &.ability
             font-size: 12px
             background-color: #eee
             line-height: 1.3
             border: 1px solid #d6d6d6
+            cursor: inherit
+
+            &:before
+                content: ''
+                display: block
+                padding-top: 154.6%
+
+            .ability-inner
+                position: absolute
+                top: 0
+                left: 0
+                right: 0
+                bottom: 0
 
         .title,
         .name,
@@ -114,11 +123,19 @@
         width: auto
         flex-grow: 1
 
+        h4
+            display: none
+
         li
-            width: auto
+            width: 50%
+            max-width: $full-item-max-width
 
         .full
             display: block
 
         .preview
             display: none
+
+    @include media($media-summary-triple-card)
+        li
+            width: $full-item-max-width
