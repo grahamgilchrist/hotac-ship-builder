@@ -119,7 +119,6 @@ module.exports = {
             }
             // trash the existing build and start a new one with the new history
             currentBuild = new Build(newHistory, currentBuild.callsign, currentBuild.playerName);
-            mainView.resetTabs();
         });
 
         events.on('view.enemies.adjustCount', function (event, data) {

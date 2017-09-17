@@ -277,7 +277,7 @@ upgradesModel.prototype.equipUpgradesToSlots = function (upgradesToEquip, abilit
         var itemIndex = newSlotIndices.shift();
         // try to equip to the additional slot at that index
         var matchingUpgrade = this.matchSlot(this.build.upgradeSlots.slotsFromUpgrades[itemIndex], remainingUpgradesToEquip, remainingAbilitiesToEquip);
-        var slotsAddedIndices = this.equipSlot(this.build.upgradeSlots.slotsFromUpgrades[itemIndex], equippedAbilities, matchingUpgrade, equippedUpgrades, remainingUpgradesToEquip, remainingAbilitiesToEquip);
+        var slotsAddedIndices = this.equipSlot(this.build.upgradeSlots.slotsFromUpgrades[itemIndex], matchingUpgrade, equippedUpgrades, equippedAbilities, remainingUpgradesToEquip, remainingAbilitiesToEquip);
         // If we added yet more slots as part of equipping this upgrade, add them to the list
         newSlotIndices = newSlotIndices.concat(slotsAddedIndices);
     }
