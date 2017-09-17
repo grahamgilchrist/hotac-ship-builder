@@ -9,10 +9,10 @@ module.exports = {
         $equippedWrapper.empty();
 
         if (build.upgrades.equippedUpgrades.length === 0 && build.upgrades.equippedAbilities.length === 0) {
-            $('.summary-equipped h4').hide();
+            $('.summary-equipped h4.not-empty').hide();
             $('.summary-equipped h4.empty').show();
         } else {
-            $('.summary-equipped h4').show();
+            $('.summary-equipped h4.not-empty').show();
             $('.summary-equipped h4.empty').hide();
         }
 
