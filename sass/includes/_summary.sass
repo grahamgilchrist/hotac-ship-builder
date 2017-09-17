@@ -28,6 +28,12 @@
     margin: 0 auto
     text-align: center
 
+    @include media($media-main-padding)
+        padding: $site-padding
+
+    @include media($media-summary-two-col)
+        flex-grow: 1
+
     ul
         display: flex
         justify-content: center
