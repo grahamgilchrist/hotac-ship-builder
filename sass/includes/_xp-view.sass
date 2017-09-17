@@ -1,0 +1,46 @@
+.xp-current
+    float: right
+    position: relative
+
+    .label,
+    .value
+        display: inline-block
+        vertical-align: middle
+        line-height: 1
+
+    .label
+        text-align: center
+
+    .label-main,
+    .label-sub
+        display: block
+
+    .label-main
+        font-size: 36px
+        margin-bottom: 4px
+
+    .label-sub
+        font-size: 10px
+
+    .value
+        margin: 0 10px
+        font-size: 36px
+        background-color: $color-accent
+        min-width: 48px
+        height: 48px
+        line-height: 48px
+        border-radius: 48px
+        text-align: center
+        padding: 0 14px
+
+        @include media('print')
+            line-height: 1
+
+    .mdl-button--fab
+        position: absolute
+        top: -5px
+        right: -10px
+        width: 30px
+        min-width: 30px
+        height: 30px
+        font-size: 10px

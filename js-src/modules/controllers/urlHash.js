@@ -20,8 +20,8 @@ module.exports = {
         var urlComponents = [];
 
         // add callsign and playername as first items
-        urlComponents.push(window.encodeURIComponent(build.callsign));
         urlComponents.push(window.encodeURIComponent(build.playerName));
+        urlComponents.push(window.encodeURIComponent(build.callsign));
 
         // Add defeated enemies
         var enemiesList = build.enemyDefeats.exportString();

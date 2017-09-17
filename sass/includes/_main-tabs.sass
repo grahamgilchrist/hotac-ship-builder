@@ -10,9 +10,13 @@
 
     .mdl-tabs__tab
         padding: 0 14px
+        font-size: 12px
 
-        @include media($media-main-two-col)
+        @include media($media-summary-two-col)
             padding: 0 24px
+
+        @include media($media-tabs-large-size)
+            font-size: 14px
 
     .tabs-panel
         overflow: hidden

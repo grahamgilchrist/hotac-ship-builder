@@ -7,10 +7,10 @@ var modalController = require('../controllers/modals');
 
 module.exports = {
     renderWithPs: function (pilotSkill, currentXp) {
-        $('#pilot-skill').text(pilotSkill);
-        $('#pilot-skill-plus-one').text(pilotSkill + 1);
+        $('[bind-pilot-skill]').text(pilotSkill);
+        $('[bind-pilot-skill-plus-one]').text(pilotSkill + 1);
         var costOfNextUpgrade = module.exports.getNextUpgradeCost(pilotSkill);
-        $('#pilot-skill-next-xp-cost').text(costOfNextUpgrade);
+        $('[bind-pilot-skill-next-xp-cost]').text(costOfNextUpgrade);
 
         $('#increase-ps').off('click').on('click', function () {
             var costOfNextUpgrade = module.exports.getNextUpgradeCost(pilotSkill);
