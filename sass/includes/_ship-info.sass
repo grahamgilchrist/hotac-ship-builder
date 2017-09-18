@@ -1,10 +1,13 @@
 .ship-info
-    background-color: #fff
-    padding: $site-padding 0
+    $max-image-width: 300px
+    $max-container-width: $max-image-width + (2 * $site-padding)
     text-align: center
 
-    @include media($media-main-two-col)
-        padding: 0 0 $site-padding
+    @include media($media-main-padding)
+        max-width: none
+
+    @include media($media-summary-two-col)
+        max-width: $max-container-width
 
     @include media('print')
         width: 270px
@@ -14,13 +17,12 @@
         margin-right: 20px
 
     .ship-image-stats,
-    #ship-info-dial,
-    .change-ship
+    #ship-info-dial
         display: inline-block
         vertical-align: middle
 
     .ship-image-stats
-        max-width: 300px
+        max-width: $max-image-width
         margin-bottom: $site-padding
 
     .img-wrapper
@@ -39,12 +41,16 @@
     #ship-info-actions
         background-color: #262626
         padding: 0 10px
-        font-size: 22px
         line-height: 58px
         text-align: center
 
     #ship-info-stats
         font-weight: 700
+        font-size: 18px
+
+        i,
+        span
+            vertical-align: middle
 
         i
             font-weight: 400
@@ -55,6 +61,9 @@
 
             &:last-child
                 margin-right: 0
+
+        .pilot-skill
+            color: #ffa500
 
         .attack
             color: #c52b2b
@@ -72,6 +81,7 @@
         border-bottom-left-radius: 14px
         border-bottom-right-radius: 14px
         border-top: 1px solid #333
+        font-size: 22px
 
         i
             color: #fff
@@ -82,7 +92,8 @@
                 margin-right: 0
 
     #ship-info-dial
-        margin: 0 $site-padding
+        $cell-size: 34px
+        margin: 0 auto
 
         table
             margin: 0
@@ -90,13 +101,15 @@
 
         td
             padding: 0
-            background-color: transparent
+
+            &:first-child
+                border-right: 1px solid #eee
 
             &.speed,
             &.maneuver
                 padding: 6px
                 font-size: 18px
-                line-height: 35px
+                line-height: $cell-size
 
             &.maneuver
                 cursor: pointer
@@ -107,15 +120,11 @@
             i
                 display: block
                 font-size: 18px
-                width: 35px    
-                height: 35px
+                width: $cell-size    
+                height: $cell-size
 
         .red
             color: red
 
         .green
             color: green
-
-    .change-ship
-        @include media('print')
-            display: none

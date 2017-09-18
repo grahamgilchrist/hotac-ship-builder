@@ -7,6 +7,7 @@ var events = require('./events');
 var headerView = require('../views/header');
 var newView = require('../views/newView');
 var mainView = require('../views/mainView');
+var XpView = require('../views/XpView');
 var shipInfoView = require('../views/shipInfo');
 var pilotSkillView = require('../views/pilotSkillView');
 var changeShipView = require('../views/changeShipView');
@@ -14,6 +15,7 @@ var upgradesView = require('../views/upgradesView');
 var xpHistoryView = require('../views/xpHistory');
 var enemiesView = require('../views/enemiesView');
 var messageView = require('../views/message');
+var summaryView = require('../views/summary');
 var hashController = require('./urlHash');
 
 var currentBuild;
@@ -26,7 +28,7 @@ module.exports = {
         module.exports.bindModelEvents();
 
         headerView.init();
-        mainView.init();
+        XpView.init();
         newView.init();
 
         var urlHash = hashController.get();
@@ -117,7 +119,6 @@ module.exports = {
             }
             // trash the existing build and start a new one with the new history
             currentBuild = new Build(newHistory, currentBuild.callsign, currentBuild.playerName);
-            mainView.resetTabs();
         });
 
         events.on('view.enemies.adjustCount', function (event, data) {
@@ -127,8 +128,8 @@ module.exports = {
     bindModelEvents: function () {
         events.on('model.build.ready', function (event, build) {
             mainView.renderTitle(build);
-            mainView.renderXp(build.currentXp);
-            shipInfoView.renderShipStats(build.currentShip, build.upgrades.equipped);
+            XpView.renderXp(build.currentXp);
+            shipInfoView.renderShipStats(build);
             shipInfoView.renderShipActions(build.currentShip, build.upgrades.equipped);
             shipInfoView.renderShipImage(build.currentShip);
             shipInfoView.renderShipDial(build.currentShip);
@@ -139,6 +140,7 @@ module.exports = {
             changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
             enemiesView.renderTable(build.enemyDefeats.get());
             messageView.clear();
+            summaryView.renderEquippedUpgrades(build);
             var newHash = hashController.generateExportString(build);
             hashController.set(newHash);
         });
@@ -146,7 +148,7 @@ module.exports = {
         events.on('model.build.currentShip.update', function (event, build) {
             if (build.ready) {
                 mainView.renderTitle(build);
-                shipInfoView.renderShipStats(build.currentShip, build.upgrades.equipped);
+                shipInfoView.renderShipStats(build);
                 shipInfoView.renderShipActions(build.currentShip, build.upgrades.equipped);
                 shipInfoView.renderShipImage(build.currentShip);
                 shipInfoView.renderShipDial(build.currentShip);
@@ -166,7 +168,7 @@ module.exports = {
         });
 
         events.on('model.build.xp.update', function (event, build) {
-            mainView.renderXp(build.currentXp);
+            XpView.renderXp(build.currentXp);
             changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
             pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
         });
@@ -176,7 +178,8 @@ module.exports = {
                 upgradesView.renderShipSlotsList(build);
                 upgradesView.renderUpgradesList(build);
                 shipInfoView.renderShipActions(build.currentShip, build.upgrades.equipped);
-                shipInfoView.renderShipStats(build.currentShip, build.upgrades.equipped);
+                shipInfoView.renderShipStats(build);
+                summaryView.renderEquippedUpgrades(build);
                 var newHash = hashController.generateExportString(build);
                 hashController.set(newHash);
             }

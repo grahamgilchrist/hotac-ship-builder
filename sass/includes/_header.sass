@@ -31,8 +31,11 @@
                 display: none
 
     h1
-        font-size: 24px
+        font-size: 22px
         margin: $vertical-spacing 0
+
+        @include media($media-header-small-size)
+            font-size: 24px
 
         @include media($media-header-med-size)
             font-size: 30px
@@ -40,8 +43,11 @@
 
         .subtitle
             display: block
-            font-size: 14px
+            font-size: 12px
             line-height: 1
+
+            @include media($media-header-small-size)
+                font-size: 14px
 
             @include media($media-header-med-size)
                 font-size: 18px

@@ -4,15 +4,15 @@ var $ = require('jquery');
 var _ = require('lodash');
 
 module.exports = {
-    renderShipStats: function (currentShip, equippedUpgrades) {
+    renderShipStats: function (build) {
         var statValues = {
-            attack: currentShip.shipData.attack,
-            agility: currentShip.shipData.agility,
-            hull: currentShip.shipData.hull,
-            shields: currentShip.shipData.shields
+            attack: build.currentShip.shipData.attack,
+            agility: build.currentShip.shipData.agility,
+            hull: build.currentShip.shipData.hull,
+            shields: build.currentShip.shipData.shields
         };
         // Add nay stats from upgrades
-        _.each(equippedUpgrades, function (upgrade) {
+        _.each(build.upgrades.equipped, function (upgrade) {
             if (upgrade.grants) {
                 _.each(upgrade.grants, function (grant) {
                     if (grant.type === 'stats') {
@@ -24,10 +24,11 @@ module.exports = {
 
         var $shipStats = $('#ship-info-stats');
         $shipStats.empty();
-        $shipStats.append('<span class="attack"><i class="xwing-miniatures-font xwing-miniatures-font-attack"></i> ' + statValues.attack + '</span>');
-        $shipStats.append('<span class="agility"><i class="xwing-miniatures-font xwing-miniatures-font-agility"></i> ' + statValues.agility + '</span>');
-        $shipStats.append('<span class="hull"><i class="xwing-miniatures-font xwing-miniatures-font-hull"></i> ' + statValues.hull + '</span>');
-        $shipStats.append('<span class="shield"><i class="xwing-miniatures-font xwing-miniatures-font-shield"></i> ' + statValues.shields + '</span>');
+        $shipStats.append('<span class="pilot-skill">PS ' + build.pilotSkill + '</span>');
+        $shipStats.append('<span class="attack">' + statValues.attack + ' <i class="xwing-miniatures-font xwing-miniatures-font-attack"></i></span>');
+        $shipStats.append('<span class="agility">' + statValues.agility + ' <i class="xwing-miniatures-font xwing-miniatures-font-agility"></i></span>');
+        $shipStats.append('<span class="hull">' + statValues.hull + ' <i class="xwing-miniatures-font xwing-miniatures-font-hull"></i></span>');
+        $shipStats.append('<span class="shield">' + statValues.shields + ' <i class="xwing-miniatures-font xwing-miniatures-font-shield"></i></span>');
     },
     renderShipActions: function (currentShip, equippedUpgrades) {
         var $shipActions = $('#ship-info-actions');
