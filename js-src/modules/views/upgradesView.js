@@ -66,9 +66,17 @@ module.exports = {
     renderShipSlot: function (upgradeSlot, build) {
         var upgradesAvailableToBuy = build.upgrades.getAvailableToBuy(upgradeSlot.type);
 
-        // Don't show this slot if there are no available upgrades for it (e.g. a title slot for a ship with no titles)
-        if (!upgradesAvailableToBuy || upgradesAvailableToBuy.length < 1) {
-            return;
+        // Don't show this slot if we can't either buy or equip anything existing into it
+        //  (for example, no titles for this ship)
+        var hasUpgradesToBuy = (upgradesAvailableToBuy.length > 0);
+        var hasUpgradesToEquip = _.find(build.upgrades.unequipped, {
+            slot: upgradeSlot.type
+        });
+
+        if (!upgradeSlot.equipped) {
+            if (!hasUpgradesToBuy && !hasUpgradesToEquip) {
+                return;
+            }
         }
 
         var slotHtml = '<span class="title">' + upgradeSlot.type + '</span>';
