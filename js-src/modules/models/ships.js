@@ -60,7 +60,6 @@ var hotacShips = [
         shipData: getShipDataById('awing'),
         pilotCard: getPilotByXws('arvelcrynyd'),
         upgradeSlots: [
-            'Elite',
             'Missile'
         ],
         startingUpgrades: [
