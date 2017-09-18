@@ -181,7 +181,7 @@ upgradesModel.prototype.getPilotById = function (pilotId) {
 upgradesModel.prototype.getAvailableToBuy = function (upgradeType) {
     var upgradesOfType = keyedUpgrades[upgradeType];
     var allowedUpgrades = _.filter(upgradesOfType, _.bind(this.upgradeAllowedOnShip, this));
-    allowedUpgrades = _.filter(allowedUpgrades, _.bind(this.upgradeAllowed, this));
+    allowedUpgrades = _.filter(allowedUpgrades, _.bind(this.upgradeAllowedInBuild, this));
     return allowedUpgrades;
 };
 
@@ -208,7 +208,7 @@ upgradesModel.prototype.abilityAllowedOnShip = function (pilot) {
     return true;
 };
 
-upgradesModel.prototype.upgradeAllowed = function (upgrade) {
+upgradesModel.prototype.upgradeAllowedInBuild = function (upgrade) {
     // Don't show anything which is a starting upgrade for the ship
     if (this.build.currentShip.startingUpgrades) {
         var found = _.find(this.build.currentShip.startingUpgrades, function (startingUpgrade) {

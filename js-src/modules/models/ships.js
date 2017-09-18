@@ -87,8 +87,12 @@ var hotacShips = [
         upgradeSlots: [
             'Turret',
             'Crew'
-        ]
-    },
+        ],
+        startingUpgrades: []
+    }
+];
+
+var experimentalShips = [
     {
         id: 't70xwing',
         shipData: getShipDataById('t70xwing'),
@@ -97,7 +101,8 @@ var hotacShips = [
             'Astromech',
             'Torpedo',
             'Tech'
-        ]
+        ],
+        startingUpgrades: []
     },
     {
         id: 'z95headhunter',
@@ -105,7 +110,8 @@ var hotacShips = [
         pilotCard: getPilotByXws('lieutenantblount'),
         upgradeSlots: [
             'Missile'
-        ]
+        ],
+        startingUpgrades: []
     },
     {
         id: 'ewing',
@@ -115,7 +121,8 @@ var hotacShips = [
             'Astromech',
             'Torpedo',
             'System'
-        ]
+        ],
+        startingUpgrades: []
     },
     {
         id: 'kwing',
@@ -129,7 +136,8 @@ var hotacShips = [
             'Crew',
             'Bomb',
             'Bomb'
-        ]
+        ],
+        startingUpgrades: []
     },
     {
         id: 'attackshuttle',
@@ -138,7 +146,8 @@ var hotacShips = [
         upgradeSlots: [
             'Turret',
             'Crew'
-        ]
+        ],
+        startingUpgrades: []
     },
     {
         id: 'arc170',
