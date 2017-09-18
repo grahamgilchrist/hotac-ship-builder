@@ -87,72 +87,81 @@ var hotacShips = [
         upgradeSlots: [
             'Turret',
             'Crew'
-        ]
-    },
-    {
-        id: 't70xwing',
-        shipData: getShipDataById('t70xwing'),
-        pilotCard: getPilotByXws('redace'),
-        upgradeSlots: [
-            'Astromech',
-            'Torpedo',
-            'Tech'
-        ]
-    },
-    {
-        id: 'z95headhunter',
-        shipData: getShipDataById('z95headhunter'),
-        pilotCard: getPilotByXws('lieutenantblount'),
-        upgradeSlots: [
-            'Missile'
-        ]
-    },
-    {
-        id: 'ewing',
-        shipData: getShipDataById('ewing'),
-        pilotCard: getPilotByXws('blackmoonsquadronpilot'),
-        upgradeSlots: [
-            'Astromech',
-            'Torpedo',
-            'System'
-        ]
-    },
-    {
-        id: 'kwing',
-        shipData: getShipDataById('kwing'),
-        pilotCard: getPilotByXws('wardensquadronpilot'),
-        upgradeSlots: [
-            'Turret',
-            'Torpedo',
-            'Torpedo',
-            'Missile',
-            'Crew',
-            'Bomb',
-            'Bomb'
-        ]
-    },
-    {
-        id: 'attackshuttle',
-        shipData: getShipDataById('attackshuttle'),
-        pilotCard: getPilotByXws('herasyndulla'),
-        upgradeSlots: [
-            'Turret',
-            'Crew'
-        ]
-    },
-    {
-        id: 'arc170',
-        shipData: getShipDataById('arc170'),
-        pilotCard: getPilotByXws('sharabey'),
-        upgradeSlots: [
-            'Torpedo',
-            'Crew',
-            'Astromech'
         ],
-        startingUpgrades: [
-            getUpgradeByXws('allianceoverhaul')
-        ]
+        startingUpgrades: []
     }
 ];
+
+// var experimentalShips = [
+//     {
+//         id: 't70xwing',
+//         shipData: getShipDataById('t70xwing'),
+//         pilotCard: getPilotByXws('redace'),
+//         upgradeSlots: [
+//             'Astromech',
+//             'Torpedo',
+//             'Tech'
+//         ],
+//         startingUpgrades: []
+//     },
+//     {
+//         id: 'z95headhunter',
+//         shipData: getShipDataById('z95headhunter'),
+//         pilotCard: getPilotByXws('lieutenantblount'),
+//         upgradeSlots: [
+//             'Missile'
+//         ],
+//         startingUpgrades: []
+//     },
+//     {
+//         id: 'ewing',
+//         shipData: getShipDataById('ewing'),
+//         pilotCard: getPilotByXws('blackmoonsquadronpilot'),
+//         upgradeSlots: [
+//             'Astromech',
+//             'Torpedo',
+//             'System'
+//         ],
+//         startingUpgrades: []
+//     },
+//     {
+//         id: 'kwing',
+//         shipData: getShipDataById('kwing'),
+//         pilotCard: getPilotByXws('wardensquadronpilot'),
+//         upgradeSlots: [
+//             'Turret',
+//             'Torpedo',
+//             'Torpedo',
+//             'Missile',
+//             'Crew',
+//             'Bomb',
+//             'Bomb'
+//         ],
+//         startingUpgrades: []
+//     },
+//     {
+//         id: 'attackshuttle',
+//         shipData: getShipDataById('attackshuttle'),
+//         pilotCard: getPilotByXws('herasyndulla'),
+//         upgradeSlots: [
+//             'Turret',
+//             'Crew'
+//         ],
+//         startingUpgrades: []
+//     },
+//     {
+//         id: 'arc170',
+//         shipData: getShipDataById('arc170'),
+//         pilotCard: getPilotByXws('sharabey'),
+//         upgradeSlots: [
+//             'Torpedo',
+//             'Crew',
+//             'Astromech'
+//         ],
+//         startingUpgrades: [
+//             getUpgradeByXws('allianceoverhaul')
+//         ]
+//     }
+// ];
 
 module.exports = hotacShips;
