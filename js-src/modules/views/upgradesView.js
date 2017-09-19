@@ -232,7 +232,7 @@ module.exports = {
     clickEquipSlot: function (upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, build) {
         // open modal to choose upgrade to equip
         var $modalContent = module.exports.renderUpgradeModalContent(upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, build);
-        modalController.openOptionSelectModal($modalContent, 'Buy upgrade');
+        modalController.openOptionSelectModal($modalContent, 'Buy');
     },
     removeEquipSlotUpgrade: function (upgradeId) {
         events.trigger('view.upgrades.unequipUpgrade', upgradeId);
@@ -318,11 +318,15 @@ module.exports = {
                 if (build.currentXp >= item.points) {
                     // We have enough XP to buy this item
                     $upgrade.on('click', function () {
-                        $(this).trigger('select', {
+                        var selectOptions = {
                             selectedUpgradeEvent: 'view.upgrades.buy',
                             selectedUpgradeId: item.id,
                             text: item.name + ': ' + item.hotacPoints + 'XP'
-                        });
+                        };
+                        if (item.slot === 'Elite') {
+                            selectOptions.text = '<span>' + item.name + ': ' + item.hotacPoints + 'XP</span><span class="help">Elite card upgrades cost double XP</span>';
+                        }
+                        $(this).trigger('select', selectOptions);
                     });
                 } else {
                     // not enough XP
