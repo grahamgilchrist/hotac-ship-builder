@@ -2,7 +2,7 @@
     text-align: center
 
     @include media('print')
-        display: none
+        page-break-before: always
 
     table
         display: inline-block
@@ -28,4 +28,7 @@
         &:last-child
             padding-right: $site-padding
 
-    @include media($media-main-padding)
+    @include media('print')
+        th.revert,
+        td.revert
+            display: none

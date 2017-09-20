@@ -2,6 +2,9 @@
     @include media($media-summary-two-col)
         display: flex
 
+    @include media('print')
+        display: flex
+
 .ship-info,
 .summary-equipped
     background-color: #fff
@@ -21,6 +24,10 @@
         margin: 0
         margin-right: $site-padding
 
+    @include media('print')
+        padding: 0
+        margin-right: $site-padding
+
 .summary-equipped
     $preview-item-width: 200px
     $full-item-max-width: 172px
@@ -34,6 +41,14 @@
     @include media($media-summary-two-col)
         flex-grow: 1
 
+    @include media('print')
+        flex-grow: 1
+        padding: 0
+
+    h4.not-empty
+        @include media('print')
+            display: none !important
+
     h4.empty
         margin: 0
  
@@ -45,6 +60,10 @@
 
         @include media($media-summary-two-col)
             margin: 0 (-$item-x-margin)
+
+    li
+        @include media('print')
+            width: 25%
 
     img
         max-width: 100%
@@ -66,6 +85,9 @@
         text-align: left
         margin: 0 $item-x-margin 10px
 
+        @include media('print')
+            display: none
+
         .xwing-miniatures-font
             margin-right: 4px
 
@@ -78,12 +100,14 @@
 
     .full
         display: none
-        // height: 263px
         margin: 5px
         border-radius: 10px
         overflow: hidden
         position: relative
         cursor: pointer
+
+        @include media('print')
+            display: block
 
         &.ability
             font-size: 12px

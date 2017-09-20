@@ -24,6 +24,9 @@
 .add-xp
     text-align: center
 
+    @include media('print')
+        display: none
+
     span,
     button,
     i
@@ -48,6 +51,9 @@
     @include media($media-upgrade-extra-padding)
         background-color: #eee
         margin-bottom: $site-padding
+
+    @include media('print')
+        display: none
 
 .pilot-skill-upgrade,
 .change-ship
@@ -83,6 +89,13 @@
             font-size: 20px
             cursor: pointer
 
+            @include media('print')
+                display: none
+
+    @include media('print')
+        .mdl-tooltip
+            margin: 1em 0
+
 .upgrade-slots-wrapper.two-list
     .ship-slots
         padding-right: 0
@@ -111,6 +124,9 @@
         margin-bottom: 6px
         padding-right: $slot-padding-right
         position: relative
+
+        @include media('print')
+            padding-right: 0
 
     .slot,
     i.remove
@@ -156,6 +172,9 @@
             color: #868686
             font-size: 20px
 
+            @include media('print')
+                display: none
+
         .required-ps
             margin-left: 3px
             white-space: nowrap
@@ -169,6 +188,9 @@
         top: 4px
         cursor: pointer
         color: #868686
+
+        @include media('print')
+            display: none
 
         &:hover
             color: #000
