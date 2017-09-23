@@ -15,6 +15,7 @@ module.exports = {
 
         module.exports.bindExportButton();
         module.exports.bindPrintButton();
+        module.exports.bindHelpButton();
     },
     openDrawer: function () {
         $('#drawer-wrapper').addClass('active');
@@ -45,6 +46,14 @@ module.exports = {
                 this.select();
             });
             $modalContent.append($input);
+            $.featherlight($modalContent);
+        });
+    },
+    bindHelpButton: function () {
+        $('.header-buttons #help, .drawer #help').on('click', function () {
+            var $modalContent = $('<div class="share-modal">');
+            $modalContent.append('<h3>About</h3>');
+            $modalContent.append('<p>Version 0.1</p>');
             $.featherlight($modalContent);
         });
     },
