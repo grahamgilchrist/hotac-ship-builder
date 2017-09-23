@@ -2,8 +2,27 @@
     @include media($media-summary-two-col)
         display: flex
 
+.ship-info-wrapper
     @include media('print')
-        display: flex
+        float: left
+        margin-right: $site-padding
+
+    .callsign-wrapper,
+    .player-name-wrapper
+        width: 300px
+        border: 1px solid #eee
+        border-radius: 14px
+        padding: 10px
+        font-size: 14px
+        margin-bottom: 10px
+        display: none
+
+        @include media('print')
+            display: block
+
+        .label
+            font-weight: 700
+            text-transform: uppercase
 
 .ship-info,
 .summary-equipped
@@ -26,7 +45,6 @@
 
     @include media('print')
         padding: 0
-        margin-right: $site-padding
 
 .summary-equipped
     $preview-item-width: 200px
@@ -42,8 +60,8 @@
         flex-grow: 1
 
     @include media('print')
-        flex-grow: 1
         padding: 0
+        clear: both
 
     h4.not-empty
         @include media('print')

@@ -3,6 +3,15 @@
     $button-spacing: 10px
     text-align: center
 
+    @include media('print')
+        border: 1px solid #eee
+        border-radius: 14px
+        padding: 10px 0
+
+    h3
+        @include media('print')
+            display: none
+
     table
         margin: 0 auto
 

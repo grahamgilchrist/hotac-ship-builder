@@ -89,9 +89,9 @@
             <div class="main">
                 <div class="structure">
                     <div class="build-header">
-                        <span id="title-icon"></span>
+                        <span class="ship-icon" bind-ship-icon></span>
                         <h2>
-                            <span id="title-callsign"></span> (<span id="title-player-name"></span>)
+                            <span class="callsign" bind-callsign></span> (<span class="player-name" bind-player-name></span>)
                         </h2>
                         <h3 class="subtitle">
                             <span bind-xp-current></span><span>XP to spend</span>
@@ -105,29 +105,6 @@
                                 <a href="#upgrades-tab" class="mdl-tabs__tab">Upgrades</a>
                                 <a href="#xp-history-tab" class="mdl-tabs__tab">History</a>
                                 <a href="#enemies-tab" class="mdl-tabs__tab">Enemies</a>
-                            </div>
-
-                            <div class="mdl-tabs__panel is-active" id="summary-tab">
-                                <div class="summary-wrapper">
-
-                                    <div class="ship-info">
-                                        <div class="ship-image-stats">
-                                            <div class="img-wrapper">
-                                                <img src="" alt="Ship image" id="ship-info-image">
-                                            </div>
-                                            <div id="ship-info-stats"></div>
-                                            <div id="ship-info-actions"></div>
-                                        </div>
-
-                                        <div id="ship-info-dial"></div>
-                                    </div>
-
-                                    <div class="summary-equipped">
-                                        <h4 class="not-empty">Equipped Upgrades</h4>
-                                        <h4 class="empty">No upgrades equipped</h4>
-                                        <div bind-equipped-upgrades></div>
-                                    </div>
-                                </div>
                             </div>
 
                             <div class="mdl-tabs__panel" id="upgrades-tab">
@@ -207,6 +184,38 @@
                                     <tbody id="kill-history">
                                     </tbody>
                                 </table>
+                            </div>
+
+                            <div class="mdl-tabs__panel is-active" id="summary-tab">
+                                <div class="summary-wrapper">
+
+                                    <div class="ship-info-wrapper">
+                                        <div class="callsign-wrapper">
+                                            <span class="label">Callsign:</span> <span class="callsign" bind-callsign></span>
+                                        </div>
+                                        <div class="player-name-wrapper">
+                                            <span class="label">Player:</span> <span class="player-name" bind-player-name></span>
+                                        </div>
+
+                                        <div class="ship-info">
+                                            <div class="ship-image-stats">
+                                                <div class="img-wrapper">
+                                                    <img src="" alt="Ship image" id="ship-info-image">
+                                                </div>
+                                                <div id="ship-info-stats"></div>
+                                                <div id="ship-info-actions"></div>
+                                            </div>
+
+                                            <div id="ship-info-dial"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="summary-equipped">
+                                        <h4 class="not-empty">Equipped Upgrades</h4>
+                                        <h4 class="empty">No upgrades equipped</h4>
+                                        <div bind-equipped-upgrades></div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="mdl-tabs__panel" id="xp-history-tab">

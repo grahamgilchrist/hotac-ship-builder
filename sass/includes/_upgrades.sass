@@ -15,9 +15,15 @@
 
     @include media('print')
         margin: 0
-        padding: 0
+        padding: 10px 0
+        border: 1px solid #eee
+        border-radius: 14px
 
     h3
+        @include media('print')
+            display: none
+
+    .mdl-tooltip
         @include media('print')
             display: none
 
@@ -75,6 +81,9 @@
     @include media($media-main-padding)
         min-width: auto
         width: 230px
+
+    @include media('print')
+        -webkit-print-color-adjust: exact
 
     h4
         text-align: center
@@ -231,21 +240,17 @@
         &:hover i.eye
             color: #000
 
-        i.eye,
-        span
+        i.eye
             @include media('print')
                 display: none
 
         img
             max-width: 100%
 
-        .preview
-            display: none
-
-            @include media('print')
-                display: block
-                zoom: 75%
-
 #disabled-upgrade-list
     li
         opacity: 0.4
+
+#ship-slots-upgrades
+    @include media('print')
+        padding-bottom: 0

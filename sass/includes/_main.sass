@@ -7,36 +7,18 @@
     align-items: center
 
     @include media('print')
-        padding: 0 0 $site-padding
-        color: #999
-        background-color: transparent
+        display: none
 
-    #title-icon,
+    .ship-icon,
     h2,
     .subtitle
         display: inline-block
         vertical-align: middle
 
-    #title-icon
-        @include media('print')
-            display: none
-
     h2
         margin: 0
         line-height: 1
         font-size: 20px
-
-        @include media('print')
-            font-size: 26px
-            font-weight: 400
-            border: 1px solid #eee
-            padding: $site-padding
-            border-radius: 14px
-
-        #title-callsign
-            @include media('print')
-                &:before
-                    content: 'Callsign: '
 
     .xwing-miniatures-ship
         $size: 25px
