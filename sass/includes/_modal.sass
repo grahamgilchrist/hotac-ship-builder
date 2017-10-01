@@ -18,7 +18,16 @@
         // reduce padding for narrow screens
         @include media($media-featherlight-narrow-tabs)
             padding: 0 12px
+            font-size: 13px
 
+    &.many-tabs .mdl-tabs__tab
+        @include media($media-featherlight-many-narrow-tabs)
+            padding: 0 4px
+            font-size: 11px
+
+        @include media($media-featherlight-many-very-narrow-tabs)
+            padding: 0 3px
+            font-size: 10px
 
     .card-image-list
         text-align: center

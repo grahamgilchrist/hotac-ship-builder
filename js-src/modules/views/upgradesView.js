@@ -233,7 +233,7 @@ module.exports = {
         // open modal to choose upgrade to equip
         var tabs = module.exports.renderUpgradeModalContent(upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, build);
         var $modalContent = module.exports.renderTabs(tabs);
-        modalController.openOptionSelectModal($modalContent, tabs[0].buttonLabel);
+        modalController.openOptionSelectModal($modalContent, tabs[0].buttonLabel, tabs.length);
     },
     removeEquipSlotUpgrade: function (upgradeId) {
         events.trigger('view.upgrades.unequipUpgrade', upgradeId);
@@ -246,8 +246,12 @@ module.exports = {
 
         if (unusedUpgrades.length > 0) {
             var $unusedUpgradesTab = module.exports.renderCardListModalContent(build, unusedUpgrades, 'equip');
+            var tabName = 'Equip Existing';
+            if (upgradeType === 'Elite') {
+                tabName = 'Equip cards';
+            }
             tabs.push({
-                name: 'Equip Existing',
+                name: tabName,
                 $content: $unusedUpgradesTab,
                 buttonLabel: 'Equip'
             });
@@ -265,7 +269,7 @@ module.exports = {
         var $tab = module.exports.renderCardListModalContent(build, upgradesAvailableToBuy, 'buy');
         var tabName = 'Buy new ' + upgradeType;
         if (upgradeType === 'Elite') {
-            tabName = 'Elite cards';
+            tabName = 'Buy cards';
         }
         tabs.push({
             name: tabName,
@@ -276,7 +280,7 @@ module.exports = {
         if (upgradeType === 'Elite') {
             var $abilityTab = module.exports.renderPilotAbilityModalContent(build, pilots, 'buy');
             tabs.push({
-                name: 'Pilot abilities',
+                name: 'Buy abilities',
                 $content: $abilityTab,
                 buttonLabel: 'Buy'
             });
@@ -357,7 +361,7 @@ module.exports = {
         return $modalContent;
     },
     renderPilotAbilityModalContent: function (build, abilitiesToShow, mode) {
-        var $modalContent = $('<div class="pilot-ability-list" id="modal-pilot-ability-list">');
+        var $modalContent = $('<div class="pilot-ability-list" id="modal-pilot-ability-list-' + mode + '">');
         var $upgradeList = $('<ul>');
 
         _.forEach(abilitiesToShow, function (pilotCard) {
