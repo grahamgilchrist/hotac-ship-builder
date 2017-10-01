@@ -25,13 +25,10 @@
         cursor: pointer
         font-size: 26px
         line-height: 56px
-        display: none
+        display: inline-block
 
-        &.active
-            display: inline-block
-
-            @include media($media-header-button-inline)
-                display: none
+        @include media($media-header-button-inline)
+            display: none
 
     h1
         font-size: 22px
@@ -60,21 +57,27 @@
         float: right
         display: none
 
-        &.active
-            @include media($media-header-button-inline)
-                display: block
+        @include media($media-header-button-inline)
+            display: block
 
         @include media('print')
             display: none
+
+    &.state-new
+        .header-buttons
+            .hide-on-new
+                display: none
 
     #new-build
         margin-right: $site-padding
 
     #print,
-    #export
+    #export,
+    #help
         padding: 0 8px
         min-width: 48px
         float: right
 
-    #export
+    #export,
+    #print
         margin-right: $site-padding / 2

@@ -46,11 +46,14 @@
                     <span class="subtitle">Campaign ship builder</span>
                 </h1>
                 <div class="header-buttons">
-                    <button id="new-build" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Start new ship</button>
-                    <button id="print" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                    <button id="new-build" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent hide-on-new">Start new ship</button>
+                    <button id="help" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                        <i class="material-icons">help</i>
+                    </button>
+                    <button id="print" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent hide-on-new">
                         <i class="material-icons">print</i>
                     </button>
-                    <button id="export" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                    <button id="export" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent hide-on-new">
                         <i class="material-icons">link</i>
                     </button>
                 </div>
@@ -241,14 +244,18 @@
             <div class="drawer-background"></div>
             <div class="drawer">
                 <span class="mdl-layout-title">Menu</span>
-                <button id="new-build" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Start new ship</button>
-                <button id="print" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                <button id="new-build" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent hide-on-new">Start new ship</button>
+                <button id="print" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent hide-on-new">
                     <span>Print</span>
                     <i class="material-icons">print</i>
                 </button>
-                <button id="export" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                <button id="export" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent hide-on-new">
                     <span>Share link</span>
                     <i class="material-icons">link</i>
+                </button>
+                <button id="help" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                    <span>Help/about</span>
+                    <i class="material-icons">help</i>
                 </button>
             </div>
         </div>

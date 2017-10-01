@@ -15,6 +15,7 @@ module.exports = {
 
         module.exports.bindExportButton();
         module.exports.bindPrintButton();
+        module.exports.bindHelpButton();
     },
     openDrawer: function () {
         $('#drawer-wrapper').addClass('active');
@@ -48,12 +49,17 @@ module.exports = {
             $.featherlight($modalContent);
         });
     },
-    showButtons: function () {
-        $('.header-buttons').addClass('active');
-        $('#drawer-button').addClass('active');
+    bindHelpButton: function () {
+        $('.header-buttons #help, .drawer #help').on('click', function () {
+            modalController.openDocsModal('docs/about.html');
+        });
     },
-    hideButtons: function () {
-        $('.header-buttons').removeClass('active');
-        $('#drawer-button').removeClass('active');
+    setMainState: function () {
+        $('.header, .drawer-wrapper').removeClass('state-new');
+        $('.header, .drawer-wrapper').addClass('state-main');
+    },
+    setNewState: function () {
+        $('.header, .drawer-wrapper').removeClass('state-main');
+        $('.header, .drawer-wrapper').addClass('state-new');
     }
 };
