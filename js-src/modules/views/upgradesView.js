@@ -243,10 +243,11 @@ module.exports = {
     },
     renderUpgradeModalContent: function (upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, build) {
         var tabs = [];
+        var tabName;
 
         if (unusedUpgrades.length > 0) {
             var $unusedUpgradesTab = module.exports.renderCardListModalContent(build, unusedUpgrades, 'equip');
-            var tabName = 'Equip Existing';
+            tabName = 'Equip Existing';
             if (upgradeType === 'Elite') {
                 tabName = 'Equip cards';
             }
@@ -267,7 +268,7 @@ module.exports = {
         }
 
         var $tab = module.exports.renderCardListModalContent(build, upgradesAvailableToBuy, 'buy');
-        var tabName = 'Buy new ' + upgradeType;
+        tabName = 'Buy new ' + upgradeType;
         if (upgradeType === 'Elite') {
             tabName = 'Buy cards';
         }
