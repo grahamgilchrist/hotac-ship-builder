@@ -98,5 +98,11 @@ module.exports = {
             }
         };
         $.featherlight($modalContent, featherLightConfig);
+    },
+    openDocsModal: function ($modalContent) {
+        var featherLightConfig = {
+            variant: 'content-typography'
+        };
+        $.featherlight($modalContent, featherLightConfig);
     }
 };

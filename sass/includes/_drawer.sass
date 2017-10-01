@@ -48,8 +48,10 @@
             i
                 vertical-align: middle
 
+        i.material-icons
+            margin-left: 4px
+
     &.active
-        // display: block
         pointer-events: auto
 
         .drawer
@@ -58,3 +60,7 @@
         .drawer-background
             opacity: 1
             visibility: visible
+
+    &.state-new
+        .drawer .hide-on-new
+            display: none

@@ -51,18 +51,15 @@ module.exports = {
     },
     bindHelpButton: function () {
         $('.header-buttons #help, .drawer #help').on('click', function () {
-            var $modalContent = $('<div class="share-modal">');
-            $modalContent.append('<h3>About</h3>');
-            $modalContent.append('<p>Version 0.1</p>');
-            $.featherlight($modalContent);
+            modalController.openDocsModal('docs/about.html');
         });
     },
-    showButtons: function () {
-        $('.header-buttons').addClass('active');
-        $('#drawer-button').addClass('active');
+    setMainState: function () {
+        $('.header, .drawer-wrapper').removeClass('state-new');
+        $('.header, .drawer-wrapper').addClass('state-main');
     },
-    hideButtons: function () {
-        $('.header-buttons').removeClass('active');
-        $('#drawer-button').removeClass('active');
+    setNewState: function () {
+        $('.header, .drawer-wrapper').removeClass('state-main');
+        $('.header, .drawer-wrapper').addClass('state-new');
     }
 };
