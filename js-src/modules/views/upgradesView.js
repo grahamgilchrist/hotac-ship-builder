@@ -231,8 +231,9 @@ module.exports = {
     },
     clickEquipSlot: function (upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, build) {
         // open modal to choose upgrade to equip
-        var $modalContent = module.exports.renderUpgradeModalContent(upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, build);
-        modalController.openOptionSelectModal($modalContent, 'Buy');
+        var tabs = module.exports.renderUpgradeModalContent(upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, build);
+        var $modalContent = module.exports.renderTabs(tabs);
+        modalController.openOptionSelectModal($modalContent, tabs[0].buttonLabel);
     },
     removeEquipSlotUpgrade: function (upgradeId) {
         events.trigger('view.upgrades.unequipUpgrade', upgradeId);
@@ -246,16 +247,18 @@ module.exports = {
         if (unusedUpgrades.length > 0) {
             var $unusedUpgradesTab = module.exports.renderCardListModalContent(build, unusedUpgrades, 'equip');
             tabs.push({
-                name: 'Existing ' + upgradeType,
-                $content: $unusedUpgradesTab
+                name: 'Equip Existing',
+                $content: $unusedUpgradesTab,
+                buttonLabel: 'Equip'
             });
         }
 
-        if (unusedAbilities.length > 0) {
+        if (unusedAbilities.length > 0 && upgradeType === 'Elite') {
             var $unusedAbilitiesTab = module.exports.renderPilotAbilityModalContent(build, unusedAbilities, 'equip');
             tabs.push({
-                name: 'Existing abilities',
-                $content: $unusedAbilitiesTab
+                name: 'Equip ability',
+                $content: $unusedAbilitiesTab,
+                buttonLabel: 'Equip'
             });
         }
 
@@ -266,18 +269,20 @@ module.exports = {
         }
         tabs.push({
             name: tabName,
-            $content: $tab
+            $content: $tab,
+            buttonLabel: 'Buy'
         });
 
         if (upgradeType === 'Elite') {
             var $abilityTab = module.exports.renderPilotAbilityModalContent(build, pilots, 'buy');
             tabs.push({
                 name: 'Pilot abilities',
-                $content: $abilityTab
+                $content: $abilityTab,
+                buttonLabel: 'Buy'
             });
         }
 
-        return module.exports.renderTabs(tabs);
+        return tabs;
     },
     renderTabs: function (tabsObject) {
         var $modalContent = $('<div>');
@@ -287,7 +292,7 @@ module.exports = {
             var $tabsBar = $('<div class="mdl-tabs__tab-bar">');
             _.each(tabsObject, function (tab) {
                 var tabId = tab.$content.attr('id');
-                var $tabLink = $('<a href="#' + tabId + '" class="mdl-tabs__tab">' + tab.name + '</a>');
+                var $tabLink = $('<a href="#' + tabId + '" class="mdl-tabs__tab" button-text="' + tab.buttonLabel + '">' + tab.name + '</a>');
                 $tabsBar.append($tabLink);
             });
             $tabsBar.find('a').first().addClass('is-active');
@@ -339,7 +344,7 @@ module.exports = {
                     $(this).trigger('select', {
                         selectedUpgradeEvent: 'view.upgrades.equipUpgrade',
                         selectedUpgradeId: item.id,
-                        text: item.name
+                        text: '<span>' + item.name + '</span><span class="help">No cost to equip a previously purchased upgrade</span>'
                     });
                 });
             }

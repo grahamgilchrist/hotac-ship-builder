@@ -14,6 +14,12 @@
     .featherlight-inner
         position: relative
 
+    .mdl-tabs__tab
+        // reduce padding for narrow screens
+        @include media($media-featherlight-narrow-tabs)
+            padding: 0 12px
+
+
     .card-image-list
         text-align: center
 
