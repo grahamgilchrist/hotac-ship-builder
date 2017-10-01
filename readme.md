@@ -10,6 +10,12 @@ Thsi project owes many thanks to two x-wing projects without which, this would h
 * [x-wing miniatures data](https://github.com/guidokessels/xwing-data)
 * [x-wing miniatures font](https://github.com/geordanr/xwing-miniatures-font)
 
+## Documentation
+* [In app documentation]('docs/about.md')
+
+## Changlog
+* [Changelog]('docs/changelog.md')
+
 ## Contributing
 * Bugfix pull requests are welcome
 * For larger feature changes, please raise an issue first to discuss the approach and possible ideas
@@ -22,22 +28,21 @@ Thsi project owes many thanks to two x-wing projects without which, this would h
 ## Development
 
 ### Requirements
-* nodeJS 7+
+* nodeJS 8+
 * npm
 * bower `npm install -g bower`
-* gulp `npm install -g gulp`
 
 ### Setup
 * Clone the repo
 * Run `npm install` in the project root
 * Run `bower install` in the project root
-* Run `gulp dev`
+* Run `npx run gulp dev`
   * This will compile the javascript, css and auto-recompile any changes to these via gulp watch
   * Gulp will start a local web server on port 8000 which can be accessed at http://localhost:8000
   * The gulp server has liverelaod enabled, so chnages to html, js or css will automatically be refreshed
 
 ### Deploy
-* Run `gulp` to create a deployable folder in the `\app` directory which can be copied to any web server
+* Run `npx run gulp` to create a deployable folder in the `\app` directory which can be copied to any web server
 * The master branch of the original repo is automatically deployed to netlify
 
 ### Structure
