@@ -49,10 +49,14 @@
             &.selected
                 box-shadow: #45b3f9 0px 0px 6px 3px
 
-            &.cannot-afford
-                opacity: 0.6
-                background-color: #eee
+            &.cannot-afford,
+            &.lower-ps
                 cursor: not-allowed
+                color: #bbb
+
+            &.lower-ps
+                background-color: #eee
+                color: #847f7f
 
             h3
                 font-size: 20px
@@ -61,6 +65,20 @@
             .cost,
             p
                 font-size: 12px
+
+            .ps
+                float: right
+                clear: right
+                line-height: 1.3
+                font-size: 11px
+
+            &.cannot-afford
+                .cost
+                    color: #ff9090
+
+            &.lower-ps
+                .ps
+                    color: #ff9090
 
         h3,
         p

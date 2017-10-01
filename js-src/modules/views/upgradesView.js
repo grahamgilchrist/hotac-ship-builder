@@ -357,26 +357,31 @@ module.exports = {
 
         _.forEach(abilitiesToShow, function (pilotCard) {
             var upgradeCost = pilotCard.skill;
-            var $upgrade = $('<li><h3>' + pilotCard.name + ' <span class="cost">(' + upgradeCost + 'XP)</span></h3><p>' + pilotCard.text + '</p></li>');
+            var $upgrade = $('<li></li>');
+            $upgrade.append('<h3>' + pilotCard.name + ' <span class="cost">(' + upgradeCost + 'XP)</span></h3><p>' + pilotCard.text + '</p>');
+            $upgrade.prepend('<p class="ps">PS: ' + pilotCard.skill + '</p>');
 
             if (mode === 'buy') {
-                if (build.currentXp >= upgradeCost) {
-                    if (build.pilotSkill >= pilotCard.skill) {
-                        // We have enough XP to buy this item
-                        $upgrade.on('click', function () {
-                            $(this).trigger('select', {
-                                selectedUpgradeEvent: 'view.pilotAbilities.buy',
-                                selectedUpgradeId: pilotCard.id,
-                                text: pilotCard.name + ': ' + pilotCard.skill + 'XP'
-                            });
-                        });
-                    } else {
-                        // not high enough PS level yet
-                        $upgrade.addClass('disabled');
-                    }
-                } else {
+                var enabled = true;
+                if (build.currentXp < upgradeCost) {
                     // not enough XP
                     $upgrade.addClass('cannot-afford');
+                    enabled = false;
+                }
+                if (build.pilotSkill < pilotCard.skill) {
+                    // not high enough PS level yet
+                    $upgrade.addClass('lower-ps');
+                    enabled = false;
+                }
+
+                if (enabled) {
+                    $upgrade.on('click', function () {
+                        $(this).trigger('select', {
+                            selectedUpgradeEvent: 'view.pilotAbilities.buy',
+                            selectedUpgradeId: pilotCard.id,
+                            text: pilotCard.name + ': ' + pilotCard.skill + 'XP'
+                        });
+                    });
                 }
             } else {
                 // Mode is to equip existing ability
