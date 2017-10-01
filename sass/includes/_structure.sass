@@ -9,6 +9,7 @@ body
 
     @include media('print')
         padding: 0
+        max-width: none
 
 .container
     @include media($media-main-padding)
@@ -31,6 +32,11 @@ body
         @include media($media-main-padding)
             padding: 0 $site-padding
 
+@include media('print')
+    #upgrades-tab,
+    #enemies-tab
+        float: left
+
 #message
     overflow: hidden
     position: fixed
@@ -39,6 +45,9 @@ body
     text-align: center
     background-color: #fff9cd
     font-size: 16px
+
+    @include media('print')
+        display: none
 
     .message
         padding: 10px
