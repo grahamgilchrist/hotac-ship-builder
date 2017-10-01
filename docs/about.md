@@ -14,6 +14,46 @@ To save your current status, simply copy the URL (either directly or via the "ex
 
 ### Getting started
 
+Enter a player name, Callsign and starting ship to progress to the main screen. The mian interface is divide dinto four "Tabs"; Summary, Upgrades, History and Enemies.
+
+### Summary
+This tab is intended to be your reference point whilst playing a game. It shows you current ships stats, dial and equipped upgrades. You should equip upgrades via the "upgrades" tab before strating you game.
+
+The dial maneuvers are clickable to indicate the currently selected maneuver, to avoid the need for a physical dial if not desired.
+
+### Upgrades
+
+The upgrades tab is probably the most complex part of the app. This tab contains all fucntionality related to upgrading your ship and earning/spending XP after a mission.
+After you gain mission XP, you can add it by clicking the "+" button, increasing your "XP to spend".
+In this tab you can spend XP to change ship, Upgrade Pilot skill, or buy ship upgrades. The first two can be done by clicking the labelled buttons. These buttons will be disabled if you do not have enough XP for either action.
+
+Beneath these buttons are the available upgrade slots for the ship. Upgrade slots fall into three types:
+* Free upgrades - These are provided for free as part of the ship chassis. They do not use up an upgrade slot to equip, and can be equipped/unequipped by toggling the "+/-" button next to the slot.
+* Normal upgrade slots. These are the upgrade slots provided by the ship. To purchase upgrades for specific ship slots, click the slot and a set of options will appear. Slots which have not been unlocked yet due to pilot skill will be faded out and cannot be clicked. 
+* Slots from upgrades - Sometimes, equipping certain upgrade cards will add additional slots to the ship (e.g. Sabine crew adds a bomb slot). Equipping one of these upgrades will add a slot to the list, which you can use to purchase and equip additionla upgrades. These will appear below the main list.
+
+The list also shows unused and disabled upgrades. These correspond to upgrades you have purchased, but are not equipped to the ship, or upgrades you have purchased which are not usable on the current ship (for example, upgrades purchased when flying a different ship type).
+
+### Purchasing upgrades
+After clicking on an upgrades slot, a popup appears. Within the popup are several sections allowing you to equip either an already purchased upgrade for that slot, or purchase new upgrades. Purchasing an upgrade will reduce the amount from your XP total and equip immediately to that slot.
+
+### History
+
+The history tab shows the history of events which have occurred to your ship, including gaining mission XP, purchasing upgrades, changing ships etc. Since the order of upgrades in important in hotac, you can't undo specific purchases in a different order, but the upgrades list allows to to revert to an earlier point in time.
+Clicking "revert" on any row in the table will discard all upgrade events after that row and revert your ship to its status at that point, including the upgrades available and the XP earnt/available. You can use this feature to test future potential upgrade combinations and costs buy buying a set of upgrades, then reverting back.
+*Note that revrting does not affect the defeated enemies list. This will stay as it is*
+
+### Enemies
+
+This tab corresponds to the space of the paper sheet for recording the number of different types of enemies defeated. Whilst playing the game, you can either update these "live" as they happen, or record them offline and update later.
+
+### Export
+
+The export button simply gives you a convenient way to copy the URL for your current ship state.
+
+### Print
+
+Printing your ship will give you a fully usable reference sheet for use during gameplay, including printouts of any upgrade cards that you have equipped.
 
 ## Acknowledgements
 This project couldn't exist without the excellent open source x-wing community. I would like to acknowledge the following amazing project, without which this application would be possible:
@@ -35,7 +75,10 @@ Please use the github issues queue to report bugs and issues. It will help debug
 ### Requesting new features
 Please use the github issues queue to request new features. 
 
-## [Changelog](./changelog.md)
+## Roadmap
+* TBC
+
+## [Changelog](docs/changelog.html)
 
 ## Disclaimer
 This application is unofficial and is not affiliated with Fantasy Flight Games, Lucasfilm Ltd., or Disney.
