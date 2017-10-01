@@ -14,7 +14,7 @@ To save your current status, simply copy the URL (either directly or via the "ex
 
 ### Getting started
 
-Enter a player name, Callsign and starting ship to progress to the main screen. The mian interface is divide dinto four "Tabs"; Summary, Upgrades, History and Enemies.
+Enter a player name, Callsign and starting ship to progress to the main screen. The main interface is divided into four tabs; Summary, Upgrades, History and Enemies.
 
 ### Summary
 This tab is intended to be your reference point whilst playing a game. It shows you current ships stats, dial and equipped upgrades. You should equip upgrades via the "upgrades" tab before strating you game.
