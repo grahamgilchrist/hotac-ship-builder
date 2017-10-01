@@ -10,8 +10,8 @@ module.exports = {
         $('.main').addClass('active');
     },
     renderTitle: function (build) {
-        $('#title-icon').html('<i class="xwing-miniatures-ship xwing-miniatures-ship-' + build.currentShip.id + '"></i>');
-        $('#title-callsign').text(build.callsign);
-        $('#title-player-name').text(build.playerName);
+        $('[bind-ship-icon]').html('<i class="xwing-miniatures-ship xwing-miniatures-ship-' + build.currentShip.id + '"></i>');
+        $('[bind-callsign]').text(build.callsign);
+        $('[bind-player-name]').text(build.playerName);
     }
 };

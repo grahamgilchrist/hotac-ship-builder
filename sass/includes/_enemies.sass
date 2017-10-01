@@ -3,21 +3,48 @@
     $button-spacing: 10px
     text-align: center
 
+    @include media('print')
+        border: 1px solid #eee
+        border-radius: 14px
+        padding: 10px 0
+
+    h3
+        @include media('print')
+            display: none
+
     table
         margin: 0 auto
 
     th
         text-align: center
 
+        @include media('print')
+            display: none
+
     td
         padding: 15px 0
 
-    .icon
-        padding: 15px 40px
+        @include media('print')
+            padding: 0 10px
+        
+        &.icon
+            padding: 15px 40px
+
+            @include media('print')
+                padding: 0
 
     .icon,
     .count-column
         font-size: 32px
+        vertical-align: middle
+
+    .icon
+        @include media('print')
+            font-size: 28px
+
+    .count-column
+        @include media('print')
+            font-size: 20px
 
     .label
         font-size: 16px
@@ -34,6 +61,9 @@
         width: $button-size
         min-width: $button-size
         height: $button-size
+
+        @include media('print')
+            display: none
 
         &:first-child
             margin-right: $button-spacing

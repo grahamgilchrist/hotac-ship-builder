@@ -7,9 +7,9 @@
     align-items: center
 
     @include media('print')
-        padding: 0
+        display: none
 
-    #title-icon,
+    .ship-icon,
     h2,
     .subtitle
         display: inline-block
@@ -19,11 +19,6 @@
         margin: 0
         line-height: 1
         font-size: 20px
-
-    .subtitle
-        margin: 0
-        margin-left: auto
-        text-align: right
 
     .xwing-miniatures-ship
         $size: 25px
@@ -38,10 +33,18 @@
         font-size: 20px
 
     .subtitle
+        margin: 0
+        margin-left: auto
+        text-align: right
         display: inline-block
         font-size: 14px
         font-weight: 400
         line-height: 1
+
+        @include media('print')
+            border: 1px solid #eee
+            padding: $site-padding
+            border-radius: 14px
 
 .build-content
     padding: 0

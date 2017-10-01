@@ -3,6 +3,9 @@
     background-color: $color-primary
     color: #fff
 
+    @include media('print')
+        display: none
+
     .structure
         padding: 0 ($site-padding / 2)
 
@@ -51,9 +54,6 @@
 
             @include media($media-header-med-size)
                 font-size: 18px
-
-            @include media('print')
-                display: inline-block
 
     .header-buttons
         margin: 25px 0

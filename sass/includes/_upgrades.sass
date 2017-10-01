@@ -15,14 +15,23 @@
 
     @include media('print')
         margin: 0
-        padding: 0
+        padding: 10px 0
+        border: 1px solid #eee
+        border-radius: 14px
 
     h3
         @include media('print')
             display: none
 
+    .mdl-tooltip
+        @include media('print')
+            display: none
+
 .add-xp
     text-align: center
+
+    @include media('print')
+        display: none
 
     span,
     button,
@@ -49,6 +58,9 @@
         background-color: #eee
         margin-bottom: $site-padding
 
+    @include media('print')
+        display: none
+
 .pilot-skill-upgrade,
 .change-ship
     margin-bottom: $site-padding
@@ -70,6 +82,9 @@
         min-width: auto
         width: 230px
 
+    @include media('print')
+        -webkit-print-color-adjust: exact
+
     h4
         text-align: center
         margin-bottom: 8px
@@ -82,6 +97,13 @@
         i
             font-size: 20px
             cursor: pointer
+
+            @include media('print')
+                display: none
+
+    @include media('print')
+        .mdl-tooltip
+            margin: 1em 0
 
 .upgrade-slots-wrapper.two-list
     .ship-slots
@@ -111,6 +133,9 @@
         margin-bottom: 6px
         padding-right: $slot-padding-right
         position: relative
+
+        @include media('print')
+            padding-right: 0
 
     .slot,
     i.remove
@@ -156,6 +181,9 @@
             color: #868686
             font-size: 20px
 
+            @include media('print')
+                display: none
+
         .required-ps
             margin-left: 3px
             white-space: nowrap
@@ -169,6 +197,9 @@
         top: 4px
         cursor: pointer
         color: #868686
+
+        @include media('print')
+            display: none
 
         &:hover
             color: #000
@@ -209,21 +240,17 @@
         &:hover i.eye
             color: #000
 
-        i.eye,
-        span
+        i.eye
             @include media('print')
                 display: none
 
         img
             max-width: 100%
 
-        .preview
-            display: none
-
-            @include media('print')
-                display: block
-                zoom: 75%
-
 #disabled-upgrade-list
     li
         opacity: 0.4
+
+#ship-slots-upgrades
+    @include media('print')
+        padding-bottom: 0
