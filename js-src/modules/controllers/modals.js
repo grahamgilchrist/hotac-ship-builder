@@ -52,7 +52,7 @@ module.exports = {
         };
         $.featherlight($modalContent, featherlightConfig);
     },
-    openOptionSelectModal: function ($modalContent, buttonText) {
+    openOptionSelectModal: function ($modalContent, buttonText, numberOfTabs) {
         var featherLightConfig = {
             variant: 'option-select',
             afterOpen: function () {
@@ -97,6 +97,9 @@ module.exports = {
                 });
             }
         };
+        if (numberOfTabs && numberOfTabs > 2) {
+            featherLightConfig.variant += ' many-tabs';
+        }
         $.featherlight($modalContent, featherLightConfig);
     },
     openDocsModal: function ($modalContent) {
