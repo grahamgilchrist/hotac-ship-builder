@@ -14,6 +14,33 @@
     .featherlight-inner
         position: relative
 
+    .modal-header
+        position: absolute
+        top: 0
+        left: 0
+        padding: 0 ($close-icon-size + $site-padding) 0 $site-padding
+        text-align: center
+        width: 100%
+        height: $close-icon-size
+        background-color: $color-primary
+        color: #fff
+        font-size: 16px
+        overflow: hidden
+        display: flex
+        justify-content: center
+        align-items: center
+
+        .title
+            flex-grow: 1
+            flex-shrink: 0
+
+        &:before
+            content: ''
+            display: block
+            height: $close-icon-size
+            width: $close-icon-size
+            flex-shrink: 10
+
     .mdl-tabs__tab
         // reduce padding for narrow screens
         @include media($media-featherlight-narrow-tabs)
@@ -129,10 +156,15 @@
         h3
             margin: 0
 
-    &.option-select
+    &.has-header
+        .featherlight-content
+            padding-top: $close-icon-size
+
+    &.has-footer
         .featherlight-content
             padding-bottom: $footer-height + $site-padding
 
+    &.option-select
         .featherlight-inner
             overflow: auto
 

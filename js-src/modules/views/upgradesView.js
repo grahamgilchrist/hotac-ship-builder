@@ -233,7 +233,7 @@ module.exports = {
         // open modal to choose upgrade to equip
         var tabs = module.exports.renderUpgradeModalContent(upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, build);
         var $modalContent = module.exports.renderTabs(tabs);
-        modalController.openOptionSelectModal($modalContent, tabs[0].buttonLabel, tabs.length);
+        modalController.openOptionSelectModal($modalContent, tabs[0].buttonLabel, 'Equip ' + upgradeType, tabs.length);
     },
     removeEquipSlotUpgrade: function (upgradeId) {
         events.trigger('view.upgrades.unequipUpgrade', upgradeId);
@@ -247,9 +247,9 @@ module.exports = {
 
         if (unusedUpgrades.length > 0) {
             var $unusedUpgradesTab = module.exports.renderCardListModalContent(build, unusedUpgrades, 'equip');
-            tabName = 'Equip Existing';
+            tabName = 'Existing';
             if (upgradeType === 'Elite') {
-                tabName = 'Equip cards';
+                tabName = 'Existing card';
             }
             tabs.push({
                 name: tabName,
@@ -261,14 +261,14 @@ module.exports = {
         if (unusedAbilities.length > 0 && upgradeType === 'Elite') {
             var $unusedAbilitiesTab = module.exports.renderPilotAbilityModalContent(build, unusedAbilities, 'equip');
             tabs.push({
-                name: 'Equip ability',
+                name: 'Existing ability',
                 $content: $unusedAbilitiesTab,
                 buttonLabel: 'Equip'
             });
         }
 
         var $tab = module.exports.renderCardListModalContent(build, upgradesAvailableToBuy, 'buy');
-        tabName = 'Buy new ' + upgradeType;
+        tabName = 'Buy new';
         if (upgradeType === 'Elite') {
             tabName = 'Buy cards';
         }
@@ -281,7 +281,7 @@ module.exports = {
         if (upgradeType === 'Elite') {
             var $abilityTab = module.exports.renderPilotAbilityModalContent(build, pilots, 'buy');
             tabs.push({
-                name: 'Buy abilities',
+                name: 'Buy ability',
                 $content: $abilityTab,
                 buttonLabel: 'Buy'
             });

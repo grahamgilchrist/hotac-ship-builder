@@ -52,12 +52,14 @@ module.exports = {
         };
         $.featherlight($modalContent, featherlightConfig);
     },
-    openOptionSelectModal: function ($modalContent, buttonText, numberOfTabs) {
+    openOptionSelectModal: function ($modalContent, buttonText, modalTitle, numberOfTabs) {
         var featherLightConfig = {
-            variant: 'option-select',
+            variant: 'option-select has-header has-footer',
             afterOpen: function () {
                 $.featherlight.defaults.afterOpen();
                 var lastSelectedItem;
+
+                var $header = $('<div class="modal-header"><div class="title">' + modalTitle + '</div></div>');
 
                 var $footer = $('<div class="modal-footer">');
                 var $footerInner = $('<div class="modal-footer-inner">');
@@ -79,6 +81,7 @@ module.exports = {
                 var height = $featherlightContent.height();
                 $featherlightInner.css('max-height', height + 'px');
                 this.$instance.find('.featherlight-content').append($footer);
+                this.$instance.find('.featherlight-content').append($header);
 
                 $featherlightInner.on('select', 'li', function (event, eventData) {
                     lastSelectedItem = eventData;
