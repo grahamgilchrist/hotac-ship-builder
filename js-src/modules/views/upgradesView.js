@@ -233,7 +233,7 @@ module.exports = {
         // open modal to choose upgrade to equip
         var tabs = module.exports.renderUpgradeModalContent(upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, build);
         var $modalContent = module.exports.renderTabs(tabs);
-        modalController.openOptionSelectModal($modalContent, tabs[0].buttonLabel, 'Equip ' + upgradeType, tabs.length);
+        modalController.openOptionSelectModal($modalContent, tabs[0].buttonLabel, 'Equip ' + upgradeType + ' slot', tabs.length);
     },
     removeEquipSlotUpgrade: function (upgradeId) {
         events.trigger('view.upgrades.unequipUpgrade', upgradeId);
