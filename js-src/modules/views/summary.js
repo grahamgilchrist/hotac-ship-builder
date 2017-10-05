@@ -2,6 +2,7 @@
 
 var $ = require('jquery');
 var _ = require('lodash');
+var abilityCardView = require('./abilityCard');
 
 module.exports = {
     renderEquippedUpgrades: function (build) {
@@ -42,7 +43,8 @@ module.exports = {
         var iconString = module.exports.getIconString('Elite');
         var escapedText = ability.text.replace(/"/g, '&quot;');
         $li.append('<div class="preview" data-featherlight-type="text" data-featherlight-variant="preview-pilot-ability" data-featherlight="' + escapedText + '">' + iconString + '<span class="name">' + ability.name + '</span><i class="material-icons icon-preview">zoom_in</i></div>');
-        $li.append('<div class="full ability"><div class="ability-inner"><span class="title">' + ability.name + '</span><span class="name">Ability</span><span class="text">' + escapedText + '</span></div></div>');
+        var $card = abilityCardView.render(ability).addClass('full');
+        $li.append($card);
 
         return $li;
     },

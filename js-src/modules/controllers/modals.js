@@ -1,6 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
+var _ = require('lodash');
 var events = require('./events');
 
 module.exports = {
@@ -52,7 +53,16 @@ module.exports = {
         };
         $.featherlight($modalContent, featherlightConfig);
     },
-    openOptionSelectModal: function ($modalContent, buttonText, modalTitle, numberOfTabs) {
+    openOptionSelectModal: function ($modalContent, buttonText, modalTitle, tabs) {
+        var numberOfTabs = 0;
+        if (tabs && tabs.length > 0) {
+            numberOfTabs = tabs.length;
+        }
+        var $newModalContent = $modalContent;
+        if (tabs) {
+            $newModalContent = module.exports.renderTabs(tabs);
+        }
+
         var featherLightConfig = {
             variant: 'option-select has-header has-footer',
             afterOpen: function () {
@@ -100,10 +110,43 @@ module.exports = {
                 });
             }
         };
-        if (numberOfTabs && numberOfTabs > 2) {
-            featherLightConfig.variant += ' many-tabs';
+        if (numberOfTabs) {
+            if (numberOfTabs > 0) {
+                featherLightConfig.variant += ' has-tabs';
+            }
+            if (numberOfTabs > 2) {
+                featherLightConfig.variant += ' many-tabs';
+            }
         }
-        $.featherlight($modalContent, featherLightConfig);
+        $.featherlight($newModalContent, featherLightConfig);
+    },
+    renderTabs: function (tabsObject) {
+        var $modalContent = $('<div>');
+
+        if (tabsObject.length > 1) {
+            // tab link elements
+            var $tabsBar = $('<div class="mdl-tabs__tab-bar">');
+            _.each(tabsObject, function (tab) {
+                var tabId = tab.$content.attr('id');
+                var $tabLink = $('<a href="#' + tabId + '" class="mdl-tabs__tab" button-text="' + tab.buttonLabel + '">' + tab.name + '</a>');
+                $tabsBar.append($tabLink);
+            });
+            $tabsBar.find('a').first().addClass('is-active');
+
+            // create DOM structure
+            $modalContent.addClass('mdl-tabs mdl-js-tabs mdl-js-ripple-effect');
+            $modalContent.prepend($tabsBar);
+            tabsObject[0].$content.addClass('is-active');
+            _.each(tabsObject, function (tab) {
+                tab.$content.addClass('mdl-tabs__panel');
+            });
+        }
+
+        _.each(tabsObject, function (tab) {
+            $modalContent.append(tab.$content);
+        });
+
+        return $modalContent;
     },
     openDocsModal: function ($modalContent) {
         var featherLightConfig = {
