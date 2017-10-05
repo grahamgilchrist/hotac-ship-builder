@@ -126,10 +126,10 @@ module.exports = {
         };
         if (numberOfTabs) {
             if (numberOfTabs > 0) {
-                featherLightConfig.variant += ' has-tabs';
+                featherlightConfig.variant += ' has-tabs';
             }
             if (numberOfTabs > 2) {
-                featherLightConfig.variant += ' many-tabs';
+                featherlightConfig.variant += ' many-tabs';
             }
         }
         $.featherlight($newModalContent, featherlightConfig);
