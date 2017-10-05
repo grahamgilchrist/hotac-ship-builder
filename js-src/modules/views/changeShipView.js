@@ -23,7 +23,7 @@ module.exports = {
     bindChangeShipButton: function (currentShip, currentXp) {
         $('#change-ship').off('click').on('click', function () {
             var $modalContent = module.exports.renderChangeShipModalContent(currentShip, currentXp);
-            modalController.openOptionSelectModal($modalContent, 'Choose ship');
+            modalController.openOptionSelectModal($modalContent, 'Choose ship', 'Change ship');
         });
     },
     renderChangeShipModalContent: function (currentShip, currentXp) {

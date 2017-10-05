@@ -14,20 +14,86 @@
     .featherlight-inner
         position: relative
 
+    &.has-header
+        .featherlight-content
+            padding-top: $close-icon-size
+
+    &.has-footer
+        .featherlight-content
+            padding-bottom: $footer-height + $site-padding
+
+    &.option-select
+        .featherlight-content
+            min-width: 240px
+
+            @include media($media-featherlight-full-width)
+                min-width: 95%
+
+        .featherlight-inner
+            overflow: auto
+
+    .modal-header
+        position: absolute
+        top: 0
+        left: 0
+        padding: 0 ($close-icon-size + $site-padding) 0 $site-padding
+        text-align: center
+        width: 100%
+        height: $close-icon-size
+        background-color: $color-primary
+        color: #fff
+        font-size: 16px
+        overflow: hidden
+        display: flex
+        justify-content: center
+        align-items: center
+
+        .title
+            flex-grow: 1
+            flex-shrink: 0
+
+        &:before
+            content: ''
+            display: block
+            height: $close-icon-size
+            width: $close-icon-size
+            flex-shrink: 10
+
+    .modal-footer
+        position: absolute
+        bottom: 0
+        left: 0
+        padding: $site-padding $site-padding 0
+        text-align: center
+        width: 100%
+        min-height: $footer-height + $site-padding
+        background-color: #fff
+
+        .modal-footer-inner
+            display: flex
+            align-items: center
+            justify-content: center
+
+        .summary
+            font:
+                size: 16px
+                weight: 700
+            text-align: center
+
+        .help
+            display: block
+            font:
+                size: 12px
+                weight: 400
+
+        button
+            margin-left: 1em
+
     .mdl-tabs__tab
         // reduce padding for narrow screens
         @include media($media-featherlight-narrow-tabs)
             padding: 0 12px
             font-size: 13px
-
-    &.many-tabs .mdl-tabs__tab
-        @include media($media-featherlight-many-narrow-tabs)
-            padding: 0 4px
-            font-size: 11px
-
-        @include media($media-featherlight-many-very-narrow-tabs)
-            padding: 0 3px
-            font-size: 10px
 
     .card-image-list
         text-align: center
@@ -36,6 +102,7 @@
             display: inline-block
             padding: 3px
             cursor: pointer
+            vertical-align: middle
 
         img
             width: 164px
@@ -45,59 +112,19 @@
         li.selected img
             box-shadow: #45b3f9 0px 0px 6px 3px
 
-        li.cannot-afford
-            opacity: 0.6
+        li.cannot-afford,
+        li.lower-ps
             cursor: not-allowed
 
-    .pilot-ability-list
-        text-align: left
+        li.cannot-afford
+            opacity: 0.6
 
-        li
-            border-bottom: 1px solid #eee
-            padding: $site-padding / 2
-            margin: 0 6px
-            cursor: pointer
+        li.lower-ps
+            opacity: 0.4
 
-            &:last-child
-                border-bottom: none
-
-            &.selected
-                box-shadow: #45b3f9 0px 0px 6px 3px
-
-            &.cannot-afford,
-            &.lower-ps
-                cursor: not-allowed
-                color: #bbb
-
-            &.lower-ps
-                background-color: #eee
-                color: #847f7f
-
-            h3
-                font-size: 20px
-                line-height: 30px
-
-            .cost,
-            p
-                font-size: 12px
-
-            .ps
-                float: right
-                clear: right
-                line-height: 1.3
-                font-size: 11px
-
-            &.cannot-afford
-                .cost
-                    color: #ff9090
-
-            &.lower-ps
-                .ps
-                    color: #ff9090
-
-        h3,
-        p
-            margin-bottom: 0
+        .ability-card
+            width: 164px
+            height: 264px
 
     .ship-options-list
         text-align: center
@@ -128,43 +155,6 @@
 
         h3
             margin: 0
-
-    &.option-select
-        .featherlight-content
-            padding-bottom: $footer-height + $site-padding
-
-        .featherlight-inner
-            overflow: auto
-
-    .modal-footer
-        position: absolute
-        bottom: 0
-        left: 0
-        padding: $site-padding $site-padding 0
-        text-align: center
-        width: 100%
-        height: $footer-height + $site-padding
-        background-color: #fff
-
-        .modal-footer-inner
-            display: flex
-            align-items: center
-            justify-content: center
-
-        .summary
-            font:
-                size: 18px
-                weight: 700
-            text-align: center
-
-        .help
-            display: block
-            font:
-                size: 12px
-                weight: 400
-
-        button
-            margin-left: 1em
 
     &.confirm-buttons,
     &.message
@@ -207,12 +197,13 @@
             button
                 margin-left: $site-padding
 
-    &.preview-pilot-ability
-        .featherlight-content
-            padding-top: $close-icon-size + ($site-padding / 2)
+    &.card-preview-modal
+        .featherlight-close-icon
+            display: none
 
-            @include media($media-featherlight-wide)
-                padding-top: $close-icon-size + $site-padding
+        .ability-card,
+        .ability-card
+            width: 164px
 
     .share-modal
         input
