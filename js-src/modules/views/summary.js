@@ -3,6 +3,7 @@
 var $ = require('jquery');
 var _ = require('lodash');
 var abilityCardView = require('./abilityCard');
+var modalController = require('../controllers/modals');
 
 module.exports = {
     renderEquippedUpgrades: function (build) {
@@ -33,17 +34,20 @@ module.exports = {
         var $li = $('<li>');
         var imageUrl = '/components/xwing-data/images/' + upgrade.image;
         var iconString = module.exports.getIconString(upgrade.slot);
-        $li.append('<div class="preview" data-featherlight="' + imageUrl + '">' + iconString + '<span class="name">' + upgrade.name + '</span><i class="material-icons icon-preview">zoom_in</i></div>');
-        $li.append('<div class="full" data-featherlight="' + imageUrl + '"><img src="' + imageUrl + '" alt="Card image for ' + upgrade.name + '"></div>');
+        $li.append('<div class="preview" data-featherlight="' + imageUrl + '" data-featherlight-variant="card-preview-modal">' + iconString + '<span class="name">' + upgrade.name + '</span><i class="material-icons icon-preview">zoom_in</i></div>');
+        $li.append('<div class="full" data-featherlight="' + imageUrl + '" data-featherlight-variant="card-preview-modal"><img src="' + imageUrl + '" alt="Card image for ' + upgrade.name + '"></div>');
 
         return $li;
     },
-    renderEquippedAbility: function (ability) {
+    renderEquippedAbility: function (abilityPilot) {
         var $li = $('<li>');
         var iconString = module.exports.getIconString('Elite');
-        var escapedText = ability.text.replace(/"/g, '&quot;');
-        $li.append('<div class="preview" data-featherlight-type="text" data-featherlight-variant="preview-pilot-ability" data-featherlight="' + escapedText + '">' + iconString + '<span class="name">' + ability.name + '</span><i class="material-icons icon-preview">zoom_in</i></div>');
-        var $card = abilityCardView.render(ability).addClass('full');
+        $li.append('<div class="preview">' + iconString + '<span class="name">' + abilityPilot.name + '</span><i class="material-icons icon-preview">zoom_in</i></div>');
+        $li.on('click', function () {
+            modalController.openAbilityCardModal(abilityPilot);
+        });
+
+        var $card = abilityCardView.render(abilityPilot).addClass('full');
         $li.append($card);
 
         return $li;

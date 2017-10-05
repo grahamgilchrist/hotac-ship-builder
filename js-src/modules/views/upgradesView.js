@@ -109,10 +109,9 @@ module.exports = {
 
                 if (upgradeSlot.equipped.skill) {
                     // this is a pilot ability upgrade
-                    $slot.attr('data-featherlight-type', 'text');
-                    $slot.attr('data-featherlight-variant', 'preview-pilot-ability');
-                    var escapedText = upgradeSlot.equipped.text.replace(/"/g, '&quot;');
-                    $slot.attr('data-featherlight', escapedText);
+                    $slot.on('click', function () {
+                        modalController.openAbilityCardModal(upgradeSlot.equipped);
+                    });
                     $icon.on('click', function () {
                         module.exports.removeEquipSlotAbility(upgradeSlot.equipped.id, build);
                     });
@@ -120,6 +119,8 @@ module.exports = {
                     // this is an upgrade card
                     var imageUrl = '/components/xwing-data/images/' + upgradeSlot.equipped.image;
                     $slot.attr('data-featherlight', imageUrl);
+                    $slot.attr('data-featherlight-variant', 'card-preview-modal');
+                    $slot.attr('data-featherlight-close-on-click', 'anywhere');
                     $icon.on('click', function () {
                         module.exports.removeEquipSlotUpgrade(upgradeSlot.equipped.id, build);
                     });
@@ -145,6 +146,8 @@ module.exports = {
         $slot.append('<i class="material-icons icon-preview">zoom_in</i>');
         var imageUrl = '/components/xwing-data/images/' + upgradeSlot.upgrade.image;
         $slot.attr('data-featherlight', imageUrl);
+        $slot.attr('data-featherlight-variant', 'card-preview-modal');
+        $slot.attr('data-featherlight-close-on-click', 'anywhere');
         $li.append($slot);
 
         var $icon;
@@ -215,12 +218,14 @@ module.exports = {
     },
     renderUpgradeItem: function (upgrade) {
         var imageUrl = '/components/xwing-data/images/' + upgrade.image;
-        var $item = $('<li class="upgrade" data-featherlight="' + imageUrl + '">' + module.exports.getIconString(upgrade.slot) + '<span class="upgrade-name">' + upgrade.name + '</span><i class="material-icons eye">zoom_in</i></li>');
+        var $item = $('<li class="upgrade" data-featherlight="' + imageUrl + '"  data-featherlight-variant="card-preview-modal" data-featherlight-close-on-click="anywhere">' + module.exports.getIconString(upgrade.slot) + '<span class="upgrade-name">' + upgrade.name + '</span><i class="material-icons eye">zoom_in</i></li>');
         return $item;
     },
     renderPilotUpgradeItem: function (pilot) {
-        var escapedText = pilot.text.replace(/"/g, '&quot;');
-        var $item = $('<li class="upgrade" data-featherlight="' + escapedText + '" data-featherlight-type="text" data-featherlight-variant="preview-pilot-ability">' + module.exports.getIconString('Elite') + '<span class="upgrade-name">Ability: ' + pilot.name + '</span><i class="material-icons eye">zoom_in</i></li>');
+        var $item = $('<li class="upgrade">' + module.exports.getIconString('Elite') + '<span class="upgrade-name">Ability: ' + pilot.name + '</span><i class="material-icons eye">zoom_in</i></li>');
+        $item.on('click', function () {
+            modalController.openAbilityCardModal(pilot);
+        });
 
         return $item;
     },
@@ -312,7 +317,7 @@ module.exports = {
                     $(this).trigger('select', {
                         selectedUpgradeEvent: 'view.upgrades.equipUpgrade',
                         selectedUpgradeId: card.id,
-                        text: '<span>' + card.name + '</span><span class="help">No cost to equip a previously purchased upgrade</span>'
+                        text: '<span>' + card.name + '</span><span class="help">No cost to equip a purchased upgrade</span>'
                     });
                 });
             }

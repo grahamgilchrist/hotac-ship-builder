@@ -3,6 +3,7 @@
 var $ = require('jquery');
 var _ = require('lodash');
 var events = require('./events');
+var abilityCardView = require('../views/abilityCard');
 
 module.exports = {
     init: function () {
@@ -107,6 +108,8 @@ module.exports = {
                     $button.attr('disabled', 'disabled');
                     lastSelectedItem = null;
                     $summary.html('');
+                    var newTabButtonText = $(this).attr('button-text');
+                    $button.text(newTabButtonText);
                 });
             }
         };
@@ -153,5 +156,13 @@ module.exports = {
             variant: 'content-typography'
         };
         $.featherlight($modalContent, featherLightConfig);
+    },
+    openAbilityCardModal: function (abilityPilot) {
+        var $card = abilityCardView.render(abilityPilot);
+        var featherlightConfig = {
+            variant: 'card-preview-modal',
+            closeOnClick: 'anywhere'
+        };
+        $.featherlight($card, featherlightConfig);
     }
 };
