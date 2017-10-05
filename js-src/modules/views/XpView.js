@@ -2,6 +2,7 @@
 
 var $ = require('jquery');
 var missionView = require('./missionResultsView');
+var modalController = require('../controllers/modals');
 
 module.exports = {
     init: function () {
@@ -13,11 +14,7 @@ module.exports = {
     bindXpButton: function () {
         $('[add-mission-xp]').on('click', function () {
             var $modalContent = missionView.renderView();
-            var featherlightConfig = {
-                variant: 'add-xp'
-            };
-
-            $.featherlight($modalContent, featherlightConfig);
+            modalController.openTitledModal($modalContent, 'Add Mission results', 'add-xp-modal');
             missionView.focus();
         });
     }
