@@ -8,7 +8,6 @@ var events = require('../controllers/events');
 module.exports = {
     renderView: function () {
         var $modalContent = $('<div>');
-        var $header = $('<h2>Add Mission results</h2>');
         var $form = $('<form>');
         var $input = $('<label for="mission-xp-amount">XP:</label><input type="number" id="mission-xp-amount">');
 
@@ -17,7 +16,6 @@ module.exports = {
 
         $form.append($input);
         $form.append($button);
-        $modalContent.append($header);
         $modalContent.append($form);
 
         return $modalContent;

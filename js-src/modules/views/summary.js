@@ -34,8 +34,8 @@ module.exports = {
         var $li = $('<li>');
         var imageUrl = '/components/xwing-data/images/' + upgrade.image;
         var iconString = module.exports.getIconString(upgrade.slot);
-        $li.append('<div class="preview" data-featherlight="' + imageUrl + '" data-featherlight-variant="card-preview-modal">' + iconString + '<span class="name">' + upgrade.name + '</span><i class="material-icons icon-preview">zoom_in</i></div>');
-        $li.append('<div class="full" data-featherlight="' + imageUrl + '" data-featherlight-variant="card-preview-modal"><img src="' + imageUrl + '" alt="Card image for ' + upgrade.name + '"></div>');
+        $li.append('<div class="preview" data-featherlight="' + imageUrl + '" data-featherlight-variant="card-preview-modal" data-featherlight-close-on-click="anywhere">' + iconString + '<span class="name">' + upgrade.name + '</span><i class="material-icons icon-preview">zoom_in</i></div>');
+        $li.append('<div class="full" data-featherlight="' + imageUrl + '" data-featherlight-variant="card-preview-modal" data-featherlight-close-on-click="anywhere"><img src="' + imageUrl + '" alt="Card image for ' + upgrade.name + '"></div>');
 
         return $li;
     },

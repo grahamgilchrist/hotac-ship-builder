@@ -11,6 +11,17 @@ module.exports = {
             window.componentHandler.upgradeDom();
         };
     },
+    openTitledModal: function ($modalContent, modalTitle, cssClass) {
+        var featherlightConfig = {
+            variant: 'has-header ' + cssClass,
+            afterOpen: function () {
+                $.featherlight.defaults.afterOpen();
+                var $header = $('<div class="modal-header"><div class="title">' + modalTitle + '</div></div>');
+                this.$instance.find('.featherlight-content').append($header);
+            }
+        };
+        $.featherlight($modalContent, featherlightConfig);
+    },
     openConfirmModal: function (message, successCallback) {
         var $modalContent = $('<div>');
         var $message = $('<div class="message">' + message + '</div>');
@@ -64,7 +75,7 @@ module.exports = {
             $newModalContent = module.exports.renderTabs(tabs);
         }
 
-        var featherLightConfig = {
+        var featherlightConfig = {
             variant: 'option-select has-header has-footer',
             afterOpen: function () {
                 $.featherlight.defaults.afterOpen();
@@ -115,13 +126,13 @@ module.exports = {
         };
         if (numberOfTabs) {
             if (numberOfTabs > 0) {
-                featherLightConfig.variant += ' has-tabs';
+                featherlightConfig.variant += ' has-tabs';
             }
             if (numberOfTabs > 2) {
-                featherLightConfig.variant += ' many-tabs';
+                featherlightConfig.variant += ' many-tabs';
             }
         }
-        $.featherlight($newModalContent, featherLightConfig);
+        $.featherlight($newModalContent, featherlightConfig);
     },
     renderTabs: function (tabsObject) {
         var $modalContent = $('<div>');
@@ -152,10 +163,10 @@ module.exports = {
         return $modalContent;
     },
     openDocsModal: function ($modalContent) {
-        var featherLightConfig = {
+        var featherlightConfig = {
             variant: 'content-typography'
         };
-        $.featherlight($modalContent, featherLightConfig);
+        $.featherlight($modalContent, featherlightConfig);
     },
     openAbilityCardModal: function (abilityPilot) {
         var $card = abilityCardView.render(abilityPilot);
