@@ -3,7 +3,11 @@
 var _ = require('lodash');
 var allUpgrades = require('../upgrades').all;
 var keyedUpgrades = require('../upgrades').keyed;
-var pilots = require('../pilots').allRebels;
+var pilotsWithAbilities = require('../pilots').pilotsWithAbilities;
+var pilots = _.uniqBy(pilotsWithAbilities, function (pilot) {
+    return pilot.text;
+});
+
 var events = require('../../controllers/events');
 var arrayUtils = require('../../utils/array-utils');
 
@@ -50,7 +54,7 @@ upgradesModel.prototype.validateAbilities = function (pilotsList) {
     // Make sure equipped list only contains upgrades we have purchased
     var filteredUpgrades = arrayUtils.intersectionSingle(pilotsList, this.purchasedAbilities);
     // Make sure equipped list only contains abilities allowed in the build
-    filteredUpgrades = _.filter(filteredUpgrades, _.bind(this.abilityAllowedOnShip, this));
+    filteredUpgrades = _.filter(filteredUpgrades, _.bind(this.abilityAllowedInBuild, this));
     return filteredUpgrades;
 };
 
@@ -82,7 +86,7 @@ upgradesModel.prototype.getDisabledAbilities = function () {
     var allowedInSlots = (slotsAllowedInBuild.indexOf('Elite') > -1);
 
     _.each(this.purchasedAbilities, function (pilot) {
-        var allowedOnShip = thisModel.abilityAllowedOnShip(pilot);
+        var allowedOnShip = thisModel.abilityAllowedInBuild(pilot);
 
         if (!allowedOnShip || !allowedInSlots) {
             disabledUpgrades.push(pilot);
@@ -101,7 +105,7 @@ upgradesModel.prototype.getUnequippedUpgrades = function () {
 };
 
 upgradesModel.prototype.getUnequippedAbilities = function () {
-    // Remove *All* copies of any upgrades which should be disabled
+    // Remove *All* copies of any abiltiies which should be disabled
     var notDisabled = _.difference(this.purchasedAbilities, this.disabledAbilities);
     // Remove one copy of each item which is equipped
     var unequipped = arrayUtils.differenceSingle(notDisabled, this.equippedAbilities);
@@ -185,6 +189,12 @@ upgradesModel.prototype.getAvailableToBuy = function (upgradeType) {
     return allowedUpgrades;
 };
 
+upgradesModel.prototype.getAbilitiesAvailableToBuy = function () {
+    var allAbilities = pilots;
+    var allowedPilots = _.difference(allAbilities, this.purchasedAbilities);
+    return allowedPilots;
+};
+
 upgradesModel.prototype.upgradeAllowedOnShip = function (upgrade) {
     // Remove any upgrades for different ships
     if (upgrade.ship && upgrade.ship.indexOf(this.build.currentShip.shipData.name) < 0) {
@@ -199,7 +209,7 @@ upgradesModel.prototype.upgradeAllowedOnShip = function (upgrade) {
     return true;
 };
 
-upgradesModel.prototype.abilityAllowedOnShip = function (pilot) {
+upgradesModel.prototype.abilityAllowedInBuild = function (pilot) {
     // Remove pilots whose PS is higher than build
     if (pilot.skill > this.build.pilotSkill) {
         return false;
@@ -241,6 +251,19 @@ upgradesModel.prototype.upgradeAllowedInBuild = function (upgrade) {
     }
 
     return true;
+};
+
+upgradesModel.prototype.abilityAlreadyInBuild = function (abilityPilot) {
+    // Remove any abilities the build already has
+    var abilityExists = _.find(this.purchasedAbilities, function (existingAbility) {
+        return existingAbility.id === abilityPilot.id;
+    });
+
+    if (abilityExists) {
+        return true;
+    }
+
+    return false;
 };
 
 upgradesModel.prototype.equipUpgradesToSlots = function (upgradesToEquip, abilitiesToEquip) {

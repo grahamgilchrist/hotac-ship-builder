@@ -88,7 +88,7 @@ module.exports = {
                 var $summary = $('<div class="summary"><span></span></div>');
                 var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>' + buttonText + '</button>');
                 $button.on('click', function () {
-                    if (lastSelectedItem.selectedUpgradeId) {
+                    if (!_.isUndefined(lastSelectedItem.selectedUpgradeId)) {
                         events.trigger(lastSelectedItem.selectedUpgradeEvent, lastSelectedItem.selectedUpgradeId);
                     }
                     $.featherlight.close();
@@ -117,7 +117,7 @@ module.exports = {
 
                 $featherlightInner.on('click', '.mdl-tabs__tab', function () {
                     $button.attr('disabled', 'disabled');
-                    lastSelectedItem = null;
+                    lastSelectedItem = undefined;
                     $summary.html('');
                     var newTabButtonText = $(this).attr('button-text');
                     $button.text(newTabButtonText);
