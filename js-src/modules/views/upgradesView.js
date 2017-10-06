@@ -3,10 +3,6 @@
 var $ = require('jquery');
 var _ = require('lodash');
 
-var pilotsWithAbilities = require('../models/pilots').pilotsWithAbilities;
-var pilots = _.uniqBy(pilotsWithAbilities, function (pilot) {
-    return pilot.text;
-});
 var modalController = require('../controllers/modals');
 var events = require('../controllers/events');
 var abilityCardView = require('./abilityCard');
@@ -66,16 +62,18 @@ module.exports = {
     },
     renderShipSlot: function (upgradeSlot, build) {
         var upgradesAvailableToBuy = build.upgrades.getAvailableToBuy(upgradeSlot.type);
+        var abilitiesAvailableToBuy = build.upgrades.getAbilitiesAvailableToBuy();
 
         // Don't show this slot if we can't either buy or equip anything existing into it
         //  (for example, no titles for this ship)
         var hasUpgradesToBuy = (upgradesAvailableToBuy.length > 0);
+        var hasAbilitiesToBuy = (abilitiesAvailableToBuy.length > 0);
         var hasUpgradesToEquip = _.find(build.upgrades.unequipped, {
             slot: upgradeSlot.type
         });
 
         if (!upgradeSlot.equipped) {
-            if (!hasUpgradesToBuy && !hasUpgradesToEquip) {
+            if (!hasUpgradesToBuy && !hasUpgradesToEquip && !hasAbilitiesToBuy) {
                 return;
             }
         }
@@ -131,7 +129,7 @@ module.exports = {
                     var unusedUpgradesForType = _.filter(build.upgrades.unequipped, function (upgrade) {
                         return upgrade.slot === upgradeSlot.type;
                     });
-                    module.exports.clickEquipSlot(upgradeSlot.type, unusedUpgradesForType, build.upgrades.unequippedAbilities, upgradesAvailableToBuy, build);
+                    module.exports.clickEquipSlot(upgradeSlot.type, unusedUpgradesForType, build.upgrades.unequippedAbilities, upgradesAvailableToBuy, abilitiesAvailableToBuy, build);
                 });
             }
         }
@@ -235,9 +233,9 @@ module.exports = {
         var iconString = '<i class="xwing-miniatures-font xwing-miniatures-font-' + iconId + '"></i>';
         return iconString;
     },
-    clickEquipSlot: function (upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, build) {
+    clickEquipSlot: function (upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, abilitiesAvailableToBuy, build) {
         // open modal to choose upgrade to equip
-        var tabs = module.exports.renderUpgradeModalContent(upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, build);
+        var tabs = module.exports.renderUpgradeModalContent(upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, abilitiesAvailableToBuy, build);
         modalController.openOptionSelectModal(undefined, tabs[0].buttonLabel, 'Equip ' + upgradeType + ' slot', tabs);
     },
     removeEquipSlotUpgrade: function (upgradeId) {
@@ -246,7 +244,7 @@ module.exports = {
     removeEquipSlotAbility: function (upgradeId) {
         events.trigger('view.upgrades.unequipAbility', upgradeId);
     },
-    renderUpgradeModalContent: function (upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, build) {
+    renderUpgradeModalContent: function (upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, abilitiesAvailableToBuy, build) {
         var tabs = [];
 
         if (unusedUpgrades.length > 0 || (unusedAbilities.length > 0 && upgradeType === 'Elite')) {
@@ -259,7 +257,7 @@ module.exports = {
             });
         }
 
-        var $cardTab = module.exports.renderCardListModalContent(upgradeType, build, upgradesAvailableToBuy, pilots, 'buy');
+        var $cardTab = module.exports.renderCardListModalContent(upgradeType, build, upgradesAvailableToBuy, abilitiesAvailableToBuy, 'buy');
         tabs.push({
             name: 'Buy new',
             $content: $cardTab,
