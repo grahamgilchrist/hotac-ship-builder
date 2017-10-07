@@ -100,10 +100,22 @@ module.exports = {
                 // Do some trickery to set the max height and allow us to have a fixed footer in the modal
                 var $featherlightContent = this.$instance.find('.featherlight-content');
                 var $featherlightInner = this.$instance.find('.featherlight-inner');
-                var height = $featherlightContent.height();
-                $featherlightInner.css('max-height', height + 'px');
+
+                var setFixedHeaderFooter = function () {
+                    // unset asny max-height, so that content flows to natural size
+                    $featherlightInner.css('max-height', 'none');
+                    var delay = 500;
+                    // Wait some time for layout then set max-height. User won't scroll immediately so
+                    //  this shoudl be unnoticable
+                    setTimeout(function () {
+                        var innerHeight = $featherlightContent.height();
+                        $featherlightInner.css('max-height', innerHeight + 'px');
+                    }, delay);
+                };
+
                 this.$instance.find('.featherlight-content').append($footer);
                 this.$instance.find('.featherlight-content').append($header);
+                setFixedHeaderFooter();
 
                 $featherlightInner.on('select', 'li', function (event, eventData) {
                     lastSelectedItem = eventData;
@@ -121,6 +133,7 @@ module.exports = {
                     $summary.html('');
                     var newTabButtonText = $(this).attr('button-text');
                     $button.text(newTabButtonText);
+                    setFixedHeaderFooter();
                 });
             }
         };
