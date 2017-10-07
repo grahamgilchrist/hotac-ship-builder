@@ -73,8 +73,14 @@ module.exports = {
         });
 
         if (!upgradeSlot.equipped) {
-            if (!hasUpgradesToBuy && !hasUpgradesToEquip && !hasAbilitiesToBuy) {
-                return;
+            if (upgradeSlot.type === 'Elite') {
+                if (!hasUpgradesToBuy && !hasUpgradesToEquip && !hasAbilitiesToBuy) {
+                    return;
+                }
+            } else {
+                if (!hasUpgradesToBuy && !hasUpgradesToEquip) {
+                    return;
+                }
             }
         }
 
