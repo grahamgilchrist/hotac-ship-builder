@@ -1,5 +1,7 @@
 'use strict';
 
+var codec = window.JsonUrl('lzma');
+
 var _ = require('lodash');
 var XpItem = require('../models/shipBuild/xpItem');
 var EnemyDefeatsModel = require('../models/enemyDefeats');
@@ -40,8 +42,14 @@ module.exports = {
         var xpHistoryString = xpHistoryUrlItems.join(',');
         urlComponents.push(xpHistoryString);
 
-        var exportString = '/v3/' + urlComponents.join('|');
+        var exportString = '/v4/' + urlComponents.join('|');
         exportString = window.encodeURIComponent(exportString);
+
+        console.log('urlComponents', urlComponents);
+        codec.compress(urlComponents).then(function (output) {
+            console.log('output', output);
+        });
+
         return exportString;
     },
     parseExportStringToHistory: function (exportString) {
@@ -104,6 +112,38 @@ module.exports = {
         },
         // v3 adds equipped upgrades
         v3: function (splitParts) {
+            var items = splitParts[2];
+
+            var splitItems = items.split('|');
+
+            var playerName = window.decodeURIComponent(splitItems.shift());
+            var callsign = window.decodeURIComponent(splitItems.shift());
+
+            var enemyDefeats = new EnemyDefeatsModel();
+            enemyDefeats.parseUrlString(splitItems.shift());
+
+            var equippedUpgrades = JSON.parse(splitItems.shift());
+            var equippedAbilities = JSON.parse(splitItems.shift());
+
+            var xpHistoryString = splitItems.shift();
+            var xpHistoryItems = xpHistoryString.split(',');
+            var xpHistory = _.map(xpHistoryItems, function (stringItem) {
+                var xpItem = new XpItem();
+                xpItem.parseExportString(stringItem);
+                return xpItem;
+            });
+
+            return {
+                xpHistory: xpHistory,
+                callsign: callsign,
+                playerName: playerName,
+                enemies: enemyDefeats.get(),
+                equippedUpgrades: equippedUpgrades,
+                equippedAbilities: equippedAbilities
+            };
+        },
+        // v4 encodes and cmpresses JSON object
+        v4: function (splitParts) {
             var items = splitParts[2];
 
             var splitItems = items.split('|');
