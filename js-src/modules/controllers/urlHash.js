@@ -41,10 +41,12 @@ module.exports = {
         urlComponents.push(xpHistoryString);
 
         var exportString = '/v3/' + urlComponents.join('|');
+        exportString = window.encodeURIComponent(exportString);
         return exportString;
     },
     parseExportStringToHistory: function (exportString) {
-        var splitParts = exportString.split('/');
+        var decodedString = window.decodeURIComponent(exportString);
+        var splitParts = decodedString.split('/');
         var urlVersion = splitParts[1];
 
         var parseVersionFunction = module.exports.parseUrlStringVersions[urlVersion];
