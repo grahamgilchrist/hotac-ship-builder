@@ -1,5 +1,6 @@
 'use strict';
 
+// eslint-disable-next-line new-cap
 var codec = window.JsonUrl('lzma');
 
 var _ = require('lodash');
@@ -83,6 +84,7 @@ module.exports = {
                 equippedAbilities: []
             };
 
+            // eslint-disable-next-line new-cap
             var deferred = $.Deferred();
             deferred.resolve(parsedData);
 
@@ -114,6 +116,7 @@ module.exports = {
                 equippedAbilities: []
             };
 
+            // eslint-disable-next-line new-cap
             var deferred = $.Deferred();
             deferred.resolve(parsedData);
 
@@ -151,6 +154,7 @@ module.exports = {
                 equippedAbilities: equippedAbilities
             };
 
+            // eslint-disable-next-line new-cap
             var deferred = $.Deferred();
             deferred.resolve(parsedData);
 
@@ -191,7 +195,6 @@ module.exports = {
 
                 return parsedData;
             });
-
 
         }
     }
