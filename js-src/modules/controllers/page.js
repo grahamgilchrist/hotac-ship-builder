@@ -34,10 +34,12 @@ module.exports = {
         var urlHash = hashController.get();
         if (urlHash && urlHash.length > 0) {
             // We got a hash in URL, so create a build based on it
-            var buildData = hashController.parseExportStringToHistory(urlHash);
-            currentBuild = new Build(buildData.xpHistory, buildData.callsign, buildData.playerName, buildData.enemies, buildData.equippedUpgrades, buildData.equippedAbilities);
-            mainView.show();
-            headerView.setMainState();
+            var promise = hashController.parseExportStringToHistory(urlHash);
+            promise.then(function (buildData) {
+                currentBuild = new Build(buildData.xpHistory, buildData.callsign, buildData.playerName, buildData.enemies, buildData.equippedUpgrades, buildData.equippedAbilities);
+                mainView.show();
+                headerView.setMainState();
+            });
         } else {
             // No build provided via URL, so show new build form
             newView.show();
@@ -141,8 +143,7 @@ module.exports = {
             enemiesView.renderTable(build.enemyDefeats.get());
             messageView.clear();
             summaryView.renderEquippedUpgrades(build);
-            var newHash = hashController.generateExportString(build);
-            hashController.set(newHash);
+            hashController.generateAndSet(build);
         });
 
         events.on('model.build.currentShip.update', function (event, build) {
@@ -180,8 +181,7 @@ module.exports = {
                 shipInfoView.renderShipActions(build.currentShip, build.upgrades.equipped);
                 shipInfoView.renderShipStats(build);
                 summaryView.renderEquippedUpgrades(build);
-                var newHash = hashController.generateExportString(build);
-                hashController.set(newHash);
+                hashController.generateAndSet(build);
             }
         });
 
@@ -190,16 +190,14 @@ module.exports = {
                 var xpItemIndex = data.build.xpHistory.length - 1;
                 xpHistoryView.renderTableRow(data.xpItem, data.build.currentXp, xpItemIndex);
                 messageView.renderMessage(data.xpItem, xpItemIndex);
-                var newHash = hashController.generateExportString(data.build);
-                hashController.set(newHash);
+                hashController.generateAndSet(data.build);
             }
         });
 
         events.on('model.enemies.change', function (event, enemyDefeats) {
             if (currentBuild.ready) {
                 enemiesView.renderTable(enemyDefeats.get());
-                var newHash = hashController.generateExportString(currentBuild);
-                hashController.set(newHash);
+                hashController.generateAndSet(currentBuild);
             }
         });
     }

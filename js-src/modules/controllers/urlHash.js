@@ -1,6 +1,10 @@
 'use strict';
 
+// eslint-disable-next-line new-cap
+var codec = window.JsonUrl('lzma');
+
 var _ = require('lodash');
+var $ = require('jquery');
 var XpItem = require('../models/shipBuild/xpItem');
 var EnemyDefeatsModel = require('../models/enemyDefeats');
 
@@ -15,6 +19,13 @@ module.exports = {
     },
     clear: function () {
         document.location.hash = '';
+    },
+    generateAndSet: function (build) {
+        var promise = module.exports.generateExportString(build);
+        promise.then(function (newHash) {
+            var exportString = '/v4/' + newHash;
+            module.exports.set(exportString);
+        });
     },
     generateExportString: function (build) {
         var urlComponents = [];
@@ -37,12 +48,9 @@ module.exports = {
         var xpHistoryUrlItems = _.map(build.xpHistory, function (xpItem) {
             return xpItem.exportString();
         });
-        var xpHistoryString = xpHistoryUrlItems.join(',');
-        urlComponents.push(xpHistoryString);
+        urlComponents.push(xpHistoryUrlItems);
 
-        var exportString = '/v3/' + urlComponents.join('|');
-        exportString = window.encodeURIComponent(exportString);
-        return exportString;
+        return codec.compress(urlComponents);
     },
     parseExportStringToHistory: function (exportString) {
         var decodedString = window.decodeURIComponent(exportString);
@@ -63,11 +71,11 @@ module.exports = {
 
             var xpHistory = _.map(splitItems, function (stringItem) {
                 var xpItem = new XpItem();
-                xpItem.parseExportString(stringItem);
+                xpItem.parseExportStringLessV3(stringItem);
                 return xpItem;
             });
 
-            return {
+            var parsedData = {
                 xpHistory: xpHistory,
                 callsign: callsign,
                 playerName: playerName,
@@ -75,6 +83,12 @@ module.exports = {
                 equippedUpgrades: [],
                 equippedAbilities: []
             };
+
+            // eslint-disable-next-line new-cap
+            var deferred = $.Deferred();
+            deferred.resolve(parsedData);
+
+            return deferred.promise();
         },
         // v2 adds enemies
         v2: function (splitParts) {
@@ -89,11 +103,11 @@ module.exports = {
 
             var xpHistory = _.map(splitItems, function (stringItem) {
                 var xpItem = new XpItem();
-                xpItem.parseExportString(stringItem);
+                xpItem.parseExportStringLessV3(stringItem);
                 return xpItem;
             });
 
-            return {
+            var parsedData = {
                 xpHistory: xpHistory,
                 callsign: callsign,
                 playerName: playerName,
@@ -101,6 +115,12 @@ module.exports = {
                 equippedUpgrades: [],
                 equippedAbilities: []
             };
+
+            // eslint-disable-next-line new-cap
+            var deferred = $.Deferred();
+            deferred.resolve(parsedData);
+
+            return deferred.promise();
         },
         // v3 adds equipped upgrades
         v3: function (splitParts) {
@@ -121,11 +141,11 @@ module.exports = {
             var xpHistoryItems = xpHistoryString.split(',');
             var xpHistory = _.map(xpHistoryItems, function (stringItem) {
                 var xpItem = new XpItem();
-                xpItem.parseExportString(stringItem);
+                xpItem.parseExportStringLessV3(stringItem);
                 return xpItem;
             });
 
-            return {
+            var parsedData = {
                 xpHistory: xpHistory,
                 callsign: callsign,
                 playerName: playerName,
@@ -133,6 +153,49 @@ module.exports = {
                 equippedUpgrades: equippedUpgrades,
                 equippedAbilities: equippedAbilities
             };
+
+            // eslint-disable-next-line new-cap
+            var deferred = $.Deferred();
+            deferred.resolve(parsedData);
+
+            return deferred.promise();
+        },
+        // v4 encodes and cmpresses JSON object
+        v4: function (splitParts) {
+            var compressedData = splitParts[2];
+
+            // var afterCompressed
+            return codec.decompress(compressedData).then(function (json) {
+                var splitItems = json;
+
+                var playerName = window.decodeURIComponent(splitItems.shift());
+                var callsign = window.decodeURIComponent(splitItems.shift());
+
+                var enemyDefeats = new EnemyDefeatsModel();
+                enemyDefeats.parseUrlString(splitItems.shift());
+
+                var equippedUpgrades = JSON.parse(splitItems.shift());
+                var equippedAbilities = JSON.parse(splitItems.shift());
+
+                var xpHistoryItems = splitItems.shift();
+                var xpHistory = _.map(xpHistoryItems, function (stringItem) {
+                    var xpItem = new XpItem();
+                    xpItem.parseExportString(stringItem);
+                    return xpItem;
+                });
+
+                var parsedData = {
+                    xpHistory: xpHistory,
+                    callsign: callsign,
+                    playerName: playerName,
+                    enemies: enemyDefeats.get(),
+                    equippedUpgrades: equippedUpgrades,
+                    equippedAbilities: equippedAbilities
+                };
+
+                return parsedData;
+            });
+
         }
     }
 };

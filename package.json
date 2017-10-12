@@ -24,6 +24,7 @@
     "gulp-webserver": "0.9.x",
     "gulp-yaml-validate": "1.0.x",
     "jquery": "3.1.x",
+    "json-url": "^2.3.4",
     "lodash": "4.17.x",
     "vinyl-source-stream": "1.x",
     "xwing-data": "0.47.x"
