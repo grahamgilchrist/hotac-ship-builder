@@ -94,16 +94,16 @@ module.exports = {
         });
 
         events.on('view.upgrades.lose', function (event, upgradeId) {
-            // currentBuild.addToHistory(itemTypes.BUY_UPGRADE, {
-            //     upgradeId: upgradeId
-            // });
+            currentBuild.addToHistory(itemTypes.LOSE_UPGRADE, {
+                upgradeId: upgradeId
+            });
             currentBuild.upgrades.loseCard(upgradeId);
         });
 
         events.on('view.pilotAbilities.lose', function (event, pilotId) {
-            // currentBuild.addToHistory(itemTypes.BUY_PILOT_ABILITY, {
-            //     pilotId: pilotId
-            // });
+            currentBuild.addToHistory(itemTypes.LOSE_PILOT_ABILITY, {
+                pilotId: pilotId
+            });
             currentBuild.upgrades.loseAbility(pilotId);
         });
 

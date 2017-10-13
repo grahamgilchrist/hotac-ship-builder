@@ -17,7 +17,7 @@ module.exports = {
             $select.append($option);
         });
         _.each(build.upgrades.purchasedAbilities, function (pilotCard) {
-            var $option = $('<option value="ab-' + pilotCard.id + '">Ability: '  + pilotCard.name + '</option>');
+            var $option = $('<option value="ab-' + pilotCard.id + '">Ability: ' + pilotCard.name + '</option>');
             $select.append($option);
         });
 

@@ -5,6 +5,7 @@ var ships = require('./ships');
 var events = require('../controllers/events');
 var XpItem = require('./shipBuild/xpItem');
 var itemTypes = require('./shipBuild/itemTypes');
+var arrayUtils = require('../utils/array-utils');
 
 var EnemyDefeatsModel = require('../models/enemyDefeats');
 var UpgradesModel = require('./shipBuild/upgradesModel');
@@ -34,21 +35,29 @@ var ShipBuild = function (xpHistory, callsign, playerName, enemyDefeats, equippe
 };
 
 ShipBuild.prototype.getPilotIdsFromHistory = function () {
-    var pilotIds = _(this.xpHistory).filter(function (xpItem) {
-        return xpItem.upgradeType === itemTypes.BUY_PILOT_ABILITY;
-    }).map(function (xpItem) {
-        return xpItem.data.pilotId;
-    }).value();
+    var pilotIds = [];
+    _.each(this.xpHistory, function (xpItem) {
+        if (xpItem.upgradeType === itemTypes.BUY_PILOT_ABILITY) {
+            pilotIds.push(xpItem.data.pilotId);
+        }
+        if (xpItem.upgradeType === itemTypes.LOSE_PILOT_ABILITY) {
+            arrayUtils.removeFirstMatchingValue(pilotIds, xpItem.data.pilotId);
+        }
+    });
 
     return pilotIds;
 };
 
 ShipBuild.prototype.getUpgradeIdsFromHistory = function () {
-    var upgradeIds = _(this.xpHistory).filter(function (xpItem) {
-        return xpItem.upgradeType === itemTypes.BUY_UPGRADE;
-    }).map(function (xpItem) {
-        return xpItem.data.upgradeId;
-    }).value();
+    var upgradeIds = [];
+    _.each(this.xpHistory, function (xpItem) {
+        if (xpItem.upgradeType === itemTypes.BUY_UPGRADE) {
+            upgradeIds.push(xpItem.data.upgradeId);
+        }
+        if (xpItem.upgradeType === itemTypes.LOSE_UPGRADE) {
+            arrayUtils.removeFirstMatchingValue(upgradeIds, xpItem.data.upgradeId);
+        }
+    });
 
     return upgradeIds;
 };
@@ -67,10 +76,18 @@ ShipBuild.prototype.processHistory = function (xpHistory) {
             thisBuild.addToHistory(itemTypes.BUY_UPGRADE, {
                 upgradeId: xpItem.data.upgradeId
             });
+        } else if (xpItem.upgradeType === itemTypes.LOSE_UPGRADE) {
+            thisBuild.addToHistory(itemTypes.LOSE_UPGRADE, {
+                upgradeId: xpItem.data.upgradeId
+            });
         } else if (xpItem.upgradeType === itemTypes.MISSION) {
             thisBuild.addMissionXp(xpItem.data.missionXp);
         } else if (xpItem.upgradeType === itemTypes.BUY_PILOT_ABILITY) {
             thisBuild.addToHistory(itemTypes.BUY_PILOT_ABILITY, {
+                pilotId: xpItem.data.pilotId
+            });
+        } else if (xpItem.upgradeType === itemTypes.LOSE_PILOT_ABILITY) {
+            thisBuild.addToHistory(itemTypes.LOSE_PILOT_ABILITY, {
                 pilotId: xpItem.data.pilotId
             });
         }

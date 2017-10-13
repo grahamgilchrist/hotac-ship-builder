@@ -56,6 +56,12 @@ XpItem.prototype.label = function () {
     } else if (this.upgradeType === itemTypes.BUY_PILOT_ABILITY) {
         var pilot = this.getPilotById(this.data.pilotId);
         return 'Pilot Ability: ' + pilot.name;
+    } else if (this.upgradeType === itemTypes.LOSE_UPGRADE) {
+        var lostUpgrade = this.getUpgradeById(this.data.upgradeId);
+        return 'Lose upgrade: ' + lostUpgrade.name;
+    } else if (this.upgradeType === itemTypes.LOSE_PILOT_ABILITY) {
+        var lostPilot = this.getPilotById(this.data.pilotId);
+        return 'Lose pilot ability: ' + lostPilot.name;
     }
     return '';
 };
@@ -81,6 +87,12 @@ XpItem.prototype.exportString = function () {
     } else if (this.upgradeType === itemTypes.BUY_PILOT_ABILITY) {
         dataString = this.data.pilotId;
         idString = 'PA';
+    } else if (this.upgradeType === itemTypes.LOSE_UPGRADE) {
+        dataString = this.data.upgradeId;
+        idString = 'LUP';
+    } else if (this.upgradeType === itemTypes.LOSE_PILOT_ABILITY) {
+        dataString = this.data.pilotId;
+        idString = 'LPA';
     }
     return {
         key: idString,
@@ -111,35 +123,22 @@ XpItem.prototype.parseExportString = function (exportObject) {
     } else if (idString === 'PA') {
         this.data.pilotId = parseInt(dataString, 10);
         this.upgradeType = itemTypes.BUY_PILOT_ABILITY;
+    } else if (idString === 'LUP') {
+        this.data.upgradeId = parseInt(dataString, 10);
+        this.upgradeType = itemTypes.LOSE_UPGRADE;
+    } else if (idString === 'LPA') {
+        this.data.pilotId = parseInt(dataString, 10);
+        this.upgradeType = itemTypes.LOSE_PILOT_ABILITY;
     }
 };
 
 XpItem.prototype.parseExportStringLessV3 = function (exportString) {
     var splitItems = exportString.split('=');
-    var idString = splitItems[0];
-    var dataString = splitItems[1];
-
-    this.data = {};
-
-    if (idString === 'SST') {
-        this.data.shipId = dataString;
-        this.upgradeType = itemTypes.STARTING_SHIP_TYPE;
-    } else if (idString === 'ST') {
-        this.data.shipId = dataString;
-        this.upgradeType = itemTypes.SHIP_TYPE;
-    } else if (idString === 'PS') {
-        this.data.pilotSkill = parseInt(dataString, 10);
-        this.upgradeType = itemTypes.PILOT_SKILL;
-    } else if (idString === 'XP') {
-        this.data.missionXp = parseInt(dataString, 10);
-        this.upgradeType = itemTypes.MISSION;
-    } else if (idString === 'UP') {
-        this.data.upgradeId = parseInt(dataString, 10);
-        this.upgradeType = itemTypes.BUY_UPGRADE;
-    } else if (idString === 'PA') {
-        this.data.pilotId = parseInt(dataString, 10);
-        this.upgradeType = itemTypes.BUY_PILOT_ABILITY;
-    }
+    var splitObject = {
+        key: splitItems[0],
+        value: splitItems[1]
+    };
+    this.parseExportString(splitObject);
 };
 
 XpItem.prototype.getShipById = function (shipId) {
