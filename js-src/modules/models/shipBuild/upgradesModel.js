@@ -126,6 +126,28 @@ upgradesModel.prototype.buyPilotAbility = function (pilotId) {
     events.trigger('model.build.pilotAbilities.update', this.build);
 };
 
+upgradesModel.prototype.loseCard = function (upgradeId) {
+    var foundIndex = _.findIndex(this.purchased, function (item) {
+        return item.id === upgradeId;
+    });
+    if (!_.isUndefined(foundIndex)) {
+        this.purchased.splice(foundIndex, 1);
+    }
+    this.refreshUpgradesState();
+    events.trigger('model.build.upgrades.lose', this.build);
+};
+
+upgradesModel.prototype.loseAbility = function (pilotId) {
+    var foundIndex = _.findIndex(this.purchasedAbilities, function (item) {
+        return item.id === pilotId;
+    });
+    if (!_.isUndefined(foundIndex)) {
+        this.purchasedAbilities.splice(foundIndex, 1);
+    }
+    this.refreshUpgradesState();
+    events.trigger('model.build.pilotAbilities.lose', this.build);
+};
+
 upgradesModel.prototype.equip = function (upgradeId) {
     var upgrade = this.getUpgradeById(upgradeId);
     this.equippedUpgrades.push(upgrade);
