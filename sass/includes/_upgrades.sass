@@ -40,13 +40,15 @@
     align-items: center
     flex-wrap: wrap
     text-align: center
-    padding: 0 5px
-    margin-bottom: $site-padding
+    padding: 0 5px 30px
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 30px
 
     @include media($media-upgrade-extra-padding)
         padding: $site-padding
         background-color: #eee
         margin-bottom: $site-padding
+        border: none
 
     @include media('print')
         display: none
