@@ -9,7 +9,6 @@ module.exports = {
     renderView: function (build) {
         var $modalContent = $('<div>');
         var $form = $('<form>');
-        var $label = $('<label for="lose-upgrade-choice">Upgrade cards:</label>');
         var $select = $('<select id="lose-upgrade-choice">');
 
         _.each(build.upgrades.purchased, function (upgrade) {
@@ -21,10 +20,9 @@ module.exports = {
             $select.append($option);
         });
 
-        var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Lose</button>');
+        var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Lose this upgrade</button>');
         $button.on('click', module.exports.submitResults);
 
-        $form.append($label);
         $form.append($select);
         $form.append($button);
         $modalContent.append($form);

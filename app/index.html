@@ -114,29 +114,21 @@
                             <div class="mdl-tabs__panel" id="upgrades-tab">
 
                                 <div class="upgrades-wrapper">
-                                    <h4 class="add-xp">
-                                        <span>XP to spend:</span> <span bind-xp-current></span> <button add-mission-xp class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored add-xp">
-                                            <i class="material-icons">add</i>
-                                        </button>
-                                    </h4>
 
                                     <div class="upgrades-options">
-                                        <div class="pilot-skill-upgrade">
-                                            <div>
-                                                <button add-mission-xp class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Add mission XP</button>
-
-                                                <button id="increase-ps" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-                                                    Upgrade to PS <span bind-pilot-skill-plus-one></span> (<span bind-pilot-skill-next-xp-cost></span>XP)
-                                                </button>
-                                            </div>
+                                        <div class="add-xp">
+                                            <h4>
+                                                <span>XP to spend:</span> <span bind-xp-current></span>
+                                            </h4>
+                                            <button add-mission-xp class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Add mission XP</button>
                                         </div>
 
                                         <div class="change-ship">
-                                           <button id="lose-upgrade" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Lose upgrade</button>
+                                            <button id="increase-ps" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                                                Upgrade to PS <span bind-pilot-skill-plus-one></span> (<span bind-pilot-skill-next-xp-cost></span>XP)
+                                            </button>
 
-                                            <span id="change-ship-wrapper">
-                                                <button id="change-ship" disabled class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Change ship (5XP)</button>
-                                            </span>
+                                            <button id="change-ship" disabled class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Change ship (5XP)</button>
                                         </div>
                                         <div class="mdl-tooltip" data-mdl-for="change-ship-wrapper" id="change-ship-tooltip">New ships are unlocked at pilot skill 4</div>
                                     </div>
@@ -177,6 +169,8 @@
                                                 <p>These upgrades have been purchased but cannot be equipped to the current ship.</p>
                                                 <ul id="disabled-upgrade-list"></ul>
                                             </div>
+
+                                            <button id="lose-upgrade" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Lose upgrade</button>
                                         </div>
                                     </div>
                                 </div>

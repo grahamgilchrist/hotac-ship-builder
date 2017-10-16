@@ -27,46 +27,67 @@
         @include media('print')
             display: none
 
-.add-xp
-    text-align: center
-
-    @include media('print')
-        display: none
-
-    span,
-    button,
-    i
-        vertical-align: middle
-
-    button
-        $size: 30px
-        width: $size
-        min-width: $size
-        height: $size
-        margin-left: 4px
-
-        i
-            font-size: $size * 0.7
+    .mdl-button
+        // @include media($media-upgrade-small-buttons)
+        font-size: 12px
 
 .upgrades-options
     display: flex
     justify-content: space-evenly
+    align-items: center
     flex-wrap: wrap
     text-align: center
+    padding: 0 5px
+    margin-bottom: $site-padding
 
     @include media($media-upgrade-extra-padding)
+        padding: $site-padding
         background-color: #eee
         margin-bottom: $site-padding
 
     @include media('print')
         display: none
 
-.pilot-skill-upgrade,
+.add-xp,
 .change-ship
+    padding: 0 5px
+
+.add-xp
     margin-bottom: $site-padding
 
     @include media($media-upgrade-extra-padding)
-        margin-top: $site-padding
+        margin-bottom: 0
+
+    @include media('print')
+        display: none
+
+    h4
+        margin: 0
+
+    h4,
+    button
+        vertical-align: middle
+
+    @include media($media-upgrade-xp-inline-button)
+        h4
+            display: inline-block
+            margin-right: 10px
+
+.change-ship
+    button
+        display: block
+        width: 100%
+
+        &:first-child
+            margin-bottom: $site-padding
+
+        @include media($media-upgrade-extra-padding)
+            display: inline-block
+            width: auto
+
+            &:first-child
+                margin-bottom: 0
+                margin-right: 10px
 
 .upgrade-slots-wrapper
     display: flex
@@ -254,3 +275,10 @@
 #ship-slots-upgrades
     @include media('print')
         padding-bottom: 0
+
+#lose-upgrade
+    width: 100%
+    height: auto
+    min-height: 36px
+    line-height: 1.3
+    padding: 5px 16px
