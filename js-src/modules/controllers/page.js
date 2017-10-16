@@ -93,6 +93,20 @@ module.exports = {
             currentBuild.upgrades.equipAbility(pilotId);
         });
 
+        events.on('view.upgrades.lose', function (event, upgradeId) {
+            currentBuild.addToHistory(itemTypes.LOSE_UPGRADE, {
+                upgradeId: upgradeId
+            });
+            currentBuild.upgrades.loseCard(upgradeId);
+        });
+
+        events.on('view.pilotAbilities.lose', function (event, pilotId) {
+            currentBuild.addToHistory(itemTypes.LOSE_PILOT_ABILITY, {
+                pilotId: pilotId
+            });
+            currentBuild.upgrades.loseAbility(pilotId);
+        });
+
         events.on('view.changeShip.changeShip', function (event, shipId) {
             currentBuild.changeShip(shipId);
         });
@@ -138,6 +152,7 @@ module.exports = {
             upgradesView.renderShipSlotsList(build);
             pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
             upgradesView.renderUpgradesList(build);
+            upgradesView.renderLoseButton(build);
             xpHistoryView.renderTable(build);
             changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
             enemiesView.renderTable(build.enemyDefeats.get());
@@ -174,7 +189,7 @@ module.exports = {
             pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
         });
 
-        events.on('model.build.equippedUpgrades.update', function (event, build) {
+        events.on('model.build.equippedUpgrades.update model.build.upgrades.lose model.build.pilotAbilities.lose', function (event, build) {
             if (build.ready) {
                 upgradesView.renderShipSlotsList(build);
                 upgradesView.renderUpgradesList(build);

@@ -6,6 +6,7 @@ var _ = require('lodash');
 var modalController = require('../controllers/modals');
 var events = require('../controllers/events');
 var abilityCardView = require('./abilityCard');
+var loseUpgradeModal = require('./loseUpgradeModal');
 
 module.exports = {
     renderShipSlotsList: function (build) {
@@ -367,5 +368,12 @@ module.exports = {
         }
 
         return $upgrade;
+    },
+    renderLoseButton: function (build) {
+        var clickHandler = function () {
+            var $modalContent = loseUpgradeModal.renderView(build);
+            modalController.openTitledModal($modalContent, 'Lose an upgrade', 'lose-upgrade-modal');
+        };
+        $('#lose-upgrade').off('click', clickHandler).on('click', clickHandler);
     }
 };
