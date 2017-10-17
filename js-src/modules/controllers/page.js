@@ -147,7 +147,7 @@ module.exports = {
             mainView.renderTitle(build);
             XpView.renderXp(build.currentXp);
             shipInfoView.renderShipStats(build);
-            shipInfoView.renderShipActions(build.currentShip, build.upgrades.equipped);
+            shipInfoView.renderShipActions(build);
             shipInfoView.renderShipImage(build.currentShip);
             shipInfoView.renderShipDial(build.currentShip);
             upgradesView.renderShipSlotsList(build);
@@ -167,7 +167,7 @@ module.exports = {
             if (build.ready) {
                 mainView.renderTitle(build);
                 shipInfoView.renderShipStats(build);
-                shipInfoView.renderShipActions(build.currentShip, build.upgrades.equipped);
+                shipInfoView.renderShipActions(build);
                 shipInfoView.renderShipImage(build.currentShip);
                 shipInfoView.renderShipDial(build.currentShip);
                 upgradesView.renderShipSlotsList(build);
@@ -195,7 +195,7 @@ module.exports = {
             if (build.ready) {
                 upgradesView.renderShipSlotsList(build);
                 upgradesView.renderUpgradesList(build);
-                shipInfoView.renderShipActions(build.currentShip, build.upgrades.equipped);
+                shipInfoView.renderShipActions(build);
                 shipInfoView.renderShipStats(build);
                 summaryView.renderEquippedUpgrades(build);
                 hashController.generateAndSet(build);
