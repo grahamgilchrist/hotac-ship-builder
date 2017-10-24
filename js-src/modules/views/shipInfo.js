@@ -8,25 +8,25 @@ module.exports = {
     renderShipStats: function (build) {
         var statValues = build.getStats();
 
-        var $shipStats = $('#ship-info-stats');
+        var $shipStats = $('[view-bind=ship-info-stats]');
         var context = {
             build: build,
             statValues: statValues
         };
-        templateUtils.render('shipinfo/shipstats.html', $shipStats, context);
+        templateUtils.renderToDom('shipinfo/shipstats.html', $shipStats, context);
     },
     renderShipActions: function (build) {
-        var $shipActions = $('#ship-info-actions');
+        var $shipActions = $('[view-bind=ship-info-actions]');
         var actions = build.getActions();
-        templateUtils.render('shipinfo/shipactions.html', $shipActions, actions, 'actions');
+        templateUtils.renderToDom('shipinfo/shipactions.html', $shipActions, actions, 'actions');
     },
     renderShipImage: function (currentShip) {
-        var $shipImage = $('#ship-info-image');
+        var $shipImage = $('[view-bind=ship-info-image]');
         var imgUrl = '/components/xwing-data/images/' + currentShip.pilotCard.image;
         $shipImage.attr('src', imgUrl);
     },
     renderShipDial: function (currentShip) {
-        var $shipUpgrades = $('#ship-info-dial');
+        var $shipUpgrades = $('[view-bind=ship-info-dial]');
         $shipUpgrades.empty();
         var $table = $('<table>');
 

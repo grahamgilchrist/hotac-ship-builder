@@ -6,7 +6,7 @@ var templateUtils = require('../utils/templates');
 
 module.exports = {
     render: function (build) {
-        var $printElement = $('#print-view');
-        templateUtils.render('print.html', $printElement, build, 'build');
+        // var $printElement = $('#print-view');
+        // templateUtils.renderToDom('print.html', $printElement, build, 'build');
     }
 };

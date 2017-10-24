@@ -202,13 +202,13 @@
                                         <div class="ship-info">
                                             <div class="ship-image-stats">
                                                 <div class="img-wrapper">
-                                                    <img src="" alt="Ship image" id="ship-info-image">
+                                                    <img src="" alt="Ship image" class="ship-info-image" view-bind="ship-info-image">
                                                 </div>
-                                                <div id="ship-info-stats"></div>
-                                                <div id="ship-info-actions"></div>
+                                                <div class="ship-info-stats" view-bind="ship-info-stats"></div>
+                                                <div class="ship-info-actions" view-bind="ship-info-actions"></div>
                                             </div>
 
-                                            <div id="ship-info-dial"></div>
+                                            <div class="ship-info-dial" view-bind="ship-info-dial"></div>
                                         </div>
                                     </div>
 
@@ -239,7 +239,10 @@
                 </div>
             </div>
         </div>
-        <div id="print-view"></div>
+        <div id="print-view">
+            <div>Callsign: <span bind-callsign></span></div>
+            <div>Player: <span bind-player-name></span></div>
+        </div>
         <div id="drawer-wrapper" class="drawer-wrapper">
             <div class="drawer-background"></div>
             <div class="drawer">
