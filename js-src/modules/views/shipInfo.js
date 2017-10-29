@@ -13,7 +13,7 @@ module.exports = {
             build: build,
             statValues: statValues
         };
-        templateUtils.renderToDom('shipinfo/shipstats.html', $shipStats, context);
+        templateUtils.renderToDom('shipinfo/shipstats', $shipStats, context);
     },
     renderShipActions: function (build) {
         var $shipActions = $('[view-bind=ship-info-actions]');
@@ -21,7 +21,7 @@ module.exports = {
         var context = {
             actions: actions
         };
-        templateUtils.renderToDom('shipinfo/shipactions.html', $shipActions, context);
+        templateUtils.renderToDom('shipinfo/shipactions', $shipActions, context);
     },
     renderShipImage: function (currentShip) {
         var $shipImage = $('[view-bind=ship-info-image]');

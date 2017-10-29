@@ -16,16 +16,13 @@ module.exports = {
             getIconString: upgrades.getIconString,
             renderCard: abilityCardView.renderHtml
         };
-        var templatePromise = templateUtils.renderHTML('summary/equipped-upgrades.html', context);
+        var viewHtml = templateUtils.renderHTML('summary/equipped-upgrades', context);
+        var $newElement = $(viewHtml);
 
-        templatePromise.then(function (viewHtml) {
-            var $newElement = $(viewHtml);
-
-            $newElement.on('click', 'li .ability.preview', function () {
-                var pilotId = parseInt($(this).attr('pilot-id'), 10);
-                modalController.openAbilityCardModal(pilotId);
-            });
-            $equippedUpgrades.empty().append($newElement);
+        $newElement.on('click', 'li .ability.preview', function () {
+            var pilotId = parseInt($(this).attr('pilot-id'), 10);
+            modalController.openAbilityCardModal(pilotId);
         });
+        $equippedUpgrades.empty().append($newElement);
     }
 };

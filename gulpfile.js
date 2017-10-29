@@ -9,6 +9,7 @@ require('./node/json-lint')();
 require('./node/yaml-lint')();
 require('./node/copyXwingData')();
 require('./node/markdown')();
+require('./node/templates')();
 
 // Add some general task aliases
 gulp.task('lint', [
@@ -21,6 +22,7 @@ gulp.task('lint', [
 gulp.task('watch', [
     'sass:watch',
     'markdown:watch',
+    'templates:watch',
     'browserify:watch'
 ]);
 
@@ -32,6 +34,7 @@ gulp.task('dev', [
 
 gulp.task('build', [
     'copyXwingData',
+    'templates:compile',
     'browserify',
     'sass',
     'markdown'
