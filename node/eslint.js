@@ -9,6 +9,7 @@ module.exports = function (options) {
         jsFiles: [
             'js-src/**/*.js',
             '!js-src/generated/**/*.js',
+            'gulpfile.js',
             'node/**/*.js'
         ]
     };
