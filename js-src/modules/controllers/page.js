@@ -16,7 +16,6 @@ var xpHistoryView = require('../views/xpHistory');
 var enemiesView = require('../views/enemiesView');
 var messageView = require('../views/message');
 var summaryView = require('../views/summary');
-var printView = require('../views/print');
 var hashController = require('./urlHash');
 
 var currentBuild;
@@ -160,7 +159,6 @@ module.exports = {
             messageView.clear();
             summaryView.renderEquippedUpgrades(build);
             hashController.generateAndSet(build);
-            printView.render(build);
         });
 
         events.on('model.build.currentShip.update', function (event, build) {
