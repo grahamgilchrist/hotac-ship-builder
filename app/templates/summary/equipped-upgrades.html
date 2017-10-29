@@ -1,0 +1,40 @@
+<div>
+    <% if (equippedUpgrades.length === 0 && equippedAbilities.length === 0) { %>
+        <h4 class="empty">No upgrades equipped</h4>
+    <% } else { %>
+        <h4 class="not-empty">Equipped Upgrades</h4>
+    <% } %>
+    <ul>
+        <% equippedUpgrades.forEach(function(upgrade) { %>
+            <li>
+                <div class="preview" 
+                    data-featherlight="/components/xwing-data/images/<%= upgrade.image %>"
+                    data-featherlight-variant="card-preview-modal"
+                    data-featherlight-close-on-click="anywhere">
+                    <%= getIconString(upgrade.slot) %>
+                    <span class="name"><%= upgrade.name %></span>
+                    <i class="material-icons icon-preview">zoom_in</i>
+                </div>
+                <div class="full"
+                    data-featherlight="/components/xwing-data/images/<%= upgrade.image %>"
+                    data-featherlight-variant="card-preview-modal"
+                    data-featherlight-close-on-click="anywhere">
+                        <img src="/components/xwing-data/images/<%= upgrade.image %>" alt="Card image for <%= upgrade.name %>">
+                </div>
+            </li>
+        <% }); %>
+
+        <% equippedAbilities.forEach(function(abilityPilot) { %>
+            <li>
+                <div class="ability preview" pilot-id="<%= abilityPilot.id %>">
+                    <%= getIconString('Elite') %>
+                    <span class="name"><%= abilityPilot.name %></span>
+                    <i class="material-icons icon-preview">zoom_in</i>
+                </div>
+                <div class="ability full">
+                    <%= renderCard(abilityPilot) %>
+                </div>
+            </li>
+        <% }); %>
+    </ul>
+</div>

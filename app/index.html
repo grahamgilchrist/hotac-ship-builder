@@ -213,9 +213,7 @@
                                     </div>
 
                                     <div class="summary-equipped">
-                                        <h4 class="not-empty">Equipped Upgrades</h4>
-                                        <h4 class="empty">No upgrades equipped</h4>
-                                        <div bind-equipped-upgrades></div>
+                                        <div view-bind="equipped-upgrades"></div>
                                     </div>
                                 </div>
                             </div>
@@ -240,8 +238,29 @@
             </div>
         </div>
         <div id="print-view">
-            <div>Callsign: <span bind-callsign></span></div>
-            <div>Player: <span bind-player-name></span></div>
+            <div class="column column-1">
+                <div>Callsign: <span bind-callsign></span></div>
+                <div>Player: <span bind-player-name></span></div>
+
+                <div class="ship-info">
+                    <div class="ship-image-stats">
+                        <div class="img-wrapper">
+                            <img src="" alt="Ship image" class="ship-info-image" view-bind="ship-info-image">
+                        </div>
+                        <div class="ship-info-stats" view-bind="ship-info-stats"></div>
+                        <div class="ship-info-actions" view-bind="ship-info-actions"></div>
+                    </div>
+
+                    <div class="ship-info-dial" view-bind="ship-info-dial"></div>
+                </div>
+            </div>
+            <div class="column column-2">
+            </div>
+            <div class="column column-3">
+                <div class="summary-equipped">
+                    <div view-bind="equipped-upgrades"></div>
+                </div>
+            </div>
         </div>
         <div id="drawer-wrapper" class="drawer-wrapper">
             <div class="drawer-background"></div>

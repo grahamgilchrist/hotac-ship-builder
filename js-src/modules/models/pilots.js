@@ -49,8 +49,15 @@ var nonHugePilots = _.filter(pilotsWithAbilities, function (pilot) {
     return true;
 });
 
+var getPilotById = function (pilotId) {
+    return _.find(pilots, function (pilotCard) {
+        return pilotCard.id === pilotId;
+    });
+};
+
 // key upgrades by type
 module.exports = {
     allRebels: rebelPilots,
-    pilotsWithAbilities: nonHugePilots
+    withAbilities: nonHugePilots,
+    getById: getPilotById
 };

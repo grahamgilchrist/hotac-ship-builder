@@ -7,6 +7,7 @@ var modalController = require('../controllers/modals');
 var events = require('../controllers/events');
 var abilityCardView = require('./abilityCard');
 var loseUpgradeModal = require('./loseUpgradeModal');
+var upgrades = require('../models/upgrades');
 
 module.exports = {
     renderShipSlotsList: function (build) {
@@ -92,7 +93,7 @@ module.exports = {
 
         var $li = $('<li></li>');
         var $slot = $('<div class="slot"></div>');
-        $slot.append(module.exports.getIconString(upgradeSlot.type));
+        $slot.append(upgrades.getIconString(upgradeSlot.type));
         $li.append($slot);
 
         if (build.pilotSkill < upgradeSlot.pilotSkill) {
@@ -146,7 +147,7 @@ module.exports = {
     renderFreeShipSlot: function (upgradeSlot) {
         var $li = $('<li></li>');
         var $slot = $('<div class="slot"></div>');
-        $slot.append(module.exports.getIconString(upgradeSlot.type));
+        $slot.append(upgrades.getIconString(upgradeSlot.type));
         $slot.append('<span class="title">' + upgradeSlot.upgrade.name + '</span>');
         $slot.append('<i class="material-icons icon-preview">zoom_in</i>');
         var imageUrl = '/components/xwing-data/images/' + upgradeSlot.upgrade.image;
@@ -223,22 +224,16 @@ module.exports = {
     },
     renderUpgradeItem: function (upgrade) {
         var imageUrl = '/components/xwing-data/images/' + upgrade.image;
-        var $item = $('<li class="upgrade" data-featherlight="' + imageUrl + '"  data-featherlight-variant="card-preview-modal" data-featherlight-close-on-click="anywhere">' + module.exports.getIconString(upgrade.slot) + '<span class="upgrade-name">' + upgrade.name + '</span><i class="material-icons eye">zoom_in</i></li>');
+        var $item = $('<li class="upgrade" data-featherlight="' + imageUrl + '"  data-featherlight-variant="card-preview-modal" data-featherlight-close-on-click="anywhere">' + upgrades.getIconString(upgrade.slot) + '<span class="upgrade-name">' + upgrade.name + '</span><i class="material-icons eye">zoom_in</i></li>');
         return $item;
     },
     renderPilotUpgradeItem: function (pilot) {
-        var $item = $('<li class="upgrade">' + module.exports.getIconString('Elite') + '<span class="upgrade-name">Ability: ' + pilot.name + '</span><i class="material-icons eye">zoom_in</i></li>');
+        var $item = $('<li class="upgrade">' + upgrades.getIconString('Elite') + '<span class="upgrade-name">Ability: ' + pilot.name + '</span><i class="material-icons eye">zoom_in</i></li>');
         $item.on('click', function () {
             modalController.openAbilityCardModal(pilot);
         });
 
         return $item;
-    },
-    getIconString: function (upgradeSlotType) {
-        var iconId = upgradeSlotType.replace(' ', '').replace('-', '');
-        iconId = iconId.toLowerCase();
-        var iconString = '<i class="xwing-miniatures-font xwing-miniatures-font-' + iconId + '"></i>';
-        return iconString;
     },
     clickEquipSlot: function (upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, abilitiesAvailableToBuy, build) {
         // open modal to choose upgrade to equip
@@ -330,7 +325,7 @@ module.exports = {
         if (abilityPilot) {
             var upgradeCost = abilityPilot.skill;
             $upgrade = $('<li></li>');
-            var $card = abilityCardView.render(abilityPilot);
+            var $card = abilityCardView.renderElement(abilityPilot);
             $upgrade.append($card);
 
             if (mode === 'buy') {

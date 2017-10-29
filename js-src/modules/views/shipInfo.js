@@ -18,7 +18,10 @@ module.exports = {
     renderShipActions: function (build) {
         var $shipActions = $('[view-bind=ship-info-actions]');
         var actions = build.getActions();
-        templateUtils.renderToDom('shipinfo/shipactions.html', $shipActions, actions, 'actions');
+        var context = {
+            actions: actions
+        };
+        templateUtils.renderToDom('shipinfo/shipactions.html', $shipActions, context);
     },
     renderShipImage: function (currentShip) {
         var $shipImage = $('[view-bind=ship-info-image]');

@@ -4,6 +4,7 @@ var $ = require('jquery');
 var _ = require('lodash');
 var events = require('./events');
 var abilityCardView = require('../views/abilityCard');
+var pilots = require('../models/pilots');
 
 module.exports = {
     init: function () {
@@ -181,8 +182,14 @@ module.exports = {
         };
         $.featherlight($modalContent, featherlightConfig);
     },
+    // Accepts either object of pilot model or integer ID
     openAbilityCardModal: function (abilityPilot) {
-        var $card = abilityCardView.render(abilityPilot);
+        var pilotModel = abilityPilot;
+        if (_.isInteger(abilityPilot)) {
+            // We were passed pilot id as a number
+            pilotModel = pilots.getById(abilityPilot);
+        }
+        var $card = abilityCardView.renderElement(pilotModel);
         var featherlightConfig = {
             variant: 'card-preview-modal',
             closeOnClick: 'anywhere'
