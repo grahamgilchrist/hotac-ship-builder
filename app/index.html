@@ -211,18 +211,7 @@
                             </div>
 
                             <div class="mdl-tabs__panel" id="xp-history-tab">
-                                <h3>XP history</h3>
-                                <table>
-                                    <thead>
-                                        <th>Upgrade</th>
-                                        <th>Cost</th>
-                                        <th>Remaining XP</th>
-                                        <th class="revert"></th>
-                                    </thead>
-                                    <tbody id="xp-history">
-                                    </tbody>
-                                </table>
-
+                                <div view-bind="history-table"></div>
                             </div>
                         </div>
                     </div>
@@ -254,6 +243,7 @@
                     <div view-bind="equipped-upgrades"></div>
                 </div>
             </div>
+             <div view-bind="history-table"></div>
         </div>
         <div id="drawer-wrapper" class="drawer-wrapper">
             <div class="drawer-background"></div>

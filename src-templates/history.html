@@ -1,0 +1,29 @@
+<div class="history-wrapper">
+    <h3>XP history</h3>
+    <table>
+        <thead>
+            <th>Upgrade</th>
+            <th>Cost</th>
+            <th>Remaining XP</th>
+            <th class="revert"></th>
+        </thead>
+        <tbody id="xp-history">
+            <% xpHistory.forEach(function(item, itemIndex) { %>
+                <tr>
+                    <td class="label"><%= item.label %></td>
+                    <td class="<% if (item.cost > 0) { %>positive<% } else if (item.cost < 0) {%>negative<% } %>">
+                        <% if (item.cost > 0) { %>
+                            +<%= item.cost %>
+                        <% } else if (item.cost < 0) {%>
+                            <%= item.cost %>
+                        <% } %>
+                    </td>
+                    <td><%= item.resultingXP %></td>
+                    <td class="revert">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" revert="<%= item.xpItemIndex %>">Revert</button>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
