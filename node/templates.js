@@ -6,8 +6,8 @@ const templateStore = require('gulp-template-store');
 module.exports = function (options) {
 
     const defaultOptions = {
-        source: 'app/templates/**/*.html',
-        base: 'app/templates/',
+        source: 'src-templates/**/*.html',
+        base: 'src-templates/',
         destFileDir: './js-src/generated/',
         destFileName: 'templates.js'
     };
