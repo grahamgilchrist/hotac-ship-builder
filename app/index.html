@@ -177,15 +177,7 @@
                             </div>
 
                             <div class="mdl-tabs__panel" id="enemies-tab">
-                                <h3>Destroyed enemies</h3>
-                                <table>
-                                    <thead>
-                                        <th>Ship type</th>
-                                        <th>Number destroyed</th>
-                                    </thead>
-                                    <tbody id="kill-history">
-                                    </tbody>
-                                </table>
+                                <div view-bind="enemies-table"></div>
                             </div>
 
                             <div class="mdl-tabs__panel is-active" id="summary-tab">
@@ -255,6 +247,7 @@
                 </div>
             </div>
             <div class="column column-2">
+                <div view-bind="enemies-table"></div>
             </div>
             <div class="column column-3">
                 <div class="summary-equipped">
