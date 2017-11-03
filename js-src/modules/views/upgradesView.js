@@ -325,6 +325,6 @@ module.exports = {
             var $modalContent = loseUpgradeModal.renderView(build);
             modalController.openTitledModal($modalContent, 'Lose an upgrade', 'lose-upgrade-modal');
         };
-        $('#lose-upgrade').off('click', clickHandler).on('click', clickHandler);
+        $(document).off('click.loseButton').on('click.loseButton', '#lose-upgrade', clickHandler);
     }
 };
