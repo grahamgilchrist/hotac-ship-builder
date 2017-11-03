@@ -70,7 +70,7 @@ This project is maintained for free as a fun side project, so bugs and new featu
 Pull requests for bugfixes are welcomed, but if you want to provide code for a new feature, please raise a ticket first (or fork your own version), as there is a limited functionality roadmap and various UX considerations to adding new features.
 
 ### Reporting bugs
-Please use the github issues queue to report bugs and issues. It will help debugging greatly if you can inlcude the device, Operating system and Browser version you are using.
+Please use the [github issues queue](https://github.com/grahamgilchrist/hotac-squad-builder/issues) to report bugs and issues. It will help debugging greatly if you can inlcude the device, Operating system and Browser version you are using.
 
 ### Requesting new features
 Please use the github issues queue to request new features. 
