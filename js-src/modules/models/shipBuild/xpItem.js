@@ -4,7 +4,7 @@ var _ = require('lodash');
 var itemTypes = require('./itemTypes');
 var ships = require('../ships');
 var upgrades = require('../upgrades').all;
-var pilots = require('../pilots').allRebels;
+var pilots = require('../pilots');
 
 var XpItem = function (upgradeType, data) {
     this.upgradeType = upgradeType;
@@ -33,7 +33,7 @@ XpItem.prototype.cost = function () {
         }
         return upgrade.points * -1;
     } else if (this.upgradeType === itemTypes.BUY_PILOT_ABILITY) {
-        var pilot = this.getPilotById(this.data.pilotId);
+        var pilot = pilots.getById(this.data.pilotId);
         return pilot.skill * -1;
     }
     return 0;
@@ -54,13 +54,13 @@ XpItem.prototype.label = function () {
         var upgrade = this.getUpgradeById(this.data.upgradeId);
         return upgrade.slot + ': ' + upgrade.name;
     } else if (this.upgradeType === itemTypes.BUY_PILOT_ABILITY) {
-        var pilot = this.getPilotById(this.data.pilotId);
+        var pilot = pilots.getById(this.data.pilotId);
         return 'Pilot Ability: ' + pilot.name;
     } else if (this.upgradeType === itemTypes.LOSE_UPGRADE) {
         var lostUpgrade = this.getUpgradeById(this.data.upgradeId);
         return 'Lose upgrade: ' + lostUpgrade.name;
     } else if (this.upgradeType === itemTypes.LOSE_PILOT_ABILITY) {
-        var lostPilot = this.getPilotById(this.data.pilotId);
+        var lostPilot = pilots.getById(this.data.pilotId);
         return 'Lose pilot ability: ' + lostPilot.name;
     }
     return '';
@@ -150,12 +150,6 @@ XpItem.prototype.getShipById = function (shipId) {
 XpItem.prototype.getUpgradeById = function (upgradeId) {
     return _.find(upgrades, function (upgradeItem) {
         return upgradeItem.id === upgradeId;
-    });
-};
-
-XpItem.prototype.getPilotById = function (pilotId) {
-    return _.find(pilots, function (pilotCard) {
-        return pilotCard.id === pilotId;
     });
 };
 

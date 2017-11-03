@@ -2,65 +2,34 @@
 
 var $ = require('jquery');
 var _ = require('lodash');
+var templateUtils = require('../utils/templates');
 
 module.exports = {
     renderShipStats: function (build) {
-        var statValues = {
-            attack: build.currentShip.shipData.attack,
-            agility: build.currentShip.shipData.agility,
-            hull: build.currentShip.shipData.hull,
-            shields: build.currentShip.shipData.shields
+        var statValues = build.getStats();
+
+        var $shipStats = $('[view-bind=ship-info-stats]');
+        var context = {
+            build: build,
+            statValues: statValues
         };
-        // Add nay stats from upgrades
-        _.each(build.upgrades.equipped, function (upgrade) {
-            if (upgrade.grants) {
-                _.each(upgrade.grants, function (grant) {
-                    if (grant.type === 'stats') {
-                        statValues[grant.name] += grant.value;
-                    }
-                });
-            }
-        });
-
-        var $shipStats = $('#ship-info-stats');
-        $shipStats.empty();
-        $shipStats.append('<span class="pilot-skill">PS ' + build.pilotSkill + '</span>');
-        $shipStats.append('<span class="attack">' + statValues.attack + ' <i class="xwing-miniatures-font xwing-miniatures-font-attack"></i></span>');
-        $shipStats.append('<span class="agility">' + statValues.agility + ' <i class="xwing-miniatures-font xwing-miniatures-font-agility"></i></span>');
-        $shipStats.append('<span class="hull">' + statValues.hull + ' <i class="xwing-miniatures-font xwing-miniatures-font-hull"></i></span>');
-        $shipStats.append('<span class="shield">' + statValues.shields + ' <i class="xwing-miniatures-font xwing-miniatures-font-shield"></i></span>');
+        templateUtils.renderToDom('shipinfo/shipstats', $shipStats, context);
     },
-    renderShipActions: function (currentShip, equippedUpgrades) {
-        var $shipActions = $('#ship-info-actions');
-        $shipActions.empty();
-
-        // Start with base ship actions
-        var actions = _.clone(currentShip.shipData.actions, true);
-        // Add any actions from upgrades
-        _.each(equippedUpgrades, function (upgrade) {
-            if (upgrade.grants) {
-                _.each(upgrade.grants, function (grant) {
-                    if (grant.type === 'action') {
-                        actions.push(grant.name);
-                    }
-                });
-            }
-        });
-        actions = _.uniq(actions);
-
-        _.each(actions, function (action) {
-            var actionString = action.replace(' ', '').replace('-', '');
-            actionString = actionString.toLowerCase();
-            $shipActions.append('<i class="xwing-miniatures-font xwing-miniatures-font-' + actionString + '"></i>');
-        });
+    renderShipActions: function (build) {
+        var $shipActions = $('[view-bind=ship-info-actions]');
+        var actions = build.getActions();
+        var context = {
+            actions: actions
+        };
+        templateUtils.renderToDom('shipinfo/shipactions', $shipActions, context);
     },
     renderShipImage: function (currentShip) {
-        var $shipImage = $('#ship-info-image');
+        var $shipImage = $('[view-bind=ship-info-image]');
         var imgUrl = '/components/xwing-data/images/' + currentShip.pilotCard.image;
         $shipImage.attr('src', imgUrl);
     },
     renderShipDial: function (currentShip) {
-        var $shipUpgrades = $('#ship-info-dial');
+        var $shipUpgrades = $('[view-bind=ship-info-dial]');
         $shipUpgrades.empty();
         var $table = $('<table>');
 

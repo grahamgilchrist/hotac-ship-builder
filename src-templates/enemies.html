@@ -1,0 +1,37 @@
+<div class="enemies-list">
+    <h3>Destroyed enemies</h3>
+    <table>
+        <thead>
+            <th>Ship type</th>
+            <th>Number destroyed</th>
+        </thead>
+        <tbody id="kill-history">
+            <% enemies.forEach(function(enemy) { %>
+                <tr>
+                    <td class="label <% if (enemy.ship.xws) { %>icon<% } %>">
+                        <% if (enemy.ship.xws) { %>
+                            <i class="xwing-miniatures-ship xwing-miniatures-ship-<%= enemy.ship.xws %>"></i>
+                        <% } else { %>
+                            <%= enemy.ship.name %>
+                        <% } %>
+                    </td>
+                    <td class="count-column">
+                        <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" remove-enemy="<%= enemy.ship.xws %>">
+                            <i class="material-icons">remove</i>
+                        </button>
+                        <span class="count">
+                            <% if (enemy.xws && enemyData && enemyData[enemy.xws]) { %>
+                                <%= enemyData[enemy.xws] %>
+                            <% } else { %>
+                                -
+                            <% } %>
+                        </span>
+                        <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" add-enemy="<%= enemy.ship.xws %>">
+                            <i class="material-icons">add</i>
+                        </button>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>

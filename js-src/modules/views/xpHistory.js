@@ -4,43 +4,43 @@ var $ = require('jquery');
 var _ = require('lodash');
 var events = require('../controllers/events');
 var modalController = require('../controllers/modals');
+var templateUtils = require('../utils/templates');
 
 module.exports = {
     renderTable: function (build) {
-        $('#xp-history').empty();
+        var $wrapperElement = $('[view-bind=history-table]');
 
         var xpCount = 0;
+        var itemList = [];
         _.each(build.xpHistory, function (xpItem, xpItemIndex) {
             xpCount += xpItem.cost();
-            module.exports.renderTableRow(xpItem, xpCount, xpItemIndex);
+            var item = {
+                resultingXP: xpCount,
+                cost: xpItem.cost(),
+                label: xpItem.label(),
+                xpItemIndex: xpItemIndex
+            };
+            itemList.unshift(item);
         });
+
+        var context = {
+            xpHistory: itemList
+        };
+
+        var viewHtml = templateUtils.renderHTML('history', context);
+        var $newElement = $(viewHtml);
+
+        $newElement.on('click', 'button[revert]', module.exports.revertButton);
+        $wrapperElement.empty().append($newElement);
     },
-    renderTableRow: function (xpItem, resultingXP, xpItemIndex) {
-        var $historyItem = $('<tr>');
-        $historyItem.append('<td class="label">' + xpItem.label() + '</td>');
-        var cost = xpItem.cost();
-        var costString = cost;
-        var costClass = '';
-        if (cost > 0) {
-            costString = '+' + cost;
-            costClass = 'positive';
-        } else if (cost < 0) {
-            costClass = 'negative';
-        }
-        $historyItem.append('<td class="' + costClass + '">' + costString + '</td>');
-        $historyItem.append('<td>' + resultingXP + '</td>');
-        var $revertLink = $('<td class="revert"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Revert</button></td>');
+    revertButton: function () {
+        var xpItemIndex = parseInt($(this).attr('revert'), 10);
 
         var successCallback = function () {
             events.trigger('view.xpHistory.revert', xpItemIndex);
         };
+
         var message = 'Reverting to this point will lose your current ship status. Are you sure you want to continue?';
-
-        $revertLink.on('click', 'button', function () {
-            modalController.openConfirmModal(message, successCallback);
-        });
-
-        $historyItem.append($revertLink);
-        $('#xp-history').prepend($historyItem);
+        modalController.openConfirmModal(message, successCallback);
     }
 };

@@ -3,8 +3,9 @@
 var _ = require('lodash');
 var allUpgrades = require('../upgrades').all;
 var keyedUpgrades = require('../upgrades').keyed;
-var pilotsWithAbilities = require('../pilots').pilotsWithAbilities;
-var pilots = _.uniqBy(pilotsWithAbilities, function (pilot) {
+var pilots = require('../pilots');
+var pilotsWithAbilities = pilots.withAbilities;
+var uniquePilots = _.uniqBy(pilotsWithAbilities, function (pilot) {
     return pilot.text;
 });
 
@@ -26,7 +27,7 @@ upgradesModel.prototype.upgradesFromIds = function (upgradeIdList) {
 };
 
 upgradesModel.prototype.abilitiesFromIds = function (abilityIdList) {
-    return _.map(abilityIdList, this.getPilotById);
+    return _.map(abilityIdList, pilots.getById);
 };
 
 upgradesModel.prototype.refreshUpgradesState = function () {
@@ -120,7 +121,7 @@ upgradesModel.prototype.buyCard = function (upgradeId) {
 };
 
 upgradesModel.prototype.buyPilotAbility = function (pilotId) {
-    var pilot = this.getPilotById(pilotId);
+    var pilot = pilots.getById(pilotId);
     this.purchasedAbilities.push(pilot);
     this.refreshUpgradesState();
     events.trigger('model.build.pilotAbilities.update', this.build);
@@ -156,7 +157,7 @@ upgradesModel.prototype.equip = function (upgradeId) {
 };
 
 upgradesModel.prototype.equipAbility = function (pilotId) {
-    var pilot = this.getPilotById(pilotId);
+    var pilot = pilots.getById(pilotId);
     this.equippedAbilities.push(pilot);
     this.refreshUpgradesState();
     events.trigger('model.build.equippedUpgrades.update', this.build);
@@ -196,12 +197,6 @@ upgradesModel.prototype.getUpgradeById = function (upgradeId) {
     });
 };
 
-upgradesModel.prototype.getPilotById = function (pilotId) {
-    return _.find(pilots, function (pilotCard) {
-        return pilotCard.id === pilotId;
-    });
-};
-
 // Return array of upgrades of specific type which are legal to purchased for current build
 //  (e.g. restricted by chassis, size, already a starting upgrade, already purchased etc.)
 upgradesModel.prototype.getAvailableToBuy = function (upgradeType) {
@@ -212,7 +207,7 @@ upgradesModel.prototype.getAvailableToBuy = function (upgradeType) {
 };
 
 upgradesModel.prototype.getAbilitiesAvailableToBuy = function () {
-    var allAbilities = pilots;
+    var allAbilities = uniquePilots;
     var allowedPilots = _.difference(allAbilities, this.purchasedAbilities);
     return allowedPilots;
 };

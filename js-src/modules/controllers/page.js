@@ -146,7 +146,7 @@ module.exports = {
             mainView.renderTitle(build);
             XpView.renderXp(build.currentXp);
             shipInfoView.renderShipStats(build);
-            shipInfoView.renderShipActions(build.currentShip, build.upgrades.equipped);
+            shipInfoView.renderShipActions(build);
             shipInfoView.renderShipImage(build.currentShip);
             shipInfoView.renderShipDial(build.currentShip);
             upgradesView.renderShipSlotsList(build);
@@ -159,18 +159,20 @@ module.exports = {
             messageView.clear();
             summaryView.renderEquippedUpgrades(build);
             hashController.generateAndSet(build);
+            upgradesView.renderPrintCardList(build);
         });
 
         events.on('model.build.currentShip.update', function (event, build) {
             if (build.ready) {
                 mainView.renderTitle(build);
                 shipInfoView.renderShipStats(build);
-                shipInfoView.renderShipActions(build.currentShip, build.upgrades.equipped);
+                shipInfoView.renderShipActions(build);
                 shipInfoView.renderShipImage(build.currentShip);
                 shipInfoView.renderShipDial(build.currentShip);
                 upgradesView.renderShipSlotsList(build);
                 upgradesView.renderUpgradesList(build);
                 changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
+                upgradesView.renderPrintCardList(build);
             }
         });
 
@@ -189,13 +191,20 @@ module.exports = {
             pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
         });
 
+        events.on('model.build.upgrades.update model.build.pilotAbilities.update', function (event, build) {
+            if (build.ready) {
+                upgradesView.renderPrintCardList(build);
+            }
+        });
+
         events.on('model.build.equippedUpgrades.update model.build.upgrades.lose model.build.pilotAbilities.lose', function (event, build) {
             if (build.ready) {
                 upgradesView.renderShipSlotsList(build);
                 upgradesView.renderUpgradesList(build);
-                shipInfoView.renderShipActions(build.currentShip, build.upgrades.equipped);
+                shipInfoView.renderShipActions(build);
                 shipInfoView.renderShipStats(build);
                 summaryView.renderEquippedUpgrades(build);
+                upgradesView.renderPrintCardList(build);
                 hashController.generateAndSet(build);
             }
         });
@@ -203,7 +212,7 @@ module.exports = {
         events.on('model.build.xpHistory.add', function (event, data) {
             if (data.build.ready) {
                 var xpItemIndex = data.build.xpHistory.length - 1;
-                xpHistoryView.renderTableRow(data.xpItem, data.build.currentXp, xpItemIndex);
+                xpHistoryView.renderTable(data.build);
                 messageView.renderMessage(data.xpItem, xpItemIndex);
                 hashController.generateAndSet(data.build);
             }

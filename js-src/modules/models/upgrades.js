@@ -51,7 +51,15 @@ _.each(sortedUpgrades, function (upgrade) {
     keyedUpgrades[upgrade.slot].push(upgrade);
 });
 
+var getIconString = function (upgradeSlotType) {
+    var iconId = upgradeSlotType.replace(' ', '').replace('-', '');
+    iconId = iconId.toLowerCase();
+    var iconString = '<i class="xwing-miniatures-font xwing-miniatures-font-' + iconId + '"></i>';
+    return iconString;
+};
+
 module.exports = {
     all: sortedUpgrades,
-    keyed: keyedUpgrades
+    keyed: keyedUpgrades,
+    getIconString: getIconString
 };

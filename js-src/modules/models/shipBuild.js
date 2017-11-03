@@ -174,5 +174,50 @@ ShipBuild.prototype.exportEquippedAbilitiesString = function () {
     return JSON.stringify(pilotIds);
 };
 
+ShipBuild.prototype.getStats = function () {
+    var statValues = {
+        attack: this.currentShip.shipData.attack,
+        agility: this.currentShip.shipData.agility,
+        hull: this.currentShip.shipData.hull,
+        shields: this.currentShip.shipData.shields
+    };
+    // Add nay stats from upgrades
+    _.each(this.upgrades.equipped, function (upgrade) {
+        if (upgrade.grants) {
+            _.each(upgrade.grants, function (grant) {
+                if (grant.type === 'stats') {
+                    statValues[grant.name] += grant.value;
+                }
+            });
+        }
+    });
+    return statValues;
+};
+
+ShipBuild.prototype.getActions = function () {
+    // Start with base ship actions
+    var actions = _.clone(this.currentShip.shipData.actions, true);
+    // Add any actions from upgrades
+    _.each(this.upgrades.equipped, function (upgrade) {
+        if (upgrade.grants) {
+            _.each(upgrade.grants, function (grant) {
+                if (grant.type === 'action') {
+                    actions.push(grant.name);
+                }
+            });
+        }
+    });
+    actions = _.uniq(actions);
+
+    var slugifiedActions = [];
+    _.each(actions, function (action) {
+        var slugifiedAction = action.replace(' ', '').replace('-', '');
+        slugifiedAction = slugifiedAction.toLowerCase();
+        slugifiedActions.push(slugifiedAction);
+    });
+
+    return slugifiedActions;
+};
+
 module.exports = ShipBuild;
 

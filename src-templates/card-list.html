@@ -1,0 +1,15 @@
+<div class="print-card-list">
+    <ul>
+        <% upgrades.forEach(function(upgrade) { %>
+            <li>
+                <img src="/components/xwing-data/images/<%= upgrade.image %>" alt="Card image for <%= upgrade.name %>">
+            </li>
+        <% }); %>
+
+        <% abilities.forEach(function(abilityPilot) { %>
+            <li class="ability">
+                <%= renderCard(abilityPilot) %>
+            </li>
+        <% }); %>
+    </ul>
+</div>

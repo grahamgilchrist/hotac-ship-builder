@@ -7,8 +7,10 @@ module.exports = function (options) {
 
     const defaultOptions = {
         jsFiles: [
-            '**/*.js',
-            '!node_modules/**/*'
+            'js-src/**/*.js',
+            '!js-src/generated/**/*.js',
+            'gulpfile.js',
+            'node/**/*.js'
         ]
     };
 
