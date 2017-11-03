@@ -32,7 +32,6 @@ module.exports = {
 
         $newElement.on('click', 'button[revert]', module.exports.revertButton);
         $wrapperElement.empty().append($newElement);
-
     },
     revertButton: function () {
         var xpItemIndex = parseInt($(this).attr('revert'), 10);

@@ -1,0 +1,35 @@
+<% if (hasDisabledOrUnequippedUpgrades) { %>
+    <div class="allowed-list">
+
+        <% if (hasUnequippedUpgrades) { %>
+            <div class="unused-upgrades-wrapper">
+                <h4><span>Unused upgrades</span> <i class="material-icons" id="unused-upgrades-info">info_outline</i></h4>
+                <div class="mdl-tooltip" data-mdl-for="unused-upgrades-info">
+                    Upgrades which have been purchased but are not currently ewquipped.
+                </div>
+                <ul id="unused-upgrade-list">
+                    <% unequipped.forEach(function(itemHtml) { %>
+                        <%= itemHtml %>
+                    <% }); %>
+                    <% unequippedAbilities.forEach(function(itemHtml) { %>
+                        <%= itemHtml %>
+                    <% }); %>
+                </ul>
+            </div>
+        <% } %>
+
+        <% if (hasDisabledUpgrades) { %>
+            <div class="disabled-upgrades">
+                <h4>Disabled upgrades</h4>
+                <p>These upgrades have been purchased but cannot be equipped to the current ship.</p>
+                <ul id="disabled-upgrade-list">
+                    <% disabled.forEach(function(itemHtml) { %>
+                        <%= itemHtml %>
+                    <% }); %>
+                </ul>
+            </div>
+        <% } %>
+
+        <button id="lose-upgrade" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Lose upgrade</button>
+    </div>
+<% } %>

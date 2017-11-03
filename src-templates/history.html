@@ -9,7 +9,7 @@
         </thead>
         <tbody id="xp-history">
             <% xpHistory.forEach(function(item, itemIndex) { %>
-                <tr>
+                <tr xp-item-index="<%= item.xpItemIndex %>">
                     <td class="label"><%= item.label %></td>
                     <td class="<% if (item.cost > 0) { %>positive<% } else if (item.cost < 0) {%>negative<% } %>">
                         <% if (item.cost > 0) { %>

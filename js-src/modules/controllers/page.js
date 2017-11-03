@@ -203,7 +203,7 @@ module.exports = {
         events.on('model.build.xpHistory.add', function (event, data) {
             if (data.build.ready) {
                 var xpItemIndex = data.build.xpHistory.length - 1;
-                xpHistoryView.renderTableRow(data.xpItem, data.build.currentXp, xpItemIndex);
+                xpHistoryView.renderTable(data.build);
                 messageView.renderMessage(data.xpItem, xpItemIndex);
                 hashController.generateAndSet(data.build);
             }
