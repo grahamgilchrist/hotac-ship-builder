@@ -6,7 +6,9 @@
     @include media('print')
         border: 1px solid #eee
         border-radius: 14px
-        padding: 10px 0
+        -webkit-print-color-adjust: exact
+        overflow: hidden
+        display: inline-block
 
     h3
         @include media('print')
@@ -26,6 +28,7 @@
 
         @include media('print')
             padding: 0 10px
+            height: 32px
         
         &.icon
             padding: 15px 40px
@@ -38,13 +41,13 @@
         font-size: 32px
         vertical-align: middle
 
-    .icon
+    .icon i
         @include media('print')
-            font-size: 28px
+            font-size: 32px
 
     .count-column
         @include media('print')
-            font-size: 20px
+            font-size: 18px
 
     .label
         font-size: 16px

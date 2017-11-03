@@ -159,6 +159,7 @@ module.exports = {
             messageView.clear();
             summaryView.renderEquippedUpgrades(build);
             hashController.generateAndSet(build);
+            upgradesView.renderPrintCardList(build);
         });
 
         events.on('model.build.currentShip.update', function (event, build) {
@@ -171,6 +172,7 @@ module.exports = {
                 upgradesView.renderShipSlotsList(build);
                 upgradesView.renderUpgradesList(build);
                 changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
+                upgradesView.renderPrintCardList(build);
             }
         });
 
@@ -189,6 +191,12 @@ module.exports = {
             pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
         });
 
+        events.on('model.build.upgrades.update model.build.pilotAbilities.update', function (event, build) {
+            if (build.ready) {
+                upgradesView.renderPrintCardList(build);
+            }
+        });
+
         events.on('model.build.equippedUpgrades.update model.build.upgrades.lose model.build.pilotAbilities.lose', function (event, build) {
             if (build.ready) {
                 upgradesView.renderShipSlotsList(build);
@@ -196,6 +204,7 @@ module.exports = {
                 shipInfoView.renderShipActions(build);
                 shipInfoView.renderShipStats(build);
                 summaryView.renderEquippedUpgrades(build);
+                upgradesView.renderPrintCardList(build);
                 hashController.generateAndSet(build);
             }
         });

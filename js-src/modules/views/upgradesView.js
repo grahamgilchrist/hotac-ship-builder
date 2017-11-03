@@ -122,6 +122,21 @@ module.exports = {
 
         return viewHtml;
     },
+    renderPrintCardList: function (build) {
+        var $wrapper = $('[view-bind=print-card-list]');
+
+        var upgrades = _.clone(build.currentShip.startingUpgrades);
+        _.each(build.upgrades.purchased, function (upgrade) {
+            upgrades.push(upgrade);
+        });
+
+        var context = {
+            upgrades: upgrades,
+            abilities: build.upgrades.purchasedAbilities,
+            renderCard: abilityCardView.renderHtml
+        };
+        templateUtils.renderToDom('card-list', $wrapper, context);
+    },
     renderUpgradesList: function (build) {
 
         var $listsWrapper = $('.upgrade-slots-wrapper');
