@@ -1,4 +1,4 @@
-<span class="pilot-skill">PS <%= build.pilotSkill %></span>
+<span class="pilot-skill">PS <%= modifiedPilotSkill %><% if (modifiedPilotSkill !== pilotSkill) { %> (<%= pilotSkill %>)<% } %></span>
 <span class="attack"><%= statValues.attack %> <i class="xwing-miniatures-font xwing-miniatures-font-attack"></i></span>
 <span class="agility"><%= statValues.agility %> <i class="xwing-miniatures-font xwing-miniatures-font-agility"></i></span>
 <span class="hull"><%= statValues.hull %> <i class="xwing-miniatures-font xwing-miniatures-font-hull"></i></span>
