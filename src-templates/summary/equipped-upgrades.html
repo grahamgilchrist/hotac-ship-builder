@@ -22,6 +22,26 @@
                         <img src="/components/xwing-data/images/<%= upgrade.image %>" alt="Card image for <%= upgrade.name %>">
                 </div>
             </li>
+            <% if (upgrade.conditions) { %>
+                <% upgrade.conditions.forEach(function(name) { %>
+                    <li>
+                        <div class="preview" 
+                            data-featherlight="/components/xwing-data/images/<%= conditions[name].image %>"
+                            data-featherlight-variant="card-preview-modal"
+                            data-featherlight-close-on-click="anywhere">
+                            <i class="xwing-miniatures-font xwing-miniatures-font-condition"></i>
+                            <span class="name"><%= conditions[name].name %></span>
+                            <i class="material-icons icon-preview">zoom_in</i>
+                        </div>
+                        <div class="full"
+                            data-featherlight="/components/xwing-data/images/<%= conditions[name].image %>"
+                            data-featherlight-variant="card-preview-modal"
+                            data-featherlight-close-on-click="anywhere">
+                                <img src="/components/xwing-data/images/<%= conditions[name].image %>" alt="Card image for <%= conditions[name].name %>">
+                        </div>
+                    </li>
+                <% }); %>
+            <% } %>
         <% }); %>
 
         <% equippedAbilities.forEach(function(abilityPilot) { %>
@@ -35,6 +55,26 @@
                     <%= renderCard(abilityPilot) %>
                 </div>
             </li>
+            <% if (abilityPilot.conditions) { %>
+                <% abilityPilot.conditions.forEach(function(name) { %>
+                    <li>
+                        <div class="preview" 
+                            data-featherlight="/components/xwing-data/images/<%= conditions[name].image %>"
+                            data-featherlight-variant="card-preview-modal"
+                            data-featherlight-close-on-click="anywhere">
+                            <i class="xwing-miniatures-font xwing-miniatures-font-condition"></i>
+                            <span class="name"><%= conditions[name].name %></span>
+                            <i class="material-icons icon-preview">zoom_in</i>
+                        </div>
+                        <div class="full"
+                            data-featherlight="/components/xwing-data/images/<%= conditions[name].image %>"
+                            data-featherlight-variant="card-preview-modal"
+                            data-featherlight-close-on-click="anywhere">
+                                <img src="/components/xwing-data/images/<%= conditions[name].image %>" alt="Card image for <%= conditions[name].name %>">
+                        </div>
+                    </li>
+                <% }); %>
+            <% } %>
         <% }); %>
     </ul>
 </div>

@@ -8,6 +8,8 @@ var events = require('../controllers/events');
 var abilityCardView = require('./abilityCard');
 var loseUpgradeModal = require('./loseUpgradeModal');
 var upgrades = require('../models/upgrades');
+var conditions = require('../models/conditions');
+var conditionsByName = conditions.keyedByName;
 var templateUtils = require('../utils/templates');
 
 module.exports = {
@@ -133,7 +135,8 @@ module.exports = {
         var context = {
             upgrades: upgrades,
             abilities: build.upgrades.purchasedAbilities,
-            renderCard: abilityCardView.renderHtml
+            renderCard: abilityCardView.renderHtml,
+            conditions: conditionsByName
         };
         templateUtils.renderToDom('card-list', $wrapper, context);
     },
