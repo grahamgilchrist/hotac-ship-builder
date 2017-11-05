@@ -8,11 +8,19 @@ var ships = require('../models/ships');
 
 module.exports = {
     renderShipView: function (pilotSkill, currentShip, currentXp) {
-        module.exports.toggleButtonDisplay(pilotSkill);
+        module.exports.toggleButtonDisplay(pilotSkill, currentXp);
         module.exports.bindChangeShipButton(currentShip, currentXp);
     },
-    toggleButtonDisplay: function (pilotSkill) {
+    toggleButtonDisplay: function (pilotSkill, currentXp) {
+        var isDisabled = false;
         if (pilotSkill < 4) {
+            isDisabled = true;
+        }
+        if (currentXp < 5) {
+            isDisabled = true;
+        }
+
+        if (isDisabled) {
             $('#change-ship').attr('disabled', 'disabled');
             $('#change-ship-tooltip').show();
         } else {

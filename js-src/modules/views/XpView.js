@@ -8,8 +8,8 @@ module.exports = {
     init: function () {
         module.exports.bindXpButton();
     },
-    renderXp: function (xpAmount) {
-        $('[bind-xp-current]').text(xpAmount);
+    renderXp: function (build) {
+        $('[bind-xp-current]').text(build.currentXp);
     },
     bindXpButton: function () {
         $('[add-mission-xp]').on('click', function () {
