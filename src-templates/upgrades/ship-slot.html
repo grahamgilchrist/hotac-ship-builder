@@ -1,13 +1,13 @@
 <li>
     <% if (build.pilotSkill < upgradeSlot.pilotSkill) { %>
-        <div class="slot disabled">
+        <button class="slot disabled">
             <span class="title"><%= upgradeSlot.type %></span>
             <% if (upgradeSlot.pilotSkill) { %>
                 <span class="required-ps"> (PS <%= upgradeSlot.pilotSkill %>)</span>
             <% } %>  
-        </div>
+        </button>
     <% } else { %>
-        <div class="slot <% if (upgradeSlot.equipped) { %>equipped<% } else { %>unequipped<% } %>"
+        <button class="slot <% if (upgradeSlot.equipped) { %>equipped<% } else { %>unequipped<% } %>"
             <% if (upgradeSlot.equipped) { %>
                 <% if (upgradeSlot.equipped.skill) { %>
                     open-ability-preview="<%= upgradeSlot.equipped.id %>"
@@ -33,7 +33,7 @@
                 <% } %>     
             <% } %>
 
-        </div>
+        </button>
         <% if (upgradeSlot.equipped) { %>
             <% if (upgradeSlot.equipped.skill) { %>
                 <i class="material-icons remove" unequip-ability="<%= upgradeSlot.equipped.id %>">remove_circle_outline</i>
