@@ -114,14 +114,14 @@ upgradesModel.prototype.buyCard = function (upgradeId) {
     var upgrade = this.getUpgradeById(upgradeId);
     this.purchased.push(upgrade);
     this.refreshUpgradesState();
-    events.trigger('model.build.upgrades.update', this.build);
+    events.trigger('model.build.upgrades.add', this.build);
 };
 
 upgradesModel.prototype.buyPilotAbility = function (pilotId) {
     var pilot = pilots.getById(pilotId);
     this.purchasedAbilities.push(pilot);
     this.refreshUpgradesState();
-    events.trigger('model.build.pilotAbilities.update', this.build);
+    events.trigger('model.build.pilotAbilities.add', this.build);
 };
 
 upgradesModel.prototype.loseCard = function (upgradeId) {

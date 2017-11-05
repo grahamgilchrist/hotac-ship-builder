@@ -191,9 +191,10 @@ module.exports = {
             pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
         });
 
-        events.on('model.build.upgrades.update model.build.pilotAbilities.update', function (event, build) {
+        events.on('model.build.upgrades.add model.build.pilotAbilities.add model.build.upgrades.lose model.build.pilotAbilities.lose', function (event, build) {
             if (build.ready) {
                 upgradesView.renderPrintCardList(build);
+                upgradesView.renderLoseButton(build);
             }
         });
 

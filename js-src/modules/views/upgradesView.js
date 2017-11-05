@@ -158,9 +158,9 @@ module.exports = {
         });
 
         if (!hasDisabledOrUnequippedUpgrades) {
-            $listsWrapper.removeClass('two-list').addClass('one-list');
+            $listsWrapper.removeClass('two-column').addClass('one-column');
         } else {
-            $listsWrapper.removeClass('one-list').addClass('two-list');
+            $listsWrapper.removeClass('one-column').addClass('two-column');
         }
 
         var $wrapperElement = $('[view-bind=allowed-list]');
@@ -321,10 +321,21 @@ module.exports = {
         return $upgrade;
     },
     renderLoseButton: function (build) {
+        var $wrapperElement = $('[view-bind=lose-upgrade-button]');
+
+        var hasPurchased = (build.upgrades.purchased.length > 0 || build.upgrades.purchasedAbilities.length > 0);
+        console.log('build.upgrades.purchased', build.upgrades.purchased);
+        console.log('build.upgrades.purchasedAbilities', build.upgrades.purchasedAbilities);
+        console.log('hasPurchased', hasPurchased);
+        var context = {
+            hasPurchased: hasPurchased
+        };
+        templateUtils.renderToDom('upgrades/lose-upgrade-button', $wrapperElement, context);
+
         var clickHandler = function () {
             var $modalContent = loseUpgradeModal.renderView(build);
             modalController.openTitledModal($modalContent, 'Lose an upgrade', 'lose-upgrade-modal');
         };
-        $(document).off('click.loseButton').on('click.loseButton', '#lose-upgrade', clickHandler);
+        $('[trigger-lose-upgrade]').off('click.loseButton').on('click.loseButton', clickHandler);
     }
 };
