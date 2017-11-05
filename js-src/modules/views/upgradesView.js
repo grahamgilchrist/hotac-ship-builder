@@ -324,9 +324,6 @@ module.exports = {
         var $wrapperElement = $('[view-bind=lose-upgrade-button]');
 
         var hasPurchased = (build.upgrades.purchased.length > 0 || build.upgrades.purchasedAbilities.length > 0);
-        console.log('build.upgrades.purchased', build.upgrades.purchased);
-        console.log('build.upgrades.purchasedAbilities', build.upgrades.purchasedAbilities);
-        console.log('hasPurchased', hasPurchased);
         var context = {
             hasPurchased: hasPurchased
         };
