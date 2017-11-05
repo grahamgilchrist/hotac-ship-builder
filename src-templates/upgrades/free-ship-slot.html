@@ -1,5 +1,5 @@
 <li>
-    <div class="slot <% if (upgradeSlot.equipped) { %>equipped<% } else { %>unequipped<% } %>"
+    <button class="slot <% if (upgradeSlot.equipped) { %>equipped<% } else { %>unequipped<% } %>"
         data-featherlight="/components/xwing-data/images/<%= upgradeSlot.upgrade.image %>"
         data-featherlight-variant="card-preview-modal"
         data-featherlight-close-on-click="anywhere"
@@ -7,7 +7,7 @@
         <%= iconString %>
         <span class="title"><%= upgradeSlot.upgrade.name %></span>
         <i class="material-icons icon-preview">zoom_in</i>
-    </div>
+    </button>
     <% if (upgradeSlot.equipped) { %>
         <i class="material-icons remove" unequip="<%= upgradeSlot.upgrade.id %>">remove_circle_outline</i>
     <% } else { %>
