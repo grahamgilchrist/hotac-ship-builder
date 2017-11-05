@@ -26,11 +26,16 @@
         .featherlight-content
             min-width: 330px
 
+            @include media($media-featherlight-small-cards)
+                padding-right: 0
+                padding-left: 0
+
             @include media($media-featherlight-full-width)
                 min-width: 95%
 
         .featherlight-inner
             overflow: auto
+            -webkit-overflow-scrolling: touch
 
     .modal-header
         position: absolute
@@ -101,6 +106,7 @@
     .card-image-list
         text-align: center
         margin-top: $site-padding
+        margin-top: $site-padding
 
         li
             display: inline-block
@@ -109,9 +115,14 @@
             vertical-align: middle
 
         img
-            width: 164px
-            height: 264px
+            width: 153px
+            height: 237px
             border-radius: 12px
+
+            @include media($media-featherlight-large-cards)
+                width: 164px
+                height: 264px
+
 
         li.selected img
             box-shadow: #45b3f9 0px 0px 6px 3px
