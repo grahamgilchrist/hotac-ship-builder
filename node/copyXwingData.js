@@ -9,7 +9,8 @@ const path = require('path');
 const xWingDataPaths = [
     require.resolve('xwing-data/data/pilots'),
     require.resolve('xwing-data/data/ships'),
-    require.resolve('xwing-data/data/upgrades')
+    require.resolve('xwing-data/data/upgrades'),
+    require.resolve('xwing-data/data/conditions')
 ];
 
 const gulpPath = process.cwd();

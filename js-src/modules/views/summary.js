@@ -5,6 +5,8 @@ var abilityCardView = require('./abilityCard');
 var modalController = require('../controllers/modals');
 var templateUtils = require('../utils/templates');
 var upgrades = require('../models/upgrades');
+var conditions = require('../models/conditions');
+var conditionsByName = conditions.keyedByName;
 
 module.exports = {
     renderEquippedUpgrades: function (build) {
@@ -14,7 +16,8 @@ module.exports = {
             equippedUpgrades: build.upgrades.equippedUpgrades,
             equippedAbilities: build.upgrades.equippedAbilities,
             getIconString: upgrades.getIconString,
-            renderCard: abilityCardView.renderHtml
+            renderCard: abilityCardView.renderHtml,
+            conditions: conditionsByName
         };
         var viewHtml = templateUtils.renderHTML('summary/equipped-upgrades', context);
         var $newElement = $(viewHtml);
