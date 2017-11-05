@@ -124,13 +124,22 @@
                                         </div>
 
                                         <div class="change-ship">
-                                            <button id="increase-ps" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                                            <span id="increase-ps-wrapper">
+                                                <button id="increase-ps" disabled class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                                                 Upgrade to PS <span bind-pilot-skill-plus-one></span> (<span bind-pilot-skill-next-xp-cost></span>XP)
-                                            </button>
+                                                </button>
+                                            </span>
+                                            <div id="increase-ps-tooltip" class="mdl-tooltip" data-mdl-for="increase-ps-wrapper">
+                                                Upgrading to Pilot skill <span bind-pilot-skill-plus-one></span> requires <span bind-pilot-skill-next-xp-cost></span>XP
+                                            </div>
 
-                                            <button id="change-ship" disabled class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Change ship (5XP)</button>
+                                            <span id="change-ship-wrapper">
+                                                <button id="change-ship" disabled class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Change ship (5XP)</button>
+                                            </span>
+                                            <div id="change-ship-tooltip" class="mdl-tooltip" data-mdl-for="change-ship-wrapper">
+                                                Changing ships is unlocked at Pilot skill 4 and requires 5XP
+                                            </div>
                                         </div>
-                                        <div class="mdl-tooltip" data-mdl-for="change-ship-wrapper" id="change-ship-tooltip">New ships are unlocked at pilot skill 4</div>
                                     </div>
 
                                     <div class="upgrade-slots-wrapper">

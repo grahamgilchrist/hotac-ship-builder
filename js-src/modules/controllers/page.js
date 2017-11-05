@@ -144,7 +144,7 @@ module.exports = {
     bindModelEvents: function () {
         events.on('model.build.ready', function (event, build) {
             mainView.renderTitle(build);
-            XpView.renderXp(build.currentXp);
+            XpView.renderXp(build);
             shipInfoView.renderShipStats(build);
             shipInfoView.renderShipActions(build);
             shipInfoView.renderShipImage(build.currentShip);
@@ -186,7 +186,7 @@ module.exports = {
         });
 
         events.on('model.build.xp.update', function (event, build) {
-            XpView.renderXp(build.currentXp);
+            XpView.renderXp(build);
             changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
             pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
         });
