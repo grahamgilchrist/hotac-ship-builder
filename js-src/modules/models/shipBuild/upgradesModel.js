@@ -4,10 +4,7 @@ var _ = require('lodash');
 var allUpgrades = require('../upgrades').all;
 var keyedUpgrades = require('../upgrades').keyed;
 var pilots = require('../pilots');
-var pilotsWithAbilities = pilots.withAbilities;
-var uniquePilots = _.uniqBy(pilotsWithAbilities, function (pilot) {
-    return pilot.text;
-});
+var uniquePilots = pilots.unique;
 
 var events = require('../../controllers/events');
 var arrayUtils = require('../../utils/array-utils');
@@ -209,7 +206,8 @@ upgradesModel.prototype.getAvailableToBuy = function (upgradeType) {
 upgradesModel.prototype.getAbilitiesAvailableToBuy = function () {
     var allAbilities = uniquePilots;
     var allowedPilots = _.difference(allAbilities, this.purchasedAbilities);
-    return allowedPilots;
+    var sortedPilots = pilots.sortList(allowedPilots);
+    return sortedPilots;
 };
 
 upgradesModel.prototype.upgradeAllowedOnShip = function (upgrade) {
