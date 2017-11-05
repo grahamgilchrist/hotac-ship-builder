@@ -12,7 +12,9 @@ module.exports = {
         module.exports.bindStartButton();
     },
     bindStartButton: function () {
-        $('#start-build').on('click', function () {
+        $('#start-build').on('click', function (event) {
+            event.preventDefault();
+
             var callsign = $('#callsign').val().trim();
             var playerName = $('#player-name').val().trim();
             var chosenShipId = $('#starting-ships select').val();
