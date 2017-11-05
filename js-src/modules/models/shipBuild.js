@@ -182,7 +182,7 @@ ShipBuild.prototype.getStats = function () {
         shields: this.currentShip.shipData.shields
     };
     // Add nay stats from upgrades
-    _.each(this.upgrades.equipped, function (upgrade) {
+    _.each(this.upgrades.equippedUpgrades, function (upgrade) {
         if (upgrade.grants) {
             _.each(upgrade.grants, function (grant) {
                 if (grant.type === 'stats') {
@@ -198,7 +198,7 @@ ShipBuild.prototype.getActions = function () {
     // Start with base ship actions
     var actions = _.clone(this.currentShip.shipData.actions, true);
     // Add any actions from upgrades
-    _.each(this.upgrades.equipped, function (upgrade) {
+    _.each(this.upgrades.equippedUpgrades, function (upgrade) {
         if (upgrade.grants) {
             _.each(upgrade.grants, function (grant) {
                 if (grant.type === 'action') {
@@ -217,6 +217,25 @@ ShipBuild.prototype.getActions = function () {
     });
 
     return slugifiedActions;
+};
+
+// Return Pilot as modified by any upgrades
+ShipBuild.prototype.getModifiedPs = function () {
+    var modifiedPilotSkill = this.pilotSkill;
+
+    // Add any actions from upgrades
+    _.each(this.upgrades.equippedUpgrades, function (upgrade) {
+        if (upgrade.grants) {
+            _.each(upgrade.grants, function (grant) {
+                if (grant.type === 'stats' && grant.name === 'skill') {
+                    var psIncrease = grant.value;
+                    modifiedPilotSkill += psIncrease;
+                }
+            });
+        }
+    });
+
+    return modifiedPilotSkill;
 };
 
 module.exports = ShipBuild;

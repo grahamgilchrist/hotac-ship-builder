@@ -7,10 +7,12 @@ var templateUtils = require('../utils/templates');
 module.exports = {
     renderShipStats: function (build) {
         var statValues = build.getStats();
+        var modifiedPilotSkill = build.getModifiedPs();
 
         var $shipStats = $('[view-bind=ship-info-stats]');
         var context = {
-            build: build,
+            modifiedPilotSkill: modifiedPilotSkill,
+            pilotSkill: build.pilotSkill,
             statValues: statValues
         };
         templateUtils.renderToDom('shipinfo/shipstats', $shipStats, context);
