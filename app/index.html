@@ -134,8 +134,14 @@
                                     </div>
 
                                     <div class="upgrade-slots-wrapper">
-                                        <div view-bind="ship-slots-list"></div>
-                                        <div view-bind="allowed-list"></div>
+                                        <div class="column column-1">
+                                            <div view-bind="ship-slots-list"></div>                                        
+                                            <div view-bind="lose-upgrade-button"></div>
+                                        </div>
+                                        <div class="column column-2">
+                                            <div view-bind="allowed-list"></div>
+                                            <div view-bind="lose-upgrade-button"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
