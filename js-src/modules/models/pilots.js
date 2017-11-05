@@ -4,30 +4,38 @@ var _ = require('lodash');
 var pilots = require('../../generated/pilots');
 var shipsData = require('../../generated/ships');
 
+// Sorts a list of pilots by skill then name
+var pilotSort = function (pilotList) {
+    var newList = _.clone(pilotList);
+    var sortedList = newList.sort(function (a, b) {
+        if (a.skill < b.skill) {
+            return -1;
+        }
+        if (a.skill > b.skill) {
+            return 1;
+        }
+
+        // skills must be equal
+        if (a.name < b.name) {
+            return -1;
+        }
+        if (a.name > b.name) {
+            return 1;
+        }
+        // skills and names must be equal
+        return 0;
+    });
+
+    return sortedList;
+};
+
+var sortedPilots = pilotSort(pilots);
+
 var getShipDataByName = function (shipName) {
     return _.find(shipsData, function (shipData) {
         return shipData.name === shipName;
     });
 };
-
-var sortedPilots = pilots.sort(function (a, b) {
-    if (a.skill < b.skill) {
-        return -1;
-    }
-    if (a.skill > b.skill) {
-        return 1;
-    }
-
-    // skills must be equal
-    if (a.name < b.name) {
-        return -1;
-    }
-    if (a.name > b.name) {
-        return 1;
-    }
-    // skills and names must be equal
-    return 0;
-});
 
 // TODO: filter out pilots from large ships
 
@@ -55,9 +63,15 @@ var getPilotById = function (pilotId) {
     });
 };
 
+var uniquePilots = _.uniqBy(nonHugePilots, function (pilot) {
+    return pilot.text;
+});
+
 // key upgrades by type
 module.exports = {
     allRebels: rebelPilots,
     withAbilities: nonHugePilots,
-    getById: getPilotById
+    unique: uniquePilots,
+    getById: getPilotById,
+    sortList: pilotSort
 };
