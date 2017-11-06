@@ -25,8 +25,8 @@ upgrades.forEach(function (upgrade) {
     // Attempt to find other cards with same xws
     var matchingCard = getByXws(upgrade.xws, upgrade.id);
     if (matchingCard && matchingCard.id) {
-        upgrade.dualCard = matchingCard.id;
-        matchingCard.dualCard = upgrade.id;
+        upgrade.otherSide = matchingCard;
+        matchingCard.otherSide = upgrade;
         var regExp = new RegExp(/(\((.*)\))/g);
         var dualCardName = upgrade.name.replace(regExp, '');
         upgrade.dualCardName = dualCardName;
