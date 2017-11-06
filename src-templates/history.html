@@ -5,6 +5,7 @@
             <th>Upgrade</th>
             <th>Cost</th>
             <th>Remaining XP</th>
+            <th>Total XP earnt</th>
             <th class="revert"></th>
         </thead>
         <tbody id="xp-history">
@@ -19,6 +20,13 @@
                         <% } %>
                     </td>
                     <td><%= item.resultingXP %></td>
+                    <td>
+                        <% if (item.lastItem && item.lastItem.total === item.total) { %>
+                            -
+                        <% } else { %>
+                            <%= item.total %>
+                        <% } %>
+                    </td>
                     <td class="revert">
                         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" revert="<%= item.xpItemIndex %>">Revert</button>
                     </td>
