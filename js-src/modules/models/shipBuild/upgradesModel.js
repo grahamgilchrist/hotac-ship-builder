@@ -1,8 +1,8 @@
 'use strict';
 
 var _ = require('lodash');
-var allUpgrades = require('../upgrades').all;
-var keyedUpgrades = require('../upgrades').keyed;
+var upgradesImport = require('../upgrades');
+var keyedUpgrades = upgradesImport.keyed;
 var pilots = require('../pilots');
 var uniquePilots = pilots.unique;
 
@@ -20,7 +20,7 @@ var upgradesModel = function (build, upgradeIdList, equippedIdList, pilotIds, eq
 };
 
 upgradesModel.prototype.upgradesFromIds = function (upgradeIdList) {
-    return _.map(upgradeIdList, this.getUpgradeById);
+    return _.map(upgradeIdList, upgradesImport.getById);
 };
 
 upgradesModel.prototype.abilitiesFromIds = function (abilityIdList) {
@@ -111,7 +111,7 @@ upgradesModel.prototype.getUnequippedAbilities = function () {
 };
 
 upgradesModel.prototype.buyCard = function (upgradeId) {
-    var upgrade = this.getUpgradeById(upgradeId);
+    var upgrade = upgradesImport.getById(upgradeId);
     this.purchased.push(upgrade);
     this.refreshUpgradesState();
     events.trigger('model.build.upgrades.add', this.build);
@@ -125,10 +125,12 @@ upgradesModel.prototype.buyPilotAbility = function (pilotId) {
 };
 
 upgradesModel.prototype.loseCard = function (upgradeId) {
+    // remove the first version of this upgrade we find in the purchased list
     var foundIndex = _.findIndex(this.purchased, function (item) {
         return item.id === upgradeId;
     });
     if (!_.isUndefined(foundIndex)) {
+        // remove found upgrade from purchased list
         this.purchased.splice(foundIndex, 1);
     }
     this.refreshUpgradesState();
@@ -147,7 +149,7 @@ upgradesModel.prototype.loseAbility = function (pilotId) {
 };
 
 upgradesModel.prototype.equip = function (upgradeId) {
-    var upgrade = this.getUpgradeById(upgradeId);
+    var upgrade = upgradesImport.getById(upgradeId);
     this.equippedUpgrades.push(upgrade);
     this.refreshUpgradesState();
     events.trigger('model.build.equippedUpgrades.update', this.build);
@@ -186,12 +188,6 @@ upgradesModel.prototype.unequipAbility = function (pilotId) {
         this.refreshUpgradesState();
         events.trigger('model.build.equippedUpgrades.update', this.build);
     }
-};
-
-upgradesModel.prototype.getUpgradeById = function (upgradeId) {
-    return _.find(allUpgrades, function (upgradeItem) {
-        return upgradeItem.id === upgradeId;
-    });
 };
 
 // Return array of upgrades of specific type which are legal to purchased for current build
@@ -246,7 +242,8 @@ upgradesModel.prototype.upgradeAllowedInBuild = function (upgrade) {
 
     // Remove any upgrades the build already has
     var upgradeExists = _.find(this.all, function (existingUpgrade) {
-        return existingUpgrade.id === upgrade.id;
+        // Check xws instead of ID so we remove both sides of dual cards
+        return existingUpgrade.xws === upgrade.xws;
     });
 
     if (upgradeExists) {

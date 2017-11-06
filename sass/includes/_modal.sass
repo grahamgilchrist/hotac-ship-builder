@@ -235,6 +235,27 @@
         .ability-card
             width: 164px
 
+        .cards-wrapper
+            $width: 200px
+            display: flex
+            flex-wrap: wrap
+
+            img
+                width: $width
+
+            &.dual-card
+                width: $width
+
+                img + img
+                    margin-top: 10px
+
+                @include media($media-featherlight-preview-dual-card)
+                    width: auto
+
+                    img + img
+                        margin-top: 0
+                        margin-left: 10px
+
     .share-modal
         input
             width: 100%

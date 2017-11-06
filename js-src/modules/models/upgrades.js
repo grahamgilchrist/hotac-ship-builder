@@ -3,6 +3,37 @@
 var _ = require('lodash');
 var upgrades = require('../../generated/upgrades');
 
+var getById = function (id) {
+    return _.find(upgrades, function (upgrade) {
+        return upgrade.id === id;
+    });
+};
+
+var getByXws = function (xws, excludeId) {
+    return _.find(upgrades, function (upgrade) {
+        return ((upgrade.xws === xws) && (upgrade.id !== excludeId));
+    });
+};
+
+// Find all dual cards
+upgrades.forEach(function (upgrade) {
+    if (upgrade.dualCard) {
+        // don't bother trying to match if we have already paired
+        return;
+    }
+    // Dual cards share xws name
+    // Attempt to find other cards with same xws
+    var matchingCard = getByXws(upgrade.xws, upgrade.id);
+    if (matchingCard && matchingCard.id) {
+        upgrade.otherSide = matchingCard;
+        matchingCard.otherSide = upgrade;
+        var regExp = new RegExp(/(\((.*)\))/g);
+        var dualCardName = upgrade.name.replace(regExp, '');
+        upgrade.dualCardName = dualCardName;
+        matchingCard.dualCardName = dualCardName;
+    }
+});
+
 var sortedUpgrades = upgrades.sort(function (a, b) {
     if (a.name < b.name) {
         return -1;
@@ -61,5 +92,6 @@ var getIconString = function (upgradeSlotType) {
 module.exports = {
     all: sortedUpgrades,
     keyed: keyedUpgrades,
-    getIconString: getIconString
+    getIconString: getIconString,
+    getById: getById
 };

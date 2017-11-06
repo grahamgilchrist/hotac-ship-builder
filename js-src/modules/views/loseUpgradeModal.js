@@ -12,7 +12,7 @@ module.exports = {
         var $select = $('<select id="lose-upgrade-choice">');
 
         _.each(build.upgrades.purchased, function (upgrade) {
-            var $option = $('<option value="up-' + upgrade.id + '">' + upgrade.name + '</option>');
+            var $option = $('<option value="up-' + upgrade.id + '">' + (upgrade.dualCardName || upgrade.name) + '</option>');
             $select.append($option);
         });
         _.each(build.upgrades.purchasedAbilities, function (pilotCard) {

@@ -52,13 +52,13 @@ XpItem.prototype.label = function () {
         return 'Gain mission XP';
     } else if (this.upgradeType === itemTypes.BUY_UPGRADE) {
         var upgrade = this.getUpgradeById(this.data.upgradeId);
-        return upgrade.slot + ': ' + upgrade.name;
+        return upgrade.slot + ': ' + (upgrade.dualCardName || upgrade.name);
     } else if (this.upgradeType === itemTypes.BUY_PILOT_ABILITY) {
         var pilot = pilots.getById(this.data.pilotId);
         return 'Pilot Ability: ' + pilot.name;
     } else if (this.upgradeType === itemTypes.LOSE_UPGRADE) {
         var lostUpgrade = this.getUpgradeById(this.data.upgradeId);
-        return 'Lose upgrade: ' + lostUpgrade.name;
+        return 'Lose upgrade: ' + (lostUpgrade.dualCardName || lostUpgrade.name);
     } else if (this.upgradeType === itemTypes.LOSE_PILOT_ABILITY) {
         var lostPilot = pilots.getById(this.data.pilotId);
         return 'Lose pilot ability: ' + lostPilot.name;

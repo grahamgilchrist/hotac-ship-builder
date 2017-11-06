@@ -4,6 +4,11 @@
             <li>
                 <img src="/components/xwing-data/images/<%= upgrade.image %>" alt="Card image for <%= upgrade.name %>">
             </li>
+            <% if (upgrade.otherSide) { %>
+                <li>
+                    <img src="/components/xwing-data/images/<%= upgrade.otherSide.image %>" alt="Card image for <%= upgrade.otherSide.name %>">
+                </li>
+            <% } %>            
             <% if (upgrade.conditions) { %>
                 <% upgrade.conditions.forEach(function(name) { %>
                     <li>

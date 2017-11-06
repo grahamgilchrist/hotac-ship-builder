@@ -22,6 +22,24 @@
                         <img src="/components/xwing-data/images/<%= upgrade.image %>" alt="Card image for <%= upgrade.name %>">
                 </div>
             </li>
+            <% if (upgrade.otherSide) { %>
+                <li>
+                    <div class="preview" 
+                        data-featherlight="/components/xwing-data/images/<%= upgrade.otherSide.image %>"
+                        data-featherlight-variant="card-preview-modal"
+                        data-featherlight-close-on-click="anywhere">
+                        <%= getIconString(upgrade.otherSide.slot) %>
+                        <span class="name"><%= upgrade.otherSide.name %></span>
+                        <i class="material-icons icon-preview">zoom_in</i>
+                    </div>
+                    <div class="full"
+                        data-featherlight="/components/xwing-data/images/<%= upgrade.otherSide.image %>"
+                        data-featherlight-variant="card-preview-modal"
+                        data-featherlight-close-on-click="anywhere">
+                            <img src="/components/xwing-data/images/<%= upgrade.otherSide.image %>" alt="Card image for <%= upgrade.otherSide.name %>">
+                    </div>
+                </li>
+            <% } %>
             <% if (upgrade.conditions) { %>
                 <% upgrade.conditions.forEach(function(name) { %>
                     <li>
