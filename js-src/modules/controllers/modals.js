@@ -203,14 +203,16 @@ module.exports = {
             // We were passed pilot id as a number
             upgradeToShow = upgrades.getById(upgrade);
         }
-        var cardHtml = '<img src="/components/xwing-data/images/' + upgradeToShow.image + '" alt="Card image for ' + upgradeToShow.name + '">';
+        var $wrapper = $('<div class="cards-wrapper"></div>');
+        $wrapper.append('<img src="/components/xwing-data/images/' + upgradeToShow.image + '" alt="Card image for ' + upgradeToShow.name + '">');
         if (upgradeToShow.otherSide) {
-            cardHtml += '<img src="/components/xwing-data/images/' + upgradeToShow.otherSide.image + '" alt="Card image for ' + upgradeToShow.otherSide.name + '">';
+            $wrapper.addClass('dual-card');
+            $wrapper.append('<img src="/components/xwing-data/images/' + upgradeToShow.otherSide.image + '" alt="Card image for ' + upgradeToShow.otherSide.name + '">');
         }
         var featherlightConfig = {
             variant: 'card-preview-modal',
             closeOnClick: 'anywhere'
         };
-        $.featherlight(cardHtml, featherlightConfig);
+        $.featherlight($wrapper, featherlightConfig);
     }
 };
