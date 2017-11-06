@@ -27,21 +27,12 @@ upgrades.forEach(function (upgrade) {
     if (matchingCard && matchingCard.id) {
         upgrade.dualCard = matchingCard.id;
         matchingCard.dualCard = upgrade.id;
+        var regExp = new RegExp(/(\((.*)\))/g);
+        var dualCardName = upgrade.name.replace(regExp, '');
+        upgrade.dualCardName = dualCardName;
+        matchingCard.dualCardName = dualCardName;
     }
 });
-
-// Returns and array or both upgrade card object for a specified card Id
-var getDualCardsById = function (upgradeId) {
-    var cards = [];
-    var upgrade = getById(upgradeId);
-    cards.push(upgrade);
-    // Also add second part if a dual card
-    if (upgrade.dualCard) {
-        var upgrade2 = getById(upgrade.dualCard);
-        cards.push(upgrade2);
-    }
-    return cards;
-};
 
 var sortedUpgrades = upgrades.sort(function (a, b) {
     if (a.name < b.name) {
@@ -102,6 +93,5 @@ module.exports = {
     all: sortedUpgrades,
     keyed: keyedUpgrades,
     getIconString: getIconString,
-    getById: getById,
-    getDualCardsById: getDualCardsById
+    getById: getById
 };

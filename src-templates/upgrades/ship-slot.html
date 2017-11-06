@@ -23,7 +23,7 @@
             <%= iconString %>
 
             <% if (upgradeSlot.equipped) { %>
-                <span class="title"><%= upgradeSlot.equipped.name %></span>
+                <span class="title"><%= (upgradeSlot.equipped.dualCardName || upgradeSlot.equipped.name) %></span>
                 <i class="material-icons icon-preview">zoom_in</i>
 
             <% } else { %>

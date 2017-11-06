@@ -111,10 +111,8 @@ upgradesModel.prototype.getUnequippedAbilities = function () {
 };
 
 upgradesModel.prototype.buyCard = function (upgradeId) {
-    var upgrades = upgradesImport.getDualCardsById(upgradeId);
-    upgrades.forEach(function (upgrade) {
-        this.purchased.push(upgrade);
-    }, this);
+    var upgrade = upgradesImport.getById(upgradeId);
+    this.purchased.push(upgrade);
     this.refreshUpgradesState();
     events.trigger('model.build.upgrades.add', this.build);
 };
@@ -127,17 +125,14 @@ upgradesModel.prototype.buyPilotAbility = function (pilotId) {
 };
 
 upgradesModel.prototype.loseCard = function (upgradeId) {
-    var upgradesToLose = upgradesImport.getDualCardsById(upgradeId);
-    upgradesToLose.forEach(function (upgradeToLose) {
-        // remove the first version of this upgrade we find in the purchased list
-        var foundIndex = _.findIndex(this.purchased, function (item) {
-            return item.id === upgradeToLose.id;
-        });
-        if (!_.isUndefined(foundIndex)) {
-            // remove found upgrade from purchased list
-            this.purchased.splice(foundIndex, 1);
-        }
-    }, this);
+    // remove the first version of this upgrade we find in the purchased list
+    var foundIndex = _.findIndex(this.purchased, function (item) {
+        return item.id === upgradeId;
+    });
+    if (!_.isUndefined(foundIndex)) {
+        // remove found upgrade from purchased list
+        this.purchased.splice(foundIndex, 1);
+    }
     this.refreshUpgradesState();
     events.trigger('model.build.upgrades.lose', this.build);
 };
@@ -247,7 +242,8 @@ upgradesModel.prototype.upgradeAllowedInBuild = function (upgrade) {
 
     // Remove any upgrades the build already has
     var upgradeExists = _.find(this.all, function (existingUpgrade) {
-        return existingUpgrade.id === upgrade.id;
+        // Check xws instead of ID so we remove both sides of dual cards
+        return existingUpgrade.xws === upgrade.xws;
     });
 
     if (upgradeExists) {

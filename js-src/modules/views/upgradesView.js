@@ -187,7 +187,7 @@ module.exports = {
     },
     renderUpgradeItem: function (upgrade) {
         var imageUrl = '/components/xwing-data/images/' + upgrade.image;
-        var itemHtml = '<li class="upgrade" data-featherlight="' + imageUrl + '"  data-featherlight-variant="card-preview-modal" data-featherlight-close-on-click="anywhere">' + upgrades.getIconString(upgrade.slot) + '<span class="upgrade-name">' + upgrade.name + '</span><i class="material-icons eye">zoom_in</i></li>';
+        var itemHtml = '<li class="upgrade" data-featherlight="' + imageUrl + '"  data-featherlight-variant="card-preview-modal" data-featherlight-close-on-click="anywhere">' + upgrades.getIconString(upgrade.slot) + '<span class="upgrade-name">' + (upgrade.dualCardName || upgrade.name) + '</span><i class="material-icons eye">zoom_in</i></li>';
         return itemHtml;
     },
     renderPilotUpgradeItem: function (pilot) {
