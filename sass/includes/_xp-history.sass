@@ -20,13 +20,17 @@
 
     th,
     td
-        padding: $site-padding / 2
+        padding: ($site-padding / 2) ($site-padding / 4)
 
-        &:first-child
-            padding-left: $site-padding
+        @include media($media-history-medium-padding)
+            padding: $site-padding / 2
 
-        &:last-child
-            padding-right: $site-padding
+        @include media($media-history-large-padding)
+            &:first-child
+                padding-left: $site-padding
+
+            &:last-child
+                padding-right: $site-padding
 
     @include media('print')
         th.revert,
