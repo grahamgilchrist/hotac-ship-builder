@@ -6,9 +6,4 @@
         <span class="title"><%= (upgradeSlot.upgrade.dualCardName || upgradeSlot.upgrade.name) %></span>
         <i class="material-icons icon-preview">zoom_in</i>
     </button>
-    <% if (upgradeSlot.equipped) { %>
-        <i class="material-icons remove" unequip="<%= upgradeSlot.upgrade.id %>">remove_circle_outline</i>
-    <% } else { %>
-        <i class="material-icons remove" equip="<%= upgradeSlot.upgrade.id %>">add_circle_outline</i>
-    <% } %>
 </li>

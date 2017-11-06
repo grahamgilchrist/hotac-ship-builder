@@ -32,12 +32,5 @@
             <% } %>
 
         </button>
-        <% if (upgradeSlot.equipped) { %>
-            <% if (upgradeSlot.equipped.skill) { %>
-                <i class="material-icons remove" unequip-ability="<%= upgradeSlot.equipped.id %>">remove_circle_outline</i>
-            <% } else { %>
-                <i class="material-icons remove" unequip-slot="<%= upgradeSlot.equipped.id %>">remove_circle_outline</i>
-            <% } %>
-        <% } %>
     <% } %>
 </li>
