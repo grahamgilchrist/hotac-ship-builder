@@ -30,6 +30,7 @@ module.exports = {
         headerView.init();
         XpView.init();
         newView.init();
+        mainView.init();
 
         var urlHash = hashController.get();
         if (urlHash && urlHash.length > 0) {
@@ -37,6 +38,7 @@ module.exports = {
             var promise = hashController.parseExportStringToHistory(urlHash);
             promise.then(function (buildData) {
                 currentBuild = new Build(buildData.xpHistory, buildData.callsign, buildData.playerName, buildData.enemies, buildData.equippedUpgrades, buildData.equippedAbilities);
+                mainView.showSavedTab();
                 mainView.show();
                 headerView.setMainState();
             });
@@ -55,6 +57,7 @@ module.exports = {
             ];
             currentBuild = new Build(startingXpHistory, data.callsign, data.playerName, {});
             newView.hide();
+            mainView.reset();
             mainView.show();
             headerView.setMainState();
         });
@@ -173,7 +176,7 @@ module.exports = {
                 upgradesView.renderUpgradesList(build);
                 changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
                 upgradesView.renderPrintCardList(build);
-                mainView.showTab('summary');
+                mainView.showTab('"#summary-tab');
             }
         });
 
