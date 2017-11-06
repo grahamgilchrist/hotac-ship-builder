@@ -111,7 +111,7 @@ upgradesModel.prototype.getUnequippedAbilities = function () {
 };
 
 upgradesModel.prototype.buyCard = function (upgradeId) {
-    var upgrades = upgradesImport.getDualCards(upgradeId);
+    var upgrades = upgradesImport.getDualCardsById(upgradeId);
     upgrades.forEach(function (upgrade) {
         this.purchased.push(upgrade);
     }, this);
@@ -127,7 +127,7 @@ upgradesModel.prototype.buyPilotAbility = function (pilotId) {
 };
 
 upgradesModel.prototype.loseCard = function (upgradeId) {
-    var upgradesToLose = upgradesImport.getDualCards(upgradeId);
+    var upgradesToLose = upgradesImport.getDualCardsById(upgradeId);
     upgradesToLose.forEach(function (upgradeToLose) {
         // remove the first version of this upgrade we find in the purchased list
         var foundIndex = _.findIndex(this.purchased, function (item) {

@@ -9,44 +9,35 @@ var getById = function (id) {
     });
 };
 
-var dualCards = [
-    {
-        // Adaptibility
-        id1: 232,
-        id2: 233
-    },
-    // Intensity
-    {
-        id1: 317,
-        id2: 318
-    },
-    // arc caster
-    {
-        id1: 310,
-        id2: 311
-    },
-    // pivot wing
-    {
-        id1: 271,
-        id2: 272
-    }
-];
+var getByXws = function (xws, excludeId) {
+    return _.find(upgrades, function (upgrade) {
+        return ((upgrade.xws === xws) && (upgrade.id !== excludeId));
+    });
+};
 
-// Link the dual cards using a "dualCard" property
-dualCards.forEach(function (dualCard) {
-    var upgrade1 = getById(dualCard.id1);
-    upgrade1.dualCard = dualCard.id2;
-    var upgrade2 = getById(dualCard.id2);
-    upgrade2.dualCard = dualCard.id1;
+// Find all dual cards
+upgrades.forEach(function (upgrade) {
+    if (upgrade.dualCard) {
+        // don't bother trying to match if we have already paired
+        return;
+    }
+    // Dual cards share xws name
+    // Attempt to find other cards with same xws
+    var matchingCard = getByXws(upgrade.xws, upgrade.id);
+    if (matchingCard && matchingCard.id) {
+        upgrade.dualCard = matchingCard.id;
+        matchingCard.dualCard = upgrade.id;
+    }
 });
 
-var getDualCards = function (upgradeId) {
+// Returns and array or both upgrade card object for a specified card Id
+var getDualCardsById = function (upgradeId) {
     var cards = [];
-    var upgrade = upgradesImport.getById(upgradeId);
+    var upgrade = getById(upgradeId);
     cards.push(upgrade);
     // Also add second part if a dual card
     if (upgrade.dualCard) {
-        var upgrade2 = upgradesImport.getById(upgrade.dualCard);
+        var upgrade2 = getById(upgrade.dualCard);
         cards.push(upgrade2);
     }
     return cards;
@@ -112,5 +103,5 @@ module.exports = {
     keyed: keyedUpgrades,
     getIconString: getIconString,
     getById: getById,
-    getDualCards: getDualCards
+    getDualCardsById: getDualCardsById
 };
