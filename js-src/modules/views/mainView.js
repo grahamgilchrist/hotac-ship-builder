@@ -3,6 +3,9 @@
 var $ = require('jquery');
 
 module.exports = {
+    init: function () {
+        module.exports.bindTabChange();
+    },
     hide: function () {
         $('.main').removeClass('active');
     },
@@ -15,7 +18,32 @@ module.exports = {
         $('[bind-player-name]').text(build.playerName);
     },
     showTab: function (tabName) {
-        var $tabLink = $('.build-content .mdl-tabs__tab-bar a[href="#' + tabName + '-tab"] span');
+        var $tabLink = $('.build-content .mdl-tabs__tab-bar a[href="' + tabName + '"] span');
         $tabLink.click();
+    },
+    reset: function () {
+        window.sessionStorage.removeItem('tabName');
+        module.exports.showTab('#summary-tab');
+    },
+    bindTabChange: function () {
+        var $tabLinks = $('.build-content .mdl-tabs__tab-bar a');
+
+        $tabLinks.on('click', module.exports.tabChanged);
+    },
+    tabChanged: function () {
+        var $clickedAnchor = $(this);
+        var tabName = $clickedAnchor.attr('href');
+
+        if (window.sessionStorage) {
+            window.sessionStorage.setItem('tabName', tabName);
+        }
+    },
+    showSavedTab: function () {
+        if (window.sessionStorage) {
+            var tabName = window.sessionStorage.getItem('tabName');
+            if (tabName) {
+                module.exports.showTab(tabName);
+            }
+        }
     }
 };
