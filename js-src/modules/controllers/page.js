@@ -173,6 +173,7 @@ module.exports = {
                 upgradesView.renderUpgradesList(build);
                 changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
                 upgradesView.renderPrintCardList(build);
+                mainView.showTab('summary');
             }
         });
 
