@@ -5,6 +5,7 @@ var _ = require('lodash');
 var events = require('./events');
 var abilityCardView = require('../views/abilityCard');
 var pilots = require('../models/pilots');
+var upgrades = require('../models/upgrades');
 
 module.exports = {
     init: function () {
@@ -195,5 +196,21 @@ module.exports = {
             closeOnClick: 'anywhere'
         };
         $.featherlight($card, featherlightConfig);
+    },
+    openUpgradeCardModal: function (upgrade) {
+        var upgradeToShow = upgrade;
+        if (_.isInteger(upgrade)) {
+            // We were passed pilot id as a number
+            upgradeToShow = upgrades.getById(upgrade);
+        }
+        var cardHtml = '<img src="/components/xwing-data/images/' + upgradeToShow.image + '" alt="Card image for ' + upgradeToShow.name + '">';
+        if (upgradeToShow.otherSide) {
+            cardHtml += '<img src="/components/xwing-data/images/' + upgradeToShow.otherSide.image + '" alt="Card image for ' + upgradeToShow.otherSide.name + '">';
+        }
+        var featherlightConfig = {
+            variant: 'card-preview-modal',
+            closeOnClick: 'anywhere'
+        };
+        $.featherlight(cardHtml, featherlightConfig);
     }
 };

@@ -55,6 +55,10 @@ module.exports = {
             events.trigger('view.upgrades.unequipUpgrade', upgradeId);
         });
 
+        $newElement.on('click', '.ship-slots-list [open-card-preview]', function () {
+            var upgradeId = parseInt($(this).attr('open-card-preview'), 10);
+            modalController.openUpgradeCardModal(upgradeId);
+        });
         $newElement.on('click', '.ship-slots-list [open-ability-preview]', function () {
             var upgradeId = parseInt($(this).attr('open-ability-preview'), 10);
             modalController.openAbilityCardModal(upgradeId);
@@ -178,6 +182,10 @@ module.exports = {
         var viewHtml = templateUtils.renderHTML('upgrades/allowed-list', context);
         var $newElement = $(viewHtml);
 
+        $newElement.on('click', 'li.upgrade.card', function () {
+            var upgradeId = parseInt($(this).attr('upgrade-id'), 10);
+            modalController.openUpgradeCardModal(upgradeId);
+        });
         $newElement.on('click', 'li.upgrade.ability', function () {
             var pilotId = parseInt($(this).attr('ability-id'), 10);
             modalController.openAbilityCardModal(pilotId);
@@ -186,8 +194,7 @@ module.exports = {
         $wrapperElement.empty().append($newElement);
     },
     renderUpgradeItem: function (upgrade) {
-        var imageUrl = '/components/xwing-data/images/' + upgrade.image;
-        var itemHtml = '<li class="upgrade" data-featherlight="' + imageUrl + '"  data-featherlight-variant="card-preview-modal" data-featherlight-close-on-click="anywhere">' + upgrades.getIconString(upgrade.slot) + '<span class="upgrade-name">' + (upgrade.dualCardName || upgrade.name) + '</span><i class="material-icons eye">zoom_in</i></li>';
+        var itemHtml = '<li class="upgrade card" upgrade-id="' + upgrade.id + '">' + upgrades.getIconString(upgrade.slot) + '<span class="upgrade-name">' + (upgrade.dualCardName || upgrade.name) + '</span><i class="material-icons eye">zoom_in</i></li>';
         return itemHtml;
     },
     renderPilotUpgradeItem: function (pilot) {
