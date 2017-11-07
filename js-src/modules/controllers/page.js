@@ -31,6 +31,7 @@ module.exports = {
         XpView.init();
         newView.init();
         mainView.init();
+        upgradesView.init();
 
         var urlHash = hashController.get();
         if (urlHash && urlHash.length > 0) {

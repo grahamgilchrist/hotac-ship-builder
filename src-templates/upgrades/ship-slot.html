@@ -11,8 +11,10 @@
             <% if (upgradeSlot.equipped) { %>
                 <% if (upgradeSlot.equipped.skill) { %>
                     open-ability-preview="<%= upgradeSlot.equipped.id %>"
+                    preview-button="unequip"
                 <% } else { %>
                     open-card-preview="<%= upgradeSlot.equipped.id %>"
+                    preview-button="unequip"
                 <% } %>
             <% } else { %> 
                 equip-slot="<%= upgradeSlot.type %>"
@@ -32,12 +34,5 @@
             <% } %>
 
         </button>
-        <% if (upgradeSlot.equipped) { %>
-            <% if (upgradeSlot.equipped.skill) { %>
-                <i class="material-icons remove" unequip-ability="<%= upgradeSlot.equipped.id %>">remove_circle_outline</i>
-            <% } else { %>
-                <i class="material-icons remove" unequip-slot="<%= upgradeSlot.equipped.id %>">remove_circle_outline</i>
-            <% } %>
-        <% } %>
     <% } %>
 </li>
