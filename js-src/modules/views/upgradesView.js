@@ -267,7 +267,7 @@ module.exports = {
     renderModalCardListItem: function (build, mode, card, abilityPilot) {
         var $upgrade;
         if (card) {
-            $upgrade = $('<li><img src="/components/xwing-data/images/' + card.image + '" alt="' + card.name + '"></li>');
+            $upgrade = $('<li><div class="upgrade-card"><img src="/components/xwing-data/images/' + card.image + '" alt="' + card.name + '"></div></li>');
 
             if (mode === 'buy') {
                 if (build.currentXp >= card.points) {

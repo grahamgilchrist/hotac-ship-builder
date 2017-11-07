@@ -7,6 +7,7 @@
     position: relative
     text-align: center
 
+    // Scale card to same ratio as upgrade cards, whatever the width
     &:before
         content: ''
         display: block
@@ -18,25 +19,34 @@
         left: 0
         right: 0
         bottom: 0
+        display: flex
+        flex-direction: column
 
-    .title,
-    .name,
-    .text
-        display: block
+    .img-wrapper
+        overflow: hidden
+        position: relative
+        height: 0
+        padding-top: 41%
+
+        img
+            max-width: 100%
+            position: absolute
+            top: 0
+            left: 0
 
     .title
         font-weight: 700
-        margin-bottom: 1.2em
-        padding: 10px 5px
+        padding: 7px 5px
         background-color: #fff
-        border-top-left-radius: 10px
-        border-top-right-radius: 10px
 
-    .name
+    .subtitle
+        margin: 7px 0
         font-weight: 700
 
     .text
-        margin: 1.2em 20px
+        margin: 0 10px 26px
+        font-size: 11px
+        flex-grow: 1
 
     .cost
         position: absolute

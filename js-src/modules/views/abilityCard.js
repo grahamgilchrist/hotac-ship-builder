@@ -1,11 +1,16 @@
 'use strict';
 
 var $ = require('jquery');
+var templateUtils = require('../utils/templates');
 
 module.exports = {
     renderHtml: function (ability) {
         var escapedText = ability.text.replace(/"/g, '&quot;');
-        var html = '<div class="ability-card"><div class="ability-inner"><span class="title">' + ability.name + '</span><span class="name">Ability  (PS ' + ability.skill + ')</span><span class="text">' + escapedText + '</span><span class="cost">' + ability.skill + '</span></div></div>';
+        var context = {
+            ability: ability,
+            escapedText: escapedText
+        };
+        var html = templateUtils.renderHTML('upgrades/ability-card', context);
 
         return html;
     },
