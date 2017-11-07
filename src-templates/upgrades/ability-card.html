@@ -1,7 +1,7 @@
 <div class="ability-card">
     <div class="ability-inner">
         <div class="img-wrapper">
-            <img src="/components/xwing-data/images/<%= ability.image %>">
+            <img <% if (ability.image) { %>src="/components/xwing-data/images/<%= ability.image %>"<% } %>>
         </div>
         <div class="title"><%= ability.name %></div>
         <div class="subtitle">Ability (PS <%= ability.skill %>)</div>
