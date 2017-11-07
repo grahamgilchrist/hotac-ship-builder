@@ -184,31 +184,76 @@ module.exports = {
         $.featherlight($modalContent, featherlightConfig);
     },
     // Accepts either object of pilot model or integer ID
-    openAbilityCardModal: function (abilityPilot) {
+    openAbilityCardModal: function (abilityPilot, buttonType) {
         var pilotModel = abilityPilot;
         if (_.isInteger(abilityPilot)) {
             // We were passed pilot id as a number
             pilotModel = pilots.getById(abilityPilot);
         }
+        var $wrapper = $('<div></div>');
         var $card = abilityCardView.renderElement(pilotModel);
+        $wrapper.append($card);
+
+        if (buttonType) {
+            var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"></button>');
+            if (buttonType === 'equip') {
+                $button.text('Equip');
+                $button.attr('equip-ability', pilotModel.id);
+            }
+            if (buttonType === 'equip-disabled') {
+                $button.text('Equip');
+                $button.attr('disabled', '');
+            }
+            if (buttonType === 'unequip') {
+                $button.text('Unequip');
+                $button.attr('unequip-ability', pilotModel.id);
+            }
+            var $buttonWrapper = $('<div class="button-wrapper"></div>');
+            $buttonWrapper.append($button);
+            $wrapper.append($buttonWrapper);
+        }
+
         var featherlightConfig = {
             variant: 'card-preview-modal',
             closeOnClick: 'anywhere'
         };
-        $.featherlight($card, featherlightConfig);
+        $.featherlight($wrapper, featherlightConfig);
     },
-    openUpgradeCardModal: function (upgrade) {
+    openUpgradeCardModal: function (upgrade, buttonType) {
         var upgradeToShow = upgrade;
         if (_.isInteger(upgrade)) {
             // We were passed pilot id as a number
             upgradeToShow = upgrades.getById(upgrade);
         }
-        var $wrapper = $('<div class="cards-wrapper"></div>');
-        $wrapper.append('<img src="/components/xwing-data/images/' + upgradeToShow.image + '" alt="Card image for ' + upgradeToShow.name + '">');
+        var $wrapper = $('<div></div>');
+        var $cardsWrapper = $('<div class="cards-wrapper"></div>');
+        $wrapper.append($cardsWrapper);
+
+        $cardsWrapper.append('<img src="/components/xwing-data/images/' + upgradeToShow.image + '" alt="Card image for ' + upgradeToShow.name + '">');
         if (upgradeToShow.otherSide) {
-            $wrapper.addClass('dual-card');
-            $wrapper.append('<img src="/components/xwing-data/images/' + upgradeToShow.otherSide.image + '" alt="Card image for ' + upgradeToShow.otherSide.name + '">');
+            $cardsWrapper.addClass('dual-card');
+            $cardsWrapper.append('<img src="/components/xwing-data/images/' + upgradeToShow.otherSide.image + '" alt="Card image for ' + upgradeToShow.otherSide.name + '">');
         }
+
+        if (buttonType) {
+            var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"></button>');
+            if (buttonType === 'equip') {
+                $button.text('Equip');
+                $button.attr('equip-card', upgradeToShow.id);
+            }
+            if (buttonType === 'equip-disabled') {
+                $button.text('Equip');
+                $button.attr('disabled', '');
+            }
+            if (buttonType === 'unequip') {
+                $button.text('Unequip');
+                $button.attr('unequip-card', upgradeToShow.id);
+            }
+            var $buttonWrapper = $('<div class="button-wrapper"></div>');
+            $buttonWrapper.append($button);
+            $wrapper.append($buttonWrapper);
+        }
+
         var featherlightConfig = {
             variant: 'card-preview-modal',
             closeOnClick: 'anywhere'

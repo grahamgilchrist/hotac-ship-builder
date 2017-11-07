@@ -278,6 +278,43 @@ upgradesModel.prototype.abilityAlreadyInBuild = function (abilityPilot) {
     return false;
 };
 
+upgradesModel.prototype.canEquipUpgrade = function (upgradeId) {
+    var upgradeSlots = this.build.upgradeSlots;
+    var upgrade = upgradesImport.getById(upgradeId);
+
+    var canEquip = false;
+
+    _.each(upgradeSlots.enabled, function (upgradeSlot) {
+        if (upgradeSlot.type === upgrade.slot) {
+            // this slot is the right type for the upgrade
+            if (!upgradeSlot.equipped) {
+            // This slot is free
+                canEquip = true;
+            }
+        }
+    });
+
+    return canEquip;
+};
+
+upgradesModel.prototype.canEquipAbilties = function () {
+    var upgradeSlots = this.build.upgradeSlots;
+
+    var canEquip = false;
+
+    _.each(upgradeSlots.enabled, function (upgradeSlot) {
+        if (upgradeSlot.type === 'Elite') {
+            // this slot is the right type for the upgrade
+            if (!upgradeSlot.equipped) {
+            // This slot is free
+                canEquip = true;
+            }
+        }
+    });
+
+    return canEquip;
+};
+
 upgradesModel.prototype.equipUpgradesToSlots = function (upgradesToEquip, abilitiesToEquip) {
     var thisModel = this;
 

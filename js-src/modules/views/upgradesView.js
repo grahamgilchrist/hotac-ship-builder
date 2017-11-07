@@ -13,6 +13,27 @@ var conditionsByName = conditions.keyedByName;
 var templateUtils = require('../utils/templates');
 
 module.exports = {
+    init: function () {
+        module.exports.bindEquipButtons();
+    },
+    bindEquipButtons: function () {
+        $(document).on('click', '[equip-card]', function () {
+            var upgradeId = parseInt($(this).attr('equip-card'), 10);
+            events.trigger('view.upgrades.equipUpgrade', upgradeId);
+        });
+        $(document).on('click', '[unequip-card]', function () {
+            var upgradeId = parseInt($(this).attr('unequip-card'), 10);
+            events.trigger('view.upgrades.unequipUpgrade', upgradeId);
+        });
+        $(document).on('click', '[equip-ability]', function () {
+            var upgradeId = parseInt($(this).attr('equip-ability'), 10);
+            events.trigger('view.upgrades.equipAbility', upgradeId);
+        });
+        $(document).on('click', '[unequip-ability]', function () {
+            var upgradeId = parseInt($(this).attr('unequip-ability'), 10);
+            events.trigger('view.upgrades.unequipAbility', upgradeId);
+        });
+    },
     renderShipSlotsList: function (build) {
         var $wrapperElement = $('[view-bind=ship-slots-list]');
 
@@ -46,31 +67,17 @@ module.exports = {
         var viewHtml = templateUtils.renderHTML('upgrades/shipslots', context);
         var $newElement = $(viewHtml);
 
-        $newElement.on('click', '.ship-slots-free-wrapper i[equip]', function () {
-            var upgradeId = parseInt($(this).attr('equip'), 10);
-            events.trigger('view.upgrades.equipUpgrade', upgradeId);
-        });
-        $newElement.on('click', '.ship-slots-free-wrapper i[unequip]', function () {
-            var upgradeId = parseInt($(this).attr('unequip'), 10);
-            events.trigger('view.upgrades.unequipUpgrade', upgradeId);
-        });
-
         $newElement.on('click', '.ship-slots-list [open-card-preview]', function () {
             var upgradeId = parseInt($(this).attr('open-card-preview'), 10);
-            modalController.openUpgradeCardModal(upgradeId);
+            var buttonType = $(this).attr('preview-button');
+            modalController.openUpgradeCardModal(upgradeId, buttonType);
         });
         $newElement.on('click', '.ship-slots-list [open-ability-preview]', function () {
             var upgradeId = parseInt($(this).attr('open-ability-preview'), 10);
-            modalController.openAbilityCardModal(upgradeId);
+            var buttonType = $(this).attr('preview-button');
+            modalController.openAbilityCardModal(upgradeId, buttonType);
         });
-        $newElement.on('click', '.ship-slots-list i[unequip-slot]', function () {
-            var upgradeId = parseInt($(this).attr('unequip-slot'), 10);
-            module.exports.removeEquipSlotUpgrade(upgradeId, build);
-        });
-        $newElement.on('click', '.ship-slots-list i[unequip-ability]', function () {
-            var upgradeId = parseInt($(this).attr('unequip-ability'), 10);
-            module.exports.removeEquipSlotAbility(upgradeId, build);
-        });
+
         var abilitiesAvailableToBuy = build.upgrades.getAbilitiesAvailableToBuy();
         $newElement.on('click', '.ship-slots-list [equip-slot]', function () {
             var slotType = $(this).attr('equip-slot');
@@ -184,11 +191,21 @@ module.exports = {
 
         $newElement.on('click', 'li.upgrade.card', function () {
             var upgradeId = parseInt($(this).attr('upgrade-id'), 10);
-            modalController.openUpgradeCardModal(upgradeId);
+            var canEquipUpgrade = build.upgrades.canEquipUpgrade(upgradeId);
+            if (canEquipUpgrade) {
+                modalController.openUpgradeCardModal(upgradeId, 'equip');
+            } else {
+                modalController.openUpgradeCardModal(upgradeId, 'equip-disabled');
+            }
         });
         $newElement.on('click', 'li.upgrade.ability', function () {
             var pilotId = parseInt($(this).attr('ability-id'), 10);
-            modalController.openAbilityCardModal(pilotId);
+            var canEquipAbilities = build.upgrades.canEquipAbilties();
+            if (canEquipAbilities) {
+                modalController.openAbilityCardModal(pilotId, 'equip');
+            } else {
+                modalController.openAbilityCardModal(pilotId, 'equip-disabled');
+            }
         });
 
         $wrapperElement.empty().append($newElement);
@@ -205,12 +222,6 @@ module.exports = {
         // open modal to choose upgrade to equip
         var tabs = module.exports.renderUpgradeModalContent(upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, abilitiesAvailableToBuy, build);
         modalController.openOptionSelectModal(undefined, tabs[0].buttonLabel, 'Equip ' + upgradeType + ' slot', tabs);
-    },
-    removeEquipSlotUpgrade: function (upgradeId) {
-        events.trigger('view.upgrades.unequipUpgrade', upgradeId);
-    },
-    removeEquipSlotAbility: function (upgradeId) {
-        events.trigger('view.upgrades.unequipAbility', upgradeId);
     },
     renderUpgradeModalContent: function (upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, abilitiesAvailableToBuy, build) {
         var tabs = [];

@@ -11,8 +11,10 @@
             <% if (upgradeSlot.equipped) { %>
                 <% if (upgradeSlot.equipped.skill) { %>
                     open-ability-preview="<%= upgradeSlot.equipped.id %>"
+                    preview-button="unequip"
                 <% } else { %>
                     open-card-preview="<%= upgradeSlot.equipped.id %>"
+                    preview-button="unequip"
                 <% } %>
             <% } else { %> 
                 equip-slot="<%= upgradeSlot.type %>"

@@ -1,6 +1,11 @@
 <li>
     <button class="slot <% if (upgradeSlot.equipped) { %>equipped<% } else { %>unequipped<% } %>"
-        open-card-preview="<%= upgradeSlot.upgrade.id %>"
+        open-card-preview="<%= upgradeSlot.upgrade.id %>" 
+        <% if (upgradeSlot.equipped) { %>
+            preview-button="unequip"
+        <% } else { %>
+            preview-button="equip"
+        <% } %>
         >
         <%= iconString %>
         <span class="title"><%= (upgradeSlot.upgrade.dualCardName || upgradeSlot.upgrade.name) %></span>
