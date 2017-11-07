@@ -1,8 +1,11 @@
 <div class="ability-card">
     <div class="ability-inner">
-        <span class="title"><%= ability.name %></span>
-        <span class="name">Ability  (PS <%= ability.skill %>)</span>
-        <span class="text"><%= escapedText %></span>
-        <span class="cost"><%= ability.skill %></span>
+        <div class="img-wrapper">
+            <img src="/components/xwing-data/images/<%= ability.image %>">
+        </div>
+        <div class="title"><%= ability.name %></div>
+        <div class="subtitle">Ability (PS <%= ability.skill %>)</div>
+        <div class="text"><div class="text-inner"><%= escapedText %></div></div>
+        <div class="cost"><%= ability.skill %></div>
     </div>
 </div>

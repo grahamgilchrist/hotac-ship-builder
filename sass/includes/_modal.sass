@@ -114,17 +114,23 @@
             cursor: pointer
             vertical-align: middle
 
-        img
+        .upgrade-card
+            border-radius: 12px
+
+            img
+                border-radius: 12px
+
+        .upgrade-card img,
+        .ability-card
             width: 153px
             height: 237px
-            border-radius: 12px
 
             @include media($media-featherlight-large-cards)
                 width: 164px
                 height: 264px
 
-
-        li.selected img
+        li.selected .upgrade-card,
+        li.selected .ability-card
             box-shadow: #45b3f9 0px 0px 6px 3px
 
         li.cannot-afford,
@@ -136,10 +142,6 @@
 
         li.lower-ps
             opacity: 0.4
-
-        .ability-card
-            width: 164px
-            height: 264px
 
     .ship-options-list
         text-align: center
