@@ -6,7 +6,7 @@
             <th>Cost</th>
             <th>Remaining XP</th>
             <th>Total XP earnt</th>
-            <th class="revert"></th>
+            <th class="revert">Revert</th>
         </thead>
         <tbody id="xp-history">
             <% xpHistory.forEach(function(item, itemIndex) { %>
@@ -28,7 +28,9 @@
                         <% } %>
                     </td>
                     <td class="revert">
-                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" revert="<%= item.xpItemIndex %>">Revert</button>
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" revert="<%= item.xpItemIndex %>">
+                            <i class="material-icons">history</i>
+                        </button>
                     </td>
                 </tr>
             <% }); %>
