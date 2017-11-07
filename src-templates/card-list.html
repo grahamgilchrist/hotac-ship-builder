@@ -1,7 +1,7 @@
 <div class="print-card-list">
     <ul>
         <% upgrades.forEach(function(upgrade) { %>
-            <li>
+            <li class="upgrade-card">
                 <img src="/components/xwing-data/images/<%= upgrade.image %>" alt="Card image for <%= upgrade.name %>">
             </li>
             <% if (upgrade.otherSide) { %>
@@ -19,7 +19,7 @@
         <% }); %>
 
         <% abilities.forEach(function(abilityPilot) { %>
-            <li class="ability">
+            <li>
                 <%= renderCard(abilityPilot) %>
             </li>
             <% if (abilityPilot.conditions) { %>
