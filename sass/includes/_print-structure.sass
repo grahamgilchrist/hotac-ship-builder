@@ -1,16 +1,21 @@
+body
+    @include media('print')
+        // zoom: 75%
+
 #print-view
+    .print-page + .print-page
+        page-break-before: always
+
     .columns-wrapper
         display: flex
         justify-content: space-between
-
-    .column-2
-        margin-left: 10px
 
     .box
         width: 300px
         border: 1px solid #eee
         border-radius: 14px
         -webkit-print-color-adjust: exact
+        color-adjust: exact
         font-size: 16px
         margin-bottom: 10px
         overflow: hidden
@@ -26,19 +31,84 @@
         .value
             padding: 8px 20px 8px 8px
 
-    .print-card-list
-        ul
-            display: flex
-            flex-wrap: wrap
-            justify-content: center
+    .summary-page
+        .column-2
+            margin-left: 10px
 
-        .upgrade-card,
-        .ability-card
-            margin: 0 5px
- 
-        .upgrade-card img,
-        .ability-card
-            height: 300px
+        // .print-card-list
+        //     ul
+        //         display: flex
+        //         flex-wrap: wrap
+        //         justify-content: center
 
-        .ability-card
-            width: 194px
+        //     .upgrade-card,
+        //     .ability-card
+        //         margin: 0 5px
+
+        //     .upgrade-card img,
+        //     .ability-card
+        //         // height: 200px
+        //         // width: 50%
+
+        //     .ability-card
+        //         // width: 145px
+
+    .history-page
+        -webkit-print-color-adjust: exact
+        color-adjust: exact
+
+        .column-1
+            max-width: 40%
+            border-right: 1px solid #ccc
+            padding-right: 10px
+
+            .history-wrapper
+                zoom: 75%
+
+        .column-2
+            width: 20%
+            padding-left: 10px
+
+            .mdl-tooltip
+                margin: 1em 0
+
+            #disabled-upgrade-list li
+                opacity: 1
+
+        .column-3
+            width: 40%
+            padding-left: 5px
+
+            ul
+                overflow: auto
+
+            li
+                padding: 5px
+                page-break-inside: avoid
+                float: left
+
+            .upgrade-card-wrapper,
+            .ability-card-wrapper
+                width: 50%
+
+            .upgrade-card-wrapper
+                position: relative
+
+                &:before
+                    content: ''
+                    display: block
+                    padding-top: 154.6%
+
+                .img-wrapper
+                    position: absolute
+                    top: 5px
+                    left: 5px
+                    right: 5px
+                    bottom: 5px
+                    overflow: hidden
+
+                img
+                    width: 100%
+
+    h4 i
+        display: none

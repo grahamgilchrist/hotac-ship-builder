@@ -198,36 +198,49 @@
             </div>
         </div>
         <div id="print-view">
-            <div class="columns-wrapper">
-                <div class="column column-1">
-                    <div class="ship-info">
-                        <div class="ship-image-stats">
-                            <div class="img-wrapper">
-                                <img src="" alt="Ship image" class="ship-info-image" view-bind="ship-info-image">
+            <div class="print-page summary-page">
+                <div class="columns-wrapper">
+                    <div class="column column-1">
+                        <div class="ship-info">
+                            <div class="ship-image-stats">
+                                <div class="img-wrapper">
+                                    <img src="" alt="Ship image" class="ship-info-image" view-bind="ship-info-image">
+                                </div>
+                                <div class="ship-info-stats" view-bind="ship-info-stats"></div>
+                                <div class="ship-info-actions" view-bind="ship-info-actions"></div>
                             </div>
-                            <div class="ship-info-stats" view-bind="ship-info-stats"></div>
-                            <div class="ship-info-actions" view-bind="ship-info-actions"></div>
+
+                            <div class="ship-info-dial" view-bind="ship-info-dial"></div>
+                        </div>
+                    </div>
+                    <div class="column column-2">
+                        <div class="box"><span class="label">Callsign:</span><span class="value" bind-callsign></span></div>
+                        <div class="box"><span class="label">Player:</span> <span class="value" bind-player-name></span></div>
+                        <div class="box"><span class="label">XP to spend:</span> <span class="value"><span bind-xp-current></span>XP</span></div>                    
+                        <div view-bind="enemies-table"></div>
+                    </div>
+                    <div class="column column-3">
+                        <div class="upgrade-slots-wrapper">
+                            <div view-bind="ship-slots-list"></div>
                         </div>
 
-                        <div class="ship-info-dial" view-bind="ship-info-dial"></div>
                     </div>
                 </div>
-                <div class="column column-2">
-                    <div class="box"><span class="label">Callsign:</span><span class="value" bind-callsign></span></div>
-                    <div class="box"><span class="label">Player:</span> <span class="value" bind-player-name></span></div>
-                    <div class="box"><span class="label">XP to spend:</span> <span class="value"><span bind-xp-current></span>XP</span></div>                    
-                    <div view-bind="enemies-table"></div>
-                </div>
-                <div class="column column-3">
-                    <div class="upgrade-slots-wrapper">
-                        <div view-bind="ship-slots-list"></div>
+                <div view-bind="equipped-upgrades"></div>
+            </div>
+            <div class="print-page history-page">
+                <div class="columns-wrapper">
+                    <div class="column column-1">
+                        <div view-bind="history-table"></div>
+                    </div>
+                    <div class="column column-2">
                         <div view-bind="allowed-list"></div>
                     </div>
-
+                    <div class="column column-3">
+                        <div view-bind="unequipped-print-card-list"></div>
+                    </div>
                 </div>
             </div>
-            <div view-bind="print-card-list"></div>
-            <div view-bind="history-table"></div>
         </div>
         <div id="drawer-wrapper" class="drawer-wrapper">
             <div class="drawer-background"></div>
