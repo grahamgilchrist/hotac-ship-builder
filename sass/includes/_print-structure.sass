@@ -3,12 +3,14 @@ body
         // zoom: 75%
 
 #print-view
-    .print-page + .print-page
-        page-break-before: always
+    .print-page
+        page-break-after: always
 
     .columns-wrapper
-        display: flex
-        justify-content: space-between
+        overflow: hidden
+
+        .column
+            float: left
 
     .box
         width: 300px
@@ -32,26 +34,15 @@ body
             padding: 8px 20px 8px 8px
 
     .summary-page
+        .column-1
+            width: 40%
+
         .column-2
-            margin-left: 10px
+            padding-left: 10px
+            width: 35%
 
-        // .print-card-list
-        //     ul
-        //         display: flex
-        //         flex-wrap: wrap
-        //         justify-content: center
-
-        //     .upgrade-card,
-        //     .ability-card
-        //         margin: 0 5px
-
-        //     .upgrade-card img,
-        //     .ability-card
-        //         // height: 200px
-        //         // width: 50%
-
-        //     .ability-card
-        //         // width: 145px
+        .column-3
+            width: 25%
 
     .history-page
         -webkit-print-color-adjust: exact
@@ -63,7 +54,13 @@ body
             padding-right: 10px
 
             .history-wrapper
-                zoom: 75%
+                font-size: 9px
+
+                h3
+                    font-size: 16px
+
+            table
+                page-break-inside: always
 
         .column-2
             width: 20%
