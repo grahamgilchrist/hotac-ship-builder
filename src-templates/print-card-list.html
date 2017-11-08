@@ -1,6 +1,6 @@
 <div class="print-card-list">
     <ul>
-        <% unequipped.forEach(function(upgrade) { %>
+        <% upgrades.forEach(function(upgrade) { %>
             <li class="upgrade-card-wrapper">
                 <div class="img-wrapper">
                     <img src="/components/xwing-data/images/<%= upgrade.image %>" alt="Card image for <%= upgrade.name %>">
@@ -24,7 +24,7 @@
             <% } %>            
         <% }); %>
 
-        <% unequippedAbilities.forEach(function(abilityPilot) { %>
+        <% abilities.forEach(function(abilityPilot) { %>
             <li class="ability-card-wrapper">
                 <%= renderCard(abilityPilot) %>
             </li>

@@ -134,12 +134,22 @@ module.exports = {
         return viewHtml;
     },
     renderPrintCardList: function (build) {
-        var $wrapper = $('[view-bind=unequipped-print-card-list]');
+        var $wrapper = $('[view-bind=equipped-print-card-list]');
 
         var context = {
-            unequipped: build.upgrades.unequipped,
-            unequippedAbilities: build.upgrades.unequippedAbilities,
-            disabled: build.upgrades.disabled,
+            upgrades: build.upgrades.equippedUpgrades,
+            abilities: build.upgrades.equippedAbilities,
+            renderCard: abilityCardView.renderHtml
+        };
+        templateUtils.renderToDom('print-card-list', $wrapper, context);
+
+        $wrapper = $('[view-bind=unequipped-print-card-list]');
+
+        var unequippedAndDisabled = build.upgrades.unequipped.concat(build.upgrades.disabled);
+
+        context = {
+            upgrades: unequippedAndDisabled,
+            abilities: build.upgrades.unequippedAbilities,
             renderCard: abilityCardView.renderHtml
         };
         templateUtils.renderToDom('print-card-list', $wrapper, context);
