@@ -142,7 +142,7 @@ module.exports = {
             upgrades: build.upgrades.equippedUpgrades,
             abilities: build.upgrades.equippedAbilities,
             renderCard: abilityCardView.renderHtml,
-            conditions: conditions.keyedByName
+            conditions: conditionsByName
         };
         templateUtils.renderToDom('print-card-list', $wrapper, context);
 
@@ -154,7 +154,7 @@ module.exports = {
             upgrades: unequippedAndDisabled,
             abilities: build.upgrades.unequippedAbilities,
             renderCard: abilityCardView.renderHtml,
-            conditions: conditions.keyedByName
+            conditions: conditionsByName
         };
         templateUtils.renderToDom('print-card-list', $wrapper, context);
     },
