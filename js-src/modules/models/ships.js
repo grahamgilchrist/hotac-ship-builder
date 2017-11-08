@@ -86,7 +86,8 @@ var hotacShips = [
         pilotCard: getPilotByXws('kylekatarn'),
         upgradeSlots: [
             'Turret',
-            'Crew'
+            'Crew',
+            'Illicit'
         ],
         startingUpgrades: []
     }
