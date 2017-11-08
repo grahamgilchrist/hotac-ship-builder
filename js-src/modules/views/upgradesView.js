@@ -9,6 +9,8 @@ var abilityCardView = require('./abilityCard');
 var loseUpgradeModal = require('./loseUpgradeModal');
 var upgrades = require('../models/upgrades');
 var templateUtils = require('../utils/templates');
+var conditions = require('../models/conditions');
+var conditionsByName = conditions.keyedByName;
 
 module.exports = {
     init: function () {
@@ -139,7 +141,8 @@ module.exports = {
         var context = {
             upgrades: build.upgrades.equippedUpgrades,
             abilities: build.upgrades.equippedAbilities,
-            renderCard: abilityCardView.renderHtml
+            renderCard: abilityCardView.renderHtml,
+            conditions: conditions.keyedByName
         };
         templateUtils.renderToDom('print-card-list', $wrapper, context);
 
@@ -150,7 +153,8 @@ module.exports = {
         context = {
             upgrades: unequippedAndDisabled,
             abilities: build.upgrades.unequippedAbilities,
-            renderCard: abilityCardView.renderHtml
+            renderCard: abilityCardView.renderHtml,
+            conditions: conditions.keyedByName
         };
         templateUtils.renderToDom('print-card-list', $wrapper, context);
     },
