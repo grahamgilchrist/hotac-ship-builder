@@ -32,7 +32,9 @@ upgradesModel.prototype.refreshUpgradesState = function () {
     // Validate and equip upgrades to slots
     var validatedEquippedUpgrades = this.validateUpgrades(this.equippedUpgrades);
     var validatedEquippedAbilities = this.validateAbilities(this.equippedAbilities);
-    this.equippedUpgrades = this.equipUpgradesToSlots(validatedEquippedUpgrades, validatedEquippedAbilities);
+    var equipped = this.equipUpgradesToSlots(validatedEquippedUpgrades, validatedEquippedAbilities);
+    this.equippedUpgrades = equipped.equippedUpgrades;
+    this.equippedAbilities = equipped.equippedAbilities;
     // Can only call getDisabled() once equipped is set, as it needs to look at slots potentially added by equipping
     this.disabled = this.getDisabledUpgrades();
     this.disabledAbilities = this.getDisabledAbilities();
@@ -354,7 +356,10 @@ upgradesModel.prototype.equipUpgradesToSlots = function (upgradesToEquip, abilit
         newSlotIndices = newSlotIndices.concat(slotsAddedIndices);
     }
 
-    return equippedUpgrades;
+    return {
+        equippedUpgrades: equippedUpgrades,
+        equippedAbilities: equippedAbilities
+    };
 };
 
 upgradesModel.prototype.matchFreeSlot = function (upgradeSlot, remainingUpgradesToEquip) {
