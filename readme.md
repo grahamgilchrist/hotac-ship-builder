@@ -36,7 +36,7 @@ Thsi project owes many thanks to two x-wing projects without which, this would h
 * Clone the repo
 * Run `npm install` in the project root
 * Run `bower install` in the project root
-* Run `npx run gulp dev`
+* Run `npx gulp dev`
   * This will compile the javascript, css and auto-recompile any changes to these via gulp watch
   * Gulp will start a local web server on port 8000 which can be accessed at http://localhost:8000
   * The gulp server has liverelaod enabled, so chnages to html, js or css will automatically be refreshed
