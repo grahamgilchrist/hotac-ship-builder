@@ -1,16 +1,22 @@
 #print-view
-    .columns-wrapper
-        display: flex
-        justify-content: space-between
+    $print-width: 794px
+    width: 794px
 
-    .column-2
-        margin-left: 10px
+    .print-page
+        page-break-after: always
+
+    .columns-wrapper
+        overflow: hidden
+
+        .column
+            float: left
 
     .box
-        width: 300px
+        width: 100%
         border: 1px solid #eee
         border-radius: 14px
         -webkit-print-color-adjust: exact
+        color-adjust: exact
         font-size: 16px
         margin-bottom: 10px
         overflow: hidden
@@ -26,12 +32,96 @@
         .value
             padding: 8px 20px 8px 8px
 
+    .summary-page
+        $col1-width: 300px
+        $col2-width: 300px
+        $col3-width: $print-width - $col1-width - $col2-width
+
+        .column-1
+            width: 300px
+
+        .column-2
+            padding: 0 10px
+            width: $col2-width
+
+        .column-3
+            width: $col3-width
+
+            .mdl-tooltip
+                display: none
+
+        .print-equipped
+            margin: 0 auto
+            padding-top: $site-padding
+
+            .upgrade-card-wrapper,
+            .ability-card-wrapper
+                width: 20%
+
+    .history-page
+        -webkit-print-color-adjust: exact
+        color-adjust: exact
+
+        .column-1
+            max-width: 40%
+            border-right: 1px solid #ccc
+            padding-right: 10px
+
+            .history-wrapper
+                font-size: 9px
+
+                h3
+                    font-size: 16px
+
+            table
+                page-break-inside: always
+                display: block
+
+        .column-2
+            width: 20%
+            padding-left: 10px
+
+            .mdl-tooltip
+                margin: 1em 0
+
+            #disabled-upgrade-list li
+                opacity: 1
+
+        .column-3
+            width: 40%
+            padding-left: 5px
+
+            li
+                padding: 5px
+                width: 50%
+
     .print-card-list
         ul
-            display: flex
-            flex-wrap: wrap
-            justify-content: center
- 
-        img
-            height: 300px
-            margin: 0 5px
+            overflow: auto
+
+        .upgrade-card-wrapper,
+        .ability-card-wrapper
+            page-break-inside: avoid
+            float: left
+
+        .upgrade-card-wrapper
+            position: relative
+
+            &:before
+                content: ''
+                display: block
+                padding-top: 154.6%
+
+            .img-wrapper
+                position: absolute
+                top: 5px
+                left: 5px
+                right: 5px
+                bottom: 5px
+                overflow: hidden
+
+            img
+                width: 100%
+
+    h4 i
+        display: none

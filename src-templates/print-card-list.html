@@ -1,0 +1,42 @@
+<div class="print-card-list">
+    <ul>
+        <% upgrades.forEach(function(upgrade) { %>
+            <li class="upgrade-card-wrapper">
+                <div class="img-wrapper">
+                    <img src="/components/xwing-data/images/<%= upgrade.image %>" alt="Card image for <%= upgrade.name %>">
+                </div>
+            </li>
+            <% if (upgrade.otherSide) { %>
+                <li class="upgrade-card-wrapper">
+                    <div class="img-wrapper">
+                        <img src="/components/xwing-data/images/<%= upgrade.otherSide.image %>" alt="Card image for <%= upgrade.otherSide.name %>">
+                    </div>
+                </li>
+            <% } %>            
+            <% if (upgrade.conditions) { %>
+                <% upgrade.conditions.forEach(function(name) { %>
+                    <li class="upgrade-card-wrapper">
+                        <div class="img-wrapper">
+                            <img src="/components/xwing-data/images/<%= conditions[name].image %>" alt="Card image for <%= conditions[name].name %>">
+                        </div>
+                    </li>
+                <% }); %>
+            <% } %>            
+        <% }); %>
+
+        <% abilities.forEach(function(abilityPilot) { %>
+            <li class="ability-card-wrapper">
+                <%= renderCard(abilityPilot) %>
+            </li>
+            <% if (abilityPilot.conditions) { %>
+                <% abilityPilot.conditions.forEach(function(name) { %>
+                    <li class="upgrade-card-wrapper">
+                        <div class="img-wrapper">
+                            <img src="/components/xwing-data/images/<%= conditions[name].image %>" alt="Card image for <%= conditions[name].name %>">
+                        </div>
+                    </li>
+                <% }); %>
+            <% } %>   
+        <% }); %>
+    </ul>
+</div>

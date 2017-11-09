@@ -8,9 +8,9 @@ var events = require('../controllers/events');
 var abilityCardView = require('./abilityCard');
 var loseUpgradeModal = require('./loseUpgradeModal');
 var upgrades = require('../models/upgrades');
+var templateUtils = require('../utils/templates');
 var conditions = require('../models/conditions');
 var conditionsByName = conditions.keyedByName;
-var templateUtils = require('../utils/templates');
 
 module.exports = {
     init: function () {
@@ -136,20 +136,27 @@ module.exports = {
         return viewHtml;
     },
     renderPrintCardList: function (build) {
-        var $wrapper = $('[view-bind=print-card-list]');
-
-        var upgrades = _.clone(build.currentShip.startingUpgrades);
-        _.each(build.upgrades.purchased, function (upgrade) {
-            upgrades.push(upgrade);
-        });
+        var $wrapper = $('[view-bind=equipped-print-card-list]');
 
         var context = {
-            upgrades: upgrades,
-            abilities: build.upgrades.purchasedAbilities,
+            upgrades: build.upgrades.equippedUpgrades,
+            abilities: build.upgrades.equippedAbilities,
             renderCard: abilityCardView.renderHtml,
             conditions: conditionsByName
         };
-        templateUtils.renderToDom('card-list', $wrapper, context);
+        templateUtils.renderToDom('print-card-list', $wrapper, context);
+
+        $wrapper = $('[view-bind=unequipped-print-card-list]');
+
+        var unequippedAndDisabled = build.upgrades.unequipped.concat(build.upgrades.disabled);
+
+        context = {
+            upgrades: unequippedAndDisabled,
+            abilities: build.upgrades.unequippedAbilities,
+            renderCard: abilityCardView.renderHtml,
+            conditions: conditionsByName
+        };
+        templateUtils.renderToDom('print-card-list', $wrapper, context);
     },
     renderUpgradesList: function (build) {
 
@@ -161,16 +168,6 @@ module.exports = {
         var hasDisabledUpgrades = (build.upgrades.disabled.length > 0);
         var hasDisabledOrUnequippedUpgrades = (hasDisabledUpgrades || hasUnequippedUpgrades);
 
-        var unequipped = _.map(build.upgrades.unequipped, function (upgrade) {
-            return module.exports.renderUpgradeItem(upgrade);
-        });
-        var unequippedAbilities = _.map(build.upgrades.unequippedAbilities, function (pilotAbility) {
-            return module.exports.renderPilotUpgradeItem(pilotAbility);
-        });
-        var disabled = _.map(build.upgrades.disabled, function (upgrade) {
-            return module.exports.renderUpgradeItem(upgrade);
-        });
-
         if (!hasDisabledOrUnequippedUpgrades) {
             $listsWrapper.removeClass('two-column').addClass('one-column');
         } else {
@@ -179,12 +176,13 @@ module.exports = {
 
         var $wrapperElement = $('[view-bind=allowed-list]');
         var context = {
-            unequipped: unequipped,
-            unequippedAbilities: unequippedAbilities,
-            disabled: disabled,
+            unequipped: build.upgrades.unequipped,
+            unequippedAbilities: build.upgrades.unequippedAbilities,
+            disabled: build.upgrades.disabled,
             hasDisabledOrUnequippedUpgrades: hasDisabledOrUnequippedUpgrades,
             hasUnequippedUpgrades: hasUnequippedUpgrades,
-            hasDisabledUpgrades: hasDisabledUpgrades
+            hasDisabledUpgrades: hasDisabledUpgrades,
+            iconString: upgrades.getIconString
         };
         var viewHtml = templateUtils.renderHTML('upgrades/allowed-list', context);
         var $newElement = $(viewHtml);
@@ -209,14 +207,6 @@ module.exports = {
         });
 
         $wrapperElement.empty().append($newElement);
-    },
-    renderUpgradeItem: function (upgrade) {
-        var itemHtml = '<li class="upgrade card" upgrade-id="' + upgrade.id + '">' + upgrades.getIconString(upgrade.slot) + '<span class="upgrade-name">' + (upgrade.dualCardName || upgrade.name) + '</span><i class="material-icons eye">zoom_in</i></li>';
-        return itemHtml;
-    },
-    renderPilotUpgradeItem: function (pilot) {
-        var itemHtml = '<li class="upgrade ability" ability-id="' + pilot.id + '">' + upgrades.getIconString('Elite') + '<span class="upgrade-name">Ability: ' + pilot.name + '</span><i class="material-icons eye">zoom_in</i></li>';
-        return itemHtml;
     },
     clickEquipSlot: function (upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, abilitiesAvailableToBuy, build) {
         // open modal to choose upgrade to equip
