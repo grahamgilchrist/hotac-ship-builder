@@ -44,6 +44,11 @@ module.exports = {
             var $input = $('<input type="text" value="' + window.location.href + '">');
             $input.on('focus', function () {
                 this.select();
+                var input = this;
+                // .select() doesn't work on iOS, so... try this
+                setTimeout(function () {
+                    input.setSelectionRange(0, 9999);
+                }, 0);
             });
             $modalContent.append($input);
             $.featherlight($modalContent);
