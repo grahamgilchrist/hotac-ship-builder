@@ -8,6 +8,7 @@ var headerView = require('../views/header');
 var newView = require('../views/newView');
 var mainView = require('../views/mainView');
 var XpView = require('../views/XpView');
+var missionView = require('../views/missionResultsView');
 var shipInfoView = require('../views/shipInfo');
 var pilotSkillView = require('../views/pilotSkillView');
 var changeShipView = require('../views/changeShipView');
@@ -16,6 +17,7 @@ var xpHistoryView = require('../views/xpHistory');
 var enemiesView = require('../views/enemiesView');
 var messageView = require('../views/message');
 var summaryView = require('../views/summary');
+var loseUpgradeView = require('../views/loseUpgradeModal');
 var hashController = require('./urlHash');
 
 var currentBuild;
@@ -28,7 +30,7 @@ module.exports = {
         module.exports.bindModelEvents();
 
         headerView.init();
-        XpView.init();
+        missionView.init();
         newView.init();
         mainView.init();
         upgradesView.init();
@@ -156,7 +158,7 @@ module.exports = {
             upgradesView.renderShipSlotsList(build);
             pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
             upgradesView.renderUpgradesList(build);
-            upgradesView.renderLoseButton(build);
+            loseUpgradeView.renderLoseButton(build);
             xpHistoryView.renderTable(build);
             changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
             enemiesView.renderTable(build.enemyDefeats.get());
@@ -199,7 +201,7 @@ module.exports = {
         events.on('model.build.upgrades.add model.build.pilotAbilities.add model.build.upgrades.lose model.build.pilotAbilities.lose', function (event, build) {
             if (build.ready) {
                 upgradesView.renderPrintCardList(build);
-                upgradesView.renderLoseButton(build);
+                loseUpgradeView.renderLoseButton(build);
             }
         });
 
