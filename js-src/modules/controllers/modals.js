@@ -7,6 +7,8 @@ var abilityCardView = require('../views/abilityCard');
 var pilots = require('../models/pilots');
 var upgrades = require('../models/upgrades');
 
+var savedScrollTop = 0;
+
 module.exports = {
     init: function () {
         $.featherlight.defaults.afterOpen = function () {
@@ -259,5 +261,17 @@ module.exports = {
             closeOnClick: 'anywhere'
         };
         $.featherlight($wrapper, featherlightConfig);
+    },
+    ios11FixOnOpen: function () {
+        // Hack to fix scroll bug on iOS 11
+        // https://hackernoon.com/how-to-fix-the-ios-11-input-element-in-fixed-modals-bug-aaf66c7ba3f8
+        savedScrollTop = $(document).scrollTop();
+        $('.container').hide();
+    },
+    ios11FixOnClose: function () {
+        // Hack to fix scroll bug on iOS 11
+        // https://hackernoon.com/how-to-fix-the-ios-11-input-element-in-fixed-modals-bug-aaf66c7ba3f8
+        $('.container').show();
+        $(document).scrollTop(savedScrollTop);
     }
 };

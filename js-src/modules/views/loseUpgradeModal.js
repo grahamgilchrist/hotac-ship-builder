@@ -7,8 +7,6 @@ var events = require('../controllers/events');
 var templateUtils = require('../utils/templates');
 var modalController = require('../controllers/modals');
 
-var savedScrollTop = 0;
-
 module.exports = {
     renderLoseButton: function (build) {
         var $wrapperElement = $('[view-bind=lose-upgrade-button]');
@@ -22,10 +20,7 @@ module.exports = {
         var clickHandler = function () {
             var $modalContent = module.exports.renderView(build);
 
-            // Hack to fix scroll bug on iOS 11
-            // https://hackernoon.com/how-to-fix-the-ios-11-input-element-in-fixed-modals-bug-aaf66c7ba3f8
-            savedScrollTop = $(document).scrollTop();
-            $('.container').hide();
+            modalController.ios11FixOnOpen();
 
             modalController.openTitledModal($modalContent, 'Lose an upgrade', 'lose-upgrade-modal');
         };
@@ -57,10 +52,7 @@ module.exports = {
     submitResults: function (e) {
         e.preventDefault();
 
-        // Hack to fix scroll bug on iOS 11
-        // https://hackernoon.com/how-to-fix-the-ios-11-input-element-in-fixed-modals-bug-aaf66c7ba3f8
-        $('.container').show();
-        $(document).scrollTop(savedScrollTop);
+        modalController.ios11FixOnClose();
 
         var chosenValue = $('#lose-upgrade-choice').val();
         var prefix = chosenValue.substr(0, 3);
