@@ -4,8 +4,33 @@ var $ = require('jquery');
 var _ = require('lodash');
 
 var events = require('../controllers/events');
+var templateUtils = require('../utils/templates');
+var modalController = require('../controllers/modals');
+
+var savedScrollTop = 0;
 
 module.exports = {
+    renderLoseButton: function (build) {
+        var $wrapperElement = $('[view-bind=lose-upgrade-button]');
+
+        var hasPurchased = (build.upgrades.purchased.length > 0 || build.upgrades.purchasedAbilities.length > 0);
+        var context = {
+            hasPurchased: hasPurchased
+        };
+        templateUtils.renderToDom('upgrades/lose-upgrade-button', $wrapperElement, context);
+
+        var clickHandler = function () {
+            var $modalContent = module.exports.renderView(build);
+
+            // Hack to fix scroll bug on iOS 11
+            // https://hackernoon.com/how-to-fix-the-ios-11-input-element-in-fixed-modals-bug-aaf66c7ba3f8
+            savedScrollTop = $(document).scrollTop();
+            $('.container').hide();
+
+            modalController.openTitledModal($modalContent, 'Lose an upgrade', 'lose-upgrade-modal');
+        };
+        $('[trigger-lose-upgrade]').off('click.loseButton').on('click.loseButton', clickHandler);
+    },
     renderView: function (build) {
         var $modalContent = $('<div>');
         var $form = $('<form>');
@@ -29,7 +54,14 @@ module.exports = {
 
         return $modalContent;
     },
-    submitResults: function () {
+    submitResults: function (e) {
+        e.preventDefault();
+
+        // Hack to fix scroll bug on iOS 11
+        // https://hackernoon.com/how-to-fix-the-ios-11-input-element-in-fixed-modals-bug-aaf66c7ba3f8
+        $('.container').show();
+        $(document).scrollTop(savedScrollTop);
+
         var chosenValue = $('#lose-upgrade-choice').val();
         var prefix = chosenValue.substr(0, 3);
         var idToLose = parseInt(chosenValue.substr(3), 10);

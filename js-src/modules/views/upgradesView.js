@@ -6,7 +6,6 @@ var _ = require('lodash');
 var modalController = require('../controllers/modals');
 var events = require('../controllers/events');
 var abilityCardView = require('./abilityCard');
-var loseUpgradeModal = require('./loseUpgradeModal');
 var upgrades = require('../models/upgrades');
 var templateUtils = require('../utils/templates');
 var conditions = require('../models/conditions');
@@ -330,20 +329,5 @@ module.exports = {
         }
 
         return $upgrade;
-    },
-    renderLoseButton: function (build) {
-        var $wrapperElement = $('[view-bind=lose-upgrade-button]');
-
-        var hasPurchased = (build.upgrades.purchased.length > 0 || build.upgrades.purchasedAbilities.length > 0);
-        var context = {
-            hasPurchased: hasPurchased
-        };
-        templateUtils.renderToDom('upgrades/lose-upgrade-button', $wrapperElement, context);
-
-        var clickHandler = function () {
-            var $modalContent = loseUpgradeModal.renderView(build);
-            modalController.openTitledModal($modalContent, 'Lose an upgrade', 'lose-upgrade-modal');
-        };
-        $('[trigger-lose-upgrade]').off('click.loseButton').on('click.loseButton', clickHandler);
     }
 };

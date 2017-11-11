@@ -4,8 +4,27 @@ var $ = require('jquery');
 var _ = require('lodash');
 
 var events = require('../controllers/events');
+var modalController = require('../controllers/modals');
+
+var savedScrollTop = 0;
 
 module.exports = {
+    init: function () {
+        module.exports.bindXpButton();
+    },
+    bindXpButton: function () {
+        $('[add-mission-xp]').on('click', function () {
+
+            // Hack to fix scroll bug on iOS 11
+            // https://hackernoon.com/how-to-fix-the-ios-11-input-element-in-fixed-modals-bug-aaf66c7ba3f8
+            savedScrollTop = $(document).scrollTop();
+            $('.container').hide();
+
+            var $modalContent = module.exports.renderView();
+            modalController.openTitledModal($modalContent, 'Add Mission results', 'add-xp-modal');
+            module.exports.focus();
+        });
+    },
     renderView: function () {
         var $modalContent = $('<div>');
         var $form = $('<form>');
@@ -23,7 +42,14 @@ module.exports = {
     focus: function () {
         $('#mission-xp-amount').focus();
     },
-    submitResults: function () {
+    submitResults: function (e) {
+        e.preventDefault();
+
+        // Hack to fix scroll bug on iOS 11
+        // https://hackernoon.com/how-to-fix-the-ios-11-input-element-in-fixed-modals-bug-aaf66c7ba3f8
+        $('.container').show();
+        $(document).scrollTop(savedScrollTop);
+
         var stringXpAmount = $('#mission-xp-amount').val();
         var xpAmount = parseInt(stringXpAmount, 10);
 
