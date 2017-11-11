@@ -12,9 +12,6 @@ module.exports = {
     },
     bindXpButton: function () {
         $('[add-mission-xp]').on('click', function () {
-
-            modalController.ios11FixOnOpen();
-
             var $modalContent = module.exports.renderView();
             modalController.openTitledModal($modalContent, 'Add Mission results', 'add-xp-modal');
             module.exports.focus();
@@ -39,8 +36,6 @@ module.exports = {
     },
     submitResults: function (e) {
         e.preventDefault();
-
-        modalController.ios11FixOnClose();
         var stringXpAmount = $('#mission-xp-amount').val();
         var xpAmount = parseInt(stringXpAmount, 10);
 

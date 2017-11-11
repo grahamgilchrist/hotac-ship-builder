@@ -6,13 +6,20 @@ var events = require('./events');
 var abilityCardView = require('../views/abilityCard');
 var pilots = require('../models/pilots');
 var upgrades = require('../models/upgrades');
+var environment = require('../utils/environment');
 
-var savedScrollTop = 0;
+var ios11FormFixData = {};
 
 module.exports = {
     init: function () {
+        $.featherlight.defaults.beforeOpen = function () {
+            module.exports.ios11FixOnOpen();
+        };
         $.featherlight.defaults.afterOpen = function () {
             window.componentHandler.upgradeDom();
+        };
+        $.featherlight.defaults.afterClose = function () {
+            module.exports.ios11FixOnClose();
         };
     },
     openTitledModal: function ($modalContent, modalTitle, cssClass) {
@@ -265,13 +272,31 @@ module.exports = {
     ios11FixOnOpen: function () {
         // Hack to fix scroll bug on iOS 11
         // https://hackernoon.com/how-to-fix-the-ios-11-input-element-in-fixed-modals-bug-aaf66c7ba3f8
-        savedScrollTop = $(document).scrollTop();
-        $('.container').hide();
+        if (environment.isIos()) {
+            ios11FormFixData = {
+                scrollTop: $(document).scrollTop(),
+                overflow: document.body.style.overflow,
+                height: document.body.style.height,
+                width: document.body.style.width,
+                position: document.body.style.position
+            };
+
+            document.body.style.overflow = 'hidden';
+            document.body.style.height = '100%';
+            document.body.style.width = '100%';
+            document.body.style.position = 'fixed';
+        }
     },
     ios11FixOnClose: function () {
         // Hack to fix scroll bug on iOS 11
         // https://hackernoon.com/how-to-fix-the-ios-11-input-element-in-fixed-modals-bug-aaf66c7ba3f8
-        $('.container').show();
-        $(document).scrollTop(savedScrollTop);
+        // $('.container').show();
+        if (environment.isIos()) {
+            $(document).scrollTop(ios11FormFixData.scrollTop);
+            document.body.style.overflow = ios11FormFixData.overflow;
+            document.body.style.height = ios11FormFixData.height;
+            document.body.style.width = ios11FormFixData.width;
+            document.body.style.position = ios11FormFixData.position;
+        }
     }
 };

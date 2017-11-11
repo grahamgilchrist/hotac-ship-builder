@@ -19,9 +19,6 @@ module.exports = {
 
         var clickHandler = function () {
             var $modalContent = module.exports.renderView(build);
-
-            modalController.ios11FixOnOpen();
-
             modalController.openTitledModal($modalContent, 'Lose an upgrade', 'lose-upgrade-modal');
         };
         $('[trigger-lose-upgrade]').off('click.loseButton').on('click.loseButton', clickHandler);
@@ -51,8 +48,6 @@ module.exports = {
     },
     submitResults: function (e) {
         e.preventDefault();
-
-        modalController.ios11FixOnClose();
 
         var chosenValue = $('#lose-upgrade-choice').val();
         var prefix = chosenValue.substr(0, 3);
