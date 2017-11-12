@@ -39,7 +39,7 @@ module.exports = {
         var $shipList = $('<ul>');
 
         // filter out current ship from list
-        var filteredShips = _.filter(ships, function (ship) {
+        var filteredShips = _.filter(ships.data, function (ship) {
             return ship.id !== currentShip.id;
         });
 

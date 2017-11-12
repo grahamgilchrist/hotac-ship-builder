@@ -95,7 +95,7 @@ ShipBuild.prototype.processHistory = function (xpHistory) {
 };
 
 ShipBuild.prototype.getShipById = function (shipId) {
-    var hotacShipModel = _.find(ships, function (ship) {
+    var hotacShipModel = _.find(ships.data, function (ship) {
         return ship.id === shipId;
     });
     var newModel = _.clone(hotacShipModel, true);

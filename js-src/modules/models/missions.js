@@ -1,9 +1,12 @@
 'use strict';
 
+var _ = require('lodash');
+
 var missions = [
     {
         id: 1,
-        name: 'Local trouble',
+        name: 'Local Trouble',
+        groupName: 'Introductory Mission',
         starting: true
     },
     {
@@ -116,4 +119,14 @@ var missions = [
     }
 ];
 
-module.exports = missions;
+var getById = function (missionId) {
+    return _.find(missions, function (mission) {
+        return mission.id === missionId;
+    });
+};
+
+
+module.exports = {
+    data: missions,
+    getById: getById
+};

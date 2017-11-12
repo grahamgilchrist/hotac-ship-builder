@@ -3,7 +3,7 @@
         <select>
             <option value="xp-only">Increase XP only</option>
             <% missions.forEach(function(mission) { %>
-                <option value="<%= mission.id %>"><%= mission.name %></option>
+                <option value="<%= mission.id %>"><%= mission.groupName %>: <%= mission.name %></option>
             <% }); %>
         </select>
         <label for="mission-xp-amount">XP:</label><input type="number" id="mission-xp-amount">
