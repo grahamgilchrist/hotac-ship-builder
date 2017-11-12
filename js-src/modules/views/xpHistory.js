@@ -55,5 +55,9 @@ module.exports = {
 
         var message = 'Reverting to this point will lose your current ship status. Are you sure you want to continue?';
         modalController.openConfirmModal(message, successCallback);
+    },
+    scrollToTop: function () {
+        var top = $('.container').position().top;
+        $('body').scrollTop(top);
     }
 };

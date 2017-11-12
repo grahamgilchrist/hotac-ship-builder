@@ -7,7 +7,7 @@ var events = require('./events');
 var headerView = require('../views/header');
 var newView = require('../views/newView');
 var mainView = require('../views/mainView');
-var XpView = require('../views/XpView');
+var xpView = require('../views/XpView');
 var missionView = require('../views/missionResultsView');
 var shipInfoView = require('../views/shipInfo');
 var pilotSkillView = require('../views/pilotSkillView');
@@ -141,6 +141,7 @@ module.exports = {
             }
             // trash the existing build and start a new one with the new history
             currentBuild = new Build(newHistory, currentBuild.callsign, currentBuild.playerName);
+            xpHistoryView.scrollToTop();
         });
 
         events.on('view.enemies.adjustCount', function (event, data) {
@@ -150,7 +151,7 @@ module.exports = {
     bindModelEvents: function () {
         events.on('model.build.ready', function (event, build) {
             mainView.renderTitle(build);
-            XpView.renderXp(build);
+            xpView.renderXp(build);
             shipInfoView.renderShipStats(build);
             shipInfoView.renderShipActions(build);
             shipInfoView.renderShipImage(build.currentShip);
@@ -193,7 +194,7 @@ module.exports = {
         });
 
         events.on('model.build.xp.update', function (event, build) {
-            XpView.renderXp(build);
+            xpView.renderXp(build);
             changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
             pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
         });
