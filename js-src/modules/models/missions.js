@@ -37,38 +37,31 @@ var missions = [
     },
     {
         id: 6,
-        name: 'Tread Softly',
-        groupName: 'Minefields',
-        groupPart: 1,
-        starting: true
-    },
-    {
-        id: 7,
         name: 'Imperial Entanglement',
         groupName: 'Minefields',
         groupPart: 2
     },
     {
-        id: 8,
+        id: 7,
         name: 'Care Package',
         groupName: 'Minefields',
         groupPart: 3
     },
     {
-        id: 9,
+        id: 8,
         name: 'Needle in a Haystack',
         groupName: 'Chasing Phantoms',
         groupPart: 1,
         starting: true
     },
     {
-        id: 10,
+        id: 9,
         name: 'Bait',
         groupName: 'Chasing Phantoms',
         groupPart: 2
     },
     {
-        id: 11,
+        id: 10,
         name: 'Cloak and Dagger',
         groupName: 'Chasing Phantoms',
         groupPart: 3
@@ -80,39 +73,39 @@ var missions = [
         groupPart: 4
     },
     {
-        id: 11,
+        id: 12,
         name: 'Capture Officer',
         groupName: 'Capture Officer',
         groupPart: 1,
         starting: true
     },
     {
-        id: 11,
+        id: 13,
         name: 'Nobody Home',
         groupName: 'Capture Officer',
         groupPart: 2
     },
     {
-        id: 11,
+        id: 14,
         name: "Miners' Strike",
         groupName: 'Capture Officer',
         groupPart: 3
     },
     {
-        id: 11,
+        id: 15,
         name: 'Secure Holonet Receiver',
         groupName: 'Defection',
         groupPart: 1,
         starting: true
     },
     {
-        id: 11,
+        id: 16,
         name: 'Defector',
         groupName: 'Defection',
         groupPart: 2
     },
     {
-        id: 11,
+        id: 17,
         name: 'Pride of the Empire',
         groupName: 'Defection',
         groupPart: 3
