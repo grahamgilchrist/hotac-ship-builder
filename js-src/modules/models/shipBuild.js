@@ -81,7 +81,7 @@ ShipBuild.prototype.processHistory = function (xpHistory) {
                 upgradeId: xpItem.data.upgradeId
             });
         } else if (xpItem.upgradeType === itemTypes.MISSION) {
-            thisBuild.addMissionXp(xpItem.data.missionId);
+            thisBuild.completeMission(xpItem.data.missionId);
         } else if (xpItem.upgradeType === itemTypes.XP) {
             thisBuild.addMissionXp(xpItem.data.xp);
         } else if (xpItem.upgradeType === itemTypes.BUY_PILOT_ABILITY) {
