@@ -21,8 +21,6 @@ XpItem.prototype.cost = function () {
     } else if (this.upgradeType === itemTypes.PILOT_SKILL) {
         // pilot skill costs double skill level upgrading to
         return (this.data.pilotSkill * 2) * -1;
-    } else if (this.upgradeType === itemTypes.MISSION) {
-        return this.data.missionId;
     } else if (this.upgradeType === itemTypes.XP) {
         return this.data.xp;
     } else if (this.upgradeType === itemTypes.BUY_UPGRADE) {
@@ -52,7 +50,8 @@ XpItem.prototype.label = function () {
     } else if (this.upgradeType === itemTypes.PILOT_SKILL) {
         return 'Upgrade pilot skill: PS ' + this.data.pilotSkill;
     } else if (this.upgradeType === itemTypes.MISSION) {
-        return 'Completed mission: ' + missions.getById(this.data.missionId);
+        var mission = missions.getById(this.data.missionId);
+        return 'Completed mission: ' + mission.name;
     } else if (this.upgradeType === itemTypes.XP) {
         return 'Gain XP';
     } else if (this.upgradeType === itemTypes.BUY_UPGRADE) {

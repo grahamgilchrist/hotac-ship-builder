@@ -166,9 +166,11 @@ var hotacShips = [
 // ];
 
 var getById = function (shipId) {
-    return _.find(hotacShips, function (shipItem) {
+    var hotacShipModel = _.find(hotacShips, function (shipItem) {
         return shipItem.id === shipId;
     });
+    var newModel = _.clone(hotacShipModel, true);
+    return newModel;
 };
 
 // get list of starting ships

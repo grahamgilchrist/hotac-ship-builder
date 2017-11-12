@@ -21,7 +21,7 @@ module.exports = {
     },
     renderView: function () {
         var context = {
-            missions: missions
+            missions: missions.data
         };
         var viewHtml = templateUtils.renderHTML('modals/mission-results', context);
         var $modalContent = $(viewHtml);
@@ -31,11 +31,22 @@ module.exports = {
         return $modalContent;
     },
     focus: function () {
-        $('#mission-xp-amount').focus();
+        $('form#mission-results input').focus();
     },
     submitResults: function (e) {
         e.preventDefault();
-        var stringXpAmount = $('#mission-xp-amount').val();
+
+        var $form = $(this).closest('form');
+
+        var $select = $form.find('select[name="mission-id"]');
+        var stringMissionId = $select.val();
+        if (stringMissionId !== 'xp-only') {
+            var missionId = parseInt(stringMissionId, 10);
+            events.trigger('view.main.completeMission', missionId);
+        }
+
+        var $input = $form.find('input[name="xp-amount"]');
+        var stringXpAmount = $input.val();
         var xpAmount = parseInt(stringXpAmount, 10);
 
         if (!_.isNaN(xpAmount) && xpAmount > 0) {
