@@ -5,6 +5,8 @@ var _ = require('lodash');
 
 var events = require('../controllers/events');
 var modalController = require('../controllers/modals');
+var missions = require('../models/missions');
+var templateUtils = require('../utils/templates');
 
 module.exports = {
     init: function () {
@@ -18,16 +20,13 @@ module.exports = {
         });
     },
     renderView: function () {
-        var $modalContent = $('<div>');
-        var $form = $('<form>');
-        var $input = $('<label for="mission-xp-amount">XP:</label><input type="number" id="mission-xp-amount">');
+        var context = {
+            missions: missions
+        };
+        var viewHtml = templateUtils.renderHTML('modals/mission-results', context);
+        var $modalContent = $(viewHtml);
 
-        var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Add</button>');
-        $button.on('click', module.exports.submitResults);
-
-        $form.append($input);
-        $form.append($button);
-        $modalContent.append($form);
+        $modalContent.on('click', 'button', module.exports.submitResults);
 
         return $modalContent;
     },
