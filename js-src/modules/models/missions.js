@@ -125,7 +125,6 @@ var getById = function (missionId) {
     });
 };
 
-
 module.exports = {
     data: missions,
     getById: getById

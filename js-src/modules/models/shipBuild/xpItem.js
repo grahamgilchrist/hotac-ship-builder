@@ -1,6 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
 var itemTypes = require('./itemTypes');
 var ships = require('../ships');
 var upgrades = require('../upgrades');
