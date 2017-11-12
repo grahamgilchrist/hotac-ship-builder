@@ -51,11 +51,7 @@ module.exports = {
         var $select = $('<select>');
 
         // get list of starting ships
-        var filterFunction = function (item) {
-            return item.starting === true;
-        };
-
-        var startingShips = _.filter(ships, filterFunction);
+        var startingShips = ships.starting;
 
         // bind starting ships to DOM
         _.forEach(startingShips, function (item) {

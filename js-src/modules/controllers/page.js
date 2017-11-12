@@ -26,7 +26,6 @@ module.exports = {
     init: function () {
         module.exports.bindNewViewEvents();
         module.exports.bindMainViewEvents();
-        module.exports.bindOtherViewEvents();
         module.exports.bindModelEvents();
 
         headerView.init();
@@ -81,8 +80,11 @@ module.exports = {
         events.on('view.main.addMissionXp', function (event, xpAmount) {
             currentBuild.addMissionXp(xpAmount);
         });
-    },
-    bindOtherViewEvents: function () {
+
+        events.on('view.main.completeMission', function (event, missionId) {
+            currentBuild.completeMission(missionId);
+        });
+
         events.on('view.upgrades.buy', function (event, upgradeId) {
             currentBuild.addToHistory(itemTypes.BUY_UPGRADE, {
                 upgradeId: upgradeId

@@ -1,0 +1,13 @@
+<div>
+    <form id="mission-results">
+        <select name="mission-id">
+            <option value="xp-only">Increase XP only</option>
+            <% missions.forEach(function(mission) { %>
+                <option value="<%= mission.id %>"><%= mission.groupName %>: <%= mission.name %></option>
+            <% }); %>
+        </select>
+        <label for="mission-xp-amount">XP:</label>
+        <input type="number" name="xp-amount">
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Add</button>
+    </form>
+</div>

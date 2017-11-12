@@ -5,6 +5,8 @@ var _ = require('lodash');
 
 var events = require('../controllers/events');
 var modalController = require('../controllers/modals');
+var missions = require('../models/missions');
+var templateUtils = require('../utils/templates');
 
 module.exports = {
     init: function () {
@@ -18,25 +20,33 @@ module.exports = {
         });
     },
     renderView: function () {
-        var $modalContent = $('<div>');
-        var $form = $('<form>');
-        var $input = $('<label for="mission-xp-amount">XP:</label><input type="number" id="mission-xp-amount">');
+        var context = {
+            missions: missions.data
+        };
+        var viewHtml = templateUtils.renderHTML('modals/mission-results', context);
+        var $modalContent = $(viewHtml);
 
-        var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Add</button>');
-        $button.on('click', module.exports.submitResults);
-
-        $form.append($input);
-        $form.append($button);
-        $modalContent.append($form);
+        $modalContent.on('click', 'button', module.exports.submitResults);
 
         return $modalContent;
     },
     focus: function () {
-        $('#mission-xp-amount').focus();
+        $('form#mission-results input').focus();
     },
     submitResults: function (e) {
         e.preventDefault();
-        var stringXpAmount = $('#mission-xp-amount').val();
+
+        var $form = $(this).closest('form');
+
+        var $select = $form.find('select[name="mission-id"]');
+        var stringMissionId = $select.val();
+        if (stringMissionId !== 'xp-only') {
+            var missionId = parseInt(stringMissionId, 10);
+            events.trigger('view.main.completeMission', missionId);
+        }
+
+        var $input = $form.find('input[name="xp-amount"]');
+        var stringXpAmount = $input.val();
         var xpAmount = parseInt(stringXpAmount, 10);
 
         if (!_.isNaN(xpAmount) && xpAmount > 0) {
