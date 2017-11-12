@@ -268,7 +268,7 @@ module.exports = {
                             text: card.name + ': ' + card.hotacPoints + 'XP'
                         };
                         if (card.slot === 'Elite') {
-                            selectOptions.text = '<span>' + card.name + ': ' + card.hotacPoints + 'XP</span><span class="help">Elite card upgrades cost double XP</span>';
+                            selectOptions.text = '<span>' + card.name + ': ' + card.hotacPoints + 'XP</span><span class="help">Elite cards cost double (' + card.points + 'XP x 2)</span>';
                         }
                         $(this).trigger('select', selectOptions);
                     });
