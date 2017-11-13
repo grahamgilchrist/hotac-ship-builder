@@ -1,5 +1,14 @@
 # Hotac Ship Builder
 
+## Contents
+* [Background](#background)
+* [Documentation](#documentation)
+* [Acknowledgements](#acknowledgements)
+* [Bugs and new features](#bugs-and-new-features)
+* [Roadmap](#roadmap)
+* [Changelog](#changelog)
+* [Disclaimer](#disclaimer)
+
 ## Background
 
 This is a web based ship builder and campaign tracker for the [Heroes of the Aturi Cluster](http://dockingbay416.com/campaign/) (hotac) campaign for the x-wing miniatures game.
@@ -78,7 +87,8 @@ Please use the github issues queue to request new features.
 ## Roadmap
 * TBC
 
-## [Changelog](docs/changelog.html)
+## Changelog
+* TBC
 
 ## Disclaimer
 This application is unofficial and is not affiliated with Fantasy Flight Games, Lucasfilm Ltd., or Disney.
