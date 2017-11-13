@@ -165,4 +165,22 @@ var hotacShips = [
 //     }
 // ];
 
-module.exports = hotacShips;
+var getById = function (shipId) {
+    var hotacShipModel = _.find(hotacShips, function (shipItem) {
+        return shipItem.id === shipId;
+    });
+    var newModel = _.clone(hotacShipModel, true);
+    return newModel;
+};
+
+// get list of starting ships
+var filterFunction = function (item) {
+    return item.starting === true;
+};
+var startingShips = _.filter(hotacShips, filterFunction);
+
+module.exports = {
+    data: hotacShips,
+    getById: getById,
+    starting: startingShips
+};

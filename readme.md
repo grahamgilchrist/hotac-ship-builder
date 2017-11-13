@@ -11,10 +11,10 @@ Thsi project owes many thanks to two x-wing projects without which, this would h
 * [x-wing miniatures font](https://github.com/geordanr/xwing-miniatures-font)
 
 ## Documentation
-* [In app documentation]('docs/about.md')
+* [In app documentation](docs/about.md)
 
 ## Changlog
-* [Changelog]('docs/changelog.md')
+* [Changelog](docs/changelog.md)
 
 ## Contributing
 * Bugfix pull requests are welcome

@@ -1,10 +1,10 @@
 'use strict';
 
-var _ = require('lodash');
 var itemTypes = require('./itemTypes');
 var ships = require('../ships');
-var upgrades = require('../upgrades').all;
+var upgrades = require('../upgrades');
 var pilots = require('../pilots');
+var missions = require('../missions');
 
 var XpItem = function (upgradeType, data) {
     this.upgradeType = upgradeType;
@@ -15,15 +15,15 @@ XpItem.prototype.cost = function () {
     if (this.upgradeType === itemTypes.SHIP_TYPE) {
         return -5;
     } else if (this.upgradeType === itemTypes.STARTING_SHIP_TYPE) {
-        var startingShip = this.getShipById(this.data.shipId);
+        var startingShip = ships.getById(this.data.shipId);
         return startingShip.startingXp;
     } else if (this.upgradeType === itemTypes.PILOT_SKILL) {
         // pilot skill costs double skill level upgrading to
         return (this.data.pilotSkill * 2) * -1;
-    } else if (this.upgradeType === itemTypes.MISSION) {
-        return this.data.missionXp;
+    } else if (this.upgradeType === itemTypes.XP) {
+        return this.data.xp;
     } else if (this.upgradeType === itemTypes.BUY_UPGRADE) {
-        var upgrade = this.getUpgradeById(this.data.upgradeId);
+        var upgrade = upgrades.getById(this.data.upgradeId);
         if (upgrade.points === 0) {
             return 0;
         }
@@ -41,23 +41,26 @@ XpItem.prototype.cost = function () {
 
 XpItem.prototype.label = function () {
     if (this.upgradeType === itemTypes.SHIP_TYPE) {
-        var ship = this.getShipById(this.data.shipId);
+        var ship = ships.getById(this.data.shipId);
         return 'Change ship: ' + ship.shipData.name;
     } else if (this.upgradeType === itemTypes.STARTING_SHIP_TYPE) {
-        var startingShip = this.getShipById(this.data.shipId);
+        var startingShip = ships.getById(this.data.shipId);
         return 'Starting ship: ' + startingShip.shipData.name;
     } else if (this.upgradeType === itemTypes.PILOT_SKILL) {
         return 'Upgrade pilot skill: PS ' + this.data.pilotSkill;
     } else if (this.upgradeType === itemTypes.MISSION) {
-        return 'Gain mission XP';
+        var mission = missions.getById(this.data.missionId);
+        return 'Completed mission: ' + mission.name;
+    } else if (this.upgradeType === itemTypes.XP) {
+        return 'Gain XP';
     } else if (this.upgradeType === itemTypes.BUY_UPGRADE) {
-        var upgrade = this.getUpgradeById(this.data.upgradeId);
+        var upgrade = upgrades.getById(this.data.upgradeId);
         return upgrade.slot + ': ' + (upgrade.dualCardName || upgrade.name);
     } else if (this.upgradeType === itemTypes.BUY_PILOT_ABILITY) {
         var pilot = pilots.getById(this.data.pilotId);
         return 'Pilot Ability: ' + pilot.name;
     } else if (this.upgradeType === itemTypes.LOSE_UPGRADE) {
-        var lostUpgrade = this.getUpgradeById(this.data.upgradeId);
+        var lostUpgrade = upgrades.getById(this.data.upgradeId);
         return 'Lose upgrade: ' + (lostUpgrade.dualCardName || lostUpgrade.name);
     } else if (this.upgradeType === itemTypes.LOSE_PILOT_ABILITY) {
         var lostPilot = pilots.getById(this.data.pilotId);
@@ -79,7 +82,10 @@ XpItem.prototype.exportString = function () {
         dataString = this.data.pilotSkill;
         idString = 'PS';
     } else if (this.upgradeType === itemTypes.MISSION) {
-        dataString = this.data.missionXp;
+        dataString = this.data.missionId;
+        idString = 'MIS';
+    } else if (this.upgradeType === itemTypes.XP) {
+        dataString = this.data.xp;
         idString = 'XP';
     } else if (this.upgradeType === itemTypes.BUY_UPGRADE) {
         dataString = this.data.upgradeId;
@@ -114,9 +120,12 @@ XpItem.prototype.parseExportString = function (exportObject) {
     } else if (idString === 'PS') {
         this.data.pilotSkill = parseInt(dataString, 10);
         this.upgradeType = itemTypes.PILOT_SKILL;
-    } else if (idString === 'XP') {
-        this.data.missionXp = parseInt(dataString, 10);
+    } else if (idString === 'MIS') {
+        this.data.missionId = parseInt(dataString, 10);
         this.upgradeType = itemTypes.MISSION;
+    } else if (idString === 'XP') {
+        this.data.xp = parseInt(dataString, 10);
+        this.upgradeType = itemTypes.XP;
     } else if (idString === 'UP') {
         this.data.upgradeId = parseInt(dataString, 10);
         this.upgradeType = itemTypes.BUY_UPGRADE;
@@ -139,18 +148,6 @@ XpItem.prototype.parseExportStringLessV3 = function (exportString) {
         value: splitItems[1]
     };
     this.parseExportString(splitObject);
-};
-
-XpItem.prototype.getShipById = function (shipId) {
-    return _.find(ships, function (shipItem) {
-        return shipItem.id === shipId;
-    });
-};
-
-XpItem.prototype.getUpgradeById = function (upgradeId) {
-    return _.find(upgrades, function (upgradeItem) {
-        return upgradeItem.id === upgradeId;
-    });
 };
 
 module.exports = XpItem;

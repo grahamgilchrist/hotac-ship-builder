@@ -1,5 +1,14 @@
 # Hotac Ship Builder
 
+## Contents
+* [Background](#background)
+* [Documentation](#documentation)
+* [Acknowledgements](#acknowledgements)
+* [Bugs and new features](#bugs-and-new-features)
+* [Roadmap](#roadmap)
+* [Changelog](#changelog)
+* [Disclaimer](#disclaimer)
+
 ## Background
 
 This is a web based ship builder and campaign tracker for the [Heroes of the Aturi Cluster](http://dockingbay416.com/campaign/) (hotac) campaign for the x-wing miniatures game.
@@ -62,23 +71,29 @@ This project couldn't exist without the excellent open source x-wing community. 
 * [X-wing card data and images](https://github.com/guidokessels/xwing-data) courtesy of "guidokessels" which is essential for the upgrade card system and card images.
 * And of course, the [Heroes of the Aturi Cluster](http://dockingbay416.com/campaign/) campaign itself, by Josh Derksen, and the x-wing miniatures game by Fantasy Flight Games.
 
-## Bugs and new features
+## Development
 
 The source code for this project is [hosted on Github](https://github.com/grahamgilchrist/hotac-squad-builder/) (https://github.com/grahamgilchrist/hotac-squad-builder/), and can be "forked" and run by anyone.
 
 This project is maintained for free as a fun side project, so bugs and new features will be addressed as and when the time is available.
-Pull requests for bugfixes are welcomed, but if you want to provide code for a new feature, please raise a ticket first (or fork your own version), as there is a limited functionality roadmap and various UX considerations to adding new features.
 
 ### Reporting bugs
-Please use the [github issues queue](https://github.com/grahamgilchrist/hotac-squad-builder/issues) to report bugs and issues. It will help debugging greatly if you can inlcude the device, Operating system and Browser version you are using.
+Please use the [github issues queue](https://github.com/grahamgilchrist/hotac-squad-builder/issues) to report bugs and issues. It will greatly help debugging if you can include the device, Operating system and Browser version you are using.
+
+Pull requests for bugfixes are welcome!
 
 ### Requesting new features
-Please use the github issues queue to request new features. 
+New features will be considered, but are going to be limited.
 
-## Roadmap
-* TBC
+Currently we are limiting to the "Core" Hotac rules just to keep the complexity down. There is such a variety of custom and house rules used by different Hotac players, it would be impossible to support them all, so this project is limiting itself to more generic solutions which can address the widest number of options. The original remit of the app was also to present the upgrade options to newer players in an easy-to-understand and user friendly way, so additional features must be careful not to compromise the UX by introducing interface complexity.
 
-## [Changelog](docs/changelog.html)
+If you have an idea for a new feature, please use the github issues queue to suggest it, but bear in mind the above considerations. You are welcome to fork the project and host your own version with specific custom features for your play group.
+
+### Roadmap
+A rough roadmap for upcoming issues/features can be seen in the [github project](https://github.com/grahamgilchrist/hotac-squad-builder/projects/1) 
+
+### Changelog
+An up-to-date [changelog](https://github.com/grahamgilchrist/hotac-squad-builder/blob/master/changelog.md) is maintained in github.
 
 ## Disclaimer
 This application is unofficial and is not affiliated with Fantasy Flight Games, Lucasfilm Ltd., or Disney.

@@ -16,6 +16,7 @@ module.exports = {
         module.exports.bindExportButton();
         module.exports.bindPrintButton();
         module.exports.bindHelpButton();
+        module.exports.bindHelpLinks();
     },
     openDrawer: function () {
         $('#drawer-wrapper').addClass('active');
@@ -57,6 +58,17 @@ module.exports = {
     bindHelpButton: function () {
         $('.header-buttons #help, .drawer #help').on('click', function () {
             modalController.openDocsModal('docs/about.html');
+        });
+    },
+    bindHelpLinks: function () {
+        $(document).on('click', '.featherlight.content-typography a[href]', function (e) {
+            var href = $(this).attr('href');
+            if (href.substring(0, 1) === '#') {
+                // this is an in-page anchor link
+                e.preventDefault();
+                var $linkedElement = $(href);
+                $linkedElement.get(0).scrollIntoView();
+            }
         });
     },
     setMainState: function () {

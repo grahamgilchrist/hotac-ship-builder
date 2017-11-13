@@ -81,7 +81,9 @@ ShipBuild.prototype.processHistory = function (xpHistory) {
                 upgradeId: xpItem.data.upgradeId
             });
         } else if (xpItem.upgradeType === itemTypes.MISSION) {
-            thisBuild.addMissionXp(xpItem.data.missionXp);
+            thisBuild.completeMission(xpItem.data.missionId);
+        } else if (xpItem.upgradeType === itemTypes.XP) {
+            thisBuild.addMissionXp(xpItem.data.xp);
         } else if (xpItem.upgradeType === itemTypes.BUY_PILOT_ABILITY) {
             thisBuild.addToHistory(itemTypes.BUY_PILOT_ABILITY, {
                 pilotId: xpItem.data.pilotId
@@ -94,21 +96,13 @@ ShipBuild.prototype.processHistory = function (xpHistory) {
     });
 };
 
-ShipBuild.prototype.getShipById = function (shipId) {
-    var hotacShipModel = _.find(ships, function (ship) {
-        return ship.id === shipId;
-    });
-    var newModel = _.clone(hotacShipModel, true);
-    return newModel;
-};
-
 ShipBuild.prototype.addXp = function (xp) {
     this.currentXp += xp;
     events.trigger('model.build.xp.update', this);
 };
 
 ShipBuild.prototype.setStartingShip = function (shipId) {
-    this.currentShip = this.getShipById(shipId);
+    this.currentShip = ships.getById(shipId);
     this.addToHistory(itemTypes.STARTING_SHIP_TYPE, {
         shipId: shipId
     });
@@ -146,7 +140,7 @@ ShipBuild.prototype.changeShip = function (shipId) {
     this.addToHistory(itemTypes.SHIP_TYPE, {
         shipId: shipId
     });
-    this.currentShip = this.getShipById(shipId);
+    this.currentShip = ships.getById(shipId);
     if (this.ready === true) {
         this.upgradeSlots.reset();
         this.upgrades.refreshUpgradesState();
@@ -155,8 +149,14 @@ ShipBuild.prototype.changeShip = function (shipId) {
 };
 
 ShipBuild.prototype.addMissionXp = function (xpAmount) {
+    this.addToHistory(itemTypes.XP, {
+        xp: xpAmount
+    });
+};
+
+ShipBuild.prototype.completeMission = function (missionId) {
     this.addToHistory(itemTypes.MISSION, {
-        missionXp: xpAmount
+        missionId: missionId
     });
 };
 

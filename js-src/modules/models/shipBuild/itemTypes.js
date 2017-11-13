@@ -5,6 +5,7 @@ module.exports = {
     PILOT_SKILL: 'pilotSkill',
     BUY_UPGRADE: 'buyUpgrade',
     LOSE_UPGRADE: 'loseUpgrade',
+    XP: 'xp',
     MISSION: 'mission',
     STARTING_SHIP_TYPE: 'startingShip',
     BUY_PILOT_ABILITY: 'pilotAbility',
