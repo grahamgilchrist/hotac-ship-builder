@@ -28,6 +28,6 @@
     "json-url": "^2.3.4",
     "lodash": "4.17.x",
     "vinyl-source-stream": "1.x",
-    "xwing-data": "0.47.x"
+    "xwing-data": "0.51.x"
   }
 }
