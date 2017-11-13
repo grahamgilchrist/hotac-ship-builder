@@ -21,13 +21,15 @@
     "gulp-sass": "3.x",
     "gulp-sass-lint": "1.x",
     "gulp-sourcemaps": "2.6.x",
-    "gulp-template-store": "^1.1.2",
+    "gulp-template-store": "1.1.x",
     "gulp-webserver": "0.9.x",
     "gulp-yaml-validate": "1.0.x",
     "jquery": "3.1.x",
-    "json-url": "^2.3.4",
+    "json-url": "2.3.x",
     "lodash": "4.17.x",
+    "node-sass": "4.6.x",
     "vinyl-source-stream": "1.x",
     "xwing-data": "0.51.x"
-  }
+  },
+  "dependencies": {}
 }
