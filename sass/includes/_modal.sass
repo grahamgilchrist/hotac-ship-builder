@@ -289,9 +289,23 @@
 
     &.content-typography
         .featherlight-content
-            padding-left: 20px
+            max-width: 980px
+            padding-left: 30px
+
+            @include media($media-featherlight-help-title-spacing)
+                padding-top: $close-icon-size
+
+            @include media($media-featherlight-help-small-padding)
+                padding-left: 20px
 
             h1,
-            h2,
-            h3
+            h2
                 margin-left: -10px
+
+            h2:before
+                content: ''
+                display: block
+                height: 0px
+                width: 100%
+                border-top: 1px solid #eee
+                margin: 10px 0
