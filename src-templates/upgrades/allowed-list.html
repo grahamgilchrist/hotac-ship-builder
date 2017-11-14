@@ -2,7 +2,7 @@
     <div class="allowed-list">
 
         <% if (hasUnequippedUpgrades) { %>
-            <div class="unused-upgrades-wrapper">
+            <div class="unused-upgrades-wrapper sub-column">
                 <h4><span>Unused upgrades</span> <i class="material-icons" id="unused-upgrades-info">info_outline</i></h4>
                 <div class="mdl-tooltip" data-mdl-for="unused-upgrades-info">
                     Upgrades which have been purchased but are not currently equipped.
@@ -27,7 +27,7 @@
         <% } %>
 
         <% if (hasDisabledUpgrades) { %>
-            <div class="disabled-upgrades">
+            <div class="disabled-upgrades sub-column">
                 <h4>Disabled upgrades</h4>
                 <p>These upgrades have been purchased but cannot be equipped to the current ship.</p>
                 <ul id="disabled-upgrade-list">

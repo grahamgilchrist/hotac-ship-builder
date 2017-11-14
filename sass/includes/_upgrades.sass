@@ -110,6 +110,10 @@
             min-width: auto
             width: 230px
 
+        @include media($media-upgrade-four-col)
+            width: 470px
+            max-width: 470px
+
         @include media('print')
             -webkit-print-color-adjust: exact
 
@@ -132,6 +136,12 @@
         @include media('print')
             .mdl-tooltip
                 margin: 1em 0
+
+    .sub-column
+        @include media($media-upgrade-four-col)
+            width: 230px
+            max-width: 230px
+            float: left
 
 .upgrade-slots-wrapper.one-column
     .column-2
