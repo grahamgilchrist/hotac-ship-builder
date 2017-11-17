@@ -1,0 +1,15 @@
+<% if (disabled.length > 0) { %>
+    <div class="disabled-upgrades">
+        <h4>Disabled upgrades</h4>
+        <p>These upgrades have been purchased but cannot be equipped to the current ship.</p>
+        <ul id="disabled-upgrade-list">
+            <% disabled.forEach(function(upgrade) { %>
+                <li class="upgrade card" upgrade-id="<%= upgrade.id %>">
+                    <%= iconString(upgrade.slot) %> 
+                    <span class="upgrade-name"><%= (upgrade.dualCardName || upgrade.name) %></span>
+                    <i class="material-icons eye">zoom_in</i>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+<% } %>

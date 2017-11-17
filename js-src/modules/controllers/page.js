@@ -158,9 +158,12 @@ module.exports = {
             shipInfoView.renderShipActions(build);
             shipInfoView.renderShipImage(build.currentShip);
             shipInfoView.renderShipDial(build.currentShip);
-            upgradesView.renderShipSlotsList(build);
+            upgradesView.renderFreeSlots(build);
+            upgradesView.renderMainSlots(build);
+            upgradesView.renderSlotsFromUpgrades(build);
             pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
-            upgradesView.renderUpgradesList(build);
+            upgradesView.renderUnequippedUpgradesList(build);
+            upgradesView.renderDisabledUpgradesList(build);
             loseUpgradeView.renderLoseButton(build);
             xpHistoryView.renderTable(build);
             changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
@@ -178,8 +181,11 @@ module.exports = {
                 shipInfoView.renderShipActions(build);
                 shipInfoView.renderShipImage(build.currentShip);
                 shipInfoView.renderShipDial(build.currentShip);
-                upgradesView.renderShipSlotsList(build);
-                upgradesView.renderUpgradesList(build);
+                upgradesView.renderFreeSlots(build);
+                upgradesView.renderMainSlots(build);
+                upgradesView.renderSlotsFromUpgrades(build);
+                upgradesView.renderUnequippedUpgradesList(build);
+                upgradesView.renderDisabledUpgradesList(build);
                 changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
                 upgradesView.renderPrintCardList(build);
                 mainView.showTab('#summary-tab');
@@ -189,9 +195,10 @@ module.exports = {
         events.on('model.build.pilotSkill.update', function (event, build) {
             if (build.ready) {
                 pilotSkillView.renderWithPs(build.pilotSkill, build.currentXp);
-                upgradesView.renderUpgradesList(build);
+                upgradesView.renderUnequippedUpgradesList(build);
+                upgradesView.renderDisabledUpgradesList(build);
                 changeShipView.renderShipView(build.pilotSkill, build.currentShip, build.currentXp);
-                upgradesView.renderShipSlotsList(build);
+                upgradesView.renderMainSlots(build);
             }
         });
 
@@ -210,8 +217,11 @@ module.exports = {
 
         events.on('model.build.equippedUpgrades.update model.build.upgrades.lose model.build.pilotAbilities.lose', function (event, build) {
             if (build.ready) {
-                upgradesView.renderShipSlotsList(build);
-                upgradesView.renderUpgradesList(build);
+                upgradesView.renderFreeSlots(build);
+                upgradesView.renderMainSlots(build);
+                upgradesView.renderSlotsFromUpgrades(build);
+                upgradesView.renderUnequippedUpgradesList(build);
+                upgradesView.renderDisabledUpgradesList(build);
                 shipInfoView.renderShipActions(build);
                 shipInfoView.renderShipStats(build);
                 summaryView.renderEquippedUpgrades(build);

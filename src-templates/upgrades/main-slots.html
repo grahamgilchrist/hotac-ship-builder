@@ -1,0 +1,11 @@
+<div class="ship-slots-list">
+    <h4>Slots on ship</h4>
+    <div id="ship-slots-default">
+        <% enabled.forEach(function(slotHtml) { %>
+            <%= slotHtml %>
+        <% }); %>
+        <% disabled.forEach(function(slotHtml) { %>
+            <%= slotHtml %>
+        <% }); %>
+    </div>
+</div>

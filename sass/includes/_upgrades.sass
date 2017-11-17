@@ -4,8 +4,6 @@
 
 .upgrades-wrapper
     background-color: #fff
-    overflow: hidden
-    // font-size: 0
 
     @include media($media-main-padding)
         padding:
@@ -40,7 +38,7 @@
     align-items: center
     flex-wrap: wrap
     text-align: center
-    padding: 0 5px 30px
+    padding: 0 5px 10px
     border-bottom: 1px solid #ddd;
     margin-bottom: 30px
 
@@ -98,21 +96,30 @@
                 margin-right: 10px
 
 .upgrade-slots-wrapper
+    $col-width: 230px
     display: flex
     justify-content: center
 
-    .column
-        padding: 0 10px
-        min-width: 50%
-        max-width: 230px
-
-        @include media($media-main-padding)
-            min-width: auto
-            width: 230px
+    .column-wrapper
+        width: 100%
+        max-width: $col-width * 2
+        display: flex
+        flex-wrap: wrap
+        justify-content: center
 
         @include media($media-upgrade-four-col)
-            width: 470px
-            max-width: 470px
+            max-width: none
+
+    .column
+        width: 50%
+        padding: 0 10px
+        max-width: $col-width
+
+        @include media($media-upgrade-four-col)
+            width: 25%
+
+        &.empty
+            display: none
 
         @include media('print')
             -webkit-print-color-adjust: exact
@@ -137,22 +144,22 @@
             .mdl-tooltip
                 margin: 1em 0
 
-    .sub-column
-        @include media($media-upgrade-four-col)
-            width: 230px
-            max-width: 230px
-            float: left
-
-.upgrade-slots-wrapper.one-column
-    .column-2
-        display: none
-
-.upgrade-slots-wrapper.two-column
     .column-1
-        padding-right: 0
-
+        order: 1
     .column-2
-        padding-left: 20px
+        order: 3
+
+        @include media($media-upgrade-four-col)
+            order: 2
+
+    .column-3
+        order: 2
+
+        @include media($media-upgrade-four-col)
+            order: 3
+
+    .column-4
+        order: 4
 
 .ship-slots-free-wrapper
     padding-bottom: 0
@@ -245,7 +252,8 @@
 .ship-slots-free-wrapper .slot .title
     flex-grow: 1
 
-.allowed-list
+.unused-upgrades-wrapper,
+.disabled-upgrades
     text-align: left
 
     p,
