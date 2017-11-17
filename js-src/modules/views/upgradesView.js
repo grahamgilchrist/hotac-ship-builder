@@ -60,6 +60,7 @@ module.exports = {
         var $newElement = $(viewHtml);
         module.exports.bindCardPreviewOpen($newElement, build);
         module.exports.setListViewEmptyClass($wrapperElement, freeSlots);
+        module.exports.setColumnCountClass($wrapperElement);
         $wrapperElement.empty().append($newElement);
     },
     renderMainSlots: function (build) {
@@ -117,8 +118,8 @@ module.exports = {
     },
     // listOrBoolean. Boolean whether items in list, or an array we can test length of
     setListViewEmptyClass: function ($viewElement, listOrBoolean) {
+        // Set class on this column based on whether it is empty
         var hasItems = false;
-
         var $column = $viewElement.closest('.column');
 
         if (_.isBoolean(listOrBoolean)) {
@@ -132,6 +133,20 @@ module.exports = {
         } else {
             $column.addClass('empty').removeClass('has-items');
         }
+    },
+    setColumnCountClass: function ($viewElement) {
+        // Set class on wrapper based on column count
+        var $columnWrapper = $viewElement.closest('.column-wrapper');
+        var numColumns = $columnWrapper.find('.column.has-items').length;
+        $columnWrapper.removeClass(function (index, classesString) {
+            var classesArray = classesString.split(' ');
+            var filteredArray = _.filter(classesArray, function (className) {
+                return className.indexOf('column-count-') === 0;
+            });
+
+            return filteredArray.join(' ');
+        });
+        $columnWrapper.addClass('column-count-' + numColumns);
     },
     renderShipSlot: function (upgradeSlot, build) {
         var upgradesAvailableToBuy = build.upgrades.getAvailableToBuy(upgradeSlot.type);
@@ -214,6 +229,7 @@ module.exports = {
         var viewHtml = templateUtils.renderHTML('upgrades/unequipped-list', context);
         var $newElement = $(viewHtml);
         module.exports.setListViewEmptyClass($wrapperElement, hasUnequippedUpgrades);
+        module.exports.setColumnCountClass($wrapperElement);
 
         $newElement.on('click', 'li.upgrade.card', function () {
             var upgradeId = parseInt($(this).attr('upgrade-id'), 10);
@@ -243,6 +259,7 @@ module.exports = {
             iconString: upgrades.getIconString
         };
         module.exports.setListViewEmptyClass($wrapperElement, build.upgrades.disabled);
+        module.exports.setColumnCountClass($wrapperElement);
         templateUtils.renderToDom('upgrades/disabled-list', $wrapperElement, context);
     },
     clickEquipSlot: function (upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, abilitiesAvailableToBuy, build) {

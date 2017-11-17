@@ -105,10 +105,21 @@
         max-width: $col-width * 2
         display: flex
         flex-wrap: wrap
-        justify-content: center
+        justify-content: flex-start
+
+        &.column-count-1,
+        &.column-count-2
+            max-width: $col-width
+
+            .column
+                width: 100%
+
+            @include media($media-upgrade-four-col)
+                max-width: none
 
         @include media($media-upgrade-four-col)
             max-width: none
+            justify-content: center
 
     .column
         width: 50%
