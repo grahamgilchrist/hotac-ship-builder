@@ -32,15 +32,41 @@ module.exports = {
             var upgradeId = parseInt($(this).attr('unequip-ability'), 10);
             events.trigger('view.upgrades.unequipAbility', upgradeId);
         });
+
+        $(document).on('click', '[open-card-preview]', function () {
+            var upgradeId = parseInt($(this).attr('open-card-preview'), 10);
+            var buttonType = $(this).attr('preview-button');
+            modalController.openUpgradeCardModal(upgradeId, buttonType);
+        });
+
+        $(document).on('click', '[open-ability-preview]', function () {
+            var upgradeId = parseInt($(this).attr('open-ability-preview'), 10);
+            var buttonType = $(this).attr('preview-button');
+            modalController.openAbilityCardModal(upgradeId, buttonType);
+        });
     },
-    renderShipSlotsList: function (build) {
-        var $wrapperElement = $('[view-bind=ship-slots-list]');
+    renderFreeSlots: function (build) {
+        var $wrapperElement = $('[view-bind=free-slots-list]');
 
-        var upgradeSlots = build.upgradeSlots;
-
-        var freeSlots = _.map(upgradeSlots.free, function (upgradeSlot) {
+        var freeSlots = _.map(build.upgradeSlots.free, function (upgradeSlot) {
             return module.exports.renderFreeShipSlot(upgradeSlot);
         });
+
+        var context = {
+            free: freeSlots
+        };
+
+        var viewHtml = templateUtils.renderHTML('upgrades/free-slots', context);
+        var $newElement = $(viewHtml);
+        module.exports.bindCardPreviewOpen($newElement, build);
+        module.exports.setListViewEmptyClass($wrapperElement, freeSlots, 'free');
+        module.exports.setColumnCountClass($wrapperElement);
+        $wrapperElement.empty().append($newElement);
+    },
+    renderMainSlots: function (build) {
+        var $wrapperElement = $('[view-bind=main-slots-list]');
+
+        var upgradeSlots = build.upgradeSlots;
 
         var enabledSlots = _.map(upgradeSlots.enabled, function (upgradeSlot) {
             return module.exports.renderShipSlot(upgradeSlot, build);
@@ -52,33 +78,35 @@ module.exports = {
             }
         });
 
-        var slotsFromUpgrades = _.map(upgradeSlots.slotsFromUpgrades, function (upgradeSlot) {
+        var context = {
+            enabled: enabledSlots,
+            disabled: disabledSlots
+        };
+
+        var viewHtml = templateUtils.renderHTML('upgrades/main-slots', context);
+        var $newElement = $(viewHtml);
+        module.exports.bindCardPreviewOpen($newElement, build);
+        $wrapperElement.empty().append($newElement);
+    },
+    renderSlotsFromUpgrades: function (build) {
+        var $wrapperElement = $('[view-bind=slots-from-upgrades-list]');
+
+        var slotsFromUpgrades = _.map(build.upgradeSlots.slotsFromUpgrades, function (upgradeSlot) {
             return module.exports.renderShipSlot(upgradeSlot, build);
         });
 
         var context = {
-            free: freeSlots,
-            enabled: enabledSlots,
-            disabled: disabledSlots,
             slotsFromUpgrades: slotsFromUpgrades
         };
 
-        var viewHtml = templateUtils.renderHTML('upgrades/shipslots', context);
+        var viewHtml = templateUtils.renderHTML('upgrades/slots-from-upgrades', context);
         var $newElement = $(viewHtml);
-
-        $newElement.on('click', '.ship-slots-list [open-card-preview]', function () {
-            var upgradeId = parseInt($(this).attr('open-card-preview'), 10);
-            var buttonType = $(this).attr('preview-button');
-            modalController.openUpgradeCardModal(upgradeId, buttonType);
-        });
-        $newElement.on('click', '.ship-slots-list [open-ability-preview]', function () {
-            var upgradeId = parseInt($(this).attr('open-ability-preview'), 10);
-            var buttonType = $(this).attr('preview-button');
-            modalController.openAbilityCardModal(upgradeId, buttonType);
-        });
-
+        module.exports.bindCardPreviewOpen($newElement, build);
+        $wrapperElement.empty().append($newElement);
+    },
+    bindCardPreviewOpen: function ($element, build) {
         var abilitiesAvailableToBuy = build.upgrades.getAbilitiesAvailableToBuy();
-        $newElement.on('click', '.ship-slots-list [equip-slot]', function () {
+        $element.on('click', '[equip-slot]', function () {
             var slotType = $(this).attr('equip-slot');
             var upgradesAvailableToBuy = build.upgrades.getAvailableToBuy(slotType);
             var unusedUpgradesForType = _.filter(build.upgrades.unequipped, function (upgrade) {
@@ -87,8 +115,42 @@ module.exports = {
             module.exports.clickEquipSlot(slotType, unusedUpgradesForType, build.upgrades.unequippedAbilities, upgradesAvailableToBuy, abilitiesAvailableToBuy, build);
         });
 
-        $wrapperElement.empty().append($newElement);
+    },
+    // listOrBoolean. Boolean whether items in list, or an array we can test length of
+    setListViewEmptyClass: function ($viewElement, listOrBoolean, columnName) {
+        // Set class on this column based on whether it is empty
+        var hasItems = false;
+        var $column = $viewElement.closest('.column');
+        var $columnWrapper = $viewElement.closest('.column-wrapper');
 
+        if (_.isBoolean(listOrBoolean)) {
+            hasItems = listOrBoolean;
+        } else if (_.isArray(listOrBoolean)) {
+            hasItems = (listOrBoolean && listOrBoolean.length > 0);
+        }
+
+        var wrapperClass = 'has-column-' + columnName;
+        if (hasItems) {
+            $column.removeClass('empty').addClass('has-items');
+            $columnWrapper.addClass(wrapperClass);
+        } else {
+            $column.addClass('empty').removeClass('has-items');
+            $columnWrapper.removeClass(wrapperClass);
+        }
+    },
+    setColumnCountClass: function ($viewElement) {
+        // Set class on wrapper based on column count
+        var $columnWrapper = $viewElement.closest('.column-wrapper');
+        var numColumns = $columnWrapper.find('.column.has-items').length;
+        $columnWrapper.removeClass(function (index, classesString) {
+            var classesArray = classesString.split(' ');
+            var filteredArray = _.filter(classesArray, function (className) {
+                return className.indexOf('column-count-') === 0;
+            });
+
+            return filteredArray.join(' ');
+        });
+        $columnWrapper.addClass('column-count-' + numColumns);
     },
     renderShipSlot: function (upgradeSlot, build) {
         var upgradesAvailableToBuy = build.upgrades.getAvailableToBuy(upgradeSlot.type);
@@ -157,34 +219,21 @@ module.exports = {
         };
         templateUtils.renderToDom('print-card-list', $wrapper, context);
     },
-    renderUpgradesList: function (build) {
-
-        var $listsWrapper = $('.upgrade-slots-wrapper');
-        var $unusedList = $('#unused-upgrade-list');
-        $unusedList.empty();
+    renderUnequippedUpgradesList: function (build) {
 
         var hasUnequippedUpgrades = (build.upgrades.unequipped.length > 0 || build.upgrades.unequippedAbilities.length > 0);
-        var hasDisabledUpgrades = (build.upgrades.disabled.length > 0);
-        var hasDisabledOrUnequippedUpgrades = (hasDisabledUpgrades || hasUnequippedUpgrades);
-
-        if (!hasDisabledOrUnequippedUpgrades) {
-            $listsWrapper.removeClass('two-column').addClass('one-column');
-        } else {
-            $listsWrapper.removeClass('one-column').addClass('two-column');
-        }
 
         var $wrapperElement = $('[view-bind=allowed-list]');
         var context = {
             unequipped: build.upgrades.unequipped,
             unequippedAbilities: build.upgrades.unequippedAbilities,
-            disabled: build.upgrades.disabled,
-            hasDisabledOrUnequippedUpgrades: hasDisabledOrUnequippedUpgrades,
             hasUnequippedUpgrades: hasUnequippedUpgrades,
-            hasDisabledUpgrades: hasDisabledUpgrades,
             iconString: upgrades.getIconString
         };
-        var viewHtml = templateUtils.renderHTML('upgrades/allowed-list', context);
+        var viewHtml = templateUtils.renderHTML('upgrades/unequipped-list', context);
         var $newElement = $(viewHtml);
+        module.exports.setListViewEmptyClass($wrapperElement, hasUnequippedUpgrades, 'unequipped');
+        module.exports.setColumnCountClass($wrapperElement);
 
         $newElement.on('click', 'li.upgrade.card', function () {
             var upgradeId = parseInt($(this).attr('upgrade-id'), 10);
@@ -206,6 +255,16 @@ module.exports = {
         });
 
         $wrapperElement.empty().append($newElement);
+    },
+    renderDisabledUpgradesList: function (build) {
+        var $wrapperElement = $('[view-bind=disabled-upgrades-list]');
+        var context = {
+            disabled: build.upgrades.disabled,
+            iconString: upgrades.getIconString
+        };
+        module.exports.setListViewEmptyClass($wrapperElement, build.upgrades.disabled, 'disabled');
+        module.exports.setColumnCountClass($wrapperElement);
+        templateUtils.renderToDom('upgrades/disabled-list', $wrapperElement, context);
     },
     clickEquipSlot: function (upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, abilitiesAvailableToBuy, build) {
         // open modal to choose upgrade to equip

@@ -143,15 +143,24 @@
                                     </div>
 
                                     <div class="upgrade-slots-wrapper">
-                                        <div class="column column-1">
-                                            <div view-bind="ship-slots-list"></div>                                        
-                                            <div view-bind="lose-upgrade-button"></div>
-                                        </div>
-                                        <div class="column column-2">
-                                            <div view-bind="allowed-list"></div>
-                                            <div view-bind="lose-upgrade-button"></div>
-                                        </div>
+                                        <div class="column-wrapper">
+                                            <div class="column column-3 has-items">
+                                                <div view-bind="allowed-list"></div>
+                                            </div>
+                                            <div class="column column-4 has-items">
+                                                <div view-bind="disabled-upgrades-list"></div>
+                                                <div view-bind="lose-upgrade-button"></div>
+                                            </div>
+                                            <div class="column column-1 has-items">
+                                                <div view-bind="free-slots-list"></div>
+                                            </div>
+                                            <div class="column column-2 has-items">
+                                                <div view-bind="main-slots-list"></div>
+                                                <div view-bind="slots-from-upgrades-list"></div>
+                                                <div view-bind="lose-upgrade-button"></div>
+                                            </div>
                                     </div>
+                                        </div>
                                 </div>
                             </div>
 
@@ -221,7 +230,9 @@
                     </div>
                     <div class="column column-3">
                         <div class="upgrade-slots-wrapper">
-                            <div view-bind="ship-slots-list"></div>
+                            <div view-bind="free-slots-list"></div>
+                            <div view-bind="main-slots-list"></div>
+                            <div view-bind="slots-from-upgrades-list"></div>
                         </div>
 
                     </div>
@@ -235,6 +246,7 @@
                     </div>
                     <div class="column column-2">
                         <div view-bind="allowed-list"></div>
+                        <div view-bind="disabled-upgrades-list"></div>                        
                     </div>
                     <div class="column column-3">
                         <div view-bind="unequipped-print-card-list"></div>

@@ -1,0 +1,24 @@
+<% if (hasUnequippedUpgrades) { %>
+    <div class="unused-upgrades-wrapper">
+        <h4><span>Unused upgrades</span> <i class="material-icons" id="unused-upgrades-info">info_outline</i></h4>
+        <div class="mdl-tooltip" data-mdl-for="unused-upgrades-info">
+            Upgrades which have been purchased but are not currently equipped.
+        </div>
+        <ul id="unused-upgrade-list">
+            <% unequipped.forEach(function(upgrade) { %>
+                <li class="upgrade card" upgrade-id="<%= upgrade.id %>">
+                    <%= iconString(upgrade.slot) %> 
+                    <span class="upgrade-name"><%= (upgrade.dualCardName || upgrade.name) %></span>
+                    <i class="material-icons eye">zoom_in</i>
+                </li>
+            <% }); %>
+            <% unequippedAbilities.forEach(function(pilot) { %>
+                <li class="upgrade ability" ability-id="<%= + pilot.id %>">
+                    <%= iconString('Elite') %>
+                    <span class="upgrade-name">Ability: <%= pilot.name %></span>
+                    <i class="material-icons eye">zoom_in</i>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+<% } %>

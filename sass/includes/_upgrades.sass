@@ -4,8 +4,6 @@
 
 .upgrades-wrapper
     background-color: #fff
-    overflow: hidden
-    // font-size: 0
 
     @include media($media-main-padding)
         padding:
@@ -40,7 +38,7 @@
     align-items: center
     flex-wrap: wrap
     text-align: center
-    padding: 0 5px 30px
+    padding: 0 5px 10px
     border-bottom: 1px solid #ddd;
     margin-bottom: 30px
 
@@ -98,17 +96,50 @@
                 margin-right: 10px
 
 .upgrade-slots-wrapper
+    $col-width: 230px
     display: flex
     justify-content: center
 
-    .column
-        padding: 0 10px
-        min-width: 50%
-        max-width: 230px
+    .column-wrapper
+        width: 100%
+        max-width: $col-width
+        display: flex
+        flex-wrap: wrap
+        justify-content: center
+        overflow: hidden
 
-        @include media($media-main-padding)
-            min-width: auto
-            width: 230px
+        @include media($media-upgrade-four-col)
+            max-width: none
+
+        @include media($media-upgrade-two-col)
+            // Only when in narrow mode
+
+            // If we have either of the second columns, switch to a float
+            //  based layout. This relies on column 3 and 4 element being before
+            //  column-1 and column-2 elements in the html
+            &.has-column-unequipped,
+            &.has-column-disabled
+                max-width: $col-width * 2
+                display: block
+
+                .column
+                    width: 50%
+
+                .column-3,
+                .column-4
+                    float: right
+                    clear: right
+
+    .column
+        width: 100%
+        padding: 0 10px
+        max-width: $col-width
+
+        @include media($media-upgrade-four-col)
+            width: 25%
+
+        &.empty
+            display: none
 
         @include media('print')
             -webkit-print-color-adjust: exact
@@ -133,16 +164,19 @@
             .mdl-tooltip
                 margin: 1em 0
 
-.upgrade-slots-wrapper.one-column
-    .column-2
-        display: none
-
-.upgrade-slots-wrapper.two-column
     .column-1
-        padding-right: 0
+        // Since columns in the html are out of order to enable float layout above,
+        //  make sure the order is right for displaying in flex mode
+        order: 1
 
     .column-2
-        padding-left: 20px
+        order: 2
+
+    .column-3
+        order: 3
+
+    .column-4
+        order: 4
 
 .ship-slots-free-wrapper
     padding-bottom: 0
@@ -235,7 +269,8 @@
 .ship-slots-free-wrapper .slot .title
     flex-grow: 1
 
-.allowed-list
+.unused-upgrades-wrapper,
+.disabled-upgrades
     text-align: left
 
     p,
