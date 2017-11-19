@@ -1,6 +1,7 @@
 'use strict';
 
-var _ = require('lodash');
+var _find = require('lodash/find');
+var _forEach = require('lodash/forEach');
 var events = require('../controllers/events');
 var enemies = require('../models/enemies');
 
@@ -28,8 +29,8 @@ enemyDefeats.prototype.adjustCount = function (enemyShipXws, amount) {
 
 enemyDefeats.prototype.exportString = function () {
     var exportValues = [];
-    _.forEach(this.enemyDefeats, function (count, xws) {
-        var enemyShip = _.find(enemies, {
+    _forEach(this.enemyDefeats, function (count, xws) {
+        var enemyShip = _find(enemies, {
             xws: xws
         });
         var exportValue = enemyShip.id + '=' + count;
@@ -49,7 +50,7 @@ enemyDefeats.prototype.parseUrlString = function (string) {
             var splitParts = itemString.split('=');
             var shipId = parseInt(splitParts[0], 10);
             var count = parseInt(splitParts[1], 10);
-            var enemyModel = _.find(enemies, {
+            var enemyModel = _find(enemies, {
                 id: shipId
             });
             if (enemyModel.xws && count) {

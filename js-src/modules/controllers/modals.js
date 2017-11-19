@@ -1,7 +1,12 @@
 'use strict';
 
 var $ = require('jquery');
-var _ = require('lodash');
+
+// lodash methods
+var _isUndefined = require('lodash/isUndefined');
+var _isInteger = require('lodash/isInteger');
+var _each = require('lodash/each');
+
 var events = require('./events');
 var abilityCardView = require('../views/abilityCard');
 var pilots = require('../models/pilots');
@@ -99,7 +104,7 @@ module.exports = {
                 var $summary = $('<div class="summary"><span></span></div>');
                 var $button = $('<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled>' + buttonText + '</button>');
                 $button.on('click', function () {
-                    if (!_.isUndefined(lastSelectedItem.selectedUpgradeId)) {
+                    if (!_isUndefined(lastSelectedItem.selectedUpgradeId)) {
                         events.trigger(lastSelectedItem.selectedUpgradeEvent, lastSelectedItem.selectedUpgradeId);
                     }
                     $.featherlight.close();
@@ -164,7 +169,7 @@ module.exports = {
         if (tabsObject.length > 1) {
             // tab link elements
             var $tabsBar = $('<div class="mdl-tabs__tab-bar">');
-            _.each(tabsObject, function (tab) {
+            _each(tabsObject, function (tab) {
                 var tabId = tab.$content.attr('id');
                 var $tabLink = $('<a href="#' + tabId + '" class="mdl-tabs__tab" button-text="' + tab.buttonLabel + '">' + tab.name + '</a>');
                 $tabsBar.append($tabLink);
@@ -175,12 +180,12 @@ module.exports = {
             $modalContent.addClass('mdl-tabs mdl-js-tabs mdl-js-ripple-effect');
             $modalContent.prepend($tabsBar);
             tabsObject[0].$content.addClass('is-active');
-            _.each(tabsObject, function (tab) {
+            _each(tabsObject, function (tab) {
                 tab.$content.addClass('mdl-tabs__panel');
             });
         }
 
-        _.each(tabsObject, function (tab) {
+        _each(tabsObject, function (tab) {
             $modalContent.append(tab.$content);
         });
 
@@ -195,7 +200,7 @@ module.exports = {
     // Accepts either object of pilot model or integer ID
     openAbilityCardModal: function (abilityPilot, buttonType) {
         var pilotModel = abilityPilot;
-        if (_.isInteger(abilityPilot)) {
+        if (_isInteger(abilityPilot)) {
             // We were passed pilot id as a number
             pilotModel = pilots.getById(abilityPilot);
         }
@@ -230,7 +235,7 @@ module.exports = {
     },
     openUpgradeCardModal: function (upgrade, buttonType) {
         var upgradeToShow = upgrade;
-        if (_.isInteger(upgrade)) {
+        if (_isInteger(upgrade)) {
             // We were passed pilot id as a number
             upgradeToShow = upgrades.getById(upgrade);
         }

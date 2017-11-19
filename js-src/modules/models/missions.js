@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require('lodash');
+var _find = require('lodash');
 
 var missions = [
     {
@@ -113,7 +113,7 @@ var missions = [
 ];
 
 var getById = function (missionId) {
-    return _.find(missions, function (mission) {
+    return _find(missions, function (mission) {
         return mission.id === missionId;
     });
 };

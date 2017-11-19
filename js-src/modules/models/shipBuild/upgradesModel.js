@@ -1,6 +1,16 @@
 'use strict';
 
-var _ = require('lodash');
+var _map = require('lodash/map');
+var _filter = require('lodash/filter');
+var _bind = require('lodash/bind');
+var _each = require('lodash/each');
+var _difference = require('lodash/difference');
+var _findIndex = require('lodash/findIndex');
+var _isUndefined = require('lodash/isUndefined');
+var _find = require('lodash/find');
+var _first = require('lodash/first');
+var _clone = require('lodash/clone');
+
 var upgradesImport = require('../upgrades');
 var keyedUpgrades = upgradesImport.keyed;
 var pilots = require('../pilots');
@@ -20,11 +30,11 @@ var upgradesModel = function (build, upgradeIdList, equippedIdList, pilotIds, eq
 };
 
 upgradesModel.prototype.upgradesFromIds = function (upgradeIdList) {
-    return _.map(upgradeIdList, upgradesImport.getById);
+    return _map(upgradeIdList, upgradesImport.getById);
 };
 
 upgradesModel.prototype.abilitiesFromIds = function (abilityIdList) {
-    return _.map(abilityIdList, pilots.getById);
+    return _map(abilityIdList, pilots.getById);
 };
 
 upgradesModel.prototype.refreshUpgradesState = function () {
@@ -46,7 +56,7 @@ upgradesModel.prototype.validateUpgrades = function (upgradesList) {
     // Make sure equipped list only contains upgrades we have purchased or started with
     var filteredUpgrades = arrayUtils.intersectionSingle(upgradesList, this.all);
     // Make sure equipped list only contains upgrade types allowed on ship
-    filteredUpgrades = _.filter(filteredUpgrades, _.bind(this.upgradeAllowedOnShip, this));
+    filteredUpgrades = _filter(filteredUpgrades, _bind(this.upgradeAllowedOnShip, this));
     return filteredUpgrades;
 };
 
@@ -54,7 +64,7 @@ upgradesModel.prototype.validateAbilities = function (pilotsList) {
     // Make sure equipped list only contains upgrades we have purchased
     var filteredUpgrades = arrayUtils.intersectionSingle(pilotsList, this.purchasedAbilities);
     // Make sure equipped list only contains abilities allowed in the build
-    filteredUpgrades = _.filter(filteredUpgrades, _.bind(this.abilityAllowedInBuild, this));
+    filteredUpgrades = _filter(filteredUpgrades, _bind(this.abilityAllowedInBuild, this));
     return filteredUpgrades;
 };
 
@@ -64,7 +74,7 @@ upgradesModel.prototype.getDisabledUpgrades = function () {
 
     var disabledUpgrades = [];
 
-    _.each(this.purchased, function (upgrade) {
+    _each(this.purchased, function (upgrade) {
         var allowedOnShip = thisModel.upgradeAllowedOnShip(upgrade);
         var allowedInSlots = (slotsAllowedInBuild.indexOf(upgrade.slot) > -1);
 
@@ -85,7 +95,7 @@ upgradesModel.prototype.getDisabledAbilities = function () {
     // Abilities only go in Elite slots
     var allowedInSlots = (slotsAllowedInBuild.indexOf('Elite') > -1);
 
-    _.each(this.purchasedAbilities, function (pilot) {
+    _each(this.purchasedAbilities, function (pilot) {
         var allowedOnShip = thisModel.abilityAllowedInBuild(pilot);
 
         if (!allowedOnShip || !allowedInSlots) {
@@ -98,7 +108,7 @@ upgradesModel.prototype.getDisabledAbilities = function () {
 
 upgradesModel.prototype.getUnequippedUpgrades = function () {
     // Remove *All* copies of any upgrades which should be disabled
-    var notDisabled = _.difference(this.purchased, this.disabled);
+    var notDisabled = _difference(this.purchased, this.disabled);
     // Remove one copy of each item which is equipped
     var unequipped = arrayUtils.differenceSingle(notDisabled, this.equippedUpgrades);
     return unequipped;
@@ -106,7 +116,7 @@ upgradesModel.prototype.getUnequippedUpgrades = function () {
 
 upgradesModel.prototype.getUnequippedAbilities = function () {
     // Remove *All* copies of any abiltiies which should be disabled
-    var notDisabled = _.difference(this.purchasedAbilities, this.disabledAbilities);
+    var notDisabled = _difference(this.purchasedAbilities, this.disabledAbilities);
     // Remove one copy of each item which is equipped
     var unequipped = arrayUtils.differenceSingle(notDisabled, this.equippedAbilities);
     return unequipped;
@@ -128,10 +138,10 @@ upgradesModel.prototype.buyPilotAbility = function (pilotId) {
 
 upgradesModel.prototype.loseCard = function (upgradeId) {
     // remove the first version of this upgrade we find in the purchased list
-    var foundIndex = _.findIndex(this.purchased, function (item) {
+    var foundIndex = _findIndex(this.purchased, function (item) {
         return item.id === upgradeId;
     });
-    if (!_.isUndefined(foundIndex)) {
+    if (!_isUndefined(foundIndex)) {
         // remove found upgrade from purchased list
         this.purchased.splice(foundIndex, 1);
     }
@@ -140,10 +150,10 @@ upgradesModel.prototype.loseCard = function (upgradeId) {
 };
 
 upgradesModel.prototype.loseAbility = function (pilotId) {
-    var foundIndex = _.findIndex(this.purchasedAbilities, function (item) {
+    var foundIndex = _findIndex(this.purchasedAbilities, function (item) {
         return item.id === pilotId;
     });
-    if (!_.isUndefined(foundIndex)) {
+    if (!_isUndefined(foundIndex)) {
         this.purchasedAbilities.splice(foundIndex, 1);
     }
     this.refreshUpgradesState();
@@ -167,7 +177,7 @@ upgradesModel.prototype.equipAbility = function (pilotId) {
 upgradesModel.prototype.unequipUpgrade = function (upgradeId) {
     // find the first instance of this upgrade in the equipped list.
     // We only look for the first time it appears, as there may be several of the same card equipped
-    var removeIndex = _.findIndex(this.equippedUpgrades, function (upgrade) {
+    var removeIndex = _findIndex(this.equippedUpgrades, function (upgrade) {
         return upgrade.id === upgradeId;
     });
     // Now remove found index from equipped list
@@ -181,7 +191,7 @@ upgradesModel.prototype.unequipUpgrade = function (upgradeId) {
 upgradesModel.prototype.unequipAbility = function (pilotId) {
     // find the first instance of this upgrade in the equipped list.
     // We only look for the first time it appears, as there may be several of the same card equipped
-    var removeIndex = _.findIndex(this.equippedAbilities, function (pilot) {
+    var removeIndex = _findIndex(this.equippedAbilities, function (pilot) {
         return pilot.id === pilotId;
     });
     // Now remove found index from equipped list
@@ -196,14 +206,14 @@ upgradesModel.prototype.unequipAbility = function (pilotId) {
 //  (e.g. restricted by chassis, size, already a starting upgrade, already purchased etc.)
 upgradesModel.prototype.getAvailableToBuy = function (upgradeType) {
     var upgradesOfType = keyedUpgrades[upgradeType];
-    var allowedUpgrades = _.filter(upgradesOfType, _.bind(this.upgradeAllowedOnShip, this));
-    allowedUpgrades = _.filter(allowedUpgrades, _.bind(this.upgradeAllowedInBuild, this));
+    var allowedUpgrades = _filter(upgradesOfType, _bind(this.upgradeAllowedOnShip, this));
+    allowedUpgrades = _filter(allowedUpgrades, _bind(this.upgradeAllowedInBuild, this));
     return allowedUpgrades;
 };
 
 upgradesModel.prototype.getAbilitiesAvailableToBuy = function () {
     var allAbilities = uniquePilots;
-    var allowedPilots = _.difference(allAbilities, this.purchasedAbilities);
+    var allowedPilots = _difference(allAbilities, this.purchasedAbilities);
     var sortedPilots = pilots.sortList(allowedPilots);
     return sortedPilots;
 };
@@ -234,7 +244,7 @@ upgradesModel.prototype.abilityAllowedInBuild = function (pilot) {
 upgradesModel.prototype.upgradeAllowedInBuild = function (upgrade) {
     // Don't show anything which is a starting upgrade for the ship
     if (this.build.currentShip.startingUpgrades) {
-        var found = _.find(this.build.currentShip.startingUpgrades, function (startingUpgrade) {
+        var found = _find(this.build.currentShip.startingUpgrades, function (startingUpgrade) {
             return startingUpgrade.xws === upgrade.xws;
         });
         if (found) {
@@ -243,7 +253,7 @@ upgradesModel.prototype.upgradeAllowedInBuild = function (upgrade) {
     }
 
     // Remove any upgrades the build already has
-    var upgradeExists = _.find(this.all, function (existingUpgrade) {
+    var upgradeExists = _find(this.all, function (existingUpgrade) {
         // Check xws instead of ID so we remove both sides of dual cards
         return existingUpgrade.xws === upgrade.xws;
     });
@@ -269,7 +279,7 @@ upgradesModel.prototype.upgradeAllowedInBuild = function (upgrade) {
 
 upgradesModel.prototype.abilityAlreadyInBuild = function (abilityPilot) {
     // Remove any abilities the build already has
-    var abilityExists = _.find(this.purchasedAbilities, function (existingAbility) {
+    var abilityExists = _find(this.purchasedAbilities, function (existingAbility) {
         return existingAbility.id === abilityPilot.id;
     });
 
@@ -286,7 +296,7 @@ upgradesModel.prototype.canEquipUpgrade = function (upgradeId) {
 
     var canEquip = false;
 
-    _.each(upgradeSlots.enabled, function (upgradeSlot) {
+    _each(upgradeSlots.enabled, function (upgradeSlot) {
         if (upgradeSlot.type === upgrade.slot) {
             // this slot is the right type for the upgrade
             if (!upgradeSlot.equipped) {
@@ -304,7 +314,7 @@ upgradesModel.prototype.canEquipAbilties = function () {
 
     var canEquip = false;
 
-    _.each(upgradeSlots.enabled, function (upgradeSlot) {
+    _each(upgradeSlots.enabled, function (upgradeSlot) {
         if (upgradeSlot.type === 'Elite') {
             // this slot is the right type for the upgrade
             if (!upgradeSlot.equipped) {
@@ -320,8 +330,8 @@ upgradesModel.prototype.canEquipAbilties = function () {
 upgradesModel.prototype.equipUpgradesToSlots = function (upgradesToEquip, abilitiesToEquip) {
     var thisModel = this;
 
-    var remainingUpgradesToEquip = _.clone(upgradesToEquip);
-    var remainingAbilitiesToEquip = _.clone(abilitiesToEquip);
+    var remainingUpgradesToEquip = _clone(upgradesToEquip);
+    var remainingAbilitiesToEquip = _clone(abilitiesToEquip);
     var equippedUpgrades = [];
     var equippedAbilities = [];
 
@@ -331,14 +341,14 @@ upgradesModel.prototype.equipUpgradesToSlots = function (upgradesToEquip, abilit
 
     var newSlotIndices = [];
 
-    _.each(upgradeSlots.free, function (upgradeSlot) {
+    _each(upgradeSlots.free, function (upgradeSlot) {
         var matchingUpgrade = thisModel.matchFreeSlot(upgradeSlot, remainingUpgradesToEquip);
         var slotsAddedIndices = thisModel.equipSlot(upgradeSlot, matchingUpgrade, equippedUpgrades, equippedAbilities, remainingUpgradesToEquip, remainingAbilitiesToEquip);
         // If we added any new slots as part of equipping this upgrade, add them to the list
         newSlotIndices = newSlotIndices.concat(slotsAddedIndices);
     });
 
-    _.each(upgradeSlots.enabled, function (upgradeSlot) {
+    _each(upgradeSlots.enabled, function (upgradeSlot) {
         var matchingUpgrade = thisModel.matchSlot(upgradeSlot, remainingUpgradesToEquip, remainingAbilitiesToEquip);
         var slotsAddedIndices = thisModel.equipSlot(upgradeSlot, matchingUpgrade, equippedUpgrades, equippedAbilities, remainingUpgradesToEquip, remainingAbilitiesToEquip);
         // If we added any new slots as part of equipping this upgrade, add them to the list
@@ -364,7 +374,7 @@ upgradesModel.prototype.equipUpgradesToSlots = function (upgradesToEquip, abilit
 
 upgradesModel.prototype.matchFreeSlot = function (upgradeSlot, remainingUpgradesToEquip) {
     // Is there an equipped upgrade for this slot?
-    var matchingUpgrade = _.find(remainingUpgradesToEquip, function (upgrade) {
+    var matchingUpgrade = _find(remainingUpgradesToEquip, function (upgrade) {
         return upgrade.id === upgradeSlot.upgrade.id;
     });
     return matchingUpgrade;
@@ -372,13 +382,13 @@ upgradesModel.prototype.matchFreeSlot = function (upgradeSlot, remainingUpgrades
 
 upgradesModel.prototype.matchSlot = function (upgradeSlot, remainingUpgradesToEquip, remainingAbilitiesToEquip) {
     // Is there an equipped upgrade for this slot?
-    var matchingUpgrade = _.find(remainingUpgradesToEquip, function (upgrade) {
+    var matchingUpgrade = _find(remainingUpgradesToEquip, function (upgrade) {
         return upgrade.slot === upgradeSlot.type;
     });
 
     if (!matchingUpgrade && upgradeSlot.type === 'Elite') {
         // We didn't find a match, and this is elite, so also check for matching abilities
-        matchingUpgrade = _.first(remainingAbilitiesToEquip);
+        matchingUpgrade = _first(remainingAbilitiesToEquip);
     }
     return matchingUpgrade;
 };
@@ -411,7 +421,7 @@ upgradesModel.prototype.equipSlot = function (upgradeSlot, upgradeToEquip, equip
 upgradesModel.prototype.addUpgradeGrantsSlot = function (upgrade) {
     var thisModel = this;
     var addedSlotIndices = [];
-    _.each(upgrade.grants, function (grant) {
+    _each(upgrade.grants, function (grant) {
         if (grant.type === 'slot') {
             var addedSlotIndex = thisModel.build.upgradeSlots.addAdditionalSlot(grant.name);
             addedSlotIndices.push(addedSlotIndex);

@@ -1,7 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
-var _ = require('lodash');
+var _each = require('lodash/each');
 
 var events = require('../controllers/events');
 var templateUtils = require('../utils/templates');
@@ -28,11 +28,11 @@ module.exports = {
         var $form = $('<form>');
         var $select = $('<select id="lose-upgrade-choice">');
 
-        _.each(build.upgrades.purchased, function (upgrade) {
+        _each(build.upgrades.purchased, function (upgrade) {
             var $option = $('<option value="up-' + upgrade.id + '">' + (upgrade.dualCardName || upgrade.name) + '</option>');
             $select.append($option);
         });
-        _.each(build.upgrades.purchasedAbilities, function (pilotCard) {
+        _each(build.upgrades.purchasedAbilities, function (pilotCard) {
             var $option = $('<option value="ab-' + pilotCard.id + '">Ability: ' + pilotCard.name + '</option>');
             $select.append($option);
         });

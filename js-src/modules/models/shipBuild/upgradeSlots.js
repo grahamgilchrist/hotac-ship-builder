@@ -1,6 +1,8 @@
 'use strict';
 
-var _ = require('lodash');
+var _map = require('lodash/map');
+var _each = require('lodash/each');
+var _uniq = require('lodash/uniq');
 
 var upgradeSlotsModel = function (build) {
     this.build = build;
@@ -23,7 +25,7 @@ upgradeSlotsModel.prototype.getShipSlots = function () {
     var thisBuild = this.build;
 
     // elite slots are dependent on pilot level
-    var allBaseSlots = _.map(this.build.currentShip.upgradeSlots, function (upgradeSlot) {
+    var allBaseSlots = _map(this.build.currentShip.upgradeSlots, function (upgradeSlot) {
         return {
             type: upgradeSlot
         };
@@ -70,7 +72,7 @@ upgradeSlotsModel.prototype.getShipSlots = function () {
     var enabledSlots = [];
     var disabledSlots = [];
 
-    _.each(allBaseSlots, function (slot) {
+    _each(allBaseSlots, function (slot) {
         if (thisBuild.pilotSkill < slot.pilotSkill) {
             // slot should be disabled
             disabledSlots.push(slot);
@@ -79,7 +81,7 @@ upgradeSlotsModel.prototype.getShipSlots = function () {
         }
     });
 
-    var startingSlots = _.map(this.build.currentShip.startingUpgrades, function (upgrade) {
+    var startingSlots = _map(this.build.currentShip.startingUpgrades, function (upgrade) {
         return {
             type: upgrade.slot,
             upgrade: upgrade
@@ -115,12 +117,12 @@ upgradeSlotsModel.prototype.allUsableSlotTypes = function () {
 
     var allEnabledSlotTypes = allowedSlots.concat(slotsFromUpgrades);
     // map output so that it is just a list of types
-    allEnabledSlotTypes = _.map(allEnabledSlotTypes, function (item) {
+    allEnabledSlotTypes = _map(allEnabledSlotTypes, function (item) {
         return item.type;
     });
 
     // Remove any duplicates in array
-    allEnabledSlotTypes = _.uniq(allEnabledSlotTypes);
+    allEnabledSlotTypes = _uniq(allEnabledSlotTypes);
 
     return allEnabledSlotTypes;
 };

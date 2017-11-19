@@ -1,6 +1,10 @@
 'use strict';
 
-var _ = require('lodash');
+var _each = require('lodash/each');
+var _map = require('lodash/map');
+var _clone = require('lodash/clone');
+var _uniq = require('lodash/uniq');
+
 var ships = require('./ships');
 var events = require('../controllers/events');
 var XpItem = require('./shipBuild/xpItem');
@@ -36,7 +40,7 @@ var ShipBuild = function (xpHistory, callsign, playerName, enemyDefeats, equippe
 
 ShipBuild.prototype.getPilotIdsFromHistory = function () {
     var pilotIds = [];
-    _.each(this.xpHistory, function (xpItem) {
+    _each(this.xpHistory, function (xpItem) {
         if (xpItem.upgradeType === itemTypes.BUY_PILOT_ABILITY) {
             pilotIds.push(xpItem.data.pilotId);
         }
@@ -50,7 +54,7 @@ ShipBuild.prototype.getPilotIdsFromHistory = function () {
 
 ShipBuild.prototype.getUpgradeIdsFromHistory = function () {
     var upgradeIds = [];
-    _.each(this.xpHistory, function (xpItem) {
+    _each(this.xpHistory, function (xpItem) {
         if (xpItem.upgradeType === itemTypes.BUY_UPGRADE) {
             upgradeIds.push(xpItem.data.upgradeId);
         }
@@ -65,7 +69,7 @@ ShipBuild.prototype.getUpgradeIdsFromHistory = function () {
 ShipBuild.prototype.processHistory = function (xpHistory) {
     var thisBuild = this;
 
-    _.each(xpHistory, function (xpItem) {
+    _each(xpHistory, function (xpItem) {
         if (xpItem.upgradeType === itemTypes.STARTING_SHIP_TYPE) {
             thisBuild.setStartingShip(xpItem.data.shipId);
         } else if (xpItem.upgradeType === itemTypes.SHIP_TYPE) {
@@ -161,14 +165,14 @@ ShipBuild.prototype.completeMission = function (missionId) {
 };
 
 ShipBuild.prototype.exportEquippedUpgradesString = function () {
-    var upgradeIds = _.map(this.upgrades.equippedUpgrades, function (item) {
+    var upgradeIds = _map(this.upgrades.equippedUpgrades, function (item) {
         return item.id;
     });
     return JSON.stringify(upgradeIds);
 };
 
 ShipBuild.prototype.exportEquippedAbilitiesString = function () {
-    var pilotIds = _.map(this.upgrades.equippedAbilities, function (item) {
+    var pilotIds = _map(this.upgrades.equippedAbilities, function (item) {
         return item.id;
     });
     return JSON.stringify(pilotIds);
@@ -182,9 +186,9 @@ ShipBuild.prototype.getStats = function () {
         shields: this.currentShip.shipData.shields
     };
     // Add nay stats from upgrades
-    _.each(this.upgrades.equippedUpgrades, function (upgrade) {
+    _each(this.upgrades.equippedUpgrades, function (upgrade) {
         if (upgrade.grants) {
-            _.each(upgrade.grants, function (grant) {
+            _each(upgrade.grants, function (grant) {
                 if (grant.type === 'stats') {
                     statValues[grant.name] += grant.value;
                 }
@@ -196,21 +200,21 @@ ShipBuild.prototype.getStats = function () {
 
 ShipBuild.prototype.getActions = function () {
     // Start with base ship actions
-    var actions = _.clone(this.currentShip.shipData.actions, true);
+    var actions = _clone(this.currentShip.shipData.actions, true);
     // Add any actions from upgrades
-    _.each(this.upgrades.equippedUpgrades, function (upgrade) {
+    _each(this.upgrades.equippedUpgrades, function (upgrade) {
         if (upgrade.grants) {
-            _.each(upgrade.grants, function (grant) {
+            _each(upgrade.grants, function (grant) {
                 if (grant.type === 'action') {
                     actions.push(grant.name);
                 }
             });
         }
     });
-    actions = _.uniq(actions);
+    actions = _uniq(actions);
 
     var slugifiedActions = [];
-    _.each(actions, function (action) {
+    _each(actions, function (action) {
         var slugifiedAction = action.replace(' ', '').replace('-', '');
         slugifiedAction = slugifiedAction.toLowerCase();
         slugifiedActions.push(slugifiedAction);
@@ -224,9 +228,9 @@ ShipBuild.prototype.getModifiedPs = function () {
     var modifiedPilotSkill = this.pilotSkill;
 
     // Add any actions from upgrades
-    _.each(this.upgrades.equippedUpgrades, function (upgrade) {
+    _each(this.upgrades.equippedUpgrades, function (upgrade) {
         if (upgrade.grants) {
-            _.each(upgrade.grants, function (grant) {
+            _each(upgrade.grants, function (grant) {
                 if (grant.type === 'stats' && grant.name === 'skill') {
                     var psIncrease = grant.value;
                     modifiedPilotSkill += psIncrease;

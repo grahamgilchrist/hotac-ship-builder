@@ -1,7 +1,10 @@
 'use strict';
 
 var $ = require('jquery');
-var _ = require('lodash');
+var _reverse = require('lodash/reverse');
+var _clone = require('lodash/clone');
+var _each = require('lodash/each');
+var _every = require('lodash/every');
 var templateUtils = require('../utils/templates');
 
 module.exports = {
@@ -67,8 +70,8 @@ module.exports = {
             'reversebankright'
         ];
 
-        var dialManeuvers = _.reverse(_.clone(currentShip.shipData.maneuvers));
-        _.each(dialManeuvers, function (speedManeuvers, speedIndex) {
+        var dialManeuvers = _reverse(_clone(currentShip.shipData.maneuvers));
+        _each(dialManeuvers, function (speedManeuvers, speedIndex) {
             var maneuverSpeed = dialManeuvers.length - 1 - speedIndex;
             var $tr = $('<tr>');
             // first row show speed
@@ -77,7 +80,7 @@ module.exports = {
 
             // don't show speed zero if there are no maneuvers
             var showRow = true;
-            var noManeuversAtThisSpeed = _.every(speedManeuvers, function (maneuver) {
+            var noManeuversAtThisSpeed = _every(speedManeuvers, function (maneuver) {
                 return maneuver === 0;
             });
             if (maneuverSpeed === 0 && noManeuversAtThisSpeed) {
@@ -85,7 +88,7 @@ module.exports = {
             }
 
             if (showRow) {
-                _.each(speedManeuvers, function (maneuver, maneuverIndex) {
+                _each(speedManeuvers, function (maneuver, maneuverIndex) {
                     var maneuverString = '';
                     if (maneuver > 0) {
                         var iconKey;

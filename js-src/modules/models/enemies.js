@@ -1,10 +1,10 @@
 'use strict';
 
-var _ = require('lodash');
+var _find = require('lodash/find');
 var shipData = require('./shipCards');
 
 var getShipDataById = function (xws) {
-    return _.find(shipData, function (shipData) {
+    return _find(shipData, function (shipData) {
         return shipData.xws === xws;
     });
 };

@@ -1,7 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
-var _ = require('lodash');
+var _forEach = require('lodash/forEach');
 
 var events = require('../controllers/events');
 var ships = require('../models/ships');
@@ -54,7 +54,7 @@ module.exports = {
         var startingShips = ships.starting;
 
         // bind starting ships to DOM
-        _.forEach(startingShips, function (item) {
+        _forEach(startingShips, function (item) {
             var $newOption = $('<option value="' + item.id + '">' + item.shipData.name + ' (' + item.startingXp + ' XP to spend)</option>');
             $select.append($newOption);
         });
@@ -77,7 +77,7 @@ module.exports = {
     },
     setFormErrors: function (formErrors) {
 
-        _.forEach(formErrors, function (error) {
+        _forEach(formErrors, function (error) {
 
             var $errorField = $('#' + error.fieldId);
             if ($errorField.length > 0) {

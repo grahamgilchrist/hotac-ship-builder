@@ -3,7 +3,7 @@
 // eslint-disable-next-line new-cap
 var codec = window.JsonUrl('lzma');
 
-var _ = require('lodash');
+var _map = require('lodash/map');
 var $ = require('jquery');
 var XpItem = require('../models/shipBuild/xpItem');
 var EnemyDefeatsModel = require('../models/enemyDefeats');
@@ -45,7 +45,7 @@ module.exports = {
         urlComponents.push(abilitiesString);
 
         // Add XP history items
-        var xpHistoryUrlItems = _.map(build.xpHistory, function (xpItem) {
+        var xpHistoryUrlItems = _map(build.xpHistory, function (xpItem) {
             return xpItem.exportString();
         });
         urlComponents.push(xpHistoryUrlItems);
@@ -69,7 +69,7 @@ module.exports = {
             var playerName = window.decodeURIComponent(splitItems.shift());
             var callsign = window.decodeURIComponent(splitItems.shift());
 
-            var xpHistory = _.map(splitItems, function (stringItem) {
+            var xpHistory = _map(splitItems, function (stringItem) {
                 var xpItem = new XpItem();
                 xpItem.parseExportStringLessV3(stringItem);
                 return xpItem;
@@ -101,7 +101,7 @@ module.exports = {
             var enemyDefeats = new EnemyDefeatsModel();
             enemyDefeats.parseUrlString(splitItems.shift());
 
-            var xpHistory = _.map(splitItems, function (stringItem) {
+            var xpHistory = _map(splitItems, function (stringItem) {
                 var xpItem = new XpItem();
                 xpItem.parseExportStringLessV3(stringItem);
                 return xpItem;
@@ -139,7 +139,7 @@ module.exports = {
 
             var xpHistoryString = splitItems.shift();
             var xpHistoryItems = xpHistoryString.split(',');
-            var xpHistory = _.map(xpHistoryItems, function (stringItem) {
+            var xpHistory = _map(xpHistoryItems, function (stringItem) {
                 var xpItem = new XpItem();
                 xpItem.parseExportStringLessV3(stringItem);
                 return xpItem;
@@ -178,7 +178,7 @@ module.exports = {
                 var equippedAbilities = JSON.parse(splitItems.shift());
 
                 var xpHistoryItems = splitItems.shift();
-                var xpHistory = _.map(xpHistoryItems, function (stringItem) {
+                var xpHistory = _map(xpHistoryItems, function (stringItem) {
                     var xpItem = new XpItem();
                     xpItem.parseExportString(stringItem);
                     return xpItem;
