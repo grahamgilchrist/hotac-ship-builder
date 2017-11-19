@@ -29,7 +29,7 @@
     "lodash": "4.17.x",
     "node-sass": "4.6.x",
     "vinyl-source-stream": "1.x",
-    "xwing-data": "0.51.x"
+    "xwing-data": "0.52.x"
   },
   "dependencies": {}
 }
