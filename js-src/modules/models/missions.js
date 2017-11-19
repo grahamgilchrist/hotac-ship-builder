@@ -1,6 +1,6 @@
 'use strict';
 
-var _find = require('lodash');
+var _find = require('lodash/find');
 
 var missions = [
     {
