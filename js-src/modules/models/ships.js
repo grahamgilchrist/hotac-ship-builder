@@ -1,25 +1,27 @@
 'use strict';
 
-var _ = require('lodash');
+var _find = require('lodash/find');
+var _clone = require('lodash/clone');
+var _filter = require('lodash/filter');
 
 var pilots = require('./pilots').allRebels;
 var shipData = require('./shipCards');
 var upgrades = require('./upgrades').all;
 
 var getPilotByXws = function (pilotId) {
-    return _.find(pilots, function (pilotCard) {
+    return _find(pilots, function (pilotCard) {
         return pilotCard.xws === pilotId;
     });
 };
 
 var getShipDataById = function (xws) {
-    return _.find(shipData, function (shipData) {
+    return _find(shipData, function (shipData) {
         return shipData.xws === xws;
     });
 };
 
 var getUpgradeByXws = function (upgradeId) {
-    return _.find(upgrades, function (upgrade) {
+    return _find(upgrades, function (upgrade) {
         return upgrade.xws === upgradeId;
     });
 };
@@ -166,10 +168,10 @@ var hotacShips = [
 // ];
 
 var getById = function (shipId) {
-    var hotacShipModel = _.find(hotacShips, function (shipItem) {
+    var hotacShipModel = _find(hotacShips, function (shipItem) {
         return shipItem.id === shipId;
     });
-    var newModel = _.clone(hotacShipModel, true);
+    var newModel = _clone(hotacShipModel, true);
     return newModel;
 };
 
@@ -177,7 +179,7 @@ var getById = function (shipId) {
 var filterFunction = function (item) {
     return item.starting === true;
 };
-var startingShips = _.filter(hotacShips, filterFunction);
+var startingShips = _filter(hotacShips, filterFunction);
 
 module.exports = {
     data: hotacShips,

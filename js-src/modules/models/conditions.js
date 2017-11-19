@@ -1,10 +1,10 @@
 'use strict';
 
-var _ = require('lodash');
+var _find = require('lodash/find');
 var conditions = require('../../generated/conditions');
 
 var getConditionByXws = function (xws) {
-    return _.find(conditions, function (condition) {
+    return _find(conditions, function (condition) {
         return condition.xws === xws;
     });
 };

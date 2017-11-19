@@ -1,7 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
-var _ = require('lodash');
+var _template = require('lodash/template');
 var templates = require('../../generated/templates');
 
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
         var templatePromise = $.get('/templates/' + templatePath);
 
         var renderTemplate = function (templateContent) {
-            var compiled = _.template(templateContent);
+            var compiled = _template(templateContent);
             var viewHtml = compiled(contextObject);
             return viewHtml;
         };

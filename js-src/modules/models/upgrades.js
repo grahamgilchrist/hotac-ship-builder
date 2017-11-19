@@ -1,16 +1,17 @@
 'use strict';
 
-var _ = require('lodash');
+var _find = require('lodash/find');
+var _each = require('lodash/each');
 var upgrades = require('../../generated/upgrades');
 
 var getById = function (id) {
-    return _.find(upgrades, function (upgrade) {
+    return _find(upgrades, function (upgrade) {
         return upgrade.id === id;
     });
 };
 
 var getByXws = function (xws, excludeId) {
-    return _.find(upgrades, function (upgrade) {
+    return _find(upgrades, function (upgrade) {
         return ((upgrade.xws === xws) && (upgrade.id !== excludeId));
     });
 };
@@ -48,7 +49,7 @@ var sortedUpgrades = upgrades.sort(function (a, b) {
 
 // key upgrades by type
 var keyedUpgrades = {};
-_.each(sortedUpgrades, function (upgrade) {
+_each(sortedUpgrades, function (upgrade) {
 
     // Remove imperial and scum cards
     if (upgrade.faction === 'Galactic Empire' || upgrade.faction === 'Scum and Villainy') {

@@ -1,7 +1,12 @@
 'use strict';
 
 var $ = require('jquery');
-var _ = require('lodash');
+var _map = require('lodash/map');
+var _filter = require('lodash/filter');
+var _forEach = require('lodash/forEach');
+var _find = require('lodash/find');
+var _isBoolean = require('lodash/isBoolean');
+var _isArray = require('lodash/isArray');
 
 var modalController = require('../controllers/modals');
 var events = require('../controllers/events');
@@ -48,7 +53,7 @@ module.exports = {
     renderFreeSlots: function (build) {
         var $wrapperElement = $('[view-bind=free-slots-list]');
 
-        var freeSlots = _.map(build.upgradeSlots.free, function (upgradeSlot) {
+        var freeSlots = _map(build.upgradeSlots.free, function (upgradeSlot) {
             return module.exports.renderFreeShipSlot(upgradeSlot);
         });
 
@@ -68,11 +73,11 @@ module.exports = {
 
         var upgradeSlots = build.upgradeSlots;
 
-        var enabledSlots = _.map(upgradeSlots.enabled, function (upgradeSlot) {
+        var enabledSlots = _map(upgradeSlots.enabled, function (upgradeSlot) {
             return module.exports.renderShipSlot(upgradeSlot, build);
         });
 
-        var disabledSlots = _.map(upgradeSlots.disabled, function (upgradeSlot) {
+        var disabledSlots = _map(upgradeSlots.disabled, function (upgradeSlot) {
             if (build.pilotSkill < upgradeSlot.pilotSkill) {
                 return module.exports.renderShipSlot(upgradeSlot, build);
             }
@@ -91,7 +96,7 @@ module.exports = {
     renderSlotsFromUpgrades: function (build) {
         var $wrapperElement = $('[view-bind=slots-from-upgrades-list]');
 
-        var slotsFromUpgrades = _.map(build.upgradeSlots.slotsFromUpgrades, function (upgradeSlot) {
+        var slotsFromUpgrades = _map(build.upgradeSlots.slotsFromUpgrades, function (upgradeSlot) {
             return module.exports.renderShipSlot(upgradeSlot, build);
         });
 
@@ -109,7 +114,7 @@ module.exports = {
         $element.on('click', '[equip-slot]', function () {
             var slotType = $(this).attr('equip-slot');
             var upgradesAvailableToBuy = build.upgrades.getAvailableToBuy(slotType);
-            var unusedUpgradesForType = _.filter(build.upgrades.unequipped, function (upgrade) {
+            var unusedUpgradesForType = _filter(build.upgrades.unequipped, function (upgrade) {
                 return upgrade.slot === slotType;
             });
             module.exports.clickEquipSlot(slotType, unusedUpgradesForType, build.upgrades.unequippedAbilities, upgradesAvailableToBuy, abilitiesAvailableToBuy, build);
@@ -123,9 +128,9 @@ module.exports = {
         var $column = $viewElement.closest('.column');
         var $columnWrapper = $viewElement.closest('.column-wrapper');
 
-        if (_.isBoolean(listOrBoolean)) {
+        if (_isBoolean(listOrBoolean)) {
             hasItems = listOrBoolean;
-        } else if (_.isArray(listOrBoolean)) {
+        } else if (_isArray(listOrBoolean)) {
             hasItems = (listOrBoolean && listOrBoolean.length > 0);
         }
 
@@ -144,7 +149,7 @@ module.exports = {
         var numColumns = $columnWrapper.find('.column.has-items').length;
         $columnWrapper.removeClass(function (index, classesString) {
             var classesArray = classesString.split(' ');
-            var filteredArray = _.filter(classesArray, function (className) {
+            var filteredArray = _filter(classesArray, function (className) {
                 return className.indexOf('column-count-') === 0;
             });
 
@@ -160,7 +165,7 @@ module.exports = {
         //  (for example, no titles for this ship)
         var hasUpgradesToBuy = (upgradesAvailableToBuy.length > 0);
         var hasAbilitiesToBuy = (abilitiesAvailableToBuy.length > 0);
-        var hasUpgradesToEquip = _.find(build.upgrades.unequipped, {
+        var hasUpgradesToEquip = _find(build.upgrades.unequipped, {
             slot: upgradeSlot.type
         });
 
@@ -297,12 +302,12 @@ module.exports = {
         var $modalContent = $('<div class="card-image-list" id="modal-upgrade-list-' + mode + '">');
         var $upgradeList = $('<ul>');
 
-        _.forEach(upgradesToShow, function (item) {
+        _forEach(upgradesToShow, function (item) {
             var $upgrade = module.exports.renderModalCardListItem(build, mode, item);
             $upgradeList.append($upgrade);
         });
         if (upgradeType === 'Elite') {
-            _.forEach(abilitiesToShow, function (pilotCard) {
+            _forEach(abilitiesToShow, function (pilotCard) {
                 var $upgrade = module.exports.renderModalCardListItem(build, mode, undefined, pilotCard);
                 $upgradeList.append($upgrade);
             });

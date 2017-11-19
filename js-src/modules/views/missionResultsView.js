@@ -1,7 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
-var _ = require('lodash');
+var _isNaN = require('lodash/isNaN');
 
 var events = require('../controllers/events');
 var modalController = require('../controllers/modals');
@@ -49,7 +49,7 @@ module.exports = {
         var stringXpAmount = $input.val();
         var xpAmount = parseInt(stringXpAmount, 10);
 
-        if (!_.isNaN(xpAmount) && xpAmount > 0) {
+        if (!_isNaN(xpAmount) && xpAmount > 0) {
             events.trigger('view.main.addMissionXp', xpAmount);
         }
 

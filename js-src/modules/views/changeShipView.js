@@ -1,7 +1,8 @@
 'use strict';
 
 var $ = require('jquery');
-var _ = require('lodash');
+var _filter = require('lodash/filter');
+var _forEach = require('lodash/forEach');
 
 var modalController = require('../controllers/modals');
 var ships = require('../models/ships');
@@ -39,12 +40,12 @@ module.exports = {
         var $shipList = $('<ul>');
 
         // filter out current ship from list
-        var filteredShips = _.filter(ships.data, function (ship) {
+        var filteredShips = _filter(ships.data, function (ship) {
             return ship.id !== currentShip.id;
         });
 
         // Add all ships to list
-        _.forEach(filteredShips, function (item) {
+        _forEach(filteredShips, function (item) {
             var $item = $('<li>');
             var $img = $('<div class="img-wrapper"><img src="/components/xwing-data/images/' + item.pilotCard.image + '" alt="' + item.shipData.name + '"><div>');
             $item.append($img);

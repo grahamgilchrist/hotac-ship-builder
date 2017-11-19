@@ -1,7 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
-var _ = require('lodash');
+var _each = require('lodash/each');
 var events = require('../controllers/events');
 var modalController = require('../controllers/modals');
 var templateUtils = require('../utils/templates');
@@ -18,7 +18,7 @@ module.exports = {
 
         var itemList = [];
         var lastItem;
-        _.each(build.xpHistory, function (xpItem, xpItemIndex) {
+        _each(build.xpHistory, function (xpItem, xpItemIndex) {
             xpCount += xpItem.cost();
             if (xpItem.upgradeType === itemTypes.MISSION) {
                 xpTotal += xpItem.cost();

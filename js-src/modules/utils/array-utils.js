@@ -1,13 +1,15 @@
 'use strict';
 
-var _ = require('lodash');
+var _findIndex = require('lodash/findIndex');
+var _clone = require('lodash/clone');
+var _each = require('lodash/each');
 
 // Remocve first found matching value
 module.exports = {
     // Removes the first matching item in an array determined by iterator function.
     // Returns new array of removed items. Mutates original array
     removeFirstMatchingItem: function (array, func) {
-        var matchingIndex = _.findIndex(array, func);
+        var matchingIndex = _findIndex(array, func);
         if (matchingIndex > -1) {
             // we found a match
             var removedItem = array.splice(matchingIndex, 1);
@@ -29,9 +31,9 @@ module.exports = {
     //  The returned copy of array A will have both of the items removed.
     differenceSingle: function (arrayA, arrayB) {
         var itemsNotInArrayB = [];
-        var cloneB = _.clone(arrayB);
-        _.each(arrayA, function (itemInA) {
-            var itemAInArrayBIndex = _.findIndex(cloneB, function (itemInB) {
+        var cloneB = _clone(arrayB);
+        _each(arrayA, function (itemInA) {
+            var itemAInArrayBIndex = _findIndex(cloneB, function (itemInB) {
                 return itemInB === itemInA;
             });
             if (itemAInArrayBIndex > -1) {
@@ -53,10 +55,10 @@ module.exports = {
     // example: ArrayA has two of the same item. Array B has one of these matching items. Returned array will contain two items
     intersectionSingle: function (arrayA, arrayB) {
         var itemsInArrayAandB = [];
-        var cloneB = _.clone(arrayB);
+        var cloneB = _clone(arrayB);
 
-        _.each(arrayA, function (itemInA) {
-            var itemAInArrayBIndex = _.findIndex(cloneB, function (itemInB) {
+        _each(arrayA, function (itemInA) {
+            var itemAInArrayBIndex = _findIndex(cloneB, function (itemInB) {
                 return itemInB === itemInA;
             });
             if (itemAInArrayBIndex > -1) {
