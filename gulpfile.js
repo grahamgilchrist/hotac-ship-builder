@@ -1,6 +1,8 @@
 'use strict';
 
 const gulp = require('gulp');
+const sequence = require('run-sequence');
+
 require('./node/server')();
 require('./node/browserify')();
 require('./node/sass')();
@@ -10,6 +12,7 @@ require('./node/yaml-lint')();
 require('./node/copyXwingData')();
 require('./node/markdown')();
 require('./node/templates')();
+require('./node/uglify')();
 
 // Add some general task aliases
 gulp.task('lint', [
@@ -23,7 +26,8 @@ gulp.task('watch', [
     'sass:watch',
     'markdown:watch',
     'templates:watch',
-    'browserify:watch'
+    'browserify:watch',
+    'uglify:watch'
 ]);
 
 gulp.task('dev', [
@@ -32,10 +36,14 @@ gulp.task('dev', [
     'watch'
 ]);
 
+gulp.task('JsCompileAndCompress', function (done) {
+    sequence('browserify', 'uglify', done);
+});
+
 gulp.task('build', [
     'copyXwingData',
     'templates:compile',
-    'browserify',
+    'JsCompileAndCompress',
     'sass',
     'markdown'
 ]);
