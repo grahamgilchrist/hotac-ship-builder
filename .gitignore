@@ -8,3 +8,4 @@ app/js/*
 !app/js/vendor
 js-src/generated
 app/docs
+.gulp-cache/
