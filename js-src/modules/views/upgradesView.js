@@ -67,6 +67,8 @@ module.exports = {
         module.exports.setListViewEmptyClass($wrapperElement, freeSlots, 'free');
         module.exports.setColumnCountClass($wrapperElement);
         $wrapperElement.empty().append($newElement);
+        // rebind tooltip
+        window.componentHandler.upgradeDom();
     },
     renderMainSlots: function (build) {
         var $wrapperElement = $('[view-bind=main-slots-list]');
@@ -108,6 +110,8 @@ module.exports = {
         var $newElement = $(viewHtml);
         module.exports.bindCardPreviewOpen($newElement, build);
         $wrapperElement.empty().append($newElement);
+        // rebind tooltip
+        window.componentHandler.upgradeDom();
     },
     bindCardPreviewOpen: function ($element, build) {
         var abilitiesAvailableToBuy = build.upgrades.getAbilitiesAvailableToBuy();
@@ -260,6 +264,8 @@ module.exports = {
         });
 
         $wrapperElement.empty().append($newElement);
+        // rebind tooltip
+        window.componentHandler.upgradeDom();
     },
     renderDisabledUpgradesList: function (build) {
         var $wrapperElement = $('[view-bind=disabled-upgrades-list]');
@@ -270,6 +276,8 @@ module.exports = {
         module.exports.setListViewEmptyClass($wrapperElement, build.upgrades.disabled, 'disabled');
         module.exports.setColumnCountClass($wrapperElement);
         templateUtils.renderToDom('upgrades/disabled-list', $wrapperElement, context);
+        // rebind tooltip
+        window.componentHandler.upgradeDom();
     },
     clickEquipSlot: function (upgradeType, unusedUpgrades, unusedAbilities, upgradesAvailableToBuy, abilitiesAvailableToBuy, build) {
         // open modal to choose upgrade to equip
