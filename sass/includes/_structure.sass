@@ -34,26 +34,8 @@
         float: left
 
 #message
-    overflow: hidden
-    position: fixed
-    bottom: 0
-    width: 100%
-    text-align: center
-    background-color: #fff9cd
-    font-size: 16px
-
     @include media('print')
         display: none
-
-    .message
-        padding: 10px
-
-        span,
-        button
-            vertical-align: middle
-
-        button
-            margin-left: $site-padding
 
 #print-view
     display: none
