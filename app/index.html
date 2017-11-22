@@ -273,7 +273,10 @@
                 </button>
             </div>
         </div>
-        <div id="message"></div>
+        <div aria-live="assertive" aria-atomic="true" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar" id="message">
+            <div class="mdl-snackbar__text"></div>
+            <button type="button" class="mdl-snackbar__action"></button>
+        </div>
 
         <script>
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
