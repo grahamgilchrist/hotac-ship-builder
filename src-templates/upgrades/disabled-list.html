@@ -1,7 +1,9 @@
 <% if (disabled.length > 0) { %>
     <div class="disabled-upgrades">
-        <h4>Disabled upgrades</h4>
-        <p>These upgrades have been purchased but cannot be equipped to the current ship.</p>
+        <h4><span>Disabled upgrades</span> <i class="material-icons" id="disabled-upgrades-info">info_outline</i></h4>
+        <div class="mdl-tooltip" data-mdl-for="disabled-upgrades-info">
+            These upgrades have been purchased but cannot be equipped to the current ship.
+        </div>
         <ul id="disabled-upgrade-list">
             <% disabled.forEach(function(upgrade) { %>
                 <li class="upgrade card" upgrade-id="<%= upgrade.id %>">
