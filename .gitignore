@@ -6,6 +6,7 @@ app/components
 app/styles
 app/js/*
 !app/js/vendor
+app/service-worker.js
 js-src/generated
 app/docs
 .gulp-cache/
