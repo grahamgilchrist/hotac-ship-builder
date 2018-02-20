@@ -9,7 +9,7 @@
   "homepage": "https://github.com/grahamgilchrist/hotac-squad-builder",
   "private": true,
   "dependencies": {
-    "xwing-data": "0.52.x",
+    "xwing-data": "0.62.x",
     "xwing-miniatures-font": "1.0.x"
   }
 }
