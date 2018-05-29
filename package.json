@@ -19,7 +19,7 @@
     "gulp-json-lint": "0.1.x",
     "gulp-markdown": "1.2.x",
     "gulp-rename": "^1.2.2",
-    "gulp-sass": "3.x",
+    "gulp-sass": "4.x",
     "gulp-sass-lint": "1.x",
     "gulp-sourcemaps": "2.6.x",
     "gulp-template-store": "1.1.x",
