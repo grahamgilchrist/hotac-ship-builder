@@ -5,7 +5,7 @@ var codec = window.JsonUrl('lzma');
 
 var _map = require('lodash/map');
 var $ = require('jquery');
-var XpItem = require('../models/shipBuild/xpItem');
+var XpItem = require('xwing-hotac-lib/modules/models/shipBuild/xpItem');
 var EnemyDefeatsModel = require('../models/enemyDefeats');
 
 module.exports = {

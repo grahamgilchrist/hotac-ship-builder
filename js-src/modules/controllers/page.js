@@ -1,8 +1,8 @@
 'use strict';
 
-var XpItem = require('../models/shipBuild/xpItem');
-var itemTypes = require('../models/shipBuild/itemTypes');
-var Build = require('../models/shipBuild');
+var XpItem = require('xwing-hotac-lib/modules/models/shipBuild/xpItem');
+var itemTypes = require('xwing-hotac-lib/modules/models/shipBuild/itemTypes');
+var Build = require('xwing-hotac-lib/modules/models/shipBuild');
 var events = require('./events');
 var headerView = require('../views/header');
 var newView = require('../views/newView');
