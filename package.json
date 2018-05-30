@@ -12,7 +12,7 @@
   },
   "homepage": "https://github.com/grahamgilchrist/hotac-squad-builder#readme",
   "devDependencies": {
-    "browserify": "13.x",
+    "browserify": "16.x",
     "gulp": "3.x",
     "gulp-eslint": "3.0.x",
     "gulp-fs-cache": "^0.1.0",
@@ -26,7 +26,7 @@
     "gulp-uglify": "^3.0.0",
     "gulp-webserver": "0.9.x",
     "gulp-yaml-validate": "1.0.x",
-    "jquery": "3.1.x",
+    "jquery": "3.3.x",
     "json-url": "2.3.x",
     "lodash": "4.17.x",
     "pump": "^1.0.3",
