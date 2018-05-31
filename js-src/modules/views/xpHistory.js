@@ -5,7 +5,7 @@ var _each = require('lodash/each');
 var events = require('../controllers/events');
 var modalController = require('../controllers/modals');
 var templateUtils = require('../utils/templates');
-var itemTypes = require('../models/shipBuild/itemTypes');
+var itemTypes = require('xwing-hotac-lib/modules/models/shipBuild/itemTypes');
 
 module.exports = {
     renderTable: function (build) {
