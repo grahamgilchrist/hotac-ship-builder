@@ -33,7 +33,7 @@
     "pump": "^1.0.3",
     "run-sequence": "^2.2.0",
     "vinyl-source-stream": "1.x",
-    "xwing-data": "0.62.x"
+    "xwing-data": "1.0.x"
   },
   "dependencies": {}
 }
