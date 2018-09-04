@@ -6,7 +6,8 @@
     "type": "git",
     "url": "git+https://github.com/grahamgilchrist/hotac-squad-builder.git"
   },
-  "author": "",
+  "author": "Graham Gilchrist",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/grahamgilchrist/hotac-squad-builder/issues"
   },

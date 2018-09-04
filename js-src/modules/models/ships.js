@@ -95,6 +95,11 @@ var hotacShips = [
     }
 ];
 
+var squadLeaderCard = getUpgradeByXws('squadleader');
+hotacShips.forEach(function (ship) {
+    ship.startingUpgrades.push(squadLeaderCard);
+});
+
 // var experimentalShips = [
 //     {
 //         id: 't70xwing',
