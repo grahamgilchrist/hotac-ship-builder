@@ -1,7 +1,6 @@
 'use strict';
 
 const gulp = require('gulp');
-const rename = require('gulp-rename');
 const path = require('path');
 const fs = require('fs-extra')
 const assetPackageNames = [
