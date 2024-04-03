@@ -1,6 +1,6 @@
 'use strict';
 
-// Data file provided by the xwing-data [ackage have .js as extension, which node can't require.
+// Data file provided by the xwing-data package have .js as extension, which node can't require.
 // This task copies them into the project with a .json extension
 
 const gulp = require('gulp');

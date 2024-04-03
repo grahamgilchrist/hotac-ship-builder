@@ -30,12 +30,10 @@ Thsi project owes many thanks to two x-wing projects without which, this would h
 ### Requirements
 * nodeJS 8+
 * npm
-* bower `npm install -g bower`
 
 ### Setup
 * Clone the repo
 * Run `npm install` in the project root
-* Run `bower install` in the project root
 * Run `npx gulp dev`
   * This will compile the javascript, css and auto-recompile any changes to these via gulp watch
   * Gulp will start a local web server on port 8000 which can be accessed at http://localhost:8000
