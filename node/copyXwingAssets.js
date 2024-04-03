@@ -16,7 +16,7 @@ module.exports = function () {
         assetPackageNames.forEach(function (packageName) {
             const srcPackagePath = require.resolve(packageName + '/package.json');
             const assetPath = gulpPath + '/app/components/' + packageName
-            fs.copySync(srcImagePath, newImagePath)
+            fs.copySync(srcPackagePath, assetPath)
         });
     });
 };
