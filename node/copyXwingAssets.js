@@ -14,7 +14,7 @@ const gulpPath = process.cwd();
 module.exports = function () {
     gulp.task('copyXwingAssets', function () {
         assetPackageNames.forEach(function (packageName) {
-            const srcPackagePath = require.resolve(packageName);
+            const srcPackagePath = require.resolve(packageName + '/package.json');
             const assetPath = gulpPath + '/app/components/' + packageName
             fs.copySync(srcImagePath, newImagePath)
         });
