@@ -14,6 +14,7 @@
   "homepage": "https://github.com/grahamgilchrist/hotac-squad-builder#readme",
   "devDependencies": {
     "browserify": "16.x",
+    "fs-extra": "11.x",
     "gulp": "3.x",
     "gulp-eslint": "3.0.x",
     "gulp-fs-cache": "^0.1.0",
