@@ -10,6 +10,7 @@ require('./node/eslint')();
 require('./node/json-lint')();
 require('./node/yaml-lint')();
 require('./node/copyXwingData')();
+require('./node/copyXwingAssets')();
 require('./node/markdown')();
 require('./node/templates')();
 require('./node/uglify')();
@@ -41,6 +42,7 @@ gulp.task('JsCompileAndCompress', function (done) {
 });
 
 gulp.task('build', [
+    'copyXwingAssets',
     'copyXwingData',
     'templates:compile',
     'JsCompileAndCompress',
