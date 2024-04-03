@@ -2,7 +2,7 @@
 
 const gulp = require('gulp');
 const path = require('path');
-const fs = require('fs-extra')
+const fs = require('fs-extra');
 const assetPackageNames = [
     'xwing-data',
     'xwing-miniatures-font'
